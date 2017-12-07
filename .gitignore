@@ -1,0 +1,11 @@
+*.py[cod]
+*egg-info/
+*~
+.cache/
+.tox/
+__pycache__/
+docs/_build/
+dist/
+.nonpubfiles/
+pdf/
+temp/

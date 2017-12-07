@@ -1,0 +1,31 @@
+['-i', '--input']            _AppendAction        type:None       choices:None
+['-f', '--file']             _StoreAction         type:None       choices:None
+['--news']                   _StoreAction         type:None       choices:['hackernews']
+['--user-agent']             _StoreAction         type:None       choices:None
+['--qt']                     _StoreAction         type:None       choices:['webengine', 'webkit']
+['--guess']                  _StoreAction         type:None       choices:None
+['--add-tags']               _StoreAction         type:None       choices:None
+['--add-attrs']              _StoreAction         type:None       choices:None
+['--userdir']                _StoreAction         type:None       choices:None
+['--urllib']                 _StoreConstAction    type:None       choices:None
+['--lxml']                   _StoreConstAction    type:None       choices:None
+['--readability']            _StoreConstAction    type:None       choices:None
+['--readability-only']       _StoreConstAction    type:None       choices:None
+['--prince']                 _StoreConstAction    type:None       choices:None
+['--weasyprint']             _StoreConstAction    type:None       choices:None
+['--wkhtmltopdf']            _StoreConstAction    type:None       choices:None
+['--ebook-convert']          _StoreConstAction    type:None       choices:None
+['--parts-download']         _StoreConstAction    type:None       choices:None
+['--no-parts-download']      _StoreConstAction    type:None       choices:None
+['--raw']                    _StoreConstAction    type:None       choices:None
+['-h', '--help']             _StoreTrueAction     type:None       choices:None
+['-v', '--verbose']          _StoreTrueAction     type:None       choices:None
+['-1', '--download']         _StoreTrueAction     type:None       choices:None
+['-2', '--extract']          _StoreTrueAction     type:None       choices:None
+['-3', '--convert']          _StoreTrueAction     type:None       choices:None
+['-a', '--appcheck']         _StoreTrueAction     type:None       choices:None
+['-b', '--browser']          _StoreTrueAction     type:None       choices:None
+['-c', '--check']            _StoreTrueAction     type:None       choices:None
+['--toc']                    _StoreTrueAction     type:None       choices:None
+['--link']                   _StoreTrueAction     type:None       choices:None
+

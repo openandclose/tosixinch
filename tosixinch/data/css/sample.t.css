@@ -1,0 +1,308 @@
+
+@page {
+    size: {{ size }};
+    margin: 1%;
+}
+
+html { page-break-before: always; }
+
+body {
+    font-family: {{ font_family }};
+    font-size: {{ font_size }};
+    line-height: {{ line_height }};
+    color: black;
+}
+
+/* http://pythonhosted.org/feedparser uses 'div.pre'. */
+pre, code, kbd, samp, tt, div.pre {
+    font-family: {{ font_mono }};
+    font-size: {{ font_size_mono }};
+}
+
+/* h1-h5 scaling is x1.125. */
+
+/* NG: somehow 'rem' doesn't render well */
+/* h1 { font-size: 1.602rem; } */
+/* h2 { font-size: 1.424rem; } */
+/* h3 { font-size: 1.266rem; } */
+/* h4 { font-size: 1.125rem; } */
+/* h5 { font-size: 1rem; } */
+/* h6 { font-size: 1rem; } */
+/* table { font-size: .889rem; } */
+
+h1 { font-size: 1.602em; }
+h2 { font-size: 1.424em; }
+h3 { font-size: 1.266em; }
+h4 { font-size: 1.125em; }
+h5 { font-size: 1em; }
+h6 { font-size: 1em; }
+table { font-size: .889em; }
+
+pre, div.pre {
+    white-space: pre-wrap;
+    border: 1px solid;
+    border-color: LightGrey;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid LightGrey;
+    page-break-inside: avoid;
+    /* NG: cells are too bloat */
+    /* white-space: pre-wrap; */
+}
+
+/* https://stackoverflow.com/questions/18401707/is-it-possible-to-merge-two-table-borders-into-one-another */
+/* table + table, */
+/* table + table tr:first-child > * { */
+/*     border-top: 0; */
+/* } */
+
+img, figure {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+img.tsi-big {
+    width: 100%;
+}
+
+img.tsi-tall {
+    height: 90%;
+}
+
+/* img.tsi-small { */
+/*     width: 10%; */
+/* } */
+
+
+/* Reduce margins as much as reasonable.*/
+blockquote {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+dd {
+    margin-left: 2%;
+}
+
+ul, menu, dir, ol {
+    padding-left: 2%;
+}
+
+/* Default underlines (color or gray) are actually more unpleasant in B&W screen. */
+/* a:link { color: black; } */
+a:link { color: inherit; }
+
+
+/* Permalink marks (pilcrow sign, U+00B6) are ugly most of the times */
+.anchor-link, .headerlink {
+    display: none;
+    /* visibility: hidden; */
+}
+
+/* When you use process.gen.make_ahref_visible, this class attribute is added. */
+span.tsi-href-visible {
+    font-size: .7em;
+}
+
+
+
+{% if prince %}
+/* prince --------------------------------------------------------- */
+
+/* Make space for prince logo. */
+@page :first {
+  margin-top: 60px;
+}
+
+/* When using '--no-default-style' in commandline, */
+/* we need to copy some basic content rendering css from 'prince_html.css' */
+/* (It is included in prince installation). */
+/* Without this, no image is rendered. */
+
+/* img, embed { */
+/*     display: inline-block; */
+/*     content: prince-fallback(attr(src, url)), attr(alt) */
+/* } */
+/* object { */
+/*     display: inline-block; */
+/*     content: prince-fallback(attr(data, url)) */
+/* } */
+
+/* embed[type="application/x-shockwave-flash"], */
+/* object[type="application/x-shockwave-flash"] { */
+/*     display: table-cell; */
+/*     width: attr(width, px); */
+/*     height: attr(height, px); */
+/*     content: "Flash"; */
+/*     background: #f0f0f0; */
+/*     color: black; */
+/*     font: bold 12px sans-serif; */
+/*     text-align: center; */
+/*     vertical-align: middle */
+/* } */
+
+/* br { */
+/*     content: '\A'; */
+/*     white-space: pre; */
+/*     background: none */
+/* } */
+
+/* br[clear="left"] { clear: left } */
+/* br[clear="right"] { clear: right } */
+/* br[clear="all"] { clear: both } */
+
+/* q::before { content: "\201C" } */
+/* q::after { content: "\201D" } */
+/* q:lang(fr)::before { content: "\AB" } */
+/* q:lang(fr)::after { content: "\BB" } */
+/* q:lang(de)::before { content: "\201E" } */
+/* q:lang(de)::after { content: "\201C" } */
+
+
+/* TODO: I don't understand how to set fonts in prince */
+
+/* http://www.princexml.com/forum/topic/3066/font-family-font-face-issues */
+/* 'In Prince, once you have one @font-face rule for Verdana it won't check the system font.' */
+/* @font-face { */
+    /* font-family: "DejaVu Sans"; */
+    /* src: local("DejaVu Sans"); */
+    /* src: prince-lookup("DejaVu Sans") */
+    /* font-family: sans-serif; */
+
+    /* unicode-range: U+3040-309F, U+30A0-30FF, U+4E00-9FBF; */
+
+    /* src: prince-lookup("Source Han Sans JP") */
+/* } */
+
+
+h1 { prince-bookmark-level: {{ bm1 }} }
+h2 { prince-bookmark-level: {{ bm2 }} }
+h3 { prince-bookmark-level: {{ bm3 }} }
+h4 { prince-bookmark-level: {{ bm4 }} }
+h5 { prince-bookmark-level: {{ bm5 }} }
+h6 { prince-bookmark-level: {{ bm6 }} }
+
+/* NG: Prince displays permalinks in pdf bookmarks. */
+/* h1, h2, h3 { prince-bookmark-label: text() } */
+
+
+/* NG: for long left margins (mako doc)  */
+/* ul, menu, dir, ol { */
+/*     padding-inline-start: 1%; */
+/* } */
+
+{% endif %}
+
+
+
+{% if weasyprint %}
+/* weasyprint ----------------------------------------------------- */
+
+div.tsi-body-merged { page-break-before: always; }
+
+h1 { -weasy-bookmark-level: {{ bm1 }} }
+h2 { -weasy-bookmark-level: {{ bm2 }} }
+h3 { -weasy-bookmark-level: {{ bm3 }} }
+h4 { -weasy-bookmark-level: {{ bm4 }} }
+h5 { -weasy-bookmark-level: {{ bm5 }} }
+h6 { -weasy-bookmark-level: {{ bm6 }} }
+
+
+/* NG: Tables are cripped */
+/* https://github.com/Kozea/WeasyPrint/issues/36 */
+/* https://github.com/Kozea/WeasyPrint/issues/198 */
+/* table, thead, tbody, tfoot, tr, th, td { display: block; } */
+/* * { float: none !important; } */
+{% endif %}
+
+
+
+{% if wkhtmltopdf %}
+/* wkhtmltopdf ---------------------------------------------------- */
+
+/* Stable wkhtmltopdf(0.12.4) uses Qt4.8, which uses QtWebKit 2.1 */
+/* https://github.com/wkhtmltopdf/qt */
+/* http://doc.qt.io/qt-4.8/qtwebkit-guide.html */
+
+/* wkhtmltopdf (Qt4 versions) doesn't support '@page' rule. */
+/* So page size and margin should be proveided by commandline options. */
+/* (--page-width, --page-height, -B, -L, -R, -T) */
+
+a {
+    -webkit-text-decoration-color: inherit;
+    /* a:link { color: inherit; } */
+    /* a:visited { color: inherit; } */
+}
+
+blockquote {
+    -webkit-margin-start: 2%;
+    -webkit-margin-end: 2%;
+}
+dd {
+    -webkit-margin-start: 2%;
+}
+ul, menu, dir, ol {
+    -webkit-padding-start: 2%;
+}
+
+
+/* Bug: images */
+/* With 'max-height', no images are rendered. */
+/* Halfway solution of setting to 'none' seems OK. */
+/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/2836 */
+/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1726 */
+/* img, figure { */
+/*     max-height: none; */
+/* } */
+
+/* Bug: thead */
+/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1770 */
+/* thead { display: table-header-group } */
+tfoot { display: table-row-group }
+tr { page-break-inside: avoid }
+/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1524 */
+/* thead, tfoot { display: table-row-group } */
+
+{% endif %}
+
+
+
+{% if ebook_convert %}
+/* ebook-convert -------------------------------------------------- */
+
+{% endif %}
+
+
+
+/* css for text --------------------------------------------------- */
+
+pre.tsi-text {
+    border: none;
+}
+
+h1.tsi-text, h2.tsi-text, h3.tsi-text {
+    font: inherit;
+    font-weight: bold;
+}
+
+h2.tsi-text, h3.tsi-text {
+    display: inline;
+}
+
+h2.tsi-text > a, h3.tsi-text > a {
+    text-decoration: none;
+}
+
+span.tsi-text {
+    font-weight: bold;
+}
+
+span.tsi-text > a {
+    text-decoration: none;
+}
