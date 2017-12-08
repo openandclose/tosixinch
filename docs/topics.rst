@@ -10,14 +10,11 @@ Text Format
 When ``extract``, the script actually checks
 if the content is really an ``html``.
 
-Currently, the existence of  ``'<html>'`` and optional ``'<doctype>'``
-in the first 1000 characters is tested.
+Currently, only the existence of  ``'<html>'`` tag is checked.
+That is, optional valid comments, optional valid doctype tag
+and following valid opening ``'<html>'`` tag in the first 1000 characters.
 
 .. note::
-    The actual regular expression is::
-
-        r'^\s*(?:<!doctype .+>)*\s*<html.*?>'
-
     It is rather strict. 
     It assumes loose or partial htmls are for presentation or software testing,
     and they are normally expected to be read as raw text.

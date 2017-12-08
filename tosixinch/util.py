@@ -38,8 +38,9 @@ ROOTPATH = re.compile('^/+')
 WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 HTMLEXT = ('htm', 'html')
+_COMMENT = r'(\s*(<!--.+-->)*)*\s*'
 HTMLFILE = re.compile(
-    r'^\s*(?:<!doctype .+>)*\s*<html.*?>',
+    '^' + _COMMENT + '(<!doctype .+?>)?' + _COMMENT + '<html(| .+?)>',
     flags=re.IGNORECASE | re.DOTALL)
 
 PYTHONEXT = ('py',)
