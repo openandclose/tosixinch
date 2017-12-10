@@ -216,7 +216,7 @@ The script includes a sample ini file (``site.sample.ini``),
 and reads it into configuration if not disabled or overwritten. ::
 
     https://*.wikipedia.org/wiki/* (only tested with 'en.wikipedia.org')
-    https://www.gnu.org/software/*/manual/*.html
+    https://www.gnu.org/software/*
     https://docs.python.org/*
     https://www.python.org/dev/peps/*
     https://bugs.python.org/issue*
