@@ -359,8 +359,7 @@ Options
 
     And one way to see the help is::
 
-        viewcmd=    open_viewer.py --help
-
+        $ tosixinch -4 --viewcmd 'open_viewer.py --help'
 
 [style]
 -------
