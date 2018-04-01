@@ -186,6 +186,10 @@ def _get_files_list(dirs, filters):
 
 
 def _filter_urls(urllist, filters):
+    # If urls consists of a single url, It doesn't apply filters.
+    if len(urllist) == 1:
+        return urllist
+
     urls = []
     for url in urllist:
         parts = url.rsplit('.', maxsplit=1)

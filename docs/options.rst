@@ -121,10 +121,13 @@ Options
 
     ``[PLUS]``
 
-    By default, the script ignores ``url`` with binary like looking extensions.
-    The value adds to or subtracts from the list.
-    The list is taken from
+    The script ignores ``url`` with binary like looking extensions,
+    if multiple ``url`` s  are provided.
+    This option value adds to or subtracts from the default binaries list.
+    The list is taken from Sindre Sorhus'
     `binary-extensions <https://github.com/sindresorhus/binary-extensions>`__.
+
+    If ``url`` list consists of one single ``url``, the script doesn't use this.
 
 **\* add_tags**
     | (None)
