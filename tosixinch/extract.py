@@ -25,7 +25,8 @@ from tosixinch import process
 from tosixinch import textformat
 from tosixinch.util import (
     make_local_references, normalize_source_url,
-    make_directories, make_path, build_new_html, build_blank_html,
+    make_directories, _in_current_dir, make_path,
+    build_new_html, build_blank_html,
     check_ftype, lxml_open, lxml_write, iter_component, xpath_select,
     get_component_size)
 
@@ -231,9 +232,13 @@ class Extract(object):
                 except urllib.error.URLError as e:
                     logger.warning('[URLError %s] %s' % e.reason, url)
 
-            # el.attrib['src'] = os.path.relpath(
-            el.attrib['src'] = './' + os.path.relpath(
-                local_url, os.path.dirname(page_fname))
+            if _in_current_dir(fname, './_html'):
+                # src = os.path.relpath(local_url, os.path.dirname(page_fname))
+                src = './' + os.path.relpath(
+                    local_url, os.path.dirname(page_fname))
+            else:
+                src = local_url
+            el.attrib['src'] = src
 
             self._add_component_attributes(el, fname)
 
