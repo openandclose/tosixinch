@@ -13,6 +13,10 @@ body {
     color: black;
 }
 
+/* html, body { */
+/*     height: 100%; */
+/* } */
+
 /* http://pythonhosted.org/feedparser uses 'div.pre'. */
 pre, code, kbd, samp, tt, div.pre {
     font-family: {{ font_mono }};
@@ -65,6 +69,8 @@ img, figure {
     display: block;
     margin: 0;
     padding: 0;
+    max-width: 100%;
+    /* max-height: 100%; */
 }
 
 img.tsi-big {
@@ -257,9 +263,9 @@ ul, menu, dir, ol {
 /* Halfway solution of setting to 'none' seems OK. */
 /* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/2836 */
 /* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1726 */
-/* img, figure { */
-/*     max-height: none; */
-/* } */
+img, figure {
+    max-height: none;
+}
 
 /* Bug: thead */
 /* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1770 */
