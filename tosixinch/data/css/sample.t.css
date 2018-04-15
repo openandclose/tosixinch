@@ -116,6 +116,10 @@ span.tsi-href-visible {
     font-size: .7em;
 }
 
+/* test */
+*[aria-hidden] {
+  display: none;
+}
 
 
 {% if prince %}
