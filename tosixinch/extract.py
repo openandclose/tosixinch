@@ -52,7 +52,7 @@ class Extract(object):
         self.fnew = site.fnew
         self.sel = site.select
         self.excl = site.exclude
-        self.sp = conf.general.preprocess + site.process
+        self.sp = site.general.preprocess + site.process
         self.section = site.section
 
         self._guess = conf.general.guess

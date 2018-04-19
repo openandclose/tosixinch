@@ -195,7 +195,7 @@ Options
 
     The value specifies whether site config includes ``site.sample.ini``.
 
-**preprocess**
+**\* preprocess**
     | (``gen.add_title,gen.youtube_video_to_thumbnail,gen.delete_duplicate_br``)
     | ``[COMMA]``
 
