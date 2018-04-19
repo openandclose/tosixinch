@@ -647,6 +647,8 @@ def get_component_size(el, fname, stream=None):
     try:
         mime, w, h = imagesize.get_size(fname, stream)
         return int(w), int(h)
+    except FileNotFoundError:
+        return None, None
     except ValueError:
         return None, None
 
