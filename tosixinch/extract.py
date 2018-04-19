@@ -224,13 +224,13 @@ class Extract(object):
                     download.download(url, fname)
                 except urllib.error.HTTPError as e:
                     if e.code == 404:
-                        logger.info('[HTTPError 404 %s] %s' % e.reason, url)
+                        logger.info('[HTTPError 404 %s] %s' % (e.reason, url))
                     else:
                         logger.warning(
                             '[HTTPError %s %s %s] %s' % (
                                 e.code, e.reason, e.headers, url))
                 except urllib.error.URLError as e:
-                    logger.warning('[URLError %s] %s' % e.reason, url)
+                    logger.warning('[URLError %s] %s' % (e.reason, url))
 
             if _in_current_dir(fname, './_html'):
                 # src = os.path.relpath(local_url, os.path.dirname(page_fname))
