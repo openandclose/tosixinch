@@ -29,7 +29,7 @@ def getlinks(conf):
 def getlink(url, path):
     root = lxml_open(url)
     links = root.xpath(path)
-    links = [urllib.parse.urljoin(url, link) for link in links]
+    links = [urllib.parse.urljoin(url, link.strip()) for link in links]
     return links
 
 

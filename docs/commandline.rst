@@ -94,6 +94,10 @@ Actions
 
     create toc htmls and a toc url list
 
+.. option:: --link
+
+    get links in documents from urls (experimental)
+
 Programs
 --------
 

@@ -16,7 +16,7 @@ from tosixinch import configfetch
 from tosixinch import download
 from tosixinch import extract
 from tosixinch import convert
-# from tosixinch import link
+from tosixinch import link
 from tosixinch import news
 from tosixinch import settings
 from tosixinch import toc
@@ -89,8 +89,8 @@ def _build_cmd_parser():
     help = 'create toc htmls and a toc url list'
     actions.add_argument('--toc', action='store_true', help=help)
 
-    # help = 'get links in documents from urls (experimental)'
-    # actions.add_argument('--link', action='store_true', help=help)
+    help = 'get links in documents from urls (experimental)'
+    actions.add_argument('--link', action='store_true', help=help)
 
     # choices = ['hackernews']
     # help = 'fetch urls from socialnews site (experimental)'
@@ -358,9 +358,9 @@ def main(args=sys.argv[1:]):
     elif args.check:
         conf.print_siteconf()
         return
-    # elif args.link:
-    #     link.print_links(conf)
-    #     return
+    elif args.link:
+        link.print_links(conf)
+        return
 
     if args.download:
         runcmd(conf, conf.general.precmd1)
