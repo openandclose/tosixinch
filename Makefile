@@ -1,30 +1,36 @@
 
-PHONIES = first help html2 prep test flake8 git scripts copylib libs html htmllibs
+PHONIES = first help all prep test flake8 git scripts copylib libs html htmlmain htmllibs
 DEV = tosixinch/tests/dev
 
 
-first: html2
+first: help
 
 .PHONY: $(PHONIES)
 
 
 help:
-	@echo tosixinch make file -- $(PHONIES)
+	@echo Tosixinch make file:
+	@echo $(PHONIES)
+	@echo
+	@echo do \'all\', or \'git flake8 test tox html\'
+	@echo and \`run\` \(_test_actualrun.py\)
 
-html2: prep html htmllibs
+all: prep html
 	@echo 'Success All!'
 
-prep: git test flake8
+prep: git flake8 test tox
 	@echo 'Success!'
-
-test:
-	python -m doctest tosixinch/process/*.py
-	pytest -x
-	tox
 
 # vim -c ':r !flake8 .'
 flake8:
 	flake8 .
+
+test:
+	python -m doctest tosixinch/process/*.py
+	pytest -x
+
+tox:
+	tox
 
 git: scripts copylib
 	git update-index --refresh
@@ -41,9 +47,15 @@ libs:
 	$(MAKE) -C ../configfetch prep
 	$(MAKE) -C ../zconfigparser prep
 
-html:
+html: htmlmain htmllibs
+
+htmlmain:
 	$(MAKE) -C docs html
 
 htmllibs:
 	$(MAKE) -C ../configfetch html
 	$(MAKE) -C ../zconfigparser html
+
+run:
+	@echo python tosixinch/tests/_test_actualrun.py --number 0 --delete file --viewer okular
+	python tosixinch/tests/_test_actualrun.py --number 0 --delete file --viewer okular
