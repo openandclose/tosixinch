@@ -111,7 +111,7 @@ def main():
         print_urls()
         return
 
-    urls = prepare()
+    urls = prepare(args.delete)
     run(urls, args.number, args.converter, args.verbose, args.viewer, args.toc)
 
 if __name__ == '__main__':
