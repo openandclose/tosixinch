@@ -396,7 +396,8 @@ def make_directories(fname):
         msg = 'filename path is outside of current dir: %r' % fname
         logger.error(msg)
         sys.exit(1)
-    os.makedirs(os.path.dirname(fname), exist_ok=True)
+    dname = os.path.abspath(os.path.dirname(fname))
+    os.makedirs(dname, exist_ok=True)
 
 
 def _in_current_dir(fname, base=os.curdir):
