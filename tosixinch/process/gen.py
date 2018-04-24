@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 # ----------------------------------------------------------
 # Default or default candidates are collected in this section.
-# They should have only one argument (required 'doc').
+# They should run only one argument (required 'doc').
 
 
-def add_title(doc):
+def add_title(doc, force=False):
     """If there is no ``<h1>``, make ``<h1>`` from ``<title>`` tag text.
 
     >>> s = '<html><head><title>aaa</title></head><body></body></html>'
@@ -24,7 +24,8 @@ def add_title(doc):
     '<html><head><title>aaa</title></head><body><h1>aaa</h1></body></html>'
     """
     if doc.xpath('//h1'):
-        return
+        if force is False:
+            return
     if not doc.xpath('//title/text()'):
         return
 
