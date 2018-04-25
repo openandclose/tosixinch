@@ -1,6 +1,4 @@
 
-.. vim: set spell spelllang=en_us :
-
 Tosixinch documentation
 =======================
 
