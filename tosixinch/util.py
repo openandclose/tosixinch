@@ -657,7 +657,8 @@ def get_component_size(el, fname, stream=None):
 
 
 def transform_xpath(path):
-    pat = re.compile(r'([a-zA-Z]+|[hH][1-6]|\*)\[@class==([\'"]*)([a-zA-Z-_]+)\2\]')  # noqa: E501
+    pat = r'([a-zA-Z]+|[hH][1-6]|\*)\[@class==([\'"]*)([a-zA-Z-_]+)\2\]'
+    pat = re.compile(pat)
     repl = r'\1[contains(concat(" ", normalize-space(@class), " "), " \3 ")]'
     return pat.sub(repl, path)
 
