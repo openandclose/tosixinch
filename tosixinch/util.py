@@ -105,7 +105,7 @@ BINARY_EXTENSIONS = """
 #     gen-delims:  #/:?@[]
 #     sub-delims:  !$&'()*+,;=
 
-# Allowed characters foe each url components are:
+# Allowed characters for each url components are:
 # (This is a simplified version of RFC3986 one.)
 #     userinfo  = *( unreserved / pct-encoded / sub-delims / ":" )
 #     host      = *( unreserved / pct-encoded / sub-delims / "[" / "]" )
