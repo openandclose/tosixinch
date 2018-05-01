@@ -2,10 +2,11 @@
 *egg-info/
 *~
 .cache/
+.nonpubfiles/
+.pytest_cache/
 .tox/
 __pycache__/
-docs/_build/
 dist/
-.nonpubfiles/
+docs/_build/
 pdf/
 temp/
