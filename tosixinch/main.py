@@ -170,7 +170,7 @@ def _build_conf_parser():
         'before PDF conversion (default)')
     configs.add_argument(
         '--parts-download', action='store_const',
-        default='', const='yes', help=help)
+        const='yes', help=help)
 
     help = 'not download components before PDF conversion'
     configs.add_argument(
@@ -189,7 +189,7 @@ def _build_conf_parser():
     help = ('use input paths as is '
             '(no url transformation, and only for local files)')
     configs.add_argument(
-        '--raw', action='store_const', default='', const='yes', help=help)
+        '--raw', action='store_const', const='yes', help=help)
 
     help = 'width (character numbers) for rendering non-prose text'
     configs.add_argument('--textwidth', help=help)
