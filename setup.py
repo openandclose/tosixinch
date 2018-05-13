@@ -5,8 +5,6 @@
 from setuptools import setup
 
 with open('README.rst') as f:
-    f.readline()
-    f.readline()
     readme = f.read()
 
 with open('VERSION') as f:

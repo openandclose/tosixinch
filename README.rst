@@ -11,4 +11,6 @@ For details, see `documentation <http://tosixinch.readthedocs.io/>`__.
 License
 -------
 
-The software is licensed under The MIT License. See `LICENSE <LICENSE>`__.
+The software is licensed under The MIT License. See `LICENSE`_.
+
+.. _LICENSE: https://github.com/openandclose/tosixinch/blob/master/LICENSE
