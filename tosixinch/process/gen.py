@@ -234,3 +234,16 @@ def add_description(doc):
     description = get_metadata(doc)['description']
     desc = make_tag('p', '[ %s ]' % description)
     doc.body.insert(0, desc)
+
+
+def add_style(doc, path, style):
+    """Add inline style strings ('style') to each xpath element ('path').
+
+    >>> el = fromstring('<div><p>aaa</p></div>')
+    >>> add_style(el, '//p', 'text-decoration:line-through;')
+    >>> tostring(el)
+    '<div><p class="tsi-keep-style" style="text-decoration:line-through;">aaa</p></div>'
+    """  # noqa: E501
+    for el in doc.xpath(path):
+        el.classes |= (KEEP_STYLE,)
+        el.set('style', style)
