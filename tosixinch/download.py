@@ -31,6 +31,7 @@ def download(url, fname, user_agent='Mozilla/5.0'):
     debuglevel = 0
     if logger.getEffectiveLevel() == 10:
         debuglevel = 1
+    logger.debug("[download] '%s'", url)
 
     req = urllib.request.Request(url, headers=headers)
     cj = http.cookiejar.CookieJar()
