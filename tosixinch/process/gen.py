@@ -247,3 +247,15 @@ def add_style(doc, path, style):
     for el in doc.xpath(path):
         el.classes |= (KEEP_STYLE,)
         el.set('style', style)
+
+
+def change_tagname(doc, path, tag='div'):
+    """Change just the tagname while keeping anything inside.
+
+    >>> doc = fromstring('<div><p>aaa</p>bbb</div>')
+    >>> change_tagname(doc, '//div', 'h3')
+    >>> tostring(doc)
+    '<h3><p>aaa</p>bbb</h3>'
+    """
+    for el in doc.xpath(path):
+        el.tag = tag
