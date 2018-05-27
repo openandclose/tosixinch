@@ -34,6 +34,11 @@ def add_title(doc, force=False):
     doc.body.insert(0, el)
 
 
+def add_title_force(doc):
+    """Add title even if there are ``<h1>``s already."""
+    add_title(doc, True)
+
+
 # http://stackoverflow.com/questions/4085717/xslt-remove-duplicate-br-tags-from-running-text  # noqa: E501
 def delete_duplicate_br(doc):
     """Continuous ``<br>`` tags to one ``<br>``, to save display space.
