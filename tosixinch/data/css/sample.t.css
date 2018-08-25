@@ -87,6 +87,7 @@ img.tsi-tall {
 
 
 /* Reduce margins as much as reasonable.*/
+/* cf. prince has 'li::marker' */
 blockquote {
     margin-left: 2%;
     margin-right: 2%;
@@ -97,8 +98,20 @@ dd {
 }
 
 ul, menu, dir, ol {
-    padding-left: 2%;
+    margin: 0%;
+    padding: 0%;
+    /* margin-left: 3em; */
+    padding-left: 3em;
 }
+
+ul ul, ul ol, ol ul, ol ol {
+  padding-left: 1em;
+}
+
+/* li { */
+/*     margin: 0%; */
+/*     padding: 0%; */
+/* } */
 
 /* Default underlines (color or gray) are actually more unpleasant in B&W screen. */
 /* a:link { color: black; } */
