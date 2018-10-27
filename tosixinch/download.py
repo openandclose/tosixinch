@@ -9,6 +9,7 @@ import gzip
 import logging
 import os
 import shutil
+import time
 import urllib.request
 import zlib
 
@@ -17,7 +18,7 @@ from tosixinch.util import idna_quote, make_directories
 logger = logging.getLogger(__name__)
 
 
-def download(url, fname, user_agent='Mozilla/5.0'):
+def download(url, fname, user_agent='Mozilla/5.0', cookies=None):
     headers = {
         'User-Agent': user_agent,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # noqa: E501
@@ -35,6 +36,10 @@ def download(url, fname, user_agent='Mozilla/5.0'):
 
     req = urllib.request.Request(url, headers=headers)
     cj = http.cookiejar.CookieJar()
+    if cookies:
+        for cookie in cookies:
+            cj = add_cookie(cj, cookie)
+
     opener = urllib.request.build_opener(
         urllib.request.HTTPSHandler(debuglevel=debuglevel),
         urllib.request.HTTPCookieProcessor(cj))
@@ -50,6 +55,45 @@ def download(url, fname, user_agent='Mozilla/5.0'):
                 g.write(zlib.decompress(f.read()))
                 return
         shutil.copyfileobj(f, g)
+
+
+def _add_cookie(cj, name, value, domain, path='/'):
+    # cf.
+    # class http.cookiejar.Cookie
+    # def __init__(
+    #     version, name, value,
+    #     port, port_specified,
+    #     domain, domain_specified, domain_initial_dot,
+    #     path, path_specified,
+    #     secure, expires, discard,
+    #     comment, comment_url, rest,
+    #     rfc2109=False,
+    # )
+    #
+    domain_initial_dot = False
+    if domain.startswith('.'):
+        domain_initial_dot = True
+    expires = time.time() + 60*60*24*2  # 2days from now
+
+    cookie = http.cookiejar.Cookie(
+        0, name, value,
+        '80', True,
+        domain, True, domain_initial_dot,
+        path, True,
+        False, expires, False,
+        'simple-cookie', None, None,
+    )
+    cj.set_cookie(cookie)
+    return cj
+
+
+def add_cookie(cj, cookie):
+    # 'cookie' is now an unparsed string.
+    values =  [c.strip() for c in cookie.split(',') if c.strip()] or []
+    if len(values) == 3:
+        values.append('/')
+    name, value, domain, path = values
+    return _add_cookie(cj, name, value, domain, path)
 
 
 # Notes about Qt
@@ -192,6 +236,7 @@ def run(conf):
         url = idna_quote(url)
         fname = site.fname
         js = site.javascript
+        cookies = site.cookie
 
         if not os.path.exists(fname):
             make_directories(fname)
@@ -212,7 +257,7 @@ def run(conf):
                         raise KeyError(msg)
                 qt_download(url, fname, render)
             else:
-                download(url, fname, user_agent)
+                download(url, fname, user_agent, cookies)
             logger.info('[url] %s', url)
 
     if QT_RUNNIG:
