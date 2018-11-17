@@ -23,24 +23,17 @@ pre, code, kbd, samp, tt, div.pre {
     font-size: {{ font_size_mono }};
 }
 
-/* h1-h5 scaling is x1.125. */
-
-/* NG: somehow 'rem' doesn't render well */
-/* h1 { font-size: 1.602rem; } */
-/* h2 { font-size: 1.424rem; } */
-/* h3 { font-size: 1.266rem; } */
-/* h4 { font-size: 1.125rem; } */
-/* h5 { font-size: 1rem; } */
-/* h6 { font-size: 1rem; } */
-/* table { font-size: .889rem; } */
-
-h1 { font-size: 1.602em; }
-h2 { font-size: 1.424em; }
-h3 { font-size: 1.266em; }
-h4 { font-size: 1.125em; }
+/* h1-h5 scaling is 1.2. */
+/* tabale scaling is 1.125. */
+/* note: somehow 'rem' doesn't render well */
+h1 { font-size: 2.074em; }
+h2 { font-size: 1.728em; }
+h3 { font-size: 1.44em; }
+h4 { font-size: 1.2em; }
 h5 { font-size: 1em; }
 h6 { font-size: 1em; }
 table { font-size: .889em; }
+
 
 pre, div.pre {
     white-space: pre-wrap;
