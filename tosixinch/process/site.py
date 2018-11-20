@@ -12,7 +12,7 @@ from tosixinch.process.util import *
 logger = logging.getLogger(__name__)
 
 
-def convert_permalink_sign(doc, repl):
+def convert_permalink_sign(doc, repl=''):
     r"""Change permalink sign to some text (``'repl'``).
 
     Most python documents use this (``U+00B6`` or ``pilcrow sign`` or '¶').
