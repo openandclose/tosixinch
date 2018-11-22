@@ -41,7 +41,8 @@ scripts:
 	$(DEV)/complete-bash.py -X
 
 copylib: libs
-	-copylib.py
+	-copylib.py configfetch.py
+	-copylib.py zconfigparser.py
 
 libs:
 	$(MAKE) -C ../configfetch prep
