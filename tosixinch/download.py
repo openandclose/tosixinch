@@ -73,7 +73,7 @@ def _add_cookie(cj, name, value, domain, path='/'):
     domain_initial_dot = False
     if domain.startswith('.'):
         domain_initial_dot = True
-    expires = time.time() + 60*60*24*2  # 2days from now
+    expires = time.time() + 60 * 60 * 24 * 2  # 2days from now
 
     cookie = http.cookiejar.Cookie(
         0, name, value,
@@ -89,7 +89,7 @@ def _add_cookie(cj, name, value, domain, path='/'):
 
 def add_cookie(cj, cookie):
     # 'cookie' is now an unparsed string.
-    values =  [c.strip() for c in cookie.split(',') if c.strip()] or []
+    values = [c.strip() for c in cookie.split(',') if c.strip()] or []
     if len(values) == 3:
         values.append('/')
     name, value, domain, path = values
