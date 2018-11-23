@@ -202,9 +202,9 @@ def qt_webengine_init(url, qt_app, QWebEngineView):
             self.page().load(QUrl(url))
             while self.html is None:
                 self.app.processEvents(
-                    QEventLoop.ExcludeUserInputEvents |
-                    QEventLoop.ExcludeSocketNotifiers |
-                    QEventLoop.WaitForMoreEvents)
+                    QEventLoop.ExcludeUserInputEvents
+                    | QEventLoop.ExcludeSocketNotifiers
+                    | QEventLoop.WaitForMoreEvents)
             self.app.quit()
 
         def _callable(self, data):
