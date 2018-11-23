@@ -41,6 +41,10 @@ ignore=
     N803,
     # N806 variable in function should be lowercase
     N806,
+    # W503 line break before binary operator
+    W503,
+    # W504 line break after binary operator
+    # W504,
 
 
 # pycodestyle default:
