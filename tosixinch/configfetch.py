@@ -443,11 +443,23 @@ class Double(object):
             return self._get_value(option)
 
     def _get_value(self, option):
+        # Blank values are None, '', and []. 'False' should be excluded.
+
+        # spec:
+        # No preference between blank values. Just returns parent one.
         try:
             val = self.sec.get(option)
         except NoOptionError:
             parent_val = self.parent_sec.get(option)
             return parent_val
+
+        if val in (None, '', []):
+            try:
+                parent_val = self.parent_sec.get(option)
+                return parent_val
+            except NoOptionError:
+                pass
+
         return val
 
     def _get_plus_value(self, option):
