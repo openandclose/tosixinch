@@ -48,7 +48,7 @@ ignore=
 
 
 # pycodestyle default:
-# E121, E123, E126, E133, E226, E241, E242, E704 and W503
+# E121, E123, E126, E226, E24, E704, W503, W504
 
 
 # vim: set ft=dosini:
