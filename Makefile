@@ -1,5 +1,5 @@
 
-PHONIES = first help all prep test flake8 git scripts copylib libs html htmlmain htmllibs
+PHONIES = first help all prep git flake8 test tox scripts copylib libs html htmlmain htmllibs
 DEV = tosixinch/tests/dev
 
 
@@ -7,13 +7,25 @@ first: help
 
 .PHONY: $(PHONIES)
 
-
 help:
 	@echo Tosixinch make file:
-	@echo $(PHONIES)
 	@echo
 	@echo do \'all\', or \'git flake8 test tox html\'
-	@echo and \`run\` \(_test_actualrun.py\)
+	@echo and \'run\' \(_test_actualrun.py\)
+	@echo
+	@echo 'all'
+	@echo '    prep'
+	@echo '        git'
+	@echo '            scripts'
+	@echo '            copylib'
+	@echo '                libs'
+	@echo '        flake8'
+	@echo '        test'
+	@echo '        tox'
+	@echo '    html'
+	@echo '        htmlmain'
+	@echo '        htmllibs'
+	@echo 'run'
 
 all: prep html
 	@echo 'Success All!'
