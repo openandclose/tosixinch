@@ -210,3 +210,31 @@ del pkg_resources
 version = '.'.join(release.split('.')[:2])
 
 autodoc_member_order = 'bysource'
+
+
+# https://github.com/sphinx-doc/sphinx/blob/master/doc/conf.py
+# import re
+from sphinx import addnodes
+
+def word_to_name(env, sig, signode):
+    signode += addnodes.desc_name(sig, sig)
+    name = sig.strip()
+    if name.endswith(' *'):
+        name = name[:-2]
+    name = name.replace(' ', '_')
+    # name = re.sub(r'[^\w\s-]', '_', name)
+    return name
+
+def setup(app):
+    app.add_object_type('dword', 'dword',
+        objname='defined word',
+        indextemplate='pair: %s; defined word',
+        parse_node=word_to_name)
+    app.add_object_type('confopt', 'confopt',
+        objname='configuration option',
+        indextemplate='pair: %s; configuration option',
+        parse_node=word_to_name)
+    app.add_object_type('script', 'script',
+        objname='other scripts',
+        indextemplate='pair: %s; other scripts',
+        parse_node=word_to_name)
