@@ -16,12 +16,12 @@ and the following valid opening ``'<html>'`` tag in the first 1000 characters.
 
 The actual code is now::
 
-   _COMMENT = r'\s*(<!--.+?-->\s*)*'
-   _XMLDECL = r'(<\?xml version.+? \?>)?'
-   _DOCTYPE = '(<!doctype .+?>)?'
-   HTMLFILE = re.compile(
-       '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + '<html(| .+?)>',
-       flags=re.IGNORECASE | re.DOTALL)
+    _COMMENT = r'\s*(<!--.+?-->\s*)*'
+    _XMLDECL = r'(<\?xml version.+? \?>)?'
+    _DOCTYPE = '(<!doctype .+?>)?'
+    HTMLFILE = re.compile(
+        '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + '<html(| .+?)>',
+        flags=re.IGNORECASE | re.DOTALL)
 
 
 .. note::
@@ -109,17 +109,17 @@ It adds small html decorations.
 
 .. Note::
 
-   The script adds some informative attributes for the ``pre`` tag it creates.
+    The script adds some informative attributes for the ``pre`` tag it creates.
 
-   For prose, ``<pre class='tsi-text tsi-prose'>...</pre>``.
+    For prose, ``<pre class='tsi-text tsi-prose'>...</pre>``.
 
-   For nonprose, ``<pre class='tsi-text tsi-nonprose'>...</pre>``.
+    For nonprose, ``<pre class='tsi-text tsi-nonprose'>...</pre>``.
 
-   For code, ``<pre class='tsi-text tsi-code'>...</pre>``.
+    For code, ``<pre class='tsi-text tsi-code'>...</pre>``.
 
-   For pythoncode, ``<pre class='tsi-text tsi-pythoncode'>...</pre>``.
+    For pythoncode, ``<pre class='tsi-text tsi-pythoncode'>...</pre>``.
 
-   But ``sample.t.css`` doesn't use these.
+    But ``sample.t.css`` doesn't use these.
 
 problem
 ^^^^^^^
@@ -165,14 +165,14 @@ you have to manually touch or delete files.
 
 .. Note::
 
-   In practice, you are likely to first try to create
-   an ordinary pdf if it is going well at all.
-   After that, you may want to create the toc version. ::
+    In practice, you are likely to first try to create
+    an ordinary pdf if it is going well at all.
+    After that, you may want to create the toc version. ::
 
-       $ tosixinch -12
-       $ tosixinch -3     # ordinary pdf
-       $ tosixinch --toc
-       $ tosixinch -3     # toc version pdf, overwrites the above
+        $ tosixinch -12
+        $ tosixinch -3     # ordinary pdf
+        $ tosixinch --toc
+        $ tosixinch -3     # toc version pdf, overwrites the above
 
 
 rules

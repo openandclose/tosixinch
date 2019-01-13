@@ -9,16 +9,16 @@ suitable for actual reading in 6-inch e-readers.
 
 
 .. toctree::
-   :maxdepth: 3
-   :caption: Contents:
+    :maxdepth: 3
+    :caption: Contents:
 
-   Introduction <intro>
-   Overview <overview>
-   Config Options <options>
-   Commandline Options <commandline>
-   Topics <topics>
+    Introduction <intro>
+    Overview <overview>
+    Config Options <options>
+    Commandline Options <commandline>
+    Topics <topics>
 
-   API <api>
+    API <api>
 
 .. API2 <api2>
 

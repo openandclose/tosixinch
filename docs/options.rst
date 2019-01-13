@@ -8,10 +8,10 @@ and `site.ini <overview.html#dword-site.ini>`__.
 
 .. note ::
 
-   ``Default Value`` is designated by parenthesis in the first lines.
+    ``Default Value`` is designated by parenthesis in the first lines.
 
-   `Value Function <overview.html#value-functions>`__
-   is designated by bracket in the first lines.
+    `Value Function <overview.html#value-functions>`__
+    is designated by bracket in the first lines.
 
 tosixinch.ini
 -------------
@@ -24,8 +24,8 @@ tosixinch.ini
 
 .. note ::
 
-   Options with star ``*`` are common options with `site.ini <#site-ini>`__.
-   You can use them to override application-wide configuration here.
+    Options with star ``*`` are common options with `site.ini <#site-ini>`__.
+    You can use them to override application-wide configuration here.
 
 General Section
 ^^^^^^^^^^^^^^^
@@ -497,12 +497,12 @@ and only the options of that converter's section are used.
 
 .. note ::
 
-   For ``Default Value``, only ones of ``prince`` section are provided here.
+    For ``Default Value``, only ones of ``prince`` section are provided here.
 
-   You can see defaults of other converters e.g.::
+    You can see defaults of other converters e.g.::
 
-      $ tosixinch -a --weasyprint
-      $ tosixinch -a --wkhtmltopdf
+        $ tosixinch -a --weasyprint
+        $ tosixinch -a --wkhtmltopdf
 
 .. confopt:: cnvpath
 
@@ -557,21 +557,21 @@ it first searches this file.
 So the names below are taken
 (You are free to override). ::
 
-   wikipedia
-   mobileread
-   gnu
-   python-doc
-   python-pep
-   bugs.python.org
-   hackernews
-   hackernews-threads
-   reddit
-   stackoverflow
-   stackprinter
-   github
-   github-issues
-   github-wiki
-   gist
+    wikipedia
+    mobileread
+    gnu
+    python-doc
+    python-pep
+    bugs.python.org
+    hackernews
+    hackernews-threads
+    reddit
+    stackoverflow
+    stackprinter
+    github
+    github-issues
+    github-wiki
+    gist
 
 .. confopt:: match
 

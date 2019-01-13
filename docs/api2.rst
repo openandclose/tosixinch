@@ -9,31 +9,31 @@ clean
 --------
 
 .. automodule:: tosixinch.clean
-   :members:
+    :members:
 
 configfetch
 -----------
 
 .. automodule:: tosixinch.configfetch
-   :members:
+    :members:
 
 convert
 -------
 
 .. automodule:: tosixinch.convert
-   :members:
+    :members:
 
 download
 --------
 
 .. automodule:: tosixinch.download
-   :members:
+    :members:
 
 extract
 -------
 
 .. automodule:: tosixinch.extract
-   :members:
+    :members:
 
 imagesize
 ---------
@@ -44,53 +44,53 @@ link
 ----
 
 .. automodule:: tosixinch.link
-   :members:
+    :members:
 
 main
 ----
 
 .. automodule:: tosixinch.main
-   :members:
+    :members:
 
 manuopen
 --------
 
 .. automodule:: tosixinch.manuopen
-   :members:
+    :members:
 
 news
 ----
 
 .. automodule:: tosixinch.news
-   :members:
+    :members:
 
 settings
 --------
 
 .. automodule:: tosixinch.settings
-   :members:
+    :members:
 
 textformat
 ----------
 
 .. automodule:: tosixinch.textformat
-   :members:
+    :members:
 
 toc
 ---
 
 .. automodule:: tosixinch.toc
-   :members:
+    :members:
 
 util
 ----
 
 .. automodule:: tosixinch.util
-   :members:
+    :members:
 
 zconfigparser
 -------------
 
 .. automodule:: tosixinch.zconfigparser
-   :members:
+    :members:
 

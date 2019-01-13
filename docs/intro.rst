@@ -216,19 +216,19 @@ and write extraction settings for the site. ::
 
 .. note ::
 
-   The values of ``select`` and ``exclude`` are
-   `Xpaths <https://en.wikipedia.org/wiki/Xpath>`__.
-   In software, html tag structure is made into objects tree
-   (``DOM`` or ``Elements``).
-   One way to get parts of them is ``Xpath``.
+    The values of ``select`` and ``exclude`` are
+    `Xpaths <https://en.wikipedia.org/wiki/Xpath>`__.
+    In software, html tag structure is made into objects tree
+    (``DOM`` or ``Elements``).
+    One way to get parts of them is ``Xpath``.
 
-   The value above means e.g.
-   get from anywhere (``'//'``),
-   ``div`` tags whose ``id`` attribute are ``'main'``
-   (including every sub-elements inside them).
+    The value above means e.g.
+    get from anywhere (``'//'``),
+    ``div`` tags whose ``id`` attribute are ``'main'``
+    (including every sub-elements inside them).
 
-   Multiple lines are interpreted
-   as connected with ``'|'`` (equivalent to *'or'*).
+    Multiple lines are interpreted
+    as connected with ``'|'`` (equivalent to *'or'*).
 
 And ::               
 

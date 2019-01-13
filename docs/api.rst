@@ -22,21 +22,21 @@ process.util
 ------------
 
 .. automodule:: tosixinch.process.util
-   :members:
+    :members:
 
 
 process.gen
 -----------
 
 .. automodule:: tosixinch.process.gen
-   :members:
+    :members:
 
 
 process.site
 ------------
 
 .. automodule:: tosixinch.process.site
-   :members:
+    :members:
 
 
 templite
@@ -51,5 +51,5 @@ templite
 
 
 .. automodule:: tosixinch.templite
-   :members:
+    :members:
 

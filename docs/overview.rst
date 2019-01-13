@@ -10,17 +10,17 @@ The script consists of several, independent actions (subcommands).
 An action is either a ``sequential action`` or a ``single action``.
 
 ``sequential actions`` are:
-   * `download <#cmdoption-arg-download>`__
-   * `extract <#cmdoption-arg-extract>`__
-   * `toc <topics.html#toc>`__ (make better table of contents)
-   * `convert <#cmdoption-arg-convert>`__
-   * `view <options.html#cmdoption-arg-viewcmd>`__ (open pdf viewer)
+    * `download <#cmdoption-arg-download>`__
+    * `extract <#cmdoption-arg-extract>`__
+    * `toc <topics.html#toc>`__ (make better table of contents)
+    * `convert <#cmdoption-arg-convert>`__
+    * `view <options.html#cmdoption-arg-viewcmd>`__ (open pdf viewer)
 
 .. note::
 
-   ``toc`` does not belong to the mainline actions,
-   and anyway very experimental.
-   So first-time readers can skip the references.
+    ``toc`` does not belong to the mainline actions,
+    and anyway very experimental.
+    So first-time readers can skip the references.
 
 You can call more than one ``sequential actions`` in one invocation.
 Irrespective of the arguments order,
@@ -28,18 +28,18 @@ the script executes actions in the above order.
 
 So, the three invocations below make no difference. ::
 
-   $ tosixinch -1  # download
-   $ tosixinch -2  # extract
-   $ tosixinch -3  # convert
+    $ tosixinch -1  # download
+    $ tosixinch -2  # extract
+    $ tosixinch -3  # convert
 
-   $ tosixinch -123
+    $ tosixinch -123
 
-   $ tosixinch -321
+    $ tosixinch -321
 
 ``single actions`` are:
-   * `appcheck <commandline.html#cmdoption-a>`__
-   * `browser <commandline.html#cmdoption-b>`__
-   * `check <commandline.html#cmdoption-c>`__
+    * `appcheck <commandline.html#cmdoption-a>`__
+    * `browser <commandline.html#cmdoption-b>`__
+    * `check <commandline.html#cmdoption-c>`__
 
 The script executes only the first ``single action``
 (if there are many, or mixed with sequential ones),
@@ -292,7 +292,7 @@ Config Files
     Reloading files or system might be needed.
     For example::
 
-         $ source ~/.bashrc
+          $ source ~/.bashrc
 
     If the script cannot find the variable,
     a basic search is done for the most common configuration directories.
@@ -389,9 +389,9 @@ Config Files
     You can choose any filename,
     but there are three files in ``process`` directory at the present. ::
 
-         gen.py
-         site.py
-         util.py
+        gen.py
+        site.py
+        util.py
 
     The sciript may add more modules.
     ``my*.py`` and ``user*.py`` are reserved for ``userprocess files``.
@@ -683,11 +683,11 @@ they are ``1``, ``2``, ``3``, ``none``, ``none`` and ``none``.
 
 In ``sample.t. css``, it is used like::
 
-   h1 { prince-bookmark-level: {{ bm1 }} }
-   h2 { prince-bookmark-level: {{ bm2 }} }
-   h3 { prince-bookmark-level: {{ bm3 }} }
-   h4 { prince-bookmark-level: {{ bm4 }} }
-   ...
+    h1 { prince-bookmark-level: {{ bm1 }} }
+    h2 { prince-bookmark-level: {{ bm2 }} }
+    h3 { prince-bookmark-level: {{ bm3 }} }
+    h4 { prince-bookmark-level: {{ bm4 }} }
+    ...
 
 
 Precmds and Postcmds
@@ -716,8 +716,8 @@ will print application config directory name.
 
 Other useful attributes are::
 
-   conf._userdir  (userdir)
-   conf.pdfname   (would-be pdf filename)
+    conf._userdir  (userdir)
+    conf.pdfname   (would-be pdf filename)
 
 (For more advanced usage, you need to peek in the source code.)
 
