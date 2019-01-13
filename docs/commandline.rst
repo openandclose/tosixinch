@@ -5,30 +5,33 @@ Commandline Options
 Commandline options are grouped by
 ``General``, ``Actions``, ``Programs``, ``Configs`` and ``Styles``.
 
-Main ``Actions`` are ``--download``, ``--extract``, ``--convert`` and ``--view``
-(or ``-1``, ``-2``, ``-3`` and ``-4``).
-They can be mixed, or concatenated,
-and in that case the option order is irrelevant,
-the script always calls '1, 2, 3, 4' in order.
+Some ``Actions`` are single actions,
+exiting after executing, ignoring other ``Actions``.
+Others are sequential actions.
+See `Actions <overview.html#actions>`__.
 
-``--toc`` can also be mixed, in the context that makes sense.
+Many options are related to only a specific ``Action``.
+Unrelated options are just ignored.
 
-Other ``Actions`` are mostly one-off,
-intended to be used independently
-(only one action in one invocation).
-
-Many options are related to a specific ``Action``.
-Unrelated options are just ignored when running some ``Action``.
-
-``Configs`` and ``Styles`` options are mostly the same as config file options,
-and the same rules for option field (for ``value functions``) apply.
+``Configs`` and ``Styles`` options are mostly the same
+as `Config Options <options.html>`__.
+You have to format commandline strings,
+following the rules specified there
+(according to `Value Functions <overview.html#value-functions>`__).
 
 .. note::
-    For [LINE] options,
-    it may not be easy to autually supply multiple values.
-    For example, using ``'\n'`` in bash, you need to quote by
-    a single quote prefixed with ``'$'``. ::
 
+    For ``[LINE]`` options,
+    it may not be easy to autually supply multiple values.
+
+    For example, an option in a configuration file
+    becomes like this in bash::
+
+        opt=    aaa
+                bbb
+
+    ::
+    
         --opt $'aaa\\nbbb'
 
 

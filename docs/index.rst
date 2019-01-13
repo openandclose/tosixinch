@@ -4,22 +4,22 @@ Tosixinch documentation
 
 *Browser to e-reader in a few minutes*
 
-A Python3 script to help to convert html to pdf,
+A Python3 script to help convert html to pdf,
 suitable for actual reading in 6-inch e-readers.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    Introduction <intro>
    Overview <overview>
-   Options <options>
+   Config Options <options>
    Commandline Options <commandline>
    Topics <topics>
 
    API <api>
-   
+
 .. API2 <api2>
 
 

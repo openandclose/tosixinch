@@ -7,61 +7,109 @@ Actions
 
 The script consists of several, independent actions (subcommands).
 
-The most common ones are:
+An action is either a ``sequential action`` or a ``single action``.
 
-**download**
-    Read input ``url``, download, and save as ``Downloaded File``.
+``sequential actions`` are:
+   * `download <#cmdoption-arg-download>`__
+   * `extract <#cmdoption-arg-extract>`__
+   * `toc <topics.html#toc>`__ (make better table of contents)
+   * `convert <#cmdoption-arg-convert>`__
+   * `view <options.html#cmdoption-arg-viewcmd>`__ (open pdf viewer)
 
-    If ``Downloaded File`` already exists, it does nothing.
-    So if you want to download again,
-    you have to search and delete the ``Downloaded File`` manually.
+.. note::
 
-    If ``url`` is a local filepath, it also does nothing.
-    ``Downloaded FIle`` is the same as ``url``.
+   ``toc`` does not belong to the mainline actions,
+   and anyway very experimental.
+   So first-time readers can skip the references.
 
-    As a special case, if all ``url`` input is directory or directories,
-    it just prints out files in them,
-    ignoring some files according to settings.
-    (It is intended to get files list in the local source repository,
-    ignoring ``/.git/``, ``/docs/`` or ``*.jpg``  etc.).
-    
-    Otherwise, mixing directories and files in ``urls`` raises Error.
+You can call more than one ``sequential actions`` in one invocation.
+Irrespective of the arguments order,
+the script executes actions in the above order.
 
-    Commandline: ``--download`` or ``-1``
+So, the three invocations below make no difference. ::
 
-**extract**
-    Open ``Downloaded File``,
-    process it some way or other to make it fit for conversion,
-    and generate ``Extracted Flle``.
-    (``Downloaded FIle`` is kept intact).
+   $ tosixinch -1  # download
+   $ tosixinch -2  # extract
+   $ tosixinch -3  # convert
 
-    It always runs, overwriting existing ``Extracted File`` if any.
+   $ tosixinch -123
 
-    (If ``url`` is local filepath, ``Downloaded File`` is not created,
-    but ``Extracted FIle`` *is* created).
+   $ tosixinch -321
 
-    Commandline: ``--extract`` or ``-2``
+``single actions`` are:
+   * `appcheck <commandline.html#cmdoption-a>`__
+   * `browser <commandline.html#cmdoption-b>`__
+   * `check <commandline.html#cmdoption-c>`__
 
-**convert**
-    Open ``Extracted File``, convert, and generate ``PDF file``.
-    (``Extracted FIle`` is kept intact).
+The script executes only the first ``single action``
+(if there are many, or mixed with sequential ones),
+and exits.
 
-    It always runs, overwriting existing ``PDF File`` if any.
+download
+^^^^^^^^
 
-    Commandline: ``--convert`` or ``-3``
+Downloads ``url``, and saves it as ``Downloaded_File``.
 
-They can be concatenated in invocation,
-so the next three commands and single command are the same::
+If ``Downloaded_File`` already exists, it does nothing.
 
-    tosixinch -1
-    tosixinch -2
-    tosixinch -3
+(So if you want to download the same ``url`` again,
+you have to delete the ``Downloaded_File`` manually.)
 
-    tosixinch -123
+If ``url`` is a local filepath, it also does nothing.
+``Downloaded_File`` is the same as ``url``.
 
-(You can also do ``'-23'``,
-but ``download`` does nothing if already done once,
-so ``'-23'`` and ``'-123'`` are the same the second time and after).
+As a special case, if all ``url`` input is a local directory or directories,
+it just prints out files in them,
+ignoring some files according to settings.
+(The intention is to make ``ufile`` from files in directories.
+But it may be more simple
+just to use ordinary utilities like unix ``find``.)
+
+Otherwise, mixing directories and files in ``urls`` raises Error.
+
+For the actual downloading, it just uses
+`urllib.request <https://docs.python.org/3/library/urllib.request.html>`__
+(python standard library),
+with `user-agent <options.html#confopt-user_agent>`__ and
+`encoding <options.html#confopt-encoding>`__ configurable.
+
+If `javascript <options.html#javascript>`__ option is ``True``,
+The script uses `pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
+instead of ``urllib``.
+
+(Note this Qt downloading is a very basic usage,
+and anyway it might be a bit too hard to implement general capabilities
+applicable to various arbitrary sites
+in case of javascript rendered pages.)
+
+extract
+^^^^^^^
+
+Opens ``Downloaded_File``, and generates ``Extracted_File``.
+(``Downloaded_File`` is kept intact).
+
+It always runs, overwriting existing ``Extracted_File`` if any.
+
+(If ``url`` is local filepath, ``Downloaded_File`` is not created,
+but ``Extracted_File`` *is* created).
+
+Extraction procedure is predetermined,
+and according to options in `site.ini <#dword-site.ini>`__.
+See `select <options.html#confopt-select>`__,
+`exclude <options.html#confopt-exclude>`__,
+`process <options.html#confopt-process>`__
+and `clean <options.html#confopt-clean>`__ options.
+
+convert
+^^^^^^^
+
+Opens ``Extracted_File``, and generates ``PDF_File``.
+(``Extracted_File`` is kept intact).
+
+It always runs, overwriting existing ``PDF_File`` if any.
+
+The `converter <options.html#confopt-converter>`__ option
+decides which ``converter`` to use.
 
 
 Target Files
@@ -72,24 +120,54 @@ each input and output for each consecutive action.
 For this, given ``url``, target file's names are uniquely determined.
 
 All generated html files are
-in ``_htmls`` folder in current directory (created if necessary).
+in ``_htmls`` sub directory in current directory (created if necessary).
 
 Generated *pdf* file is placed under current directory.
 
 Usually users don't have to care about these files' details.
 But disposing of the files (deleting or moving) is users' job.
 
-**url**
-    Input file location. URL or local filepath.
+.. dword:: url
+
+    Input resource location. URL or local filepath.
     File url (``file://..``) is currently not supported.
 
     Example::
 
         https://en.wikipedia.org/wiki/Xpath
 
-**Downloaded FIle**
+.. dword:: ufile
+
+    The required argument of the commandline option ``-f`` or ``--file``.
+    It should be a file containingi ``urls``.
+
+    ``ufile`` defaults to `urls.txt <#dword-urls.txt>`__.
+
+    The file's syntax is:
+
+        * Each line is parsed as ``url`` (or filepath).
+
+        * When action is not ``toc``,
+          the lines start with ``'#'`` or ``';'`` are ignored.
+
+        * When action is ``toc``,
+          the lines start with ``'#'`` are interpreted as chapters.
+          the lines start with ``';'`` are ignored.
+
+        * When there are multiple ``urls``,
+          if ``url`` has an extension that looks like binary,
+          this ``url`` is ignored
+          (according to 
+          `add_binaries <options.html#confopt-add_binaries>`__ option).
+
+          Note if input ``url`` is single,
+          whether ``-i`` or ``-f``,
+          this ``add_binaries`` fileter is not applied.
+
+.. dword:: Downloaded_File
+
     If ``url`` is a remote one,
-    ``Downloaded File`` is created inside ``_htmls`` directory,
+    ``Downloaded_File`` is created inside ``_htmls`` directory,
     with URL ``domain`` and ``paths`` as subdirectories.
 
     If ``url``'s last ``path`` doesn't have file extension,
@@ -97,10 +175,35 @@ But disposing of the files (deleting or moving) is users' job.
     If it ends with ``'/'``, ``'index--tosixinch'`` is added.
 
     .. note::
-        Recent servers use extensively no-extension urls with or without a slash,
+
+        Recent servers extensively use no-extension urls with or without a slash,
         and that causes trouble to filepath conversion.
-        (Because filepath cannot have the same name both for file and directory).
+
+        Because the clients doesn't have the same routing system as the servers,
+        they cannot determine univocably the location of these 'clean' urls.
+
+        For example, some sites actually use the same path component
+        both as file and directory.
+        E.g. they have both urls::
+
+            'http://example.com/aaa'         # a document
+            'http://example.com/aaa/bbb'     # a document
+
+        and since the filesystems cannot have the same name ('aaa')
+        for a file and a directory,
+        we have to invent some artificial local routing rules.
         This is the reason for this rather verbose name changing.
+
+        Extension check is a rough heuristic
+        because I don't want to go any further.
+
+        If the site has a url ::
+
+            'http://example.com/aaa.html'
+
+        I assume It is less likey that
+        the site would create ``'aaa.html/bbb'`` document.
+
 
     In Windows, illigal filename characters (``':?*\"<>```) in ``url`` are
     all changed to ``'_'``.
@@ -112,199 +215,194 @@ But disposing of the files (deleting or moving) is users' job.
 
         ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/index--tosixinch
 
-**Extracted File**
+.. dword:: Extracted_File
+
     String ``'--extracted'`` and ``'.html'`` (If not already have one)
-    is added to ``Downloaded FIle``.
-    
+    is added to ``Downloaded_File``.
+
     If ``url`` is local filepath,
-    The path of ``Extracted FIle`` is determined
-    roughly by the same process as ``Downloaded File``.
+    The path components of ``Extracted_File`` are created
+    by the same process as ``Downloaded_File``.
 
     Example::
 
         ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/index--tosixinch--extracted.html
 
-**PDF File**
-    If input consists of single ``url``,
+.. dword:: PDF_File
+
+    If input consists of a single ``url``,
     The filename is created from ``url``'s last ``path``.
-    If not, it is created from the section name of first ``url``.
+    If not, it is created from the section name of the first ``url``.
 
     Example::
 
         ~/Download/tosixinch/Xpath.pdf (from single input)
         ~/Download/tosixinch/wikipedia.pdf (from multiple input)
 
-    If multiple input includes multiple domains,
-    the filename of the pdf named after first domain may not be what you want.
+    Even if ``urls`` are from multiple domains (e.g. wikipedia and reddit),
+    the filename of the pdf is named after the first one (just wikipedia).
+    So, it is not always appropriate.
 
 
 Config Files
 ------------
 
-**urls.txt**
-    It is default name for ``--file``,
+.. dword:: urls.txt
+
+    It is the default filename for ``--file``,
     and used when no other file or input ``url`` is specified.
 
-    ``urls`` are read from this file in current directory.
+.. note::
 
-    The file's syntax is:
+    In general, it is better users have this file,
+    on the working directory specially chosen for ``tosixinch``.
 
-        * Each line is interpreted as ``url`` string.
+    I imagine this is the difference from ``a few hours`` application.
+    Many scraping or data extraction programs adopt 'new project strategy'.
+    For each objective, users think up some suitable name and place
+    (this is the hard part),
+    create a new directory,
+    and then let the programs initialize directory structure
+    and various configuration files.
 
-        * If a line starts with ``'#'`` or ``';'``,  the line is ignored.
+    I find this is a bit excessive for our humble ``a few minutes`` concern.
+    Users are always on the same directory,
+    reusing ``urls.txt`` (deleting and reediting the contents).
 
-        * In special case, when action is ``toc``,
-          a line starting with ``'#'`` is interpreted as a chapter.
-          So only ``';'`` can be used as comment character.
+.. dword:: toc-ufile
 
-**\*-toc.txt**
-    It is generated automatically when action ``toc`` is invoked,
-    and parsed automatically when ``convert``.
+    It is a ``toc`` version of `ufile <#dword-ufile>`__.
 
-    The filename is determined from ``--file``.
-    ``urls-toc.txt``, for example.
+    It is generated automatically when action is ``toc``,
+    and processed automatically when ``convert``.
 
-**userdir**
+    The filename is determined from ``--file`` input,
+    adding '-toc' suffix before extension. e.g. ``urls-toc.txt``.
+
+    see `TOC <topics.html#toc>`__ for details.
+
+.. dword:: userdir
+
     user configuration directory is specified
     by environment variable: ``TOSIXINCH_USERDIR``.
     For example::
 
-        export TOSIXINCH_USERDIR=~/.config/tosixinch (in .bashrc)
+        export TOSIXINCH_USERDIR=~/etc/tosixinch  # (in ~/.bashrc)
 
     Reloading files or system might be needed.
     For example::
 
-         $ source ~/.bashrc 
+         $ source ~/.bashrc
 
-    Failing this,
+    If the script cannot find the variable,
     a basic search is done for the most common configuration directories.
 
-    Windows:
-        | ``C:\Users\<username>\AppData\Roaming\tosixinch``
-        | ``C:\Users\<username>\AppData\Local\tosixinch``
-        | ``C:\Documents and Settings\<username>\Local Settings\Application Data\tosixinch``
-        | ``C:\Documents and Settings\<username>\Application Data\tosixinch``
-    Mac:
-        | ``~/Library/Application Support/tosixinch``
-    Others:
-        | ``$XDG_CONFIG_HOME/tosixinch``
-        | ``~/.config/tosixinch``
+    Windows::
 
-    (So, in this case, you don't need the environment variable).
+        C:\Users\<username>\AppData\Roaming\tosixinch
+        C:\Users\<username>\AppData\Local\tosixinch
+        C:\Documents and Settings\<username>\Local Settings\Application Data\tosixinch
+        C:\Documents and Settings\<username>\Application Data\tosixinch
 
-    Failing this, no user directory is set,
+    Mac::
+
+        ~/Library/Application Support/tosixinch
+
+    Others::
+
+        $XDG_CONFIG_HOME/tosixinch
+        ~/.config/tosixinch
+
+    (So, if this is OK for you, you don't have to create the environment variable).
+
+    If this also fails, no user directory is set,
     and just default application config and sample site config are read.
-    (In this state, the script is not very useful).
 
-    If commandline argument ``--userdir`` is given, it overwrites all the above.
+    If commandline argument ``--userdir`` is given, it overrides all the above.
 
-**tosixinch.ini**
+.. dword:: tosixinch.ini
+
     if there are files that glob match ``tosixinch*.ini`` in ``userdir``,
     it reads all of them in alphabetical order,
     and sets application settings accordingly.
 
-**site.ini**
+.. dword:: site.ini
+
     if there are files that glob match ``site*.ini`` in ``userdir``,
     it reads all of them in alphabetical order,
     and sets site specific settings accordingly.
 
-    Each section in them has ``match`` option,
-    and it is used as glob string to match input urls.
-    Section names can be arbitrary e.g.::
+.. dword:: css directory
 
-        [wikipedia]
-        match=      https://*.wikipedia.org/wiki/
+    ``userdir`` should have ``css`` sub directory. For example ::
 
-    Last asterisk can be omitted, so the following two lines make no deference. ::
-
-        match=      https://*.wikipedia.org/wiki/*
-        match=      https://*.wikipedia.org/wiki/
-
-**css directory**
-    ``userdir`` should have ``css`` subdirectory. For example ::
-    
         ~/.config/tosixinch/css
 
-**\*.css**
-    It reads css files in ``css directory`` when ``convert``.
-    ``prince`` and ``weasyprint`` require the files.
-    Other converters may not need them depending on your config.
+.. dword:: css files
+
+    The script searches css files (``'*.css'``) in ``css directory`` when ``convert``.
+    ``prince`` and ``weasyprint`` require css files.
+    Other converters may not need them depending on the configuration.
 
     Each file name must be specified for each converter
-    in ``tosixinch.ini``.
+    in ``tosixinch.ini`` (see option `css <options.html#confopt-css>`__.
 
-**\*.t.css**
+    By default, the script uses ``sample.css`` for all converters.
+    It is generated from the template ``sample.t.css`` (see below).
+
+.. dword:: css template files
+
     If css file names match ``'*.t.css'``,
-    they are interpreted as css ``template`` files
-    for ``templite.py`` (See `Vendored libraries <#vendored-libraries>`__).
+    they are rendered by a template engine
+    `templite.py <topics.html#script-templite.py>`__ (included.).
 
-    When ``convert``, It always runs,
-    and rendered css file is placed in ``css directory``,
-    stripping ``'.t'`` from the template filename.
-    (For example, ``my.t.css`` generates ``my.css``,
-    always overwriting older one).
+    (for the syntax and values, see `CSS Template Values <#css-template-values>`__).
 
-    The script includes ``sample.t.css`` file.
-    It is used by default, for all converters.
+    When ``convert``, the script always renders them,
+    and resultant ``css files`` are placed in ``css directory``,
+    overwriting older one, if any.
 
-    The syntax is:
+    The css filenames are made by stripping ``'.t'`` from the template.
+    (For example, ``sample.t.css`` generates ``sample.css``,
 
-        * The dictionary to pass to ``templite.py`` is made from option values
-          in ``style`` section in ``tosixinch.ini``.
+.. dword:: userprocess directory
 
-        * ``size`` variable is added.
-          It is either ``portrait_size`` or ``landscape_size``,
-          according to the value of ``orientation``.
+    ``userdir`` can also have ``'userprocess'`` sub directory. For example ::
 
-        * Bool variables ``prince``, ``weasyprint``, ``wkhtmltopdf``
-          and ``ebook-convert`` are added.
-          They are ``True`` or ``False``
-          according to the currently selected converter.
+        ~/.config/tosixinch/userprocess
 
-        * ``toc_depth`` is transformed to variables
-          ``bm1``, ``bm2``, ``bm3``, ``bm4``, ``bm5`` and ``bm6``.
-          For example, if ``toc_depth`` is ``3``,
-          they are ``1``, ``2``, ``3``, ``none``, ``none`` and ``none``.
+.. dword:: userprocess files
 
-        * ``'{{ option }}'`` is replaced with ``'value'``,
-          for example, ``'{{ font_size }}'`` becomes ``'9px'``.
+    When Action is ``extract``,
+    you can apply arbitrary functions to the html DOM elements,
+    before writing to ``Extracted_File``.
 
-        * Conditional block ``'{% if prince %} ... {% endif %}'`` can be used
-          for converter specific css.
+    (For the details, see `Process Functions <#process-functions>`__).
 
-        * For the details,
-          see the docstring of class `Templite <api.html#tosixinch.templite.Templite>`__
-          (by Ned and others).
-          But it seems you can't use much of them here.
+    The script searches process functions in python files (``'*.py'``)
+    in ``userprocess`` directory.
 
+    If it cannot find the one,
+    it seaches next in application's ``process`` directory
+    (It is in the installed application's root).
 
-**userprocess directory**
-    ``userdir`` can also have ``userprocess`` subdirectory.
+    You can choose any filename,
+    but there are three files in ``process`` directory at the present. ::
 
-**\*.py**
-    When ``extract``, arbitrary ``process`` functions can be called
-    after ``select`` and ``exclude``.
+         gen.py
+         site.py
+         util.py
 
-    The script searches first in ``userprocess`` directory, 
-    then in application's ``process`` directory,
-    and first found one is used.
-    So, name conflict should be avoided.
-
-    Already taken names are::
-
-        gen.py
-        site.py
-        util.py
-
-    Other names are free to choose, but ``user*.py`` is recommended.
-    (Builtin process files may increase.)
+    The sciript may add more modules.
+    ``my*.py`` and ``user*.py`` are reserved for ``userprocess files``.
 
 
 Config Format
 -------------
 
 Configuration files are parsed by a customized version of
-`configparser library <https://docs.python.org/3/library/configparser.html>`__.
+`configparser <https://docs.python.org/3/library/configparser.html>`__
+(Python standard library).
 So in general, the syntax follows it. ::
 
     [section]
@@ -314,30 +412,37 @@ So in general, the syntax follows it. ::
 Comment
 ^^^^^^^
 
-Comment markers are ``'#'`` or ``';'`` in the first non-whitespace column.
+Comment markers are ``'#'`` or ``';'``, in the first non-whitespace column.
 Inline comments are not possible.
 
-But if option function is ``[CMD]``, it is parsed by
-`shlex library <https://docs.python.org/3/library/shlex.html>`__,
+But if option function is `[CMD] <#dword-CMD>`__, it is parsed by
+`shlex <https://docs.python.org/3/library/shlex.html>`__
+(Python standard library),
 so *in the option value*, you can use inline comments
-(only ``'#'`` character). For example::
+(only ``'#'`` character). For example:
+
+.. code-block:: ini
 
     [section]
-    command_string= find . -name '*.py' # TODO: more suitable command example
+    command= find . -name '*.py' # TODO: more suitable command example
 
-``ConfigParser`` reads the entire line, but it is passed to ``shlex``,
-and it ignores ``'#'`` and after.
+``ConfigParser`` reads the entire line after ``=``,
+but it is passed to ``shlex``, and it strips ``'#'`` and after.
 
 Structure
 ^^^^^^^^^
 
 There are two types of configuration files.
-``tosixinch.ini`` (application config)
-and ``site.ini'`` (sites configs).
 
-``tosixinch.ini`` consists of three types of sections,
-``general``, ``style`` and each converter sections
-(``prince``, ``weasyprint``, ``wkhtmltopdf`` and ``ebook-convert``).
+* ``tosixinch.ini`` (application config)
+* ``site.ini`` (sites configs).
+
+``tosixinch.ini`` consists of three types of sections.
+
+* ``general``
+* ``style``
+* each converter sections
+  (``prince``, ``weasyprint``, ``wkhtmltopdf`` and ``ebook-convert``).
 
 ``site.ini`` consists of sections for each specific website,
 and they all have the same options.
@@ -359,7 +464,7 @@ In ``site.ini``, you can use simple section inheritance syntax.
 
 ``' : '`` in section names is specially handled,
 so that ``[aa : bb]`` means ``[aa]``,
-but if the option is not in ``[aa]``, look up also ``[bb]``. For example::
+but falls back to ``[bb]``. For example::
 
     [aa : bb]
     x=aaa
@@ -367,48 +472,60 @@ but if the option is not in ``[aa]``, look up also ``[bb]``. For example::
     x=bbb
     y=bbb
 
-In this config, ``x`` option of section ``[aa]`` is ``aaa``,
-and ``y`` is ``bbb``.
+In this config, ``aa.x`` is ``aaa``, and ``aa.y`` is ``bbb``.
 
-In ``site.sample.ini``,
-the section of ``mobileread.com`` wiki pages is just::
+``aa`` doesn't have ``y`` option,
+so it searches the parent section (``bb``).
+
+(If even the parent section doesn't have the option,
+then it falls back to ordinary mechanism.
+(``DEFAULT`` section search or ``NoOptionError``).
+
+It is to omit duplicate options.
+For example, wiki pages of mobileread.com use the same layout
+as wikipedia.org.
+So the options for the script are also the same,
+and you don't have to write.
+(other than ``match``). ::
 
     [mobileread : wikipedia]
-    match=      http://wiki.mobileread.com/wiki
-
-because they use the same layout,
-you can omit other options
-(they are the same as wikipedia options, ``select``, ``exclude`` etc.).
+    match=      http://wiki.mobileread.com/wiki/*
 
 
 Value Functions
----------------
+^^^^^^^^^^^^^^^
 
-Each option value field has predetermined transformation syntax.
-Users have to fill the value accordingly, when setting.
+Each option value field has predetermined transformation rules.
+Users have to fill the value accordingly, if setting.
 
-**None**
+.. dword:: None
+
     If nothing is specified, it is an ordinary ``ConfigParser`` value.
     String value as you write it. Leading and ending spaces are stripped.
     Newlines are preserved if indented.
 
-**BOOL**
-    ``'1'``, ``'yes'``, ``'true'`` and ``'on'`` are interpreted as ``'True'``.
-    ``'0'``, ``'no'``, ``'false'`` and ``'off'`` are interpreted as ``'False'``.
+.. dword:: BOOL
+
+    ``'1'``, ``'yes'``, ``'true'`` and ``'on'`` are interpreted as ``True``.
+
+    ``'0'``, ``'no'``, ``'false'`` and ``'off'`` are interpreted as ``False``.
+
     It accepts only one of the eight (case insensitive).
 
-**COMMA**
+.. dword:: COMMA
+
     Values are comma separated list. For example::
-    
+
         [section]
-        ...    
+        ...
         comma_option=   one, two, three
 
     Leading and ending spaces and newlines are stripped.
-    So value is a list of ``'one'``, ``'two'`` and ``'three'``.
+    So the value is a list of ``'one'``, ``'two'`` and ``'three'``.
     Single value with no commas is OK.
 
-**LINE**
+.. dword:: LINE
+
     Values are line separated list. For example::
 
         [section]
@@ -417,53 +534,61 @@ Users have to fill the value accordingly, when setting.
                         two, three
                         four five,
 
-    Leading and ending spaces and commas are stripped.
-    So value is a list of ``'one'``, ``'two, three'`` and ``'four five'``.
+    Leading and ending spaces and *commas* are stripped.
+    So the value is a list of ``'one'``, ``'two, three'`` and ``'four five'``.
     Single line with no newlines is OK.
 
-**CMD**
-    Value is a commandline string.
+.. dword:: CMD
+
+    Value is for a commandline string.
     You write value string as you would write in the shell.
     So words with spaces need quotes, and special characters need escapes.
 
-**PLUS**
-    Values are comma separated list,
-    and add to or subtract from some default value.
+.. dword:: PLUS
+
+    Values are comma separated list as ``COMMA``,
+    and add to or subtract from some default values.
     If first character of an item is ``'+'``,
     it is a ``plus item``.
     If ``'-'``, it is a ``minus item``.
-    
+
     For example, if initial value is ``'one, two, three'``::
 
-        +four                   (one, two, three, four)
-        -two, -three, +five     (one, four, five)
+        +four                ->  (one, two, three, four)
+        -two, -three, +five  ->  (one, four, five)
 
     If already added or no items to subtract, it does nothing. ::
 
-        +one, -six              (one, four, five)
+        +one, -six           ->  (one, four, five)
 
 
     As a special case,
     if all items are neither ``plus item`` nor ``minus item``,
     the list itself overwrites previous value. ::
 
-        six, seven              (six, seven)
+        six, seven           ->  (six, seven)
 
     So items must be either
     some combination of ``plus item`` and ``minus item``,
     or none of them.
     Mixing these raises Error.
 
-    You can pass ``minus item`` in the same way in commandline
-    (with a little customization of ``argparse``)::
+    You can pass ``minus item`` in the same way in commandline.
+    The script can parse these a bit confusing arguments.
+    (leading single dash is also a short optional argument marker) ::
 
         ... --plus-option -one
+
+    Multiple items in commandline should be quoted. ::
+
         ... --plus-option '-two, -three, +four'
 
 
-**XPATH**
+.. dword:: XPATH
+
     some values are interpreted as xpath,
-    in most cases, ``[LINE]`` is also specified.
+    in most cases, `[LINE] <#dword-LINE>`__ is also specified
+    (Because they tend to be long).
 
     One custom syntax, *double equals* (``'=='``) is added.
     If the string matches:
@@ -482,45 +607,167 @@ Users have to fill the value accordingly, when setting.
 
         <tag>[contains(concat(" ", normalize-space(@class), " "), " <value> ")]'
 
-    For example, if you want to select 
-    ``div`` elements whose class attribute includes ``'aa'``,
-    you can write:
-
-    .. code-block:: none
-
-        //div[@class=="aa"]
-
-    And it also selects ``div`` elements with ``class`` value ``'aa bb cc'``.
+    It is to get arround one inconvenient point of Xpath,
+    compared to CSS Selector.
+    see note below.
 
     .. note::
 
-        This is one inconvenient point of xpath, compared to css selector.
+        There are many occasions when you want to select an element by a ``class`` attribute.
+        But it is not easy for Xpath, if the ``class`` has multiple values.
 
-        * You cannot select ``'aa bb cc'`` by ``'@class="aa"'``.
+        For example, if you want to select ``<div class="aa bb cc">``,
+
+        * You cannot select it by ``'@class="aa"'``.
+          Because Xpath campares strings, and 'aa bb cc' and 'aa' are defferent strings.
 
         * You can select it by ``'contains(@class, "aa")'``,
-          but it also selects values
-          which just *contains* the string, ``'aaa'``, ``'aaxxx'`` etc..
+          but it also selects elements
+          whose ``class`` just *contains* the string, e.g. ``'aaa'`` or ``'aaxxx'``.
 
         * You can more wisely select it by ``'contains(@class, "aa ")'`` (with space),
-          but the existence of space is not so certain.
+          but the existence of space is not so reliable.
+
+        * Verbose syntax above is the established practice.
+          So in this case, ::
+
+            //div[contains(concat(" ", normalize-space(@class), " "), " aa ")]
 
         `Scrapy document <https://docs.scrapy.org/en/latest/topics/selectors.html#when-querying-by-class-consider-using-css>`__
-        has a little longer explanation.
+        has a slightly longer explanation.
 
 
-Other Magic Words
------------------
+CSS Template Values
+-------------------
 
-**tsi-keep-style**
-    When you add ``style`` attributes to some elements
-    in your custom ``userprocess`` functions,
-    also add this value to the ``class`` attribute.
-    All ``style`` attributes without this ``class`` value are
-    removed in ``clean`` method in ``extract``. ::
+In ``css template files``,
+you can look up option values in `style <options.html#style>`__ section.
 
-        # removed (becomes just '<div>')
-        <div style="font-weight:bold;">
+Syntax
+^^^^^^
 
-        # not removed
-        <div class="tsi-keep-style other-values" style="font-weight:bold;">
+``{{ option }}`` is replaced with ``value``.
+
+For example, ``{{ font_size }}`` becomes ``9px``.
+
+Conditional block ``{% if option %} ... {% endif %}``
+is rendered if the ``option`` is evaluated to ``True``
+(not ``None``, ``False``, ``0``, ``''``, or ``[]``).
+
+For example, you can write ``prince`` specific css rules
+inside ``{% if prince %} ... {% endif %}`` block.
+
+For the details,
+see the docstring of the code `Templite <api.html#tosixinch.templite.Templite>`__
+(by Ned and others).
+
+Values
+^^^^^^
+
+``size`` variable is added.
+It is automatically set from either
+`portrait_size <options.html#confopt-portrait_size>`__
+or `landscape_size <options.html#confopt-landscape_size>`__,
+according to the value of
+`orientation <options.html#confopt-orientation>`__.
+
+Bool variables ``prince``, ``weasyprint``, ``wkhtmltopdf``
+and ``ebook-convert`` are added.
+They are ``True`` or ``False``
+according to the currently selected converter.
+
+`toc_depth <options.html#confopt-toc_depth>`__ is transformed to variables
+``bm1``, ``bm2``, ``bm3``, ``bm4``, ``bm5`` and ``bm6``.
+For example, if ``toc_depth`` is ``3``,
+they are ``1``, ``2``, ``3``, ``none``, ``none`` and ``none``.
+
+In ``sample.t. css``, it is used like::
+
+   h1 { prince-bookmark-level: {{ bm1 }} }
+   h2 { prince-bookmark-level: {{ bm2 }} }
+   h3 { prince-bookmark-level: {{ bm3 }} }
+   h4 { prince-bookmark-level: {{ bm4 }} }
+   ...
+
+
+Precmds and Postcmds
+--------------------
+
+Before and after main actions (``'-1'``, ``'-2'`` and ``'-3``),
+The script calls arbitrary shell commands,
+according to precmds and postcmds options in ``tosixinch.ini``.
+
+One useful use case of ``postcmds`` is notification,
+since ``download`` and ``convert`` sometimes take a time.
+For example, if you are using linux::
+
+    postcmd1=   notify-send -t 3000 'Done -- tosixinch.download'
+
+should bring some notification balloon
+when ``download`` is complete.
+
+If a word in the statement begins with ``'conf.'``,
+and the rest is dot-separated identifier (``[a-zA-Z_][a-zA-Z_0-9]+``),
+it is evaluated as the object ``conf``. For example::
+
+    postcmd1=   echo conf._configdir
+
+will print application config directory name.
+
+Other useful attributes are::
+
+   conf._userdir  (userdir)
+   conf.pdfname   (would-be pdf filename)
+
+(For more advanced usage, you need to peek in the source code.)
+
+`userdir <#dword-userdir>`__ is inserted in the head of ``$PATH``.
+So you can call your custom scripts only by filenames (not fuillpath),
+if they are in there.
+
+
+Viewcmd
+^^^^^^^
+
+A special case of ``precmds`` and ``postcmds``, is ``viewcmd``.
+
+While ``precmds`` and ``postcmds`` are always executed,
+``viewcmds``  needs additional commandline switch to run
+(``-4`` or ``--view``).
+
+The intended use case is to open a pdf viewer
+to see the generated pdf.
+
+So, if you are using `okular <https://okular.kde.org/>`__
+as pdf viewer, ::
+
+    # in tosixinch.ini
+    viewcmd=    okular conf.pdfname
+
+    $ tosixinch -4
+
+will opens the viewer with the generated pdf file.
+
+Also, the script includes a sample file ``open_viewer.py``.
+It does basically the same thing as above.
+But if there is a same pdf application opened with the same pdf file,
+if does nothing (cancel duplicate opening).
+
+It uses unix command ``ps`` to get active processes,
+and search the app and the file names in invocation commandline strings.
+So, only unixes users can use it.
+
+It can be used without full path.::
+
+    viewcmd=    open_viewer.py --command okular --check conf.pdfname
+
+* ``--command`` accepts arbitrary commands with some options,
+  but you need to quote.
+  (e.g. ``--command 'okular --page 5'``).
+* ``--check`` is the option flag to do above duplicate checks.
+
+And one way to see the help is::
+
+  $ tosixinch -4 --viewcmd 'open_viewer.py --help'
+
+(note if ``urls.txt`` doesn't exist or is blank, this does not work.)
