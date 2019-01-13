@@ -2,3 +2,11 @@
 div.line-block {
   line-height: 1.4em;
 }
+
+div.note {
+  background-color: #fff;
+}
+
+div.admonition p.admonition-title {
+  font-size: inherit;
+}
