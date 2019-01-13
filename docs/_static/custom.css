@@ -10,3 +10,7 @@ div.note {
 div.admonition p.admonition-title {
   font-size: inherit;
 }
+
+dl.script code.descname {
+  font-family: inherit;
+}
