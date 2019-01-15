@@ -61,7 +61,7 @@ If ``url`` is a local filepath, it also does nothing.
 As a special case, if all ``url`` input is a local directory or directories,
 it just prints out files in them,
 ignoring some files according to settings.
-(The intention is to make ``ufile`` from files in directories.
+(The intention is to make `ufile <#dword-ufile>`__ from files in directories.
 But it may be more simple
 just to use ordinary utilities like unix ``find``.)
 
@@ -77,10 +77,8 @@ If `javascript <options.html#javascript>`__ option is ``True``,
 The script uses `pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
 instead of ``urllib``.
 
-(Note this Qt downloading is a very basic usage,
-and anyway it might be a bit too hard to implement general capabilities
-applicable to various arbitrary sites
-in case of javascript rendered pages.)
+(Note this Qt downloading is very basic.
+Just think of it like *I'm feeling lucky* button).
 
 extract
 ^^^^^^^
@@ -117,7 +115,7 @@ Target Files
 
 The point of the script is that you don't have to designate
 each input and output for each consecutive action.
-For this, given ``url``, target file's names are uniquely determined.
+For this, given ``url``, target files' names are uniquely determined.
 
 All generated html files are
 in ``_htmls`` sub directory in current directory (created if necessary).
@@ -220,7 +218,7 @@ But disposing of the files (deleting or moving) is users' job.
     String ``'--extracted'`` and ``'.html'`` (If not already have one)
     is added to ``Downloaded_File``.
 
-    If ``url`` is local filepath,
+    If ``url`` is a local filepath,
     The path components of ``Extracted_File`` are created
     by the same process as ``Downloaded_File``.
 
@@ -289,13 +287,14 @@ Config Files
 
         export TOSIXINCH_USERDIR=~/etc/tosixinch  # (in ~/.bashrc)
 
-    Reloading files or system might be needed.
+    Reloading files or rebooting system might be needed.
     For example::
 
           $ source ~/.bashrc
 
     If the script cannot find the variable,
-    a basic search is done for the most common configuration directories.
+    a basic search is done for the most common configuration directories
+    (in the same order below for each OS).
 
     Windows::
 
@@ -377,7 +376,7 @@ Config Files
     you can apply arbitrary functions to the html DOM elements,
     before writing to ``Extracted_File``.
 
-    (For the details, see `Process Functions <#process-functions>`__).
+    (For the details, see `process option <options.html#confopt-process>`__).
 
     The script searches process functions in python files (``'*.py'``)
     in ``userprocess`` directory.
@@ -394,7 +393,7 @@ Config Files
         util.py
 
     The sciript may add more modules.
-    ``my*.py`` and ``user*.py`` are reserved for ``userprocess files``.
+    Names ``my*.py`` and ``user*.py`` are reserved for ``userprocess files``.
 
 
 Config Format
@@ -408,6 +407,7 @@ So in general, the syntax follows it. ::
     [section]
     option=         value
     more_option=    more value
+
 
 Comment
 ^^^^^^^
@@ -426,7 +426,7 @@ so *in the option value*, you can use inline comments
     [section]
     command= find . -name '*.py' # TODO: more suitable command example
 
-``ConfigParser`` reads the entire line after ``=``,
+``ConfigParser`` reads the entire line after ``'='``,
 but it is passed to ``shlex``, and it strips ``'#'`` and after.
 
 Structure
@@ -487,6 +487,14 @@ as wikipedia.org.
 So the options for the script are also the same,
 and you don't have to write.
 (other than ``match``). ::
+
+    [wikipedia]
+    match=      ...
+    select=     ...
+    exclude=    ...
+    ...
+
+::
 
     [mobileread : wikipedia]
     match=      http://wiki.mobileread.com/wiki/*
@@ -569,7 +577,7 @@ Users have to fill the value accordingly, if setting.
         six, seven           ->  (six, seven)
 
     So items must be either
-    some combination of ``plus item`` and ``minus item``,
+    some combination of ``plus items`` and ``minus items``,
     or none of them.
     Mixing these raises Error.
 
@@ -619,19 +627,19 @@ Users have to fill the value accordingly, if setting.
         For example, if you want to select ``<div class="aa bb cc">``,
 
         * You cannot select it by ``'@class="aa"'``.
-          Because Xpath campares strings, and 'aa bb cc' and 'aa' are defferent strings.
+          Because Xpath campares strings, and ``'aa bb cc'`` and ``'aa'`` are defferent strings.
 
         * You can select it by ``'contains(@class, "aa")'``,
           but it also selects elements
           whose ``class`` just *contains* the string, e.g. ``'aaa'`` or ``'aaxxx'``.
 
         * You can more wisely select it by ``'contains(@class, "aa ")'`` (with space),
-          but the existence of space is not so reliable.
+          but the existence of a space is not so reliable.
 
         * Verbose syntax above is the established practice.
           So in this case, ::
 
-            //div[contains(concat(" ", normalize-space(@class), " "), " aa ")]
+            div[contains(concat(" ", normalize-space(@class), " "), " aa ")]
 
         `Scrapy document <https://docs.scrapy.org/en/latest/topics/selectors.html#when-querying-by-class-consider-using-css>`__
         has a slightly longer explanation.
@@ -690,8 +698,12 @@ In ``sample.t. css``, it is used like::
     ...
 
 
+Hookcmds
+--------
+
+
 Precmds and Postcmds
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 Before and after main actions (``'-1'``, ``'-2'`` and ``'-3``),
 The script calls arbitrary shell commands,
@@ -729,10 +741,10 @@ if they are in there.
 Viewcmd
 ^^^^^^^
 
-A special case of ``precmds`` and ``postcmds``, is ``viewcmd``.
+A special case of ``hookcmds`` is ``viewcmd``.
 
 While ``precmds`` and ``postcmds`` are always executed,
-``viewcmds``  needs additional commandline switch to run
+``viewcmd``  needs additional commandline switch to run
 (``-4`` or ``--view``).
 
 The intended use case is to open a pdf viewer
@@ -748,26 +760,6 @@ as pdf viewer, ::
 
 will opens the viewer with the generated pdf file.
 
-Also, the script includes a sample file ``open_viewer.py``.
-It does basically the same thing as above.
-But if there is a same pdf application opened with the same pdf file,
-if does nothing (cancel duplicate opening).
-
-It uses unix command ``ps`` to get active processes,
-and search the app and the file names in invocation commandline strings.
-So, only unixes users can use it.
-
-It can be used without full path.::
-
-    viewcmd=    open_viewer.py --command okular --check conf.pdfname
-
-* ``--command`` accepts arbitrary commands with some options,
-  but you need to quote.
-  (e.g. ``--command 'okular --page 5'``).
-* ``--check`` is the option flag to do above duplicate checks.
-
-And one way to see the help is::
-
-  $ tosixinch -4 --viewcmd 'open_viewer.py --help'
-
-(note if ``urls.txt`` doesn't exist or is blank, this does not work.)
+Also, the script includes a sample file `open_viewer.py <topics.html#script-open_viewer>`__.
+(It does basically the same thing as above,
+but cancels duplicate openings.)

@@ -35,7 +35,7 @@ def add_title(doc, force=False):
 
 
 def add_title_force(doc):
-    """Add title even if there are ``<h1>``s already."""
+    """Add title even if there are ``<h1>`` s already."""
     add_title(doc, True)
 
 

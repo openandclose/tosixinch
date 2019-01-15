@@ -2,38 +2,38 @@
 API reference
 =============
 
+*some* modules are documented here.
+
+
 process
 -------
 
-``process`` package includes ``util``, ``gen`` and ``site`` modules,
-and each module mostly consists of top level functions.
+.. note::
 
-They are all simplest functions,
-and not particularly easier to use,
-so users don't have to use these 'built-ins' preferentially.
+    ``process`` package includes ``util``, ``gen`` and ``site`` modules,
+    and each module mostly consists of top level functions.
 
-The intention is that
-by carefully collecting and classifying these functions,
-we might be able to survey the problem domain
-specific to the script.
+    They are all simplest functions,
+    and not particularly easier to use,
+    so users don't have to use these 'built-ins' preferentially.
 
 
 process.util
-------------
+^^^^^^^^^^^^
 
 .. automodule:: tosixinch.process.util
     :members:
 
 
 process.gen
------------
+^^^^^^^^^^^
 
 .. automodule:: tosixinch.process.gen
     :members:
 
 
 process.site
-------------
+^^^^^^^^^^^^
 
 .. automodule:: tosixinch.process.site
     :members:
@@ -43,9 +43,10 @@ templite
 --------
 
 .. note::
-    This module is copied from Ned Batchelder's
-    `Coverage.py <https://github.com/nedbat/coveragepy/blob/master/coverage/templite.py>`__,
+
+    This module is copied from Ned Batchelder's Coverage.py,
     including docstrings here.
+    see `templite.py <topics.html#script-templite.py>`__
 
     Small changes are made to work independently.
 

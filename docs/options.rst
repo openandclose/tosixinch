@@ -2,10 +2,6 @@
 Config Options
 ==============
 
-``tosixinch`` has two configuration files,
-`tosixinch.ini <overview.html#dword-tosixinch.ini>`__
-and `site.ini <overview.html#dword-site.ini>`__.
-
 .. note ::
 
     ``Default Value`` is designated by parenthesis in the first lines.
@@ -16,16 +12,10 @@ and `site.ini <overview.html#dword-site.ini>`__.
 tosixinch.ini
 -------------
 
-``tosixinch.ini`` consists of three kinds of sections.
-
-* [general]
-* [style]
-* converter sections ([prince], [weasyprint], [wkhtmltopdf] and [ebook-convert])
-
 .. note ::
 
     Options with star ``*`` are common options with `site.ini <#site-ini>`__.
-    You can use them to override application-wide configuration here.
+    You can use them to override application-wide configuration.
 
 General Section
 ^^^^^^^^^^^^^^^
@@ -34,26 +24,32 @@ General Section
 
     (``urllib``)
 
-    Designate default downloader. Currently only ``'urllib'``.
+    Designate default downloader. Currently only ``urllib``.
 
 .. confopt:: extractor
 
     (``lxml``)
 
     Designate default extractor.
-    Either ``'lxml'`` (recommended) or ``'readability'``.
+    Either ``lxml`` (recommended) or ``readability``.
+
+    The intended use case of ``readability`` is
+    from commandline.
+    Either `--readability <commandline.html#cmdoption-readability>`__
+    or `--readability-only <commandline.html#cmdoption-readability-only>`__.
 
 .. confopt:: converter
 
     (``prince``)
 
     Designate default converter.
-    One of ``'prince'``, ``'weasyprint'``, ``'wkhtmltopdf'``
-    or ``'ebook-convert'``.
+    One of ``prince``, ``weasyprint``, ``wkhtmltopdf``
+    or ``ebook-convert``.
 
 .. confopt:: user_agent \*
 
-    (some arbitrary browser user agent. run ``'tosixinch -a'``)
+    (some arbitrary browser user agent.
+    run ``'tosixinch -a'`` to actually see.)
 
     Designate user agent for downloader (only for ``urllib``).
 
@@ -105,7 +101,7 @@ General Section
     Web pages may have some component content.
     Most important ones are images,
     and currently the script only concerns images
-    (in html tag ``<img src=...``).
+    (in html tag ``<img src=...>``).
     The value designate whether it downloads these components
     when ``extract``.
 
@@ -119,10 +115,10 @@ General Section
     for multiple trials and layout checking.
 
     TODO:
-       So the script does nothing about ``iframe`` inline sources.
-       Downloading and rendering are done by converters,
-       but we can't apply our css rules
-       (They are defferent domain).
+        So the script does nothing about ``iframe`` inline sources.
+        Downloading and rendering are done by converters,
+        but we can't apply our css rules
+        (They are defferent domains).
 
 .. confopt:: full_image \*
 
@@ -220,7 +216,7 @@ General Section
 
     ``[LINE][XPATH]``
 
-    If ``url`` doesn't `match <#confopt-match>`__ s any site in ``site.ini``,
+    If ``url`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
     ``select`` is done according to this value.
 
     The procedure is differet from ordinary ``select``
@@ -254,6 +250,7 @@ General Section
     | ``[BOOL]``
 
     The value specifies whether site config includes ``site.sample.ini``.
+    see `Samples <intro.html#samples>`__.
 
 .. confopt:: preprocess \*
 
@@ -296,7 +293,7 @@ General Section
 
 .. confopt:: textcss
 
-    (``sample``)
+    ()
 
     Not used.
 
@@ -315,20 +312,12 @@ General Section
     Printing out also considers `add_binaries <#confopt-add_binaries>`__ option,
     and ignores some extinsion files accordingly.
 
-.. confopt:: userdir
+---
 
-    (the script searches ``TOSIXINCH_USERDIR`` environment variable
-    and common OS config dirs)
+.. note ::
 
-    Override default user configuration directory if specified.
-
-.. confopt:: nouserdir
-
-    | (``False``)
-    | ``[BOOL]``
-
-    Skip parsing user configurations.
-    Intended for testing.
+    For ``hookcmds`` (``precmd*``, ``postcmd*`` and ``viewcmd``),
+    see `Hookcmds <overview.html#hookcmds>`__.
 
 .. confopt:: precmd1
 
@@ -380,11 +369,6 @@ General Section
     Run arbitrary shell command
     when specified in commandline options (``-4`` or ``--view``).
 
-.. note ::
-
-    For ``precmd*``, ``postcmd*`` and ``viewcmd``,
-    see `Precmds and Postcmds <overview.html#precmds-and-postcmds>`__.
-
 
 Style Section
 ^^^^^^^^^^^^^
@@ -411,12 +395,12 @@ In the following, the roles in the sample file
     (``90mm 118mm``)
 
     Designate portrait page size (width and height).
-    The script use this value when ``orientation`` is ``portrait``.
+    The script uses this value when ``orientation`` is ``portrait``.
 
     The display size of common 6-inch e-readers seems
     arround 90mm x 120mm.
     Here the default thinly clips on height, for versatility.
-    (Officially published pixels may be different from
+    (Officially published pixel specs may be different from
     physically effective pixels,
     may be limited by OS, application, or user interfaces.
     In general, width is more precious than height in small devices.)
@@ -432,7 +416,7 @@ In the following, the roles in the sample file
 
     (``3``)
 
-    Designate tree depth of pdf bookmarks (Table of Contents).
+    Designate (max) tree level of pdf bookmarks (Table of Contents).
     the option can only be used
     when ``converter`` is ``prince`` or ``weasyprint``.
 
@@ -597,7 +581,7 @@ So the names below are taken
 
     If there are multiple matches,
     the one with the most path separator characters (``'/'``) is used
-    (scheme separator ``'//'`` in ``'https?://'`` are ignored).
+    (scheme separator ``'//'`` in ``'https?://'`` are not counted).
     If there are multiple matches still,
     the last one is used.
 
@@ -613,12 +597,13 @@ So the names below are taken
     | (None)
     | ``[LINE][XPATH]``
 
-    Xpath strings to select elements from ``Downloaded_File`` when ``extract``.
+    Xpath strings to select elements
+    from ``Downloaded_File`` when ``extract``.
     Only selected elements are included
     in the ``<body>`` tag of the new ``Extracted_File``,
     discarding others.
 
-    Each line in the value will be connected with bar string (``'|'``)
+    Each line in the value will be connected with a bar string (``'|'``)
     when evaluating.
     This means the sequence of selected elements are
     as the same order in the document,
@@ -630,10 +615,11 @@ So the names below are taken
     | (None)
     | ``[LINE][XPATH]``
 
-    Xpath strings to remove elements from the new ``Extracted_File`` when ``extract``.
+    Xpath strings to remove elements
+    from the new ``Extracted_File`` after ``select``.
     So you don't need to exclude already excluded elements by ``select``.
     As in ``select``,
-    each line in the value will be connected with bar string (``'|'``).
+    each line in the value will be connected with a bar string (``'|'``).
 
 .. confopt:: process
 
@@ -670,7 +656,7 @@ So the names below are taken
 
     You don't have to ``return`` anything,
     just manipulate ``doc`` as you like.
-    The script uses the resultant ``doc`` for the following procedures.
+    The script uses the resultant ``doc`` subsequently.
 
     For 'built-in' functions and examples, see modules in `process <api.html#process>`__.
 
@@ -740,7 +726,7 @@ So the names below are taken
 
     The author doesn't recommend using it altogether.
     But, like the above,
-    if the site only wants for anonimous users
+    if the site only wants anonimous users
     to press 'OK' just the first time to make temporary sessions,
     bad things shouldn't happen to the client,
     and that's the rational.

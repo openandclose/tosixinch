@@ -60,7 +60,7 @@ Some points to consider:
   1. Parse html text as DOM elements tree (by ``lxml``).
   2. ``select`` the elements you want, discarding others.
   3. ``exclude`` undesirable sub-elements from the selected elements.
-  4. ``process`` the resultant tree.
+  4. ``process`` the resultant tree
      (apply arbitrary functions against the tree
      in a very limited way).
   5. ``clean`` the resultant tree.
@@ -184,7 +184,7 @@ You don't need to change that part of the commandline
 
 Site specific options are either on commandline or in a configuration file.
 You use frequently the latter,
-because options are sometimes long and includes special characters.
+because options are sometimes long and include special characters.
 
 For each site, users will create a new section,
 adding a few lines of options.
@@ -212,7 +212,7 @@ and write extraction settings for the site. ::
     match=    https://somesite.com/article/*
     selecet=  //div[@id="main"]
     exclude=  //div[@id="sidemenu"]
-              //div[@id="comments"]
+              //div[@id="comment"]
 
 .. note ::
 
@@ -224,7 +224,7 @@ and write extraction settings for the site. ::
 
     The value above means e.g.
     get from anywhere (``'//'``),
-    ``div`` tags whose ``id`` attribute are ``'main'``
+    ``div`` tags whose ``id`` attributes are ``'main'``
     (including every sub-elements inside them).
 
     Multiple lines are interpreted
@@ -297,8 +297,8 @@ like the previous example.::
     match=      https://www.python.org/dev/peps/*
     select=     //article[@class="text"]
 
-* It seems there is nothing to remove.
-  You can omit ``exclude`` option.
+It seems there is nothing to remove.
+You can omit ``exclude`` option.
 
 But looking at the pdf, you find a problem.
 The pdf bookmarks (Table of Contents) are not good.
@@ -314,10 +314,10 @@ The script only provides a relatively simple
 `process <options.html#confopt-process>`__ option,
 so you have to manage with that.
 
-Fortunately, there are no ``<h2>``, ``<h3>``...
+Fortunately, there are no ``<h2>``, ``<h3>``... ``<h6>``
 in the content part of the pages.
-So, let's change ``<h1>`` tags to ``<h2>``,
-keeping only the main title heading.
+So, let's change other ``<h1>`` tags to ``<h2>``,
+keeping ``<h1>`` only for the main title heading.
 
 You create a file
 (in `userprocess directory <overview.html#dword-userprocess_directory>`__,
@@ -358,7 +358,7 @@ Now you can do::
 
 .. note ::
 
-    The script already has a built-in configuration
+    The script already has a similar 'built-in' configuration
     for the PEP site (see `below <#samples>`__).
     So actually you don't have to write your configuration.
 
@@ -432,7 +432,7 @@ Other Features
   The script can convert epub, mobi or other format files to pdf.
   It just wraps ``ebook-convert``,
   so there is not much reason to run our script in this case,
-  but you can use the same css and configuration.
+  but you can use the same API and configurations.
 
 * It has simple TOC (table of contents) rebounding feature,
   adding one level of structure.

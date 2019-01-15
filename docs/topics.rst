@@ -2,6 +2,8 @@
 Topics
 ======
 
+'Advanced' or miscellaneous subjects are discussed here.
+
 Text Format
 -----------
 
@@ -45,9 +47,9 @@ prose
 
 ``prose`` is supposed to be the general content type.
 Paragraph should be the main unit.
-Physical line wraps do not contribute to document structure.
-In other words, we can wrap long lines without changing the meaning.
-In most cases, you should have a pre tag rule like this in your css.::
+Adding extra line wraps should not change major semantic structure.
+
+In most cases, you should have a ``pre`` tag rule like this in your css.::
 
     pre {
        white-space: pre-wrap;
@@ -65,6 +67,9 @@ As a solution, the script pre-processes text to have exact line length,
 and attaches some label to wrapped lines, according to settings
 (`textwidth <options.html#confopt-textwidth>`__ and
 `textindent <options.html#confopt-textindent>`__ respectively).
+
+So that readers can tell logical (source) line breaks
+from editorial layout line breaks.
 
 For a short example,::
 
@@ -94,32 +99,43 @@ code
 and currently only for python source code.
 It adds small html decorations.
 
-* ``class`` and ``function`` identifiers in definitions are made ``headings``,
-  top level ones are ``<h2>``, others are ``<h3>``.
-  So that they appear in pdf bookmarks.
-  Rendered in bold, in normal font size, in ``sample.t.css``.
+* ``class`` and ``function`` identifiers in definitions
+  are wrapped in additional tags.
+
+  * The top level ones are in ``<h2>``,
+  * The second level ones (now it means ones with 4 space indent) are in ``<h3>``,
+  * Others are in ``<span>``.
+
+  ``<h2>`` and ``<h3>`` should appear in pdf bookmarks,
+  if so configured in css.
 * These identifiers in the same file are linked to the definitions.
   So that we can navigate a little,
   or just see physically (underlined link)
   that they are defined words in this module.
 
   Note that linking is just a simple supplement, only in-file,
-  and give up and doesn't do linking for duplicate names
+  and give up and doesn't do anything for duplicate names
   (e.g. If there are many ``__init__()`` or ``get()``).
 
 .. Note::
 
-    The script adds some informative attributes for the ``pre`` tag it creates.
+    The script adds some informative attributes
+    to the ``pre`` tag it creates.
 
-    For prose, ``<pre class='tsi-text tsi-prose'>...</pre>``.
+    In case of ``codes``, It also adds the same attributes
+    to each ``h1``, ``h2``, ``h3``, and ``span`` it creates.
 
-    For nonprose, ``<pre class='tsi-text tsi-nonprose'>...</pre>``.
+    Especially, ``codes`` use ``h2`` and ``h3`` unusually,
+    some care should be taken in the css.
+    In ``sample.t.css``, they are rendered in bold, in normal font size.
 
-    For code, ``<pre class='tsi-text tsi-code'>...</pre>``.
+    For ``prose``, ``class="tsi-text tsi-prose"``.
 
-    For pythoncode, ``<pre class='tsi-text tsi-pythoncode'>...</pre>``.
+    For ``nonprose``, ``class="tsi-text tsi-nonprose"``.
 
-    But ``sample.t.css`` doesn't use these.
+    For ``code``, ``class="tsi-text tsi-code"``.
+
+    For ``pythoncode``, ``class="tsi-text tsi-pythoncode"``.
 
 problem
 ^^^^^^^
@@ -140,9 +156,8 @@ writes to a single html, and creates a new ``url`` list
 
 When ``--file`` is ``urls.txt`` (default),
 the toc ``url`` list is ``urls-toc.txt``.
-It is auto-generated, and always overwrites existing one.
-(It could be any other name,
-but here we will use just this name for explanation).
+They can be other names,
+but here, we only use them for explanation.
 
 Table of Contents adjustments are done
 simply by decreasing ``heading`` numbers.
@@ -276,7 +291,7 @@ and it creates ``urls-toc.txt``, which contains::
 corresponding to (7)(8)(9) (``Extracted_Files``).
 
 So, ``convert`` doesn't do anything special for ``urls-toc.txt``,
-just process pre-built htmls and produce a more structured pdf.
+just processes pre-built htmls and produces a more structured pdf.
 
 
 Scripts
@@ -289,9 +304,30 @@ just copied in the tosixinch installation directory
 
 .. script:: open_viewer
 
-    It opens a pdf viewer.
     Intended to be used in ``viewcmd`` option in ``tosixinch.ini``.
-    Details are explained `there <options.html#general>`__.
+
+    It opens a pdf viewer.
+    But if there is a same pdf application opened with the same pdf file,
+    if does nothing (cancels duplicate openings).
+
+    It uses unix command ``ps`` to get active processes,
+    and search the app and the file names in invocation commandline strings.
+    So, only unixes users can use it.
+
+    It can be used without full path.::
+
+        viewcmd=    open_viewer.py --command okular --check conf.pdfname
+
+    * ``--command`` accepts arbitrary commands with some options,
+      but you need to quote.
+      (e.g. ``--command 'okular --page 5'``).
+    * ``--check`` is the option flag to do above duplicate checks.
+
+    And one way to see the help is::
+
+        $ tosixinch -4 --viewcmd 'open_viewer.py --help'
+
+    (note if ``urls.txt`` doesn't exist or is blank, this does not work.)
 
 
 .. script:: tosixinch-complete.bash
@@ -306,7 +342,7 @@ just copied in the tosixinch installation directory
 Vendored Libraries
 ------------------
 
-The script package includes a few vendored (included) libraries.
+The script uses a few vendored (included) libraries.
 They are all single file modules.
 
 .. script:: templite.py
