@@ -1,12 +1,23 @@
+# editor
+*~
+
+# python
 *.py[cod]
 *egg-info/
-*~
-.cache/
-.nonpubfiles/
-.pytest_cache/
-.tox/
 __pycache__/
 dist/
+
+# pytest
+.cache/
+.pytest_cache/
+
+# sphinx
 docs/_build/
+
+# tox
+.tox/
+
+# me
+.nonpubfiles/
 pdf/
 temp/
