@@ -5,12 +5,7 @@
 Read template and write to a file.
 (``complete.template.bash`` and ``tosixinch-complete.bash``, respectively.)
 
-For now, it needs manually picked special options dictionaries like
-FILE_COMP, DIR_COMP, and NO_COMP.
-So not particularly useful.
-(Customizing argparse is one way to go,
-adding additional arguments to ``add_argument()``.
-But I hesitate.)
+You have to manually pick options for FILE_COMP and DIR_COMP.
 """
 
 import argparse
@@ -33,16 +28,6 @@ FILE_COMP = {
 
 DIR_COMP = {
     '--userdir',
-}
-
-# only no nargs type
-NO_COMP = {
-    '-h', '--help',
-    '-a', '--appcheck',
-    '-b', '--browser',
-    '-c', '--check',
-    '--toc',
-    '--link',
 }
 
 
@@ -81,7 +66,7 @@ def short_printout(sep=' '):
 def get_context():
     context = {}
 
-    no_comp = list(NO_COMP)
+    no_comp = []
     choices = []
     all_opts = []
     for a in parser._actions:
