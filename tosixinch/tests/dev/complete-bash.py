@@ -37,6 +37,7 @@ _opt = lambda x: x.option_strings
 _cls = lambda x: repr(x.__class__).split('.')[1].split("'")[0]
 _type = lambda x: x.type
 _choice = lambda x: x.choices
+_nargs = lambda x: x.nargs
 
 
 class Namespace(object):
@@ -52,8 +53,9 @@ def list_options():
 
 
 def list_option(action):
-    print('%-25s    %-20s type:%-10s choices:%s'
-        % (_opt(action), _cls(action), _type(action), _choice(action)))
+    print('%-25s    %-20s nargs:%-10s type:%-10s choices:%s'
+        % (_opt(action), _cls(action),
+            _nargs(action), _type(action), _choice(action)))
 
 
 def short_printout(sep=' '):
@@ -99,8 +101,7 @@ def _get_longopt(opt):
 
 
 def _need_args(obj):
-    nargs_actions = (argparse._StoreAction, argparse._AppendAction)
-    return isinstance(obj, nargs_actions)
+    return obj.nargs != 0
 
 
 def render(template_file, output):
