@@ -356,10 +356,10 @@ def main(args=sys.argv[1:], conf=None):
         else:
             webbrowser.open(html)
         return
-    elif args.check:
+    if args.check:
         conf.print_siteconf()
         return
-    elif args.link:
+    if args.link:
         link.print_links(conf)
         return
 

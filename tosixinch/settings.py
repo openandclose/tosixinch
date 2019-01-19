@@ -121,14 +121,14 @@ def _get_configs(paths, args, envs):
         appconfigs = sorted(glob.glob('%s/tosixinch*.ini' % userdir))
         siteconfigs = sorted(glob.glob('%s/site*.ini' % userdir))
         for appconfig in appconfigs:
-            logger.debug("reading user application config: %r", appconfig)
+            logger.debug('reading user application config: %r', appconfig)
             appconf.read(appconfig)
 
         if appconf.general.use_sample:
             siteconf.read(sample_siteconfig)
 
         for siteconfig in siteconfigs:
-            logger.debug("reading user site config: %r", siteconfig)
+            logger.debug('reading user site config: %r', siteconfig)
             siteconf.read(siteconfig)
     else:
         if appconf.general.use_sample:

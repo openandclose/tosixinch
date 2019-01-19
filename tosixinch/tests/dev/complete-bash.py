@@ -43,8 +43,6 @@ _nargs = lambda x: x.nargs
 class Namespace(object):
     """Make data object with dot-lookup."""
 
-    pass
-
 
 def list_options():
     parser._actions.sort(key=lambda x: repr(x.__class__))
@@ -82,7 +80,6 @@ def get_context():
             choices.append(c)
 
         elif _need_args(a):
-            # list_option(a)
             o = set(_opt(a))
             if o.isdisjoint(FILE_COMP | DIR_COMP):
                 no_comp.extend(o)
