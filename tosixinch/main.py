@@ -261,7 +261,7 @@ def _build_parser():
     return parser
 
 
-def main(args=sys.argv[1:]):
+def main(args=sys.argv[1:], conf=None):
     """Parse commandline arguments and run accordingly.
 
     note:
@@ -323,7 +323,8 @@ def main(args=sys.argv[1:]):
         if urls:
             firstline = urls[0]
 
-    conf = settings.Conf(urls, args=confargs, envs=ENVS)
+    if conf is None:
+        conf = settings.Conf(urls, args=confargs, envs=ENVS)
     setv = conf.general.set_value
 
     # When handling urls the `news` module built,
@@ -378,6 +379,8 @@ def main(args=sys.argv[1:]):
         runcmd(conf, conf.general.postcmd3)
     if args.view:
         runcmd(conf, conf.general.viewcmd)
+
+    return conf
 
 
 def usage(parser):
