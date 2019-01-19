@@ -25,11 +25,9 @@ _tosixinch()
 
     $split && return
 
-    if [[ $cur == -* ]]; then
-        COMPREPLY=( $( compgen -W '{{ all_opts }}' -- "$cur" ) )
-        [[ $COMPREPLY == *= ]] && compopt -o nospace
-        return
-    fi
+    COMPREPLY=( $( compgen -W '{{ all_opts }}' -- "$cur" ) )
+    [[ $COMPREPLY == *= ]] && compopt -o nospace
+    return
 
     _filedir
 } &&
