@@ -87,12 +87,12 @@ class Convert(object):
 
         if css.endswith(TEMPLATE_EXT):
             new_css = css[:-len(TEMPLATE_EXT)] + '.css'
-            new_csspath = os.path.join(userdir, 'css', new_css)
-            # if (not os.path.isfile(new_csspath) or
-            #     _is_newer(new_csspath, csspath)):
-            if True:
-                context = self._build_context()
-                render_template(csspath, new_csspath, context)
+            if userdir is None:
+                new_csspath = new_css  # current directory
+            else:
+                new_csspath = os.path.join(userdir, 'css', new_css)
+            context = self._build_context()
+            render_template(csspath, new_csspath, context)
             return new_csspath
         else:
             return csspath

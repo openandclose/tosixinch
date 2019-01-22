@@ -64,6 +64,11 @@ class Extract(object):
 
     def _userpythondir_init(self):
         userdir = self._conf._userdir
+        if userdir is None:
+            return
+        if not os.path.isdir(os.path.join(userdir, 'userprocess')):
+            return
+
         # if userdir not in sys.path:
         if 'userprocess' not in sys.modules:
             sys.path.insert(0, userdir)
