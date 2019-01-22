@@ -18,10 +18,8 @@ http://www.stackprinter.com/export?question=5686206&service=stackoverflow
 https://github.com/buriy/python-readability
 https://github.com/buriy/python-readability/issues/43
 https://github.com/redapple/parslepy/wiki
-# code
-../../main.py
-../../process/gen.py
-../../../docs/intro.rst
+# text
+../resource/templite.py
 
 
 ; userdir
