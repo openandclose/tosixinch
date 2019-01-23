@@ -175,6 +175,10 @@ Configs
 
     use input paths as is (no url transformation, and only for local files)
 
+.. option:: --force-download
+
+    force --download or --parts-download even if the file already exists
+
 .. option:: --textwidth TEXTWIDTH
 
     width (character numbers) for rendering non-prose text

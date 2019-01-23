@@ -114,6 +114,9 @@ General Section
     In general, pre-downloading is useful
     for multiple trials and layout checking.
 
+    If `force_download <#confopt-force_download>`__ is ``False`` (default),
+    the script skips downloading if the file already exists.
+
     TODO:
         So the script does nothing about ``iframe`` inline sources.
         Downloading and rendering are done by converters,
@@ -243,6 +246,22 @@ General Section
         tosixinch -i somebook.mobi -3 --raw --ebook-convert
 
     generates ``somebook.pdf``.
+
+.. confopt:: force_download \*
+
+    | (``False``)
+    | ``[BOOL]``
+
+    By default, The script does not download the same files again.
+
+    If this options is ``True``:
+
+    In case of ``-1``,
+    it (re-) downloads ``url`` even if ``Downloaded_File`` exists.
+
+    In case of ``-2``,
+    it (re-) downloads component files (images etc.)
+    even if they exist.
 
 .. confopt:: use_sample
 

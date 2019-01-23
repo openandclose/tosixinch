@@ -50,10 +50,8 @@ download
 
 Downloads ``url``, and saves it as ``Downloaded_File``.
 
-If ``Downloaded_File`` already exists, it does nothing.
-
-(So if you want to download the same ``url`` again,
-you have to delete the ``Downloaded_File`` manually.)
+If `force_download <options.html#confopt-force_download>`__ is ``False`` (default),
+the script skips downloading if the file already exists.
 
 If ``url`` is a local filepath, it also does nothing.
 ``Downloaded_File`` is the same as ``url``.

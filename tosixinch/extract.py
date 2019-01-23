@@ -58,6 +58,7 @@ class Extract(object):
         self._guess = conf.general.guess
         self._encoding = site.general.encoding
         self._parts_download = site.general.parts_download
+        self._force_download = site.general.force_download
         self._full_image = site.general.full_image
 
         self._userpythondir_init()
@@ -222,7 +223,7 @@ class Extract(object):
             logger.debug('[url] %s (quote adjusted)', local_url)
             logger.debug('[fname] %s', fname)
 
-            if not os.path.exists(fname):
+            if not os.path.exists(fname) or self._force_download:
                 logger.info('[img] %s', url)
                 make_directories(fname)
                 try:

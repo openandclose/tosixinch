@@ -238,27 +238,30 @@ def run(conf):
         js = site.javascript
         cookies = site.cookie
 
-        if not os.path.exists(fname):
-            make_directories(fname)
-            if js:
-                if not QT_RUNNIG:
-                    qt_app, QWebEngineView = start_qt(qt_ver)
-                    QT_RUNNIG = True
-                    if qt_ver == 'webengine':
-                        render = qt_webengine_init(url, qt_app, QWebEngineView)
-                        qt_download = qt_webengine_download
-                    elif qt_ver == 'webkit':
-                        render = qt_webkit_init(url, qt_app)
-                        qt_download = qt_webkit_download
-                    else:
-                        msg = ("You have to set option 'qt' to "
-                                "either 'webengine' or 'webkit'")
-                        logger.critical(msg)
-                        raise KeyError(msg)
-                qt_download(url, fname, render)
-            else:
-                download(url, fname, user_agent, cookies)
-            logger.info('[url] %s', url)
+        if os.path.exists(fname):
+            if not site.general.force_download:
+                continue
+
+        make_directories(fname)
+        if js:
+            if not QT_RUNNIG:
+                qt_app, QWebEngineView = start_qt(qt_ver)
+                QT_RUNNIG = True
+                if qt_ver == 'webengine':
+                    render = qt_webengine_init(url, qt_app, QWebEngineView)
+                    qt_download = qt_webengine_download
+                elif qt_ver == 'webkit':
+                    render = qt_webkit_init(url, qt_app)
+                    qt_download = qt_webkit_download
+                else:
+                    msg = ("You have to set option 'qt' to "
+                            "either 'webengine' or 'webkit'")
+                    logger.critical(msg)
+                    raise KeyError(msg)
+            qt_download(url, fname, render)
+        else:
+            download(url, fname, user_agent, cookies)
+        logger.info('[url] %s', url)
 
     if QT_RUNNIG:
         end_qt(qt_app)

@@ -191,6 +191,11 @@ def _build_conf_parser():
     configs.add_argument(
         '--raw', action='store_const', const='yes', help=help)
 
+    help = ('force --download or --parts-download '
+            'even if the file already exists')
+    configs.add_argument(
+        '--force-download', action='store_const', const='yes', help=help)
+
     help = 'width (character numbers) for rendering non-prose text'
     configs.add_argument('--textwidth', help=help)
 
