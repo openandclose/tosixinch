@@ -161,7 +161,7 @@ class Convert(object):
     def _log(self):
         # from https://bugs.python.org/issue22454
         cmdstr = ' '.join(shlex.quote(c) for c in self.cmd)
-        logger.info('making %r by %r...', self.pdfname, self.path)
+        logger.info('[pdf] %r (%r)', self.pdfname, self.path)
         logger.debug('[convert command] %s', cmdstr)
 
     def _run(self, log=True, dry_run=False):
