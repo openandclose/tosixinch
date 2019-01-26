@@ -40,6 +40,7 @@ flake8:
 test:
 	python -m doctest tosixinch/process/*.py
 	pytest -x
+	python tosixinch/tests/_test_actualrun2.py -x
 
 tox:
 	tox
@@ -70,5 +71,4 @@ htmllibs:
 	$(MAKE) -C ../zconfigparser html
 
 run:
-	@echo python tosixinch/tests/_test_actualrun.py --number 0 --delete file --viewer okular
-	python tosixinch/tests/_test_actualrun.py --number 0 --delete file --viewer okular
+	python tosixinch/tests/_test_actualrun2.py -xx
