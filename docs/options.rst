@@ -274,7 +274,7 @@ General Section
 .. confopt:: preprocess \*
 
     | (``gen.add_title, gen.youtube_video_to_thumbnail``)
-    | ``[COMMA]``
+    | ``[COMMA][XPATH]``
 
     Before site specific ``process`` functions,
     the script applies default ``process`` functions to all ``url``,
