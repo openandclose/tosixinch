@@ -89,11 +89,11 @@ def _checkmacth(url, siteconfig):
 
 
 def _get_configs(paths, args, envs):
-    configdir = resource_filename('tosixinch', 'data').rstrip('/')
+    configdir = resource_filename('tosixinch', 'data').rstrip(os.sep)
 
-    default_appconfig = '%s/tosixinch.default.ini' % configdir
-    default_siteconfig = '%s/site.default.ini' % configdir
-    sample_siteconfig = '%s/site.sample.ini' % configdir
+    default_appconfig = os.path.join(configdir, 'tosixinch.default.ini')
+    default_siteconfig = os.path.join(configdir, 'site.default.ini')
+    sample_siteconfig = os.path.join(configdir, 'site.sample.ini')
 
     appconf = configfetch.fetch(
         default_appconfig, paths=paths, args=args, envs=envs, Func=Func,
@@ -107,7 +107,7 @@ def _get_configs(paths, args, envs):
         userdir = None
     elif appconf.general.userdir:
         userdir = appconf.general.userdir
-        userdir = os.path.expanduser(userdir).rstrip('/')
+        userdir = os.path.expanduser(userdir).rstrip(os.sep)
         if not os.path.isdir(userdir):
             msg = ('userdir: %r is not an existing directory. '
                 "It must be full path. '~' and '~user' are expanded.")
@@ -118,8 +118,8 @@ def _get_configs(paths, args, envs):
         userdir = _check_platform_dirs()
 
     if userdir:
-        appconfigs = sorted(glob.glob('%s/tosixinch*.ini' % userdir))
-        siteconfigs = sorted(glob.glob('%s/site*.ini' % userdir))
+        appconfigs = sorted(glob.glob(userdir + os.sep + 'tosixinch*.ini'))
+        siteconfigs = sorted(glob.glob(userdir + os.sep + 'site*.ini'))
         for appconfig in appconfigs:
             logger.debug('reading user application config: %r', appconfig)
             appconf.read(appconfig)

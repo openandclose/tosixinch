@@ -238,7 +238,7 @@ class Extract(object):
                 except urllib.error.URLError as e:
                     logger.warning('[URLError %s] %s' % (e.reason, url))
 
-            if _in_current_dir(fname, './_html'):
+            if _in_current_dir(fname, '_html'):
                 # src = os.path.relpath(local_url, os.path.dirname(page_fname))
                 src = './' + os.path.relpath(
                     local_url, os.path.dirname(page_fname))
