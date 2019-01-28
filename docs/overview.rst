@@ -136,7 +136,7 @@ But disposing of the files (deleting or moving) is users' job.
 .. dword:: ufile
 
     The required argument of the commandline option ``-f`` or ``--file``.
-    It should be a file containingi ``urls``.
+    It should be a file containing ``urls``.
 
     ``ufile`` defaults to `urls.txt <#dword-urls.txt>`__.
 
@@ -159,7 +159,7 @@ But disposing of the files (deleting or moving) is users' job.
 
           Note if input ``url`` is single,
           whether ``-i`` or ``-f``,
-          this ``add_binaries`` fileter is not applied.
+          this ``add_binaries`` filter is not applied.
 
 .. dword:: Downloaded_File
 
@@ -177,7 +177,7 @@ But disposing of the files (deleting or moving) is users' job.
         and that causes trouble to filepath conversion.
 
         Because the clients doesn't have the same routing system as the servers,
-        they cannot determine univocably the location of these 'clean' urls.
+        they cannot determine univocally the location of these 'clean' urls.
 
         For example, some sites actually use the same path component
         both as file and directory.
@@ -198,11 +198,11 @@ But disposing of the files (deleting or moving) is users' job.
 
             'http://example.com/aaa.html'
 
-        I assume It is less likey that
+        I assume It is less likely that
         the site would create ``'aaa.html/bbb'`` document.
 
 
-    In Windows, illigal filename characters (``':?*\"<>```) in ``url`` are
+    In Windows, illegal filename characters (``':?*\"<>```) in ``url`` are
     all changed to ``'_'``.
     So name conflict may occur in rare cases.
 
@@ -381,7 +381,7 @@ Config Files
     in ``userprocess`` directory.
 
     If it cannot find the one,
-    it seaches next in application's ``process`` directory
+    it searches next in application's ``process`` directory
     (It is in the installed application's root).
 
     You can choose any filename,
@@ -391,7 +391,7 @@ Config Files
         site.py
         util.py
 
-    The sciript may add more modules.
+    The script may add more modules.
     Names ``my*.py`` and ``user*.py`` are reserved for ``userprocess files``.
 
 
@@ -614,7 +614,7 @@ Users have to fill the value accordingly, if setting.
 
         <tag>[contains(concat(" ", normalize-space(@class), " "), " <value> ")]'
 
-    It is to get arround one inconvenient point of Xpath,
+    It is to get around one inconvenient point of Xpath,
     compared to CSS Selector.
     see note below.
 
@@ -626,7 +626,7 @@ Users have to fill the value accordingly, if setting.
         For example, if you want to select ``<div class="aa bb cc">``,
 
         * You cannot select it by ``'@class="aa"'``.
-          Because Xpath campares strings, and ``'aa bb cc'`` and ``'aa'`` are defferent strings.
+          Because Xpath compares strings, and ``'aa bb cc'`` and ``'aa'`` are different strings.
 
         * You can select it by ``'contains(@class, "aa")'``,
           but it also selects elements

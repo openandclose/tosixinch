@@ -22,7 +22,7 @@ following the rules specified there
 .. note::
 
     For ``[LINE]`` options,
-    it may not be easy to autually supply multiple values.
+    it may not be easy to actually supply multiple values.
 
     For example, an option in a configuration file
     becomes like this in bash::
@@ -139,7 +139,7 @@ Configs
 
 .. option:: --user-agent USER_AGENT
 
-    set http header user-angent when donloading by urllib (to see the default, run --appcheck)
+    set http header user-agent when downloading by urllib (to see the default, run --appcheck)
 
 .. option:: --qt {webengine,webkit}
 
@@ -161,7 +161,7 @@ Configs
 
 .. option:: --add-binaries ADD_BINARIES
 
-    add or subtract to-skip-binaries-extention list [COMMA]
+    add or subtract to-skip-binaries-extension list [COMMA]
 
 .. option:: --add-tags ADD_TAGS
 

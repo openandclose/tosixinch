@@ -90,7 +90,7 @@ The command will only install ``tosixinch`` package.
 
 .. note::
 
-    * The author is an amature holiday programmer.
+    * The author is an amateur holiday programmer.
 
     * It is under construction, to get to the state of the alpha.
 
@@ -98,7 +98,7 @@ The command will only install ``tosixinch`` package.
       but it is likely to be more imperfect.
 
     * In some places in code,
-      unicode encoding in system and files is presupossed.
+      Unicode encoding in system and files is presupposed.
 
 
 Requirements
@@ -144,7 +144,7 @@ some things are done better.
     The wkhtmltopdf official site provides compiled binaries
     built with *patched* Qt.
     Linux distributions sometimes install non-patched version of wkhtmltopdf,
-    which is limitted in functionalities.
+    which is limited in functionalities.
     For example, it can not receive multiple htmls,
     and it can not build pdf bookmarks.
 

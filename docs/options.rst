@@ -49,7 +49,7 @@ General Section
 .. confopt:: user_agent \*
 
     (some arbitrary browser user agent.
-    run ``'tosixinch -a'`` to actually see.)
+    Run ``'tosixinch -a'`` to actually see.)
 
     Designate user agent for downloader (only for ``urllib``).
 
@@ -74,7 +74,7 @@ General Section
     and ``ftfy`` and ``chardet`` if they are installed.
 
     `ftfy <https://ftfy.readthedocs.io/en/latest/>`__
-    is a library to fix bad unicode stirings.
+    is a library to fix bad Unicode strings.
     A use case here is to aggressively interpret text as UTF-8,
     by injecting it before false-positives.
 
@@ -121,7 +121,7 @@ General Section
         So the script does nothing about ``iframe`` inline sources.
         Downloading and rendering are done by converters,
         but we can't apply our css rules
-        (They are defferent domains).
+        (They are different domains).
 
 .. confopt:: full_image \*
 
@@ -133,7 +133,7 @@ General Section
     'tsi' is short for 'tosixinch'.
 
     By itself, it does nothing. However, In ``sample.css``,
-    it is used to make midium sized images expand almost full display size,
+    it is used to make medium sized images expand almost full display size,
     with small images (icon, logo, etc.) as is.
     The layout gets a bit uglier,
     but I think it is necessary for small e-reader displays.
@@ -180,7 +180,7 @@ General Section
     `binary-extensions <https://github.com/sindresorhus/binary-extensions>`__.
 
     This is for user convenience. If you copy and paste many urls,
-    checking strange exxtensions is a bit of work.
+    checking strange extensions is a bit of work.
     But I'm afraid sometimes it gets in the way.
 
 .. confopt:: add_tags \*
@@ -188,7 +188,7 @@ General Section
     | (None)
     | ``[PLUS]``
 
-    After ``select``, ``exculde`` and ``process`` in ``extract``,
+    After ``select``, ``exclude`` and ``process`` in ``extract``,
     the script ``clean`` s the resultant html.
 
     The tags in this option are stripped.
@@ -199,7 +199,7 @@ General Section
     | (``color, width, height``)
     | ``[PLUS]``
 
-    After ``select``, ``exculde`` and ``process`` in ``extract``,
+    After ``select``, ``exclude`` and ``process`` in ``extract``,
     the script ``clean`` s the resultant html.
 
     The attributes in this option are stripped.
@@ -222,12 +222,12 @@ General Section
     If ``url`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
     ``select`` is done according to this value.
 
-    The procedure is differet from ordinary ``select``
+    The procedure is different from ordinary ``select``
     (with a little bit of extra precaution).
 
     * The xpaths in this value are searched in order.
     * If match is found and match is a single element
-      (not multiple occurences),
+      (not multiple occurrences),
       the script ``select`` s the xpath.
 
 .. confopt:: raw
@@ -269,7 +269,7 @@ General Section
     | ``[BOOL]``
 
     The value specifies whether site config includes ``site.sample.ini``.
-    see `Samples <intro.html#samples>`__.
+    See `Samples <intro.html#samples>`__.
 
 .. confopt:: preprocess \*
 
@@ -329,7 +329,7 @@ General Section
     Each item is some python regular expression.
 
     Printing out also considers `add_binaries <#confopt-add_binaries>`__ option,
-    and ignores some extinsion files accordingly.
+    and ignores some extension files accordingly.
 
 ---
 
@@ -417,7 +417,7 @@ In the following, the roles in the sample file
     The script uses this value when ``orientation`` is ``portrait``.
 
     The display size of common 6-inch e-readers seems
-    arround 90mm x 120mm.
+    around 90mm x 120mm.
     Here the default thinly clips on height, for versatility.
     (Officially published pixel specs may be different from
     physically effective pixels,
@@ -436,7 +436,7 @@ In the following, the roles in the sample file
     (``3``)
 
     Designate (max) tree level of pdf bookmarks (Table of Contents).
-    the option can only be used
+    The option can only be used
     when ``converter`` is ``prince`` or ``weasyprint``.
 
 .. confopt:: font_family
@@ -609,7 +609,7 @@ So the names below are taken
     In this case, a placeholder value ``http://tosixinch.example.com``
     is set.
     (Note this imaginary site is used to make file paths
-    in ``donwnload`` and ``extract``).
+    in ``download`` and ``extract``).
 
 .. confopt:: select
 
@@ -681,9 +681,9 @@ So the names below are taken
 
 .. confopt:: clean
 
-    | (Not implemented. Now this paragraph is only for documentaton purpose.)
+    | (Not implemented. Now this paragraph is only for documentation purpose.)
 
-    After ``select``, ``exculde`` and ``process`` in ``extract``,
+    After ``select``, ``exclude`` and ``process`` in ``extract``,
     the script ``clean`` s the resultant html.
 
     **tags**:
@@ -737,7 +737,7 @@ So the names below are taken
 
     And ``urllib`` cannot handle these interactive communications.
 
-    By adding cokkie data here (e.g. from your browsers),
+    By adding cookie data here (e.g. from your browsers),
     you may be able to bypass them.
 
     Note it is not secure and not right.
@@ -745,7 +745,7 @@ So the names below are taken
 
     The author doesn't recommend using it altogether.
     But, like the above,
-    if the site only wants anonimous users
+    if the site only wants anonymous users
     to press 'OK' just the first time to make temporary sessions,
     bad things shouldn't happen to the client,
     and that's the rational.
