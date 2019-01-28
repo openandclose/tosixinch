@@ -749,3 +749,15 @@ So the names below are taken
     to press 'OK' just the first time to make temporary sessions,
     bad things shouldn't happen to the client,
     and that's the rational.
+
+
+.. confopt:: link
+
+    | (``//a/@href``)
+    | ``[LINE][XPATH]``
+
+    (Experimental)
+
+    When action is ``link``,
+    the script prints some xpath content (must be URL strings) for each url,
+    reading from this option.
