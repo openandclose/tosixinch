@@ -216,7 +216,7 @@ def compare_error(filename):
 def _run(urls, args, action, do_compare=True):
     for url in urls:
         action_args = args + ['--input', url, '--' + action]
-        conf = tosixinch.main.main(args=action_args)
+        conf = tosixinch.main._main(args=action_args)
 
         if do_compare:
             compare(conf, action)

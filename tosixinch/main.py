@@ -266,7 +266,7 @@ def _build_parser():
     return parser
 
 
-def main(args=sys.argv[1:], conf=None):
+def _main(args=sys.argv[1:], conf=None):
     """Parse commandline arguments and run accordingly.
 
     note:
@@ -386,6 +386,10 @@ def main(args=sys.argv[1:], conf=None):
         runcmd(conf, conf.general.viewcmd)
 
     return conf
+
+
+def main():
+    ret = _main()
 
 
 def usage(parser):
