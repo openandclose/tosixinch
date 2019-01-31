@@ -42,6 +42,20 @@ The script separates it into three types:
 * ``non-prose``
 * ``code``
 
+And it adds some informative attributes
+to the ``pre`` tag it creates.
+
+In case of ``code``, It also adds the same attributes
+to other new tags it creates. (``h2``, ``h3``, and ``span``. See below.)
+
+For ``prose``, ``class="tsi-text tsi-prose"``.
+
+For ``nonprose``, ``class="tsi-text tsi-nonprose"``.
+
+For ``code``, ``class="tsi-text tsi-code"``.
+
+For ``pythoncode``, ``class="tsi-text tsi-pythoncode"``.
+
 prose
 ^^^^^
 
@@ -99,43 +113,39 @@ code
 and currently only for python source code.
 It adds small html decorations.
 
-* ``class`` and ``function`` identifiers in definitions
-  are wrapped in additional tags.
+``class`` and ``function`` identifiers in definitions
+are wrapped in additional tags.
 
-  * The top level ones are in ``<h2>``,
-  * The second level ones (now it means ones with 4 space indent) are in ``<h3>``,
-  * Others are in ``<span>``.
+* The top level ones are in ``<h2>``,
+* The second level ones (now it means ones with 4 space indent) are in ``<h3>``,
+* Others are in ``<span>``.
 
-  ``<h2>`` and ``<h3>`` should appear in pdf bookmarks,
-  if so configured in css.
-* These identifiers in the same file are linked to the definitions.
-  So that we can navigate a little,
-  or just see physically (underlined link)
-  that they are defined words in this module.
+``<h2>`` and ``<h3>`` should appear in pdf bookmarks,
+if so configured in css.
 
-  Note that linking is just a simple supplement, only in-file,
-  and give up and doesn't do anything for duplicate names
-  (e.g. If there are many ``__init__()`` or ``get()``).
+These identifiers in the same file are linked to the definitions.
+So that we can navigate a little,
+or just see physically (underlined link)
+that they are defined words in this module.
 
-.. Note::
+This linking is just a simple supplement, only in-file,
+and give up and doesn't do anything for duplicate names
+(e.g. If there are many ``__init__()`` or ``get()``).
 
-    The script adds some informative attributes
-    to the ``pre`` tag it creates.
+.. note::
 
-    In case of ``codes``, It also adds the same attributes
-    to each ``h1``, ``h2``, ``h3``, and ``span`` it creates.
+    In default user agent css,
+    ``h2`` and ``h3`` are normally styled in big, bold font
+    with line breaks (``display: block;``).
+    And it is usually not
+    what we want in classes and functions definitions.
 
-    Especially, ``codes`` use ``h2`` and ``h3`` unusually,
-    some care should be taken in the css.
-    In ``sample.t.css``, they are rendered in bold, in normal font size.
+    So we need to change them back to the normal text style
+    in the user css somehow.
 
-    For ``prose``, ``class="tsi-text tsi-prose"``.
+    See ``sample.t.css``, for an example.
 
-    For ``nonprose``, ``class="tsi-text tsi-nonprose"``.
 
-    For ``code``, ``class="tsi-text tsi-code"``.
-
-    For ``pythoncode``, ``class="tsi-text tsi-pythoncode"``.
 
 problem
 ^^^^^^^
