@@ -145,6 +145,8 @@ and give up and doesn't do anything for duplicate names
 
     See ``sample.t.css``, for an example.
 
+    (Also note that ``h3`` is going to change into ``h4``
+    if ``toc`` action is run.)
 
 
 problem
