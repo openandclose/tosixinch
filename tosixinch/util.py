@@ -39,7 +39,7 @@ WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 HTMLEXT = ('htm', 'html')
 _COMMENT = r'\s*(<!--.+?-->\s*)*'
-_XMLDECL = r'(<\?xml version.+? \?>)?'
+_XMLDECL = r'(<\?xml version.+?\?>)?'
 _DOCTYPE = '(<!doctype .+?>)?'
 HTMLFILE = re.compile(
     '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + '<html(| .+?)>',

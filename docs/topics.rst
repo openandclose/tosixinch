@@ -19,7 +19,7 @@ and the following valid opening ``'<html>'`` tag in the first 1000 characters.
 The actual code is now::
 
     _COMMENT = r'\s*(<!--.+?-->\s*)*'
-    _XMLDECL = r'(<\?xml version.+? \?>)?'
+    _XMLDECL = r'(<\?xml version.+?\?>)?'
     _DOCTYPE = '(<!doctype .+?>)?'
     HTMLFILE = re.compile(
         '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + '<html(| .+?)>',
