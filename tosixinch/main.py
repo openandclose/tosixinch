@@ -177,13 +177,13 @@ def _build_conf_parser():
         '--no-parts-download', action='store_const',
         const='no', dest='parts_download', help=help)
 
-    help = 'add or subtract to-skip-binaries-extention list [COMMA]'
+    help = 'add or subtract to-skip-binaries-extention list [PLUS]'
     configs.add_argument('--add-binaries', help=help)
 
-    help = 'add or subtract to-delete-tag list [COMMA]'
+    help = 'add or subtract to-delete-tag list [PLUS]'
     configs.add_argument('--add-tags', help=help)
 
-    help = 'add or subtract to-delete-attribute list [COMMA]'
+    help = 'add or subtract to-delete-attribute list [PLUS]'
     configs.add_argument('--add-attrs', help=help)
 
     help = ('use input paths as is '
@@ -203,7 +203,7 @@ def _build_conf_parser():
     configs.add_argument('--textindent', help=help)
 
     help = ('add or subtract regex strings for filtering '
-        'when printing files in directories [COMMA]')
+        'when printing files in directories [PLUS]')
     configs.add_argument('--add-filters', help=help)
 
     help = 'commandline string to open the pdf viewer [CMD]'
