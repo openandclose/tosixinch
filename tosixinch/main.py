@@ -24,7 +24,7 @@ from tosixinch.util import _parse_ufile, _parse_urls, runcmd
 
 logger = logging.getLogger(__name__)
 
-HELP = """A Python3 script to help to convert html to pdf,
+HELP = """A Python3 script to help convert html to pdf,
 suitable for actual reading in 6-inch e-readers.
 
 example:
