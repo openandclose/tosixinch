@@ -235,11 +235,11 @@ def _build_conf_parser():
     help = 'monospace font for the css'
     styles.add_argument('--font-mono', help=help)
 
-    # help = 'serif font for the css'
-    # styles.add_argument('--font-serif', help=help)
+    help = 'serif font for the css (not used by sample)'
+    styles.add_argument('--font-serif', help=help)
 
-    # help = 'sans font for the css'
-    # styles.add_argument('--font-sans', help=help)
+    help = 'sans font for the css (not used by sample)'
+    styles.add_argument('--font-sans', help=help)
 
     help = "main font size for the css, e.g. '9px'"
     styles.add_argument('--font-size', help=help)
@@ -250,8 +250,8 @@ def _build_conf_parser():
     help = "'adjust spaces between lines, number like '1.3'"
     styles.add_argument('--line-height', help=help)
 
-    # help = 'simple font size changing, number like 1.5'
-    # styles.add_argument('--font-scale', help=help)
+    help = 'number like 1.5 to scale font sizes (not yet used by sample)'
+    styles.add_argument('--font-scale', help=help)
 
     return parser
 

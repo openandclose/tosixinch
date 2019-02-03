@@ -232,6 +232,14 @@ Styles
 
     monospace font for the css
 
+.. option:: --font-serif FONT_SERIF
+
+    serif font for the css (not used by sample)
+
+.. option:: --font-sans FONT_SANS
+
+    sans font for the css (not used by sample)
+
 .. option:: --font-size FONT_SIZE
 
     main font size for the css, e.g. '9px'
@@ -243,3 +251,7 @@ Styles
 .. option:: --line-height LINE_HEIGHT
 
     'adjust spaces between lines, number like '1.3'
+
+.. option:: --font-scale FONT_SCALE
+
+    number like 1.5 to scale font sizes (not yet used by sample)
