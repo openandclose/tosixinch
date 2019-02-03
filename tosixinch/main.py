@@ -150,7 +150,7 @@ def _build_conf_parser():
         const='ebook_convert', dest='converter', help=help)
 
     # configs group
-    help = ('set http header user-angent when donloading by urllib '
+    help = ('set http header user-agent when downloading by urllib '
             '(to see the default, run --appcheck)')
     configs.add_argument('--user-agent', help=help)
 
@@ -177,14 +177,14 @@ def _build_conf_parser():
         '--no-parts-download', action='store_const',
         const='no', dest='parts_download', help=help)
 
-    help = 'add or subtract to-skip-binaries-extention list [PLUS]'
-    configs.add_argument('--add-binaries', help=help)
+    help = 'add or subtract to-skip-binaries-extension list [PLUS]'
+    configs.add_argument('--add-binary-extensions', help=help)
 
     help = 'add or subtract to-delete-tag list [PLUS]'
-    configs.add_argument('--add-tags', help=help)
+    configs.add_argument('--add-clean-tags', help=help)
 
     help = 'add or subtract to-delete-attribute list [PLUS]'
-    configs.add_argument('--add-attrs', help=help)
+    configs.add_argument('--add-clean-attrs', help=help)
 
     help = ('use input paths as is '
             '(no url transformation, and only for local files)')
@@ -204,7 +204,7 @@ def _build_conf_parser():
 
     help = ('add or subtract regex strings for filtering '
         'when printing files in directories [PLUS]')
-    configs.add_argument('--add-filters', help=help)
+    configs.add_argument('--add-file-filters', help=help)
 
     help = 'commandline string to open the pdf viewer [CMD]'
     configs.add_argument('--viewcmd', help=help)

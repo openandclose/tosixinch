@@ -155,11 +155,11 @@ But disposing of the files (deleting or moving) is users' job.
           if ``url`` has an extension that looks like binary,
           this ``url`` is ignored
           (according to 
-          `add_binaries <options.html#confopt-add_binaries>`__ option).
+          `add_binary_extensions <options.html#confopt-add_binary_extensions>`__ option).
 
           Note if input ``url`` is single,
           whether ``-i`` or ``-f``,
-          this ``add_binaries`` filter is not applied.
+          this ``add_binary_extensions`` filter is not applied.
 
 .. dword:: Downloaded_File
 

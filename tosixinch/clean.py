@@ -71,11 +71,11 @@ class Clean(object):
         self._site = site
 
     def _get_tags(self):
-        tags = self._site.general.add_tags
+        tags = self._site.general.add_clean_tags
         return tags
 
     def _get_attrs(self):
-        attrs = self._site.general.add_attrs
+        attrs = self._site.general.add_clean_attrs
         return attrs
 
     def _clean_html(self):

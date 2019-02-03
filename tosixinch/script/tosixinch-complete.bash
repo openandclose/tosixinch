@@ -4,7 +4,7 @@ _tosixinch()
     _init_completion -s || return
 
     case $prev in
-        --add-attrs|--add-binaries|--add-filters|--add-tags|--font-family|--font-mono|--font-size|--font-size-mono|--guess|--landscape-size|--line-height|--portrait-size|--textindent|--textwidth|--toc-depth|--user-agent|--viewcmd)
+        --add-binary-extensions|--add-clean-attrs|--add-clean-tags|--add-file-filters|--font-family|--font-mono|--font-sans|--font-scale|--font-serif|--font-size|--font-size-mono|--guess|--landscape-size|--line-height|--portrait-size|--textindent|--textwidth|--toc-depth|--user-agent|--viewcmd)
             return
             ;;
         --orientation)
@@ -27,7 +27,7 @@ _tosixinch()
 
     $split && return
 
-    COMPREPLY=( $( compgen -W '--add-attrs --add-binaries --add-filters --add-tags --appcheck --browser --check --convert --download --ebook-convert --extract --file --font-family --font-mono --font-size --font-size-mono --force-download --guess --help --input --landscape-size --line-height --link --lxml --no-parts-download --nouserdir --orientation --parts-download --portrait-size --prince --qt --raw --readability --readability-only --textindent --textwidth --toc --toc-depth --urllib --user-agent --userdir --verbose --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
+    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --add-file-filters --appcheck --browser --check --convert --download --ebook-convert --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --guess --help --input --landscape-size --line-height --link --lxml --no-parts-download --nouserdir --orientation --parts-download --portrait-size --prince --qt --raw --readability --readability-only --textindent --textwidth --toc --toc-depth --urllib --user-agent --userdir --verbose --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
     return
 

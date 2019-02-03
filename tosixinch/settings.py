@@ -277,11 +277,11 @@ class Conf(object):
         return _get_pdfname(self.urls, self.sites, self.minsep)
 
     def _filter_urls(self, urls):
-        filters = self.general.add_binaries
+        filters = self.general.add_binary_extensions
         return _filter_urls(urls, filters)
 
     def _filter_files(self, dirs):
-        filters = self.general.add_filters
+        filters = self.general.add_file_filters
         return _get_files_list(dirs, re.compile(filters))
 
     def print_files(self, dirs):

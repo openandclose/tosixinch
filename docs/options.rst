@@ -138,7 +138,7 @@ General Section
     The layout gets a bit uglier,
     but I think it is necessary for small e-reader displays.
 
-.. confopt:: add_binaries \*
+.. confopt:: add_binary_extensions \*
 
     (``3ds`` ``3g2`` ``3gp`` ``7z`` ``a`` ``aac`` ``adp`` ``ai`` ``aif`` ``aiff``
     ``alz`` ``ape`` ``apk`` ``ar`` ``arj`` ``asf`` ``au`` ``avi`` ``bak`` ``bh``
@@ -174,7 +174,7 @@ General Section
     only when multiple ``urls`` are provided.
 
     This option value adds to or subtracts from
-    the default ``add_binaries`` list above.
+    the default ``add_binary_extensions`` list above.
 
     The list is taken from Sindre Sorhus'
     `binary-extensions <https://github.com/sindresorhus/binary-extensions>`__.
@@ -183,7 +183,7 @@ General Section
     checking strange extensions is a bit of work.
     But I'm afraid sometimes it gets in the way.
 
-.. confopt:: add_tags \*
+.. confopt:: add_clean_tags \*
 
     | (None)
     | ``[PLUS]``
@@ -194,7 +194,7 @@ General Section
     The tags in this option are stripped.
     The current default is none.
 
-.. confopt:: add_attrs \*
+.. confopt:: add_clean_attrs \*
 
     | (``color, width, height``)
     | ``[PLUS]``
@@ -316,7 +316,7 @@ General Section
 
     Not used.
 
-.. confopt:: add_filters
+.. confopt:: add_file_filters
 
     | (``/\.git/, /docs?/, /.+\.egg-info/``)
     | ``[PLUS]``
@@ -328,7 +328,8 @@ General Section
 
     Each item is some python regular expression.
 
-    Printing out also considers `add_binaries <#confopt-add_binaries>`__ option,
+    Printing out also considers
+    `add_binary_extensions <#confopt-add_binary_extensions>`__ option,
     and ignores some extension files accordingly.
 
 ---
@@ -687,10 +688,10 @@ So the names below are taken
     the script ``clean`` s the resultant html.
 
     **tags**:
-        According to `add_tags <#confopt-add_tags>`__.
+        According to `add_clean_tags <#confopt-add_clean_tags>`__.
 
     **attributes**:
-        According to `add_attrs <#confopt-add_attrs>`__.
+        According to `add_clean_attrs <#confopt-add_clean_attrs>`__.
 
     **javascript**:
         All inline javascript and javascript source references

@@ -159,17 +159,17 @@ Configs
 
     not download components before PDF conversion
 
-.. option:: --add-binaries ADD_BINARIES
+.. option:: --add-binary-extensions ADD_BINARY_EXTENSIONS
 
-    add or subtract to-skip-binaries-extension list [COMMA]
+    add or subtract to-skip-binaries-extension list [PLUS]
 
-.. option:: --add-tags ADD_TAGS
+.. option:: --add-clean-tags ADD_CLEAN_TAGS
 
-    add or subtract to-delete-tag list [COMMA]
+    add or subtract to-delete-tag list [PLUS]
 
-.. option:: --add-attrs ADD_ATTRS
+.. option:: --add-clean-attrs ADD_CLEAN_ATTRS
 
-    add or subtract to-delete-attribute list [COMMA]
+    add or subtract to-delete-attribute list [PLUS]
 
 .. option:: --raw
 
@@ -187,9 +187,9 @@ Configs
 
     line continuation marker for rendering non-prose text
 
-.. option:: --add-filters ADD_FILTERS
+.. option:: --add-file-filters ADD_FILE_FILTERS
 
-    add or subtract regex strings for filtering when printing files in directories [COMMA]
+    add or subtract regex strings for filtering when printing files in directories [PLUS]
 
 .. option:: --viewcmd VIEWCMD
 
