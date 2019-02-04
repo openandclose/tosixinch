@@ -8,7 +8,7 @@ with open('README.rst') as f:
     readme = f.read()
 
 with open('VERSION') as f:
-    version = f.read()
+    version = f.read().strip()
 
 
 setup(
