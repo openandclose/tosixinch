@@ -389,7 +389,7 @@ def _main(args=sys.argv[1:], conf=None):
 
 
 def main():
-    ret = _main()
+    ret = _main()  # noqa F841 variable not used
 
 
 def usage(parser):

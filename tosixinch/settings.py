@@ -211,7 +211,8 @@ class Func(configfetch.Func):
     @configfetch.register
     def _plus_binaries(self, value):
         values = self.values
-        return configfetch._get_plusminus_values(reversed(values), BINARY_EXTENSIONS)
+        return configfetch._get_plusminus_values(
+            reversed(values), BINARY_EXTENSIONS)
 
 
 class Site(object):
