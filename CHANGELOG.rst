@@ -2,6 +2,61 @@
 Changelog
 =========
 
+v0.0.8
+------
+
+Added option 'force_download'.
+Fixed around 'plus' functions (with configfetch updates).
+[test] Added new (system) test (_test_actualrun2.py).
+Improved Document.
+Added Python3.7.
+
+Open Close (43):
+      Make Add more handy help message
+      Document Add custom 'objects'
+      Document Add css for 'Note:' parts
+      Document Add css for custom 'script' opject
+      Document Fix undesirable sphinx build warinings
+      Document broad rewrite (documents wide)
+      Document Fix indents
+      Document Cut building api2.rst
+      Document rewrite continued
+      [copy] (templite.py)
+      [small edits] (README.rst)
+      [copy] (.gitignore)
+      Add a way to use main() externally (for test etc.)
+      Fix wrong no_comp argument selection
+      Add better _need_args() check using .nargs
+      Add more useful (eager) bash completion
+      Make update bash completion file
+      Change url (pythoncode) in tests/urls.txt
+      Fix no userdir and no userprocess dir cases
+      (small edits)
+      Fix globals in test into class namespace (pytest)
+      Add option 'force_download'
+      Fix message when creating pdf
+      Fix typo in the filename
+      Add _test_actualrun2.py
+      Make Add _test_actualrun2()
+      Fix some windows path treatment (only easy ones)
+      Fix preprocess func (adding xpath)
+      Fix link.py doc and config
+      Fix main() leaking return value to the shell
+      Fix many misspellings in docs
+      Document rewrite around 'code' part
+      Fix code css (with 'toc', h3 becomes h4)
+      [small edits] (main.py)
+      Fix xml declaration regex
+      Fix class attribute regex
+      Fix 'unused' style options.
+      Fix 'plus' commandline descriptions
+      Fix 'plus' option names
+      [copy] (configfetch.py)
+      Fix wrong function
+      Refactor Fix Flake8 errors
+      Make Add Python3.7
+
+
 v0.0.7
 ------
 
@@ -71,5 +126,3 @@ v0.0.5
 ------
 
 First commit
-
-
