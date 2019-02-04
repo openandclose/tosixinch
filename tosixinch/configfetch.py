@@ -2,6 +2,7 @@
 """Helper to get values from configparser and argparse."""
 
 import argparse
+from collections import OrderedDict
 import configparser
 import os
 import re
@@ -503,8 +504,15 @@ def _get_plusminus_values(adjusts, initial=None):
     """Add or sbtract values partially (used by ``_plus()``).
 
     Use ``+`` and ``-`` as the markers.
+
+    Internally, the values list is converted to ``OrderedDict`` keys,
+    with each dict value is ``None``,
+    used as a substitute for 'Ordered Set'.
     """
-    values = initial if initial else []
+    def _fromkeys(keys):
+        return OrderedDict.fromkeys(keys)
+
+    values = _fromkeys(initial) if initial else _fromkeys([])
 
     for adjust in adjusts:
         # if not adjust:
@@ -516,22 +524,22 @@ def _get_plusminus_values(adjusts, initial=None):
         adjust = _parse_comma(adjust)
 
         if not any([a.startswith(('+', '-')) for a in adjust]):
-            values = adjust
+            values = _fromkeys(adjust)
             continue
 
         for a in adjust:
             cmd, a = a[:1], a[1:]
             if a and cmd == '+':
                 if a not in values:
-                    values.append(a)
+                    values[a] = None
             elif a and cmd == '-':
                 if a in values:
-                    values.remove(a)
+                    del values[a]
             else:
                 fmt = ('Input members must be '
                     "'+something' or '-something', or none of them. Got %r.")
                 raise ValueError(fmt % (cmd + a))
-    return values
+    return list(values.keys())
 
 
 def minusadapter(parser, matcher=None, args=None):
