@@ -253,9 +253,9 @@ class Extract(object):
         w, h = get_component_size(el, fname)
         if w and h:
             length = max(w, h)
-            tall = bool(w < h)
             if length >= full:
-                if tall:
+                ratio = h / w
+                if ratio > self._conf.pdfratio:
                     el.classes.add('tsi-tall')
                 else:
                     el.classes.add('tsi-big')

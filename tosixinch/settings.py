@@ -285,6 +285,13 @@ class Conf(object):
         else:
             return self.style.portrait_size
 
+    @property
+    def pdfratio(self):
+        w, h = self.pdfsize.split()
+        num_and_unit = r'^([0-9.]+)([A-Za-z]+)?$'
+        w, h = [re.sub(num_and_unit, r'\1', size) for size in (w, h)]
+        return int(h) / int(w)
+
     def _filter_urls(self, urls):
         filters = self.general.add_binary_extensions
         return _filter_urls(urls, filters)
