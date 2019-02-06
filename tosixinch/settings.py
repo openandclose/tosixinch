@@ -278,6 +278,13 @@ class Conf(object):
     def pdfname(self):
         return _get_pdfname(self.urls, self.sites, self.minsep)
 
+    @property
+    def pdfsize(self):
+        if self.style.orientation == 'landscape':
+            return self.style.landscape_size
+        else:
+            return self.style.portrait_size
+
     def _filter_urls(self, urls):
         filters = self.general.add_binary_extensions
         return _filter_urls(urls, filters)

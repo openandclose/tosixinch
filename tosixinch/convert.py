@@ -100,11 +100,7 @@ class Convert(object):
     def _build_context(self):
         context = {key: self.style.get(key) for key in self.style}
 
-        if self.style.orientation == 'portrait':
-            size = self.style.portrait_size
-        else:
-            size = self.style.landscape_size
-        context['size'] = size
+        context['size'] = self._conf.pdfsize
 
         using = lambda x: self._conf.converter._section == x
         conv_dict = {
