@@ -128,8 +128,8 @@ General Section
     (``200``)
 
     If width or height of component pixel size is equal or above this value,
-    class attribute ``tsi-big`` or ``tsi-tall`` is added to the image tag,
-    ``tsi-big`` if width is longer than height, ``tsi-tall`` if the opposite.
+    class attribute ``tsi-wide`` or ``tsi-tall`` is added to the image tag,
+    ``tsi-wide`` if width is longer than height, ``tsi-tall`` if the opposite.
     'tsi' is short for 'tosixinch'.
 
     By itself, it does nothing. However, In ``sample.css``,

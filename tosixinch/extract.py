@@ -258,7 +258,7 @@ class Extract(object):
                 if ratio > self._conf.pdfratio:
                     el.classes.add('tsi-tall')
                 else:
-                    el.classes.add('tsi-big')
+                    el.classes.add('tsi-wide')
 
 
 def run(conf):
