@@ -22,8 +22,6 @@ import urllib.parse
 
 logger = logging.getLogger(__name__)
 
-PLATFORM = sys.platform
-
 COMMENT_PREFIX = (';',)
 DIRECTIVE_PREFIX = ('#',)
 
@@ -145,7 +143,7 @@ class _Location(object):
         else:
             return False
 
-    def _make_path(self, url, ext='html', platform=PLATFORM):
+    def _make_path(self, url, ext='html', platform=sys.platform):
         if is_local(url):
             return url
         fname = SCHEMES.sub('', url)
@@ -161,7 +159,7 @@ class _Location(object):
         return fname
 
     def _make_new_fname(self,
-            fname, appendix='--extracted', ext='html', platform=PLATFORM):
+            fname, appendix='--extracted', ext='html', platform=sys.platform):
         base = os.path.join(os.curdir, DOWNLOAD_DIR)
         if not self._in_current_dir(fname, base=base):
             fname = self._strip_root(fname, platform)
@@ -371,7 +369,7 @@ class _Component(Location):
 
     def __init__(self, url, base, platform=None):
         if not platform:
-            self.platform = PLATFORM
+            self.platform = sys.platform
 
         if isinstance(base, str):
             base = Location(base)
@@ -412,7 +410,7 @@ class _Component(Location):
             newparts.append(part)
         return self._urlunsplit_no_query(newparts)
 
-    def _make_filename(self, url, platform=PLATFORM):
+    def _make_filename(self, url, platform=sys.platform):
         parts = urllib.parse.urlsplit(url)
         newparts = []
         for part, delimiters in zip(parts, _delimiters):

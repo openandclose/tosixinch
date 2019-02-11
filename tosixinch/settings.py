@@ -16,13 +16,14 @@ import glob
 import logging
 import os
 import re
+import sys
 import urllib.parse
 
 from pkg_resources import resource_filename
 
 from tosixinch import configfetch
 from tosixinch import location
-from tosixinch.util import PLATFORM, BINARY_EXTENSIONS, transform_xpath
+from tosixinch.util import BINARY_EXTENSIONS, transform_xpath
 from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)
@@ -142,7 +143,7 @@ def _check_platform_dirs():
 
     Only the most typical ones.
     """
-    platform = PLATFORM
+    platform = sys.platform
     home = os.path.expanduser('~')
     if platform not in ('win32', 'darwin'):
         platform = 'others'

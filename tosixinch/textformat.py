@@ -9,10 +9,11 @@ import html
 import logging
 import os
 import re
+import sys
 import textwrap
 
 from tosixinch.util import (
-    PLATFORM, make_directories)
+    make_directories)
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,7 @@ class Prose(object):
     def _build(self):
         fname = self.fname
         fname = fname.split(os.sep, maxsplit=self.minsep)[-1]
-        if PLATFORM == 'win32':
+        if sys.platform == 'win32':
             fname = fname.replace('\\', '/')
 
         content = html.escape(self.wrapped)
