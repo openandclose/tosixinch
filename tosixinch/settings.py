@@ -21,8 +21,8 @@ import urllib.parse
 from pkg_resources import resource_filename
 
 from tosixinch import configfetch
-from tosixinch.util import (
-    PLATFORM, BINARY_EXTENSIONS, make_path, make_new_fname, transform_xpath)
+from tosixinch import location
+from tosixinch.util import PLATFORM, BINARY_EXTENSIONS, transform_xpath
 from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)
@@ -215,7 +215,7 @@ class Func(configfetch.Func):
             reversed(values), BINARY_EXTENSIONS)
 
 
-class Site(object):
+class Site(location.Location):
     """Settings for each url."""
 
     def __init__(self, url, conf, siteconf):
@@ -224,8 +224,6 @@ class Site(object):
         self._config = siteconf._config
 
         self.url = url
-        self.fname = make_path(self.url)
-        self.fnew = make_new_fname(self.fname)
 
         self.general = configfetch.Double(
             self._get_self(), self._conf.general)
