@@ -274,9 +274,17 @@ def _in_short_ulist(url):
             return True
 
 
-def short_run(urls, args):
-    urls = [url for url in urls if _in_short_ulist(url)]
+def _get_short_ulist(urls):
+    return [url for url in urls if _in_short_ulist(url)]
 
+
+def very_short_run(urls, args):
+    urls = _get_short_ulist(urls)
+    _run(urls, args, 'extract')
+
+
+def short_run(urls, args):
+    urls = _get_short_ulist(urls)
     normal_run(urls, args)
 
 
@@ -292,7 +300,7 @@ def parse_args(args=sys.argv[1:]):
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('-x', '--run', action='count',
-            help='run test (-x: short one, --xx: all urls).')
+            help='run test (-x: very short, --xx: short, --xxx: all urls).')
 
     parser.add_argument('-p', '--print',
         action='store_const', const='yes',
@@ -385,13 +393,16 @@ def main():
 
     if args.run:
         if args.run == 1:
-            short_run(urls, cmd_args)
+            very_short_run(urls, cmd_args)
             return
         elif args.run == 2:
+            short_run(urls, cmd_args)
+            return
+        elif args.run == 3:
             normal_run(urls, cmd_args)
             return
         else:
-            raise ValueError('Not Implemented (only -x or -xx).')
+            raise ValueError('Not Implemented (only -x, -xx, or -xxx).')
 
     if args.download:
         _run(urls, cmd_args, 'download')
