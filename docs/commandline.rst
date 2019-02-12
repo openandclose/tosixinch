@@ -193,10 +193,6 @@ Configs
 
     line continuation marker for rendering non-prose text
 
-.. option:: --add-file-filters ADD_FILE_FILTERS
-
-    add or subtract regex strings for filtering when printing files in directories [PLUS]
-
 .. option:: --viewcmd VIEWCMD
 
     commandline string to open the pdf viewer [CMD]

@@ -58,15 +58,6 @@ the script skips downloading if the file already exists.
 If ``url`` is a local filepath, it also does nothing.
 ``Downloaded_File`` is the same as ``url``.
 
-As a special case, if all ``url`` input is a local directory or directories,
-it just prints out files in them,
-ignoring some files according to settings.
-(The intention is to make `ufile <#dword-ufile>`__ from files in directories.
-But it may be more simple
-just to use ordinary utilities like unix ``find``.)
-
-Otherwise, mixing directories and files in ``urls`` raises Error.
-
 For the actual downloading, it just uses
 `urllib.request <https://docs.python.org/3/library/urllib.request.html>`__
 (python standard library),

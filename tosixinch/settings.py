@@ -190,21 +190,6 @@ def _check_platform_dirs():
             return path
 
 
-def _get_files_list(dirs, filters):
-    paths = []
-    for d in dirs:
-        for root, dirs, files in os.walk(d):
-            for file in files:
-                path = os.path.join(root, file)
-                if filters:
-                    if filters.search(path):
-                        continue
-                paths.append(path)
-    # http://stackoverflow.com/questions/29732298/file-paths-hierarchial-sort-in-python  # noqa: E501
-    paths.sort(key=lambda fl: (os.path.split(fl)))
-    return paths
-
-
 def _filter_urls(urllist, filters):
     # If urls consists of a single url, It doesn't apply filters.
     if len(urllist) == 1:
@@ -316,15 +301,6 @@ class Conf(object):
     def _filter_urls(self, urls):
         filters = self.general.add_binary_extensions
         return _filter_urls(urls, filters)
-
-    def _filter_files(self, dirs):
-        filters = self.general.add_file_filters
-        return _get_files_list(dirs, re.compile(filters))
-
-    def print_files(self, dirs):
-        files = self._filter_files(dirs)
-        files = self._filter_urls(files)
-        print('\n'.join(files))
 
     def print_siteconf(self):
         if len(self.sites) == 1:

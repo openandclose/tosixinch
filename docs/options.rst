@@ -316,22 +316,6 @@ General Section
 
     Not used.
 
-.. confopt:: add_file_filters
-
-    | (``/\.git/, /docs?/, /.+\.egg-info/``)
-    | ``[PLUS]``
-
-    If ``url`` is directory or they are all directories,
-    the script just print out files in that directory or directories,
-    excluding matched files and sub directories
-    in this value.
-
-    Each item is some python regular expression.
-
-    Printing out also considers
-    `add_binary_extensions <#confopt-add_binary_extensions>`__ option,
-    and ignores some extension files accordingly.
-
 ---
 
 .. note ::

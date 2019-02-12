@@ -202,10 +202,6 @@ def _build_conf_parser():
     help = 'line continuation marker for rendering non-prose text'
     configs.add_argument('--textindent', help=help)
 
-    help = ('add or subtract regex strings for filtering '
-        'when printing files in directories [PLUS]')
-    configs.add_argument('--add-file-filters', help=help)
-
     help = 'commandline string to open the pdf viewer [CMD]'
     configs.add_argument('--viewcmd', help=help)
 
@@ -340,10 +336,6 @@ def _main(args=sys.argv[1:], conf=None):
     # it is better to use `readability`.
     if firstline == news.FL_SOCIALNEWS:
         setv('extractor', 'readability')
-
-    if dirs:
-        conf.print_files(dirs)
-        return
 
     if args.appcheck:
         conf.print_appconf()
