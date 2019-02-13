@@ -68,10 +68,11 @@ class Directive(object):
 class _Locations(object):
     """Get URL strings."""
 
-    def __init__(self, ufile=None, urls=None):
-        if not (ufile or urls):
-            fmt = 'ufile or urls must be provided. Got ufile: %r, urls: %r.'
-            raise ValueError(fmt % (ufile, urls))
+    def __init__(self, urls=None, ufile=None):
+        if not (urls or ufile):
+            fmt = ('Either urls or ufile must be provided. '
+                'Got urls: %r, ufile: %r.')
+            raise ValueError(fmt % (urls, ufile))
 
         if not urls:
             with open(ufile) as f:

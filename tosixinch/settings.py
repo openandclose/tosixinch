@@ -249,7 +249,8 @@ class Site(location.Location):
 class Conf(object):
     """It possesses all configuration data."""
 
-    def __init__(self, urls, paths=None, args=None, envs=None):
+    def __init__(self, urls=None, ufile=None,
+            paths=None, args=None, envs=None):
         paths = paths or {}
         args = args or argparse.Namespace()
         envs = envs or {}
@@ -261,9 +262,9 @@ class Conf(object):
         self.style = self._appconf.style
         self.converter = getattr(self._appconf, self.general.converter)
 
-        self._sites_init(urls)
+        self._sites_init(urls, ufile)
 
-    def _sites_init(self, urls):
+    def _sites_init(self, urls, ufile):
         sites = []
         urls = self._filter_urls(urls)
         for url in urls:
@@ -275,6 +276,7 @@ class Conf(object):
             self.minsep = min(seps) - 2
 
         self.urls = urls
+        self.ufile = ufile
         self.sites = sites
 
     @property
