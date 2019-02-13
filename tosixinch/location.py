@@ -39,12 +39,6 @@ ROOTPATH = re.compile('^/+')
 WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 
-def is_directive(line):
-    if line.startswith(DIRECTIVE_PREFIX):
-        return True
-    return False
-
-
 def is_local(url):
     if SCHEMES.match(url):
         return False
@@ -90,9 +84,14 @@ class _Locations(object):
             if not url.startswith(COMMENT_PREFIX))
 
     def _parse_url(self, url):
-        if is_directive(url):
+        if self._is_directive(url):
             return url
         return self._normalize_url(url)
+
+    def _is_directive(self, line):
+        if line.startswith(DIRECTIVE_PREFIX):
+            return True
+        return False
 
     def _normalize_url(self, url):
         if is_local(url):
@@ -111,7 +110,7 @@ class Locations(_Locations):
 
     def iterate(self, with_directive=False):
         for url in self.urls:
-            if is_directive(url):
+            if self._is_directive(url):
                 if with_directive:
                     yield Directive(url)
                 else:
