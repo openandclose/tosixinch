@@ -25,6 +25,10 @@ class TestParse:
             )
         return tosixinch.settings.Conf(urls, args=args)
 
+    @pytest.fixture(scope='class')
+    def site(self, conf):
+        return [site for site in conf.sites][0]
+
     def test_parse_encode(self, conf):
         encode_value = ['aaa', 'bbb', 'ccc']
         assert conf.general.encoding == encode_value
@@ -32,18 +36,18 @@ class TestParse:
     def test_parse_pdfname(self, conf):
         assert conf.pdfname == 'xxx.pdf'
 
-    def test_parse_fnew(self, conf):
+    def test_parse_fnew(self, site):
         # fnew_value = '_htmls/bbb.com/ttt/xxx#yyy--extracted.html'
         fnew_value = '_htmls/bbb.com/ttt/xxx/index--tosixinch--extracted.html'
-        assert conf.sites[0].fnew == fnew_value
+        assert site.fnew == fnew_value
 
-    def test_parse_select(self, conf):
+    def test_parse_select(self, site):
         select_value = '//div[@id="title"]|//div[@id="article"]'
-        assert conf.sites[0].select == select_value
+        assert site.select == select_value
 
-    def test_parse_exclude(self, conf):
+    def test_parse_exclude(self, site):
         exclude_value = '//div[@class="side"]'
-        assert conf.sites[0].exclude == exclude_value
+        assert site.exclude == exclude_value
 
     def test_parse_css(self, conf):
         css_value = ['base.css', 'pconv.css']

@@ -48,18 +48,19 @@ BINARY_EXTENSIONS = """
 """.split()
 
 
-def _get_pdfname(urls, sites, minsep):
-    if not urls:
-        return None
+def _get_pdfname(sites, minsep):
+    sitelist = [site for site in sites]
+    site = sitelist[0]
+    url = site.url
 
-    parts = urllib.parse.urlsplit(urls[0])
+    parts = urllib.parse.urlsplit(url)
     host = parts.netloc.replace('www.', '').split('.')[0]
     # host = host.encode('ascii').decode('idna')
     path = parts.path.rstrip('/').split('/')[-1]
     rootpath = parts.path.split('/')[minsep - 1]
-    section = sites[0].section.split(' : ')[0]
+    section = site.section.split(' : ')[0]
 
-    if len(urls) == 1:
+    if len(sitelist) == 1:
         name = path or host
         name = os.path.basename(name)
     else:
@@ -246,6 +247,25 @@ class Site(location.Location):
         return self._get_self().get(option)
 
 
+class Sites(location.Locations):
+    """An object for ``Site`` iteratorion."""
+
+    def __init__(self, urls, ufile, conf, siteconf):
+        super().__init__(urls, ufile)
+        self._conf = conf
+        self._siteconf = siteconf
+        self._config = siteconf._config
+
+    def iterate(self, with_directive=False):
+        for url in self.urls:
+            if self._is_directive(url):
+                if with_directive:
+                    yield location.Directive(url)
+                else:
+                    continue
+            yield Site(url, self._conf, self._siteconf)
+
+
 class Conf(object):
     """It possesses all configuration data."""
 
@@ -265,26 +285,28 @@ class Conf(object):
         self._sites_init(urls, ufile)
 
     def _sites_init(self, urls, ufile):
-        sites = []
-        urls = self._filter_urls(urls)
-        for url in urls:
-            sites.append(Site(url, self._appconf, self._siteconf))
+        sites = Sites(urls, ufile, self._appconf, self._siteconf)
+        # urls = self._filter_urls(urls)
 
-        if urls:
-            # seps = [len(site.fname.split(os.sep)) for site in sites]
-            seps = [len(site.url.split(os.sep)) for site in sites]
-            self.minsep = min(seps) - 2
-
-        self.urls = urls
-        self.ufile = ufile
+        self._urls = sites._urls
+        self._ufile = sites._ufile
         self.sites = sites
+
+    @property
+    def urls(self):
+        return self.sites.urls
+
+    @property
+    def minsep(self):
+        seps = [len(site.url.split(os.sep)) for site in self.sites]
+        return min(seps) - 2
 
     @property
     def pdfname(self):
         pname = self.general.pdfname
         if pname:
             return pname
-        return _get_pdfname(self.urls, self.sites, self.minsep)
+        return _get_pdfname(self.sites, self.minsep)
 
     @property
     def pdfsize(self):

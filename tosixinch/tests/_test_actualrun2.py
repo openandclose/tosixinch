@@ -222,10 +222,12 @@ def _compare(filename):
 
 
 def compare(conf, action):
+    site = [site for site in conf.sites][0]
+
     if action == 'download':
-        filename = conf.sites[0].fname
+        filename = site.fname
     if action == 'extract':
-        filename = conf.sites[0].fnew
+        filename = site.fnew
     elif action == 'convert':
         filename = conf.pdfname
 
