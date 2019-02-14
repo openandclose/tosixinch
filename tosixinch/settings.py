@@ -255,7 +255,7 @@ class Sites(location.Locations):
         self._conf = conf
         self._siteconf = siteconf
         self._config = siteconf._config
-        self._iteritem = (Site, conf, siteconf)
+        self._iterobj = (Site, conf, siteconf)
 
 
 class Conf(object):

@@ -75,9 +75,9 @@ class Locations(object):
         self._ufile = ufile
         self._urls = urls
 
-        self._iteritem = (Location,)
+        self._iterobj = (Location,)
 
-    def _normalize_url(self, url):
+    def _parse_url(self, url):
         if _is_local(url):
             url = os.path.expanduser(url)
             url = os.path.expandvars(url)
@@ -88,7 +88,7 @@ class Locations(object):
                 raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
-    def iterate(self, with_directive=False):
+    def _iterate(self, with_directive=False):
         for url in self._urls:
             if url.startswith(COMMENT_PREFIX):
                 continue
@@ -97,15 +97,15 @@ class Locations(object):
                     yield Directive(url)
                 continue
 
-            item = self._iteritem
-            url = self._normalize_url(url)
-            if len(item) == 1:
-                yield item[0](url)
+            obj = self._iterobj
+            url = self._parse_url(url)
+            if len(obj) == 1:
+                yield obj[0](url)
             else:
-                yield item[0](url, *item[1:])
+                yield obj[0](url, *obj[1:])
 
     def __iter__(self):
-        return self.iterate()
+        return self._iterate()
 
 
 class _Location(object):
