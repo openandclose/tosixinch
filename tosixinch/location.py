@@ -2,7 +2,7 @@
 """URL and filepath related module.
 
 URL object collections (URLS):
-    _Locations -> Locations
+    Locations
 
 URL object (a URL and destination filepaths):
     _Location -> Location
@@ -59,8 +59,8 @@ class Directive(object):
         self.line = line
 
 
-class _Locations(object):
-    """Get URL strings."""
+class Locations(object):
+    """Make ``Location`` object and implement iteration."""
 
     def __init__(self, urls=None, ufile=None):
         if not (urls or ufile):
@@ -74,6 +74,8 @@ class _Locations(object):
 
         self._ufile = ufile
         self._urls = urls
+
+        self._iteritem = (Location,)
 
     @property
     def urls(self):
@@ -103,14 +105,6 @@ class _Locations(object):
             if os.path.isdir(url):
                 raise IsADirectoryError('Got directory name: %r' % url)
         return url
-
-
-class Locations(_Locations):
-    """Make URL objects (class ``Location``)."""
-
-    def __init__(self, urls, ufile):
-        super().__init__(urls, ufile)
-        self._iteritem = (Location,)
 
     def iterate(self, with_directive=False):
         for url in self.urls:
