@@ -77,24 +77,6 @@ class Locations(object):
 
         self._iteritem = (Location,)
 
-    @property
-    def urls(self):
-        return self._parse_urls()
-
-    def _parse_urls(self):
-        return (self._parse_url(url) for url in self._urls
-            if not url.startswith(COMMENT_PREFIX))
-
-    def _parse_url(self, url):
-        if self._is_directive(url):
-            return url
-        return self._normalize_url(url)
-
-    def _is_directive(self, line):
-        if line.startswith(DIRECTIVE_PREFIX):
-            return True
-        return False
-
     def _normalize_url(self, url):
         if _is_local(url):
             url = os.path.expanduser(url)
@@ -107,15 +89,16 @@ class Locations(object):
         return url
 
     def iterate(self, with_directive=False):
-        for url in self.urls:
-            if self._is_directive(url):
+        for url in self._urls:
+            if url.startswith(COMMENT_PREFIX):
+                continue
+            if url.startswith(DIRECTIVE_PREFIX):
                 if with_directive:
                     yield Directive(url)
-                    continue
-                else:
-                    continue
+                continue
 
             item = self._iteritem
+            url = self._normalize_url(url)
             if len(item) == 1:
                 yield item[0](url)
             else:
