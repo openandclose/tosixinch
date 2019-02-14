@@ -3,7 +3,7 @@
 
 Intended to make easier to build ``urls.txt``.
 
-Not exposed now.
+Not developed now.
 """
 
 import json
@@ -17,7 +17,7 @@ FL_SOCIALNEWS = '## TOSIXINCH: SOCIALNEWS URLS ##'
 
 def socialnews(arg):
     if arg == 'hackernews':
-        return hackernews()
+        return print_news(hackernews())
 
 
 def hackernews():
@@ -44,3 +44,8 @@ def hackernews():
         # print(story)
         stories.append(story)
     return stories
+
+
+def print_news(stories):
+    for s in stories:
+        print(s)

@@ -92,9 +92,9 @@ def _build_cmd_parser():
     help = 'get links in documents from urls (experimental)'
     actions.add_argument('--link', action='store_true', help=help)
 
-    # choices = ['hackernews']
-    # help = 'fetch urls from socialnews site (experimental)'
-    # actions.add_argument('--news', choices=choices, help=help)
+    choices = ['hackernews']
+    help = 'fetch urls from socialnews site (experimental)'
+    actions.add_argument('--news', choices=choices, help=help)
 
     # TODO: '--printout' prints urls, fnames, fnews etc...
 
@@ -345,10 +345,10 @@ def _main(args=sys.argv[1:], conf=None):
     if args.appcheck:
         conf.print_appconf()
         return
-    # elif args.news:
-    #     ret = news.socialnews(args.news)
-    #     print(ret)
-    #     return
+    elif args.news:
+        ret = news.socialnews(args.news)
+        print(ret)
+        return
 
     if not urls:
         return

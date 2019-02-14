@@ -38,6 +38,7 @@ So, the three invocations below make no difference. ::
 
 ``single actions`` are:
     * `appcheck <commandline.html#cmdoption-a>`__
+    * `news  <commandline.html#cmdoption-news>`__
     * `browser <commandline.html#cmdoption-b>`__
     * `check <commandline.html#cmdoption-c>`__
     * `link  <commandline.html#cmdoption-link>`__

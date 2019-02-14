@@ -99,6 +99,12 @@ Actions
 
     get links in documents from urls (experimental)
 
+.. option:: --news {hackernews}
+
+    fetch urls from socialnews site (experimental)
+
+        choices=hackernews
+
 Programs
 --------
 
