@@ -52,7 +52,7 @@ def _is_local(url):
 class Directive(object):
     """Represent a special line that is not a url, in ufile.
 
-    Mostly they are ignored (skipped in urls iteration).
+    They are usually ignored (skipped in urls iteration).
     """
 
     def __init__(self, line):
