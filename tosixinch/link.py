@@ -1,7 +1,7 @@
 
 """Get inner links in a page, reading from site configuration.
 
-Not used now.
+Not developed now.
 
 The idea is that since we already built configurations
 for each site of our particular interest,
