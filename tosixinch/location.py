@@ -99,10 +99,7 @@ class Locations(object):
 
             obj = self._iterobj
             url = self._parse_url(url)
-            if len(obj) == 1:
-                yield obj[0](url)
-            else:
-                yield obj[0](url, *obj[1:])
+            yield obj[0](url, *obj[1:])
 
     def __iter__(self):
         return self._iterate()
