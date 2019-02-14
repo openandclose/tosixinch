@@ -255,15 +255,7 @@ class Sites(location.Locations):
         self._conf = conf
         self._siteconf = siteconf
         self._config = siteconf._config
-
-    def iterate(self, with_directive=False):
-        for url in self.urls:
-            if self._is_directive(url):
-                if with_directive:
-                    yield location.Directive(url)
-                else:
-                    continue
-            yield Site(url, self._conf, self._siteconf)
+        self._iteritem = (Site, conf, siteconf)
 
 
 class Conf(object):

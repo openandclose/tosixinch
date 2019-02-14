@@ -108,14 +108,24 @@ class _Locations(object):
 class Locations(_Locations):
     """Make URL objects (class ``Location``)."""
 
+    def __init__(self, urls, ufile):
+        super().__init__(urls, ufile)
+        self._iteritem = (Location,)
+
     def iterate(self, with_directive=False):
         for url in self.urls:
             if self._is_directive(url):
                 if with_directive:
                     yield Directive(url)
+                    continue
                 else:
                     continue
-            yield Location(url)
+
+            item = self._iteritem
+            if len(item) == 1:
+                yield item[0](url)
+            else:
+                yield item[0](url, *item[1:])
 
     def __iter__(self):
         return self.iterate()
