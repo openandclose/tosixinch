@@ -39,7 +39,7 @@ ROOTPATH = re.compile('^/+')
 WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 
-def is_local(url):
+def _is_local(url):
     if SCHEMES.match(url):
         return False
     # m = OTHER_SCHEMES.match(url)
@@ -94,7 +94,7 @@ class _Locations(object):
         return False
 
     def _normalize_url(self, url):
-        if is_local(url):
+        if _is_local(url):
             url = os.path.expanduser(url)
             url = os.path.expandvars(url)
             url = os.path.abspath(url)
@@ -154,7 +154,7 @@ class _Location(object):
             return False
 
     def _make_path(self, url, ext='html', platform=sys.platform):
-        if is_local(url):
+        if _is_local(url):
             return url
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
