@@ -97,9 +97,9 @@ class Locations(object):
                     yield Directive(url)
                 continue
 
-            obj = self._iterobj
             url = self._parse_url(url)
-            yield obj[0](url, *obj[1:])
+            obj, *args = self._iterobj
+            yield obj(url, *args)
 
     def __iter__(self):
         return self._iterate()
