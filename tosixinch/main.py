@@ -38,6 +38,8 @@ $ tosixinch -123
 
 ENVS = {'userdir': 'TOSIXINCH_USERDIR'}
 
+DEFAULT_UFILE = 'urls.txt'
+
 
 # For argument parser object:
 # To pass only config-related arguments on to `configfetch`,
@@ -55,7 +57,7 @@ def _build_cmd_parser():
     general.add_argument('-i', '--input', action='append', help=help)
 
     help = "file to read inputs. only one file"
-    general.add_argument('-f', '--file', default='urls.txt', help=help)
+    general.add_argument('-f', '--file', default=DEFAULT_UFILE, help=help)
 
     help = 'show this help message and exit'
     general.add_argument('-h', '--help', action='store_true', help=help)
@@ -331,9 +333,9 @@ def _main(args=sys.argv[1:], conf=None):
         return
 
     if not conf.sites._urls:
-        if ufile == 'urls.txt':
-            msg = "'urls.txt' (default ufile) not found in current directory."
-            raise ValueError(msg)
+        if ufile == DEFAULT_UFILE:
+            fmt = '%r (default ufile) not found in current directory.'
+            raise ValueError(fmt % DEFAULT_UFILE)
         else:
             raise ValueError('File not found: %r' % ufile)
 
