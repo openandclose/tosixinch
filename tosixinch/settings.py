@@ -28,6 +28,7 @@ from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_PDFNAME = 'no-urls.pdf'
 
 # https://github.com/sindresorhus/binary-extensions
 BINARY_EXTENSIONS = """
@@ -298,6 +299,8 @@ class Conf(object):
         pname = self.general.pdfname
         if pname:
             return pname
+        if not self.sites._urls:
+            return DEFAULT_PDFNAME
         return _get_pdfname(self.sites, self.minsep)
 
     @property

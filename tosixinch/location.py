@@ -63,14 +63,12 @@ class Locations(object):
     """Make ``Location`` object and implement iteration."""
 
     def __init__(self, urls=None, ufile=None):
-        if not (urls or ufile):
-            fmt = ('Either urls or ufile must be provided. '
-                'Got urls: %r, ufile: %r.')
-            raise ValueError(fmt % (urls, ufile))
-
         if not urls:
-            with open(ufile) as f:
-                urls = [url.strip() for url in f if url.strip()]
+            try:
+                with open(ufile) as f:
+                    urls = [url.strip() for url in f if url.strip()]
+            except FileNotFoundError:
+                urls = []
 
         self._ufile = ufile
         self._urls = urls
