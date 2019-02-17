@@ -13,8 +13,6 @@ import time
 import urllib.request
 import zlib
 
-from tosixinch.util import idna_quote, make_directories
-
 logger = logging.getLogger(__name__)
 
 
@@ -232,8 +230,7 @@ def run(conf):
         user_agent = site.general.user_agent
         qt_ver = site.general.qt
 
-        url = site.url
-        url = idna_quote(url)
+        url = site.idna_url
         fname = site.fname
         js = site.javascript
         cookies = site.cookie
@@ -242,7 +239,7 @@ def run(conf):
             if not site.general.force_download:
                 continue
 
-        make_directories(fname)
+        site.make_directories
         if js:
             if not QT_RUNNIG:
                 qt_app, QWebEngineView = start_qt(qt_ver)
