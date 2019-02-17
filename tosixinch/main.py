@@ -300,10 +300,6 @@ def _main(args=sys.argv[1:], conf=None):
     # logging_tree.printout()
     # return
 
-    ufile = None
-    urls = []
-    dirs = []
-
     # This script, by design, doesn't hold any state between each jobs
     # (download, extract, etc.).
     # As an compensation,
@@ -313,22 +309,11 @@ def _main(args=sys.argv[1:], conf=None):
     # so users don't have to care most of the times.
     firstline = None
 
-    if args.input:
-        urls, dirs = _parse_urls(args.input, dir_error=False)
-    elif args.file:
-        if os.path.isfile(args.file):
-            ufile = args.file
-        elif args.file == 'urls.txt':
-            raise ValueError("'urls.txt' not found in current directory.")
-        else:
-            raise ValueError('File not found or is directory: %r' % ufile)
-
-        urls, dirs = _parse_ufile(ufile, is_toc=False, dir_error=False)
-        if urls:
-            firstline = urls[0]
+    urls = args.input
+    ufile = None if urls else args.file
 
     if conf is None:
-        conf = settings.Conf(urls, args=confargs, envs=ENVS)
+        conf = settings.Conf(urls, ufile, args=confargs, envs=ENVS)
     setv = conf.general.set_value
 
     # When handling urls the `news` module built,
@@ -345,8 +330,12 @@ def _main(args=sys.argv[1:], conf=None):
         print(ret)
         return
 
-    if not urls:
-        return
+    if not conf.sites._urls:
+        if ufile == 'urls.txt':
+            msg = "'urls.txt' (default ufile) not found in current directory."
+            raise ValueError(msg)
+        else:
+            raise ValueError('File not found: %r' % ufile)
 
     if args.browser:
         html = conf.sites[0].fnew
