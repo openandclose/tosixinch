@@ -1,9 +1,17 @@
 #!/usr/bin/env python
 
-"""Module for commandline usage.
+"""A Python3 script to help convert html to pdf.
 
-The entry point is `tosixinch.main.main()`
+Example:
+$ tosixinch -i https://en.wikipedia.org/wiki/Xpath -1
+    download(1) (i)nput url.
+
+$ tosixinch -123
+    download(1), extract(2), and convert(3) urls,
+    reading from 'urls.txt' in current directory.
+    no '--input' and no '--file' defaults to this file.
 """
+
 
 import argparse
 import logging
@@ -23,18 +31,6 @@ from tosixinch import toc
 from tosixinch.util import _parse_ufile, _parse_urls, runcmd
 
 logger = logging.getLogger(__name__)
-
-HELP = """A Python3 script to help convert html to pdf,
-suitable for actual reading in 6-inch e-readers.
-
-example:
-$ tosixinch -i https://en.wikipedia.org/wiki/Xpath -1
-    download(1) (i)nput url.
-
-$ tosixinch -123
-    download(1), extract(2), and convert(3) urls,
-    reading from 'urls.txt' in current directory.
-    no '--input' and no '--file' defaults to this file."""
 
 ENVS = {'userdir': 'TOSIXINCH_USERDIR'}
 
@@ -261,7 +257,7 @@ def _build_parser():
     """Build `argparse.ArgumentParser` object."""
     parsers = (_build_cmd_parser(), _build_conf_parser())
     parser = argparse.ArgumentParser(
-        prog='tosixinch', description=HELP,
+        prog='tosixinch', description=__doc__,
         add_help=False, parents=parsers,
         formatter_class=argparse.RawDescriptionHelpFormatter)
     return parser
