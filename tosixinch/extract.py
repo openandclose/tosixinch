@@ -207,46 +207,54 @@ class Extract(object):
     #         audio, canvas, embed, iframe, img, math, object, svg, video
     # https://www.w3.org/TR/html5/dom.html#embedded-content-2
     def _get_components(self):
-        page_url = self.url
-        page_fname = self.fname
-        logger.debug('[page url] %s', page_url)
         for el, url in iter_component(self.doc):
-            logger.debug('[url] %s', url)
-            url = normalize_source_url(url, page_url)
-            logger.debug('[url] %s (normalized)', url)
-            url = urllib.parse.urljoin(self.baseurl, url)
-            logger.debug('[url] %s (joined)', url)
+            self._get_component(el, url)
 
-            local_url = make_path(url, ext=None)
-            logger.debug('[url] %s (local url)', local_url)
-            local_url, fname = make_local_references(local_url)
-            logger.debug('[url] %s (quote adjusted)', local_url)
-            logger.debug('[fname] %s', fname)
+    def _get_component(self, el, url):
+        url, src, fname = self._get_component_names(el, url)
+        el.attrib['src'] = src
+        self._download_component(url, fname)
+        self._add_component_attributes(el, fname)
 
-            if not os.path.exists(fname) or self._force_download:
-                logger.info('[img] %s', url)
-                make_directories(fname)
-                try:
-                    download.download(url, fname)
-                except urllib.error.HTTPError as e:
-                    if e.code == 404:
-                        logger.info('[HTTPError 404 %s] %s' % (e.reason, url))
-                    else:
-                        logger.warning(
-                            '[HTTPError %s %s %s] %s' % (
-                                e.code, e.reason, e.headers, url))
-                except urllib.error.URLError as e:
-                    logger.warning('[URLError %s] %s' % (e.reason, url))
+    def _get_component_names(self, el, url):
+        page_url = self.url
+        logger.debug('[page url] %s', page_url)
+        logger.debug('[url] %s', url)
+        url = normalize_source_url(url, page_url)
+        logger.debug('[url] %s (normalized)', url)
+        url = urllib.parse.urljoin(self.baseurl, url)
+        logger.debug('[url] %s (joined)', url)
 
-            if _in_current_dir(fname, '_html'):
-                # src = os.path.relpath(local_url, os.path.dirname(page_fname))
-                src = './' + os.path.relpath(
-                    local_url, os.path.dirname(page_fname))
-            else:
-                src = local_url
-            el.attrib['src'] = src
+        local_url = make_path(url, ext=None)
+        logger.debug('[url] %s (local url)', local_url)
+        local_url, fname = make_local_references(local_url)
+        logger.debug('[url] %s (quote adjusted)', local_url)
+        logger.debug('[fname] %s', fname)
 
-            self._add_component_attributes(el, fname)
+        if _in_current_dir(fname, '_html'):
+            # src = os.path.relpath(local_url, os.path.dirname(self.fname))
+            src = './' + os.path.relpath(
+                local_url, os.path.dirname(self.fname))
+        else:
+            src = local_url
+
+        return url, src, fname
+
+    def _download_component(self, url, fname):
+        if not os.path.exists(fname) or self._force_download:
+            logger.info('[img] %s', url)
+            make_directories(fname)
+            try:
+                download.download(url, fname)
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    logger.info('[HTTPError 404 %s] %s' % (e.reason, url))
+                else:
+                    logger.warning(
+                        '[HTTPError %s %s %s] %s' % (
+                            e.code, e.reason, e.headers, url))
+            except urllib.error.URLError as e:
+                logger.warning('[URLError %s] %s' % (e.reason, url))
 
     def _add_component_attributes(self, el, fname):
         full = int(self._full_image)
