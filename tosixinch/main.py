@@ -28,7 +28,7 @@ from tosixinch import link
 from tosixinch import news
 from tosixinch import settings
 from tosixinch import toc
-from tosixinch.util import _parse_ufile, _parse_urls, runcmd
+from tosixinch.util import runcmd
 
 logger = logging.getLogger(__name__)
 
