@@ -109,11 +109,14 @@ class _Location(object):
     def __init__(self, url):
         self.url = url
 
-    def _make_directories(self, fname):
+    def _make_directories(self, fname, on_error_exit=True):
         if not self._in_current_dir(fname):
-            msg = 'filename path is outside of current dir: %r' % fname
-            logger.error(msg)
-            sys.exit(1)
+            if on_error_exit:
+                msg = 'filename path is outside of current dir: %r' % fname
+                logger.error(msg)
+                sys.exit(1)
+            else:
+                return
         dname = os.path.abspath(os.path.dirname(fname))
         os.makedirs(dname, exist_ok=True)
 
@@ -184,6 +187,10 @@ class Location(_Location):
     @property
     def fnew(self):
         return self._make_new_fname(self.fname)
+
+    @property
+    def make_directories(self):
+        return self._make_directories(self.fnew)
 
     @property
     def idna_url(self):
