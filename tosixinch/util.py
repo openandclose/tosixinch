@@ -385,7 +385,7 @@ def make_directories(fname):
 def _in_current_dir(fname, base=os.curdir):
     current = os.path.abspath(base)
     filepath = os.path.abspath(fname)
-    if filepath.startswith(current):
+    if re.match(current + os.sep, filepath):
         return True
     else:
         return False

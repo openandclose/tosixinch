@@ -123,7 +123,8 @@ class _Location(object):
     def _in_current_dir(self, fname, base=os.curdir):
         current = os.path.abspath(base)
         filepath = os.path.abspath(fname)
-        if filepath.startswith(current):
+        # note: the same filepath is not 'in' current dir.
+        if re.match(current + os.sep, filepath):
             return True
         else:
             return False
