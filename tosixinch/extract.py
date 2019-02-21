@@ -231,7 +231,7 @@ class Extract(object):
         logger.debug('[url] %s (quote adjusted)', local_url)
         logger.debug('[fname] %s', fname)
 
-        if _in_current_dir(fname, '_html'):
+        if _in_current_dir(fname, '_htmls'):
             # src = os.path.relpath(local_url, os.path.dirname(self.fname))
             src = './' + os.path.relpath(
                 local_url, os.path.dirname(self.fname))
