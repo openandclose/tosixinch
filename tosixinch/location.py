@@ -381,9 +381,6 @@ class _Component(Location):
             url = '://'.join(urllib.parse.urlsplit(base)[0:2]) + url
         return url
 
-    def make_local_references(self):
-        return self._make_local_references(self.fname)
-
     def _make_local_references(self, url):
         local_url = self._make_local_url(url)
         fname = self._make_filename(url, self.platform)
