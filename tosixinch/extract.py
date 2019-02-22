@@ -25,8 +25,6 @@ from tosixinch import location
 from tosixinch import process
 from tosixinch import textformat
 from tosixinch.util import (
-    make_local_references, normalize_source_url,
-    make_directories, _in_current_dir, make_path,
     build_new_html, build_blank_html,
     check_ftype, lxml_open, lxml_write, iter_component, xpath_select,
     get_component_size)
@@ -223,7 +221,7 @@ class Extract(object):
     def _download_component(self, url, fname):
         if not os.path.exists(fname) or self._force_download:
             logger.info('[img] %s', url)
-            make_directories(fname)
+            self._site._make_directories(fname)
             try:
                 download.download(url, fname)
             except urllib.error.HTTPError as e:
