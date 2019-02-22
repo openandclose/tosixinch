@@ -382,10 +382,13 @@ def make_directories(fname):
     os.makedirs(dname, exist_ok=True)
 
 
-def _in_current_dir(fname, base=os.curdir):
+def _in_current_dir(fname, base=os.curdir, platform=PLATFORM):
     current = os.path.abspath(base)
     filepath = os.path.abspath(fname)
-    if re.match(current + os.sep, filepath):
+    sep = '\\' if platform == 'win32' else '/'
+    current = current + sep
+    current = current.replace('\\', '\\\\')
+    if re.match(current, filepath):
         return True
     else:
         return False
@@ -424,7 +427,7 @@ def _edit_fname(fname, appendix=None, default_ext=None):
 def make_new_fname(
         fname, appendix='--extracted', ext='html', platform=PLATFORM):
     base = os.path.join(os.curdir, DOWNLOAD_DIR)
-    if not _in_current_dir(fname, base=base):
+    if not _in_current_dir(fname, base=base, platform=platform):
         fname = _strip_root(fname, platform)
         fname = os.path.join(DOWNLOAD_DIR, fname)
     return _edit_fname(fname, appendix, ext)
