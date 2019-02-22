@@ -7,9 +7,8 @@ import os
 import shlex
 import subprocess
 
-from tosixinch.util import (
-    parse_ufile, make_path, make_new_fname,
-    merge_htmls, render_template)
+from tosixinch import location
+from tosixinch.util import merge_htmls, render_template
 
 logger = logging.getLogger(__name__)
 
@@ -56,8 +55,9 @@ class Convert(object):
         if conf.general.raw:
             files = [site.url for site in conf.sites]
         elif tocfile and _is_newer(ufile, tocfile):
-            urls = parse_ufile(tocfile)
-            files = [make_new_fname(make_path(url)) for url in urls]
+            locations = location.Locations(ufile=tocfile)
+            files = [loc.fnew for loc in locations]
+
         else:
             files = [site.fnew for site in conf.sites]
         self.files = files
