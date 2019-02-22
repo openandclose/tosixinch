@@ -21,6 +21,7 @@ import urllib.parse
 from tosixinch import _ImportError
 from tosixinch import clean
 from tosixinch import download
+from tosixinch import location
 from tosixinch import process
 from tosixinch import textformat
 from tosixinch.util import (
@@ -211,34 +212,13 @@ class Extract(object):
             self._get_component(el, url)
 
     def _get_component(self, el, url):
-        url, src, fname = self._get_component_names(el, url)
+        comp = location.Component(url, self)
+        url = comp.url
+        src = comp.relative_component_fname
+        fname = comp.component_fname
         el.attrib['src'] = src
         self._download_component(url, fname)
         self._add_component_attributes(el, fname)
-
-    def _get_component_names(self, el, url):
-        page_url = self.url
-        logger.debug('[page url] %s', page_url)
-        logger.debug('[url] %s', url)
-        url = normalize_source_url(url, page_url)
-        logger.debug('[url] %s (normalized)', url)
-        url = urllib.parse.urljoin(self.baseurl, url)
-        logger.debug('[url] %s (joined)', url)
-
-        local_url = make_path(url, ext=None)
-        logger.debug('[url] %s (local url)', local_url)
-        local_url, fname = make_local_references(local_url)
-        logger.debug('[url] %s (quote adjusted)', local_url)
-        logger.debug('[fname] %s', fname)
-
-        if _in_current_dir(fname, '_htmls'):
-            # src = os.path.relpath(local_url, os.path.dirname(self.fname))
-            src = './' + os.path.relpath(
-                local_url, os.path.dirname(self.fname))
-        else:
-            src = local_url
-
-        return url, src, fname
 
     def _download_component(self, url, fname):
         if not os.path.exists(fname) or self._force_download:

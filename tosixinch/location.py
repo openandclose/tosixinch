@@ -430,17 +430,28 @@ class Component(_Component):
     """Add convenient APIs."""
 
     @property
+    def fname(self):
+        return self._make_path(self.url, ext=None)
+
+    @property
     def components(self):
-        return self.make_local_references()
+        return self._make_local_references(self.fname)
 
     @property
     def component_url(self):
-        pass
+        return self._make_local_url(self.fname)
 
     @property
     def component_fname(self):
-        pass
+        return self._make_filename(self.fname, self.platform)
 
     @property
     def relative_component_fname(self):
-        pass
+        local_url = self.component_url
+        fname = self.component_fname
+        if self._in_current_dir(fname, DOWNLOAD_DIR):
+            src = './' + os.path.relpath(
+                local_url, os.path.dirname(self.base.fname))
+        else:
+            src = local_url
+        return src
