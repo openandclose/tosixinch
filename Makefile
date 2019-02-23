@@ -1,5 +1,5 @@
 
-PHONIES = first help all prep git flake8 test tox scripts copylib libs html htmlmain htmllibs run1 run2 run3
+PHONIES = first help all prep git flake8 test tox scripts copylib libs html htmlmain htmllibs x xx xxx
 DEV = tosixinch/tests/dev
 
 
@@ -25,9 +25,9 @@ help:
 	@echo '    html'
 	@echo '        htmlmain'
 	@echo '        htmllibs'
-	@echo 'run1'
-	@echo 'run2'
-	@echo 'run3'
+	@echo 'x'
+	@echo 'xx'
+	@echo 'xxx'
 
 all: prep html
 	@echo 'Success All!'
@@ -72,9 +72,9 @@ htmllibs:
 	$(MAKE) -C ../configfetch html
 	$(MAKE) -C ../zconfigparser html
 
-run1:
+x:
 	python tosixinch/tests/_test_actualrun2.py -x
-run2:
+xx:
 	python tosixinch/tests/_test_actualrun2.py -xx
-run3:
+xxx:
 	python tosixinch/tests/_test_actualrun2.py -xxx
