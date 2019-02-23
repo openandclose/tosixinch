@@ -389,6 +389,14 @@ General Section
     Run arbitrary shell command
     when specified in commandline options (``-4`` or ``--view``).
 
+.. confopt:: pdfname
+
+    | (None)
+
+    Designate output PDF file name.
+    If not provided (default), the script makes up some name.
+    see `PDF_File <overview.html#dword-PDF_File>`__.
+
 
 Style Section
 ^^^^^^^^^^^^^

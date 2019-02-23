@@ -215,6 +215,9 @@ def _build_conf_parser():
     help = 'do not parse user configuration (intended for testing)'
     configs.add_argument('--nouserdir', action='store_true', help=help)
 
+    help = 'override pdf file name'
+    configs.add_argument('--pdfname', help=help)
+
     # styles group
     choices = ['portrait', 'landscape']
     help = ('portrait(default) or landscape, determine which size data to use')

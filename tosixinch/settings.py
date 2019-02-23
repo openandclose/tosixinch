@@ -276,6 +276,9 @@ class Conf(object):
 
     @property
     def pdfname(self):
+        pname = self.general.pdfname
+        if pname:
+            return pname
         return _get_pdfname(self.urls, self.sites, self.minsep)
 
     @property

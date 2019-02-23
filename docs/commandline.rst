@@ -209,6 +209,10 @@ Configs
 
     do not parse user configuration (intended for testing)
 
+.. option:: --pdfname PDFNAME
+
+    override pdf file name
+
 Styles
 ------
 
