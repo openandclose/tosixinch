@@ -244,7 +244,7 @@ def _copy_downloaded_files(urls):
 
     for url in urls:
         fname = tosixinch.util.make_path(url)
-        fname_outcome = os.path.join(REFERENCE, fname)
+        fname_outcome = os.path.join(OUTCOME, fname)
         if fname_outcome == fname:
             continue
         shutil.copy(fname, fname_outcome)
