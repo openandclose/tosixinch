@@ -374,7 +374,7 @@ def parse_args(args=sys.argv[1:]):
     #         'from urls.txt and reference extracted htmls')
 
     args = parser.parse_args(args)
-    return args
+    return parser, args
 
 
 def _minimum_args():
@@ -397,7 +397,7 @@ def build_cmd_args(args):
 
 
 def main():
-    args = parse_args()
+    parser, args = parse_args()
 
     if args.compare:
         filename = os.path.relpath(args.compare, start=OUTCOME)
@@ -442,6 +442,8 @@ def main():
         _run(urls, cmd_args, 'extract')
     elif args.convert:
         _run(urls, cmd_args, 'convert')
+    else:
+        parser.print_help()
 
 
 if __name__ == '__main__':
