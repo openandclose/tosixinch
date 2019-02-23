@@ -23,6 +23,7 @@ About run:
           test extract and convert, for selected 3 urls.
 -xxx:     (all)
           test extract and convert, for all urls (now 14).
+          also test ufile-convert, making an 'all in one' pdf.
 """
 
 # For now I am not deleting files if not necessary,
@@ -50,6 +51,7 @@ COMPARE_ERROR_FATAL = True
 BUFSIZE = 8*1024
 
 UFILE = 'urls.txt'
+ALL_PDF = '_all.pdf'
 PNG_DIR = '_png'
 IMG_PREFIX = 'pdfcmp'
 
@@ -152,8 +154,10 @@ def _get_page_count(pdfname):
 def _get_png_name(num, pagenum, img_prefix):
     if pagenum < 10:
         digit = '%d'
-    else:
+    elif pagenum < 100:
         digit = '%02d'
+    else:
+        digit = '%03d'
 
     fmt = '%s/%s-' + digit + '.png'
     return fmt % (PNG_DIR, img_prefix, num)
@@ -195,7 +199,7 @@ def _check_pdfs(ref, filename):
         if _bincmp(png1, png2):
             continue
 
-        print('creating png images from %r...' % filename)
+        print('creating png images from %r, at page: %d...' % (filename, num))
         _create_diff_png_page(png1, png2, png3)
         _open_image_viewer(png1, png2, png3)
         compare_error(filename)
@@ -241,6 +245,18 @@ def _run(urls, args, action, do_compare=True):
             compare(conf, action)
 
 
+def _run_ufile(args, do_compare=True):
+    # Instead of generating each pdf file, generates one big pdf file
+    # from all urls.
+    # Let's skip extraction test since it should be the same as ``_run``.
+    _check_ufiles()
+    action_args = args + ['--convert', '--pdfname', ALL_PDF]
+    conf = tosixinch.main._main(args=action_args)
+
+    if do_compare:
+        _compare(conf.pdfname)
+
+
 def _clean_directory():
     assert os.path.abspath(os.curdir) in (REFERENCE, OUTCOME)
 
@@ -268,6 +284,9 @@ def _copy_downloaded_files(urls):
             continue
         shutil.copy(fname, fname_outcome)
 
+    # for _run_ufile
+    shutil.copy(ALL_PDF, os.path.join(OUTCOME, ALL_PDF))
+
 
 def create_ref(urls):
     curdir = os.curdir
@@ -281,6 +300,7 @@ def create_ref(urls):
     _run(urls, args, 'download', do_compare=False)
     _run(urls, args, 'extract', do_compare=False)
     _run(urls, args, 'convert', do_compare=False)
+    _run_ufile(args, do_compare=False)
 
     _copy_downloaded_files(urls)
 
@@ -317,13 +337,16 @@ def very_short_run(urls, args):
 
 def short_run(urls, args):
     urls = _get_short_ulist(urls)
-    normal_run(urls, args)
+    _run(urls, args, 'extract')
+    _run(urls, args, 'convert')
+    print('success!')
 
 
 def normal_run(urls, args):
     _check_ufiles()
     _run(urls, args, 'extract')
     _run(urls, args, 'convert')
+    _run_ufile(args)
     print('success!')
 
 
@@ -332,7 +355,10 @@ def parse_args(args=sys.argv[1:]):
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('-x', '--run', action='count',
-            help='run test (-x: very short, --xx: short, --xxx: all urls).')
+        help='run test (-x: very short, --xx: short, --xxx: all urls).')
+    parser.add_argument('--run-ufile',
+        action='store_const', const='yes',
+        help='run test reading from ufile.')
 
     parser.add_argument('-p', '--print',
         action='store_const', const='yes',
@@ -435,6 +461,9 @@ def main():
             return
         else:
             raise ValueError('Not Implemented (only -x, -xx, or -xxx).')
+    if args.run_ufile:
+        _run_ufile(cmd_args)
+        return
 
     if args.download:
         _run(urls, cmd_args, 'download')
