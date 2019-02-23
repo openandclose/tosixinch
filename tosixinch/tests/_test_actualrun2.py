@@ -48,6 +48,13 @@ SELECT_SHORT_ULIST = (
     'templite.py'
 )
 
+CONVERT_RELATED_FILES = (
+    'convert.py',
+    'data/tosixinch.default.ini',
+    'data/site.default.ini',
+    'data/css/sample.t.css',
+)
+
 HTML_DIFF_VIEWER_CMD = 'vim -d %s %s'
 IMAGE_VIEWER_CMD = 'sxiv %s %s %s'
 PDF_PAGE_COUNT_CMD = 'pdfinfo %s'
@@ -58,6 +65,7 @@ TESTDIR = os.path.dirname(os.path.abspath(__file__))
 TEMP = os.path.join(TESTDIR, 'temp')
 OUTCOME = os.path.join(TEMP, 'actualrun', 'outcome')
 REFERENCE = os.path.join(TEMP, 'actualrun', 'reference')
+APPLICATION_ROOT = os.path.dirname(TESTDIR)
 
 os.chdir(OUTCOME)
 if not os.path.isdir(PNG_DIR):
@@ -268,6 +276,17 @@ def create_ref(urls):
     os.chdir(curdir)
 
 
+def _need_convert_test():
+    base_pdf = 'Xpath.pdf'
+    last_conversion = os.path.getmtime(os.path.join(OUTCOME, base_pdf))
+
+    for file in CONVERT_RELATED_FILES:
+        file = os.path.join(APPLICATION_ROOT, file)
+        if os.path.getmtime(file) > last_conversion:
+            return True
+    return False
+
+
 def _in_short_ulist(url):
     for sel in SELECT_SHORT_ULIST:
         if sel in url:
@@ -281,6 +300,8 @@ def _get_short_ulist(urls):
 def very_short_run(urls, args):
     urls = _get_short_ulist(urls)
     _run(urls, args, 'extract')
+    if _need_convert_test():
+        _run(urls, args, 'convert')
 
 
 def short_run(urls, args):
