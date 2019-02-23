@@ -12,6 +12,17 @@ And on error, make it so that I can see the diffs in some way or other.
 Require Pillow or PIL python library.
 Require Poppler commandline utilities (pdfinfo and pdftoppm).
 Require viewer applications (vim and sxiv).
+
+---
+About run:
+-x:       (very short)
+          test extract,
+          and test convert only when related files are modified,
+          for selected 3 urls.
+-xx:      (short)
+          test extract and convert, for selected 3 urls.
+-xxx:     (all)
+          test extract and convert, for all urls (now 14).
 """
 
 # For now I am not deleting files if not necessary,
