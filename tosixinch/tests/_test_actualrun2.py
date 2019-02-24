@@ -70,6 +70,9 @@ CONVERT_RELATED_FILES = (
     'data/site.default.ini',
     'data/css/sample.t.css',
 )
+TOC_RELATED_FILES = (
+    'toc.py',
+)
 
 HTML_DIFF_VIEWER_CMD = 'vim -d %s %s'
 IMAGE_VIEWER_CMD = 'sxiv %s %s %s'
@@ -336,26 +339,28 @@ def create_ref(urls):
     os.chdir(curdir)
 
 
-def _need_convert_test():
-    base_pdf = 'Xpath.pdf'
-    last_conversion = os.path.getmtime(os.path.join(OUTCOME, base_pdf))
-
-    for file in CONVERT_RELATED_FILES:
-        file = os.path.join(APPLICATION_ROOT, file)
-        if os.path.getmtime(file) > last_conversion:
+def _is_newer(ref, files):
+    reftime = os.path.getmtime(ref)
+    for file in files:
+        if os.path.getmtime(file) > reftime:
             return True
     return False
 
 
-def _need_toc_test():
-    base_html = '_htmls/tosixinch.example.com/mediawiki/index--tosixinch--extracted.html'  # noqa: E501
-    last_conversion = os.path.getmtime(os.path.join(OUTCOME, base_html))
+def _is_code_edited(ref, files):
+    ref = os.path.join(OUTCOME, ref)
+    files = [os.path.join(APPLICATION_ROOT, file) for file in files]
+    _is_newer(ref, files)
 
-    file = 'toc.py'
-    file = os.path.join(APPLICATION_ROOT, file)
-    if os.path.getmtime(file) > last_conversion:
-        return True
-    return False
+
+def _need_convert_test():
+    ref = 'Xpath.pdf'
+    return _is_code_edited(ref, CONVERT_RELATED_FILES)
+
+
+def _need_toc_test():
+    ref = '_htmls/tosixinch.example.com/mediawiki/index--tosixinch--extracted.html'  # noqa: E501
+    return _is_code_edited(ref, TOC_RELATED_FILES)
 
 
 def _in_short_ulist(url):
