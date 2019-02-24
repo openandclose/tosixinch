@@ -24,6 +24,7 @@ About run:
 -xxx:     (all)
           test extract and convert, for all urls (now 14).
           also test ufile-convert, making an 'all in one' pdf.
+          also test toc extraction (merging htmls).
 """
 
 # For now I am not deleting files if not necessary,
@@ -51,7 +52,9 @@ COMPARE_ERROR_FATAL = True
 BUFSIZE = 8*1024
 
 UFILE = 'urls.txt'
+TOC_UFILE = 'urls-toc.txt'
 ALL_PDF = '_all.pdf'
+TOC_PDF = '_toc.pdf'
 PNG_DIR = '_png'
 IMG_PREFIX = 'pdfcmp'
 
@@ -257,6 +260,27 @@ def _run_ufile(args, do_compare=True):
         _compare(conf.pdfname)
 
 
+def _run_toc(args, action, do_compare=True):
+    if action == 'toc':
+        action_args = args + ['--toc']
+        conf = tosixinch.main._main(args=action_args)
+        if do_compare:
+            urls = get_urls(ufile=TOC_UFILE)
+            for url in urls:
+                fname = tosixinch.util.make_path(url)
+                fnew = tosixinch.util.make_new_fname(fname)
+                _compare(fnew)
+
+    # We can almost skip conversion test
+    # since it should be similar as ``_run_ufile``.
+    # But we have to check at least for the first time.
+    elif action == 'convert':
+        action_args = args + ['--convert', '--pdfname', TOC_PDF]
+        conf = tosixinch.main._main(args=action_args)
+        if do_compare:
+            _compare(conf.pdfname)
+
+
 def _clean_directory():
     assert os.path.abspath(os.curdir) in (REFERENCE, OUTCOME)
 
@@ -286,6 +310,9 @@ def _copy_downloaded_files(urls):
 
     # for _run_ufile
     shutil.copy(ALL_PDF, os.path.join(OUTCOME, ALL_PDF))
+    # for _run_toc
+    shutil.copy(TOC_UFILE, os.path.join(OUTCOME, TOC_UFILE))
+    shutil.copy(TOC_PDF, os.path.join(OUTCOME, TOC_PDF))
 
 
 def create_ref(urls):
@@ -301,6 +328,8 @@ def create_ref(urls):
     _run(urls, args, 'extract', do_compare=False)
     _run(urls, args, 'convert', do_compare=False)
     _run_ufile(args, do_compare=False)
+    _run_toc(args, 'toc', do_compare=False)
+    _run_toc(args, 'convert', do_compare=False)
 
     _copy_downloaded_files(urls)
 
@@ -318,6 +347,17 @@ def _need_convert_test():
     return False
 
 
+def _need_toc_test():
+    base_html = '_htmls/tosixinch.example.com/mediawiki/index--tosixinch--extracted.html'  # noqa: E501
+    last_conversion = os.path.getmtime(os.path.join(OUTCOME, base_html))
+
+    file = 'toc.py'
+    file = os.path.join(APPLICATION_ROOT, file)
+    if os.path.getmtime(file) > last_conversion:
+        return True
+    return False
+
+
 def _in_short_ulist(url):
     for sel in SELECT_SHORT_ULIST:
         if sel in url:
@@ -332,7 +372,12 @@ def very_short_run(urls, args):
     urls = _get_short_ulist(urls)
     _run(urls, args, 'extract')
     if _need_convert_test():
+        print('doing conversion test...')
         _run(urls, args, 'convert')
+    if _need_toc_test():
+        print('doing toc test...')
+        _run_toc(args, 'toc')
+    print('success!')
 
 
 def short_run(urls, args):
@@ -347,6 +392,7 @@ def normal_run(urls, args):
     _run(urls, args, 'extract')
     _run(urls, args, 'convert')
     _run_ufile(args)
+    _run_toc(args, 'toc')
     print('success!')
 
 
@@ -359,6 +405,9 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('--run-ufile',
         action='store_const', const='yes',
         help='run test reading from ufile.')
+    parser.add_argument('--toc',
+        action='store_const', const='yes',
+        help='run toc test')
 
     parser.add_argument('-p', '--print',
         action='store_const', const='yes',
@@ -394,10 +443,6 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('--convert',
         action='store_const', const='yes',
         help='convert htmls to pdf and compare it with the reference')
-    # parser.add_argument('--toc',
-    #     action='store_const', const='yes',
-    #     help='create urls-toc.txt and new merged htmls'
-    #         'from urls.txt and reference extracted htmls')
 
     args = parser.parse_args(args)
     return parser, args
@@ -463,6 +508,9 @@ def main():
             raise ValueError('Not Implemented (only -x, -xx, or -xxx).')
     if args.run_ufile:
         _run_ufile(cmd_args)
+        return
+    if args.toc:
+        _run_toc(cmd_args, 'toc')
         return
 
     if args.download:
