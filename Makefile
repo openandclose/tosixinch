@@ -1,5 +1,5 @@
 
-PHONIES = first help all prep git flake8 test tox scripts copylib libs html htmlmain htmllibs x xx xxx
+PHONIES = first help all prep git flake8 test tox scripts copylib libs html htmlmain htmllibs x xx
 DEV = tosixinch/tests/dev
 
 
@@ -27,7 +27,6 @@ help:
 	@echo '        htmllibs'
 	@echo 'x'
 	@echo 'xx'
-	@echo 'xxx'
 
 all: prep html
 	@echo 'Success All!'
@@ -76,5 +75,3 @@ x:
 	python tosixinch/tests/_test_actualrun2.py -x
 xx:
 	python tosixinch/tests/_test_actualrun2.py -xx
-xxx:
-	python tosixinch/tests/_test_actualrun2.py -xxx

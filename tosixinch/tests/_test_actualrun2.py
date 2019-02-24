@@ -15,13 +15,11 @@ Require viewer applications (vim and sxiv).
 
 ---
 About run:
--x:       (very short)
+-x:       (short)
           test extract,
           and test convert only when related files are modified,
           for selected 3 urls.
--xx:      (short)
-          test extract and convert, for selected 3 urls.
--xxx:     (all)
+-xx:      (normal)
           test extract and convert, for all urls (now 14).
           also test ufile-convert, making an 'all in one' pdf.
           also test toc extraction (merging htmls).
@@ -373,7 +371,7 @@ def _get_short_ulist(urls):
     return [url for url in urls if _in_short_ulist(url)]
 
 
-def very_short_run(urls, args):
+def short_run(urls, args):
     urls = _get_short_ulist(urls)
     _run(urls, args, 'extract')
     if _need_convert_test():
@@ -382,13 +380,6 @@ def very_short_run(urls, args):
     if _need_toc_test():
         print('doing toc test...')
         _run_toc(args, 'toc')
-    print('success!')
-
-
-def short_run(urls, args):
-    urls = _get_short_ulist(urls)
-    _run(urls, args, 'extract')
-    _run(urls, args, 'convert')
     print('success!')
 
 
@@ -406,7 +397,7 @@ def parse_args(args=sys.argv[1:]):
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('-x', '--run', action='count',
-        help='run test (-x: very short, --xx: short, --xxx: all urls).')
+        help='run test (-x: short, --xx: all urls).')
     parser.add_argument('--run-ufile',
         action='store_const', const='yes',
         help='run test reading from ufile.')
@@ -501,16 +492,13 @@ def main():
 
     if args.run:
         if args.run == 1:
-            very_short_run(urls, cmd_args)
-            return
-        elif args.run == 2:
             short_run(urls, cmd_args)
             return
-        elif args.run == 3:
+        elif args.run == 2:
             normal_run(urls, cmd_args)
             return
         else:
-            raise ValueError('Not Implemented (only -x, -xx, or -xxx).')
+            raise ValueError('Not Implemented (only -x or -xx).')
     if args.run_ufile:
         _run_ufile(cmd_args)
         return
