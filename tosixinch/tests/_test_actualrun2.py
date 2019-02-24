@@ -282,7 +282,7 @@ def _run_toc(args, action, do_compare=True):
 
 
 def _clean_directory():
-    assert os.path.abspath(os.curdir) in (REFERENCE, OUTCOME)
+    assert os.path.abspath(os.curdir) == REFERENCE
 
     for entry in os.listdir():
         if os.path.isfile(entry):
