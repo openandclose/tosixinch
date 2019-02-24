@@ -85,29 +85,29 @@ if not os.path.isdir(PNG_DIR):
     os.mkdir(PNG_DIR)
 
 
-def _get_ufiles():
-    ufile = os.path.join(TESTDIR, UFILE)
-    ufile_ref = os.path.join(REFERENCE, UFILE)
-    ufile_outcome = os.path.join(OUTCOME, UFILE)
+def _get_ufiles(ufile=UFILE):
+    ufile = os.path.join(TESTDIR, ufile)
+    ufile_ref = os.path.join(REFERENCE, ufile)
+    ufile_outcome = os.path.join(OUTCOME, ufile)
     return ufile, ufile_ref, ufile_outcome
 
 
-def _check_ufiles():
-    ufile, ufile_ref, ufile_outcome = _get_ufiles()
+def _check_ufiles(ufile=UFILE):
+    ufile, ufile_ref, ufile_outcome = _get_ufiles(ufile)
     assert os.path.getmtime(ufile) <= os.path.getmtime(ufile_ref)
     assert os.path.getmtime(ufile) <= os.path.getmtime(ufile_outcome)
 
 
-def update_ufiles():
+def update_ufiles(ufile=UFILE):
     """Copy 'urls.txt' from the canonical one in 'tests' direcrtory."""
     print('updating ufiles...')
-    ufile, ufile_ref, ufile_outcome = _get_ufiles()
+    ufile, ufile_ref, ufile_outcome = _get_ufiles(ufile)
     shutil.copy(ufile, ufile_ref)
     shutil.copy(ufile, ufile_outcome)
 
 
-def get_urls():
-    urls = tosixinch.util.parse_ufile(UFILE)
+def get_urls(ufile=UFILE):
+    urls = tosixinch.util.parse_ufile(ufile)
     return urls
 
 
