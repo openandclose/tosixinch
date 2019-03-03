@@ -6,6 +6,7 @@ Use comment structure in 'urls.txt' as directive.
 
 import logging
 import os
+import re
 
 from tosixinch.process import gen
 from tosixinch.util import (
@@ -29,43 +30,121 @@ def _make_toc_file(fname):
     return root + '-toc' + ext
 
 
-# TODO: consider using util.merge_htmls().
-# TODO: divide parsing and html building.
-def run(conf, fname):
-    urls = parse_tocfile(fname)
-    newurls = []
-    inside = False
-    prev = None
-    for url in urls:
-        if not url.startswith('#'):
-            if not inside:
-                newurls.append(url)
-            else:
-                fnew = make_new_fname(make_path(url))
-                tags = lxml_open(fnew).xpath('//body')
-                for t in tags:
-                    gen.decrease_heading(t)
-                    _relink_component(t, prev, fnew)
-                    t.tag = 'div'
-                    t.set('class', 'tsi-body-merged')
-                    doc.body.append(t)  # noqa: F821 (undefined name 'doc')
-        else:
-            if url.strip() == '#':
-                lxml_write(prev, doc)  # noqa: F821
-                inside = False
-                continue
-            title = url.split('#')[-1].strip()
-            newurl = '%s/%s' % (TOCDOMAIN, slugify(title))
-            newurls.append(newurl)
-            fnew = make_new_fname(make_path(newurl))
-            if not inside:
-                inside = True
-            else:
-                lxml_write(prev, doc)  # noqa: F821
-            prev = fnew
-            doc = _make_toc_html(title)
-    if inside:
-        lxml_write(prev, doc)
+class Node(object):
+    """Represent one non-blank line in ufile."""
 
-    with open(_make_toc_file(fname), 'w') as f:
-        f.write('\n'.join(newurls))
+    def __init__(self, level, url, title, root=None):
+        self.level = level
+        self.url = url
+        self.title = title
+        if root is None:
+            self.root = self
+        else:
+            self.root = root
+        self.last = False
+        self._doc = None
+
+    @property
+    def fnew(self):
+        return make_new_fname(make_path(self.url))
+
+    @property
+    def doc(self):
+        if self._doc is None:
+            self._create_doc()
+        return self._doc
+
+    def _create_doc(self):
+        if self.title:
+            self._doc = _make_toc_html(self.title)
+        else:
+            self._doc = lxml_open(self.fnew)
+
+    # TODO: consider using util.merge_htmls().
+    def _append_body(self):
+        for t in self.doc.xpath('//body'):
+            gen.decrease_heading(t)
+            _relink_component(t, self.root.fnew, self.fnew)
+            t.tag = 'div'
+            t.set('class', 'tsi-body-merged')
+            self.root.doc.body.append(t)
+
+    def write(self):
+        if self.root is not self:
+            self._append_body()
+
+        if self.last:
+            lxml_write(self.root.fnew, self.root.doc)
+
+
+class Nodes(object):
+    """Represent ufile."""
+
+    def __init__(self, urls, ufile):
+        self.urls = urls
+        self.ufile = ufile
+
+    def _parse_url(self, url):
+        m = re.match(r'^\s*(#+)?\s*(.+)?\s*$', url)
+        if m.group(1):
+            cnt = len(m.group(1))
+        else:
+            cnt = 0
+        line = m.group(2)
+        if cnt and line:
+            title = line
+            url = '%s/%s' % (TOCDOMAIN, slugify(title))
+        elif cnt and not line:
+            title = None
+            url = None
+        else:
+            title = None
+            url = line
+
+        return cnt, url, title
+
+    def parse(self):
+        nodes = []
+        level = 0
+        node = None
+        root = None
+        for url in self.urls:
+            cnt, url, title = self._parse_url(url)
+            if cnt:
+                if url is None:
+                    level -= 1
+                    continue
+                if cnt == 1:
+                    if node:
+                        node.last = True
+                level = cnt
+            else:
+                if level == 0:
+                    if node:
+                        node.last = True
+
+            if not node or node.last:
+                root = node = Node(level, url, title, None)
+            else:
+                node = Node(level, url, title, root)
+            nodes.append(node)
+
+        node.last = True
+        return nodes
+
+    def write(self):
+        for node in self:
+            node.write()
+
+        urls = '\n'.join([node.url for node in self if node.root is node])
+        with open(_make_toc_file(self.ufile), 'w') as f:
+            f.write(urls)
+
+    def __iter__(self):
+        return self.parse().__iter__()
+
+
+def run(conf, ufile):
+    urls = parse_tocfile(ufile)
+    nodes = Nodes(urls, ufile)
+    nodes.write()
