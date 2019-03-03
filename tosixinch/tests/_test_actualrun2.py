@@ -254,6 +254,9 @@ def _run_ufile(args, do_compare=True):
     # from all urls.
     # Let's skip extraction test since it should be the same as ``_run``.
     _check_ufiles()
+    if os.path.isfile(TOC_UFILE):
+        os.remove(TOC_UFILE)
+
     action_args = args + ['--convert', '--pdfname', ALL_PDF]
     conf = tosixinch.main._main(args=action_args)
 
@@ -266,6 +269,7 @@ def _run_toc(args, action, do_compare=True):
         action_args = args + ['--toc']
         conf = tosixinch.main._main(args=action_args)
         if do_compare:
+            _compare(TOC_UFILE)
             urls = get_urls(ufile=TOC_UFILE)
             for url in urls:
                 fname = tosixinch.util.make_path(url)
@@ -348,7 +352,7 @@ def _is_newer(ref, files):
 def _is_code_edited(ref, files):
     ref = os.path.join(OUTCOME, ref)
     files = [os.path.join(APPLICATION_ROOT, file) for file in files]
-    _is_newer(ref, files)
+    return _is_newer(ref, files)
 
 
 def _need_convert_test():
@@ -389,6 +393,7 @@ def normal_run(urls, args):
     _run(urls, args, 'convert')
     _run_ufile(args)
     _run_toc(args, 'toc')
+    _run_toc(args, 'convert')
     print('success!')
 
 
