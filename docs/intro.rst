@@ -126,7 +126,7 @@ Personally, it is rare that I use other converters than ``prince``,
 and (a semblance of) software testing tends to be only concerned with ``prince``.
 
 ``weasyprint`` has some limitations, notably it is unbearably slow
-(For our usage, in which it is not rare
+(For our usage, it is not rare
 that a pdf consists of hundreds or thousands of pages).
 But it is written in python, by great authors.
 I want to keep it rather as a reference.
@@ -230,7 +230,8 @@ and write extraction settings for the site. ::
     Multiple lines are interpreted
     as connected with ``'|'`` (equivalent to *'or'*).
 
-And ::               
+And applies the site config to the local html,
+creating a new (extracted) html. ::
 
     $ tosixinch -i https://somesite.com/article/aaa.html -2
 
@@ -241,7 +242,7 @@ Optionally, you check the extracted html in the browser. ::
 * ``'-b'`` or ``'--browser'`` opens ``Extracted_File``.
 
 You try ``-2`` several times if necessary,
-editing and changing site configuration
+editing and changing the site configuration
 (It overwrites the same ``Extracted_File``).
 
 And ::

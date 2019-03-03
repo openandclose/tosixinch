@@ -269,7 +269,7 @@ Config Files
 
 .. dword:: toc-ufile
 
-    It is a ``toc`` version of `ufile <#dword-ufile>`__.
+    It is the ``toc`` version of `ufile <#dword-ufile>`__.
 
     It is generated automatically when action is ``toc``,
     and processed automatically when ``convert``.
