@@ -22,8 +22,7 @@ import urllib.parse
 
 logger = logging.getLogger(__name__)
 
-COMMENT_PREFIX = (';',)
-DIRECTIVE_PREFIX = ('#',)
+COMMENT_PREFIX = ('#', ';',)
 
 DOWNLOAD_DIR = '_htmls'
 
@@ -47,16 +46,6 @@ def _is_local(url):
     #     msg = 'Only http, https and file schemes are supported, got %r'
     #     raise ValueError(msg % m.group(1))
     return True
-
-
-class Directive(object):
-    """Represent a special line that is not a url, in ufile.
-
-    They are usually ignored (skipped in urls iteration).
-    """
-
-    def __init__(self, line):
-        self.line = line
 
 
 class Locations(object):
@@ -86,13 +75,9 @@ class Locations(object):
                 raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
-    def _iterate(self, with_directive=False):
+    def _iterate(self):
         for url in self._urls:
             if url.startswith(COMMENT_PREFIX):
-                continue
-            if url.startswith(DIRECTIVE_PREFIX):
-                if with_directive:
-                    yield Directive(url)
                 continue
 
             url = self._parse_url(url)
