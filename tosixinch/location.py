@@ -231,9 +231,13 @@ class Location(_Location):
 # Authority is:
 #     user:password@host:port
 
+# Unreserved characters are:
+#     ALPHA DIGIT -._~
 # Reserved characters are:
 #     gen-delims:  #/:?@[]
 #     sub-delims:  !$&'()*+,;=
+# Excluded characters are:
+#     "%/<>\^`{}
 
 # Allowed characters for each url components are:
 # (This is a simplified version of RFC3986 one.)
