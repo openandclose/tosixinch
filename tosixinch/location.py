@@ -87,6 +87,10 @@ class Locations(object):
     def __iter__(self):
         return self._iterate()
 
+    @property
+    def urls(self):
+        return list(self._iterate())
+
 
 class _Location(object):
     """Calculate filepaths."""
