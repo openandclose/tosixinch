@@ -19,17 +19,6 @@ logger = logging.getLogger(__name__)
 TOCDOMAIN = 'http://tosixinch.example.com'
 
 
-def _make_toc_html(title):
-    content = '<h1>%s</h1>' % title
-    doc = build_new_html(title, content)
-    return doc
-
-
-def _make_toc_file(fname):
-    root, ext = os.path.splitext(fname)
-    return root + '-toc' + ext
-
-
 class Node(object):
     """Represent one non-blank line in ufile."""
 
@@ -54,9 +43,13 @@ class Node(object):
             self._create_doc()
         return self._doc
 
+    def _make_toc_html(self):
+        content = '<h1>%s</h1>' % self.title
+        return build_new_html(self.title, content)
+
     def _create_doc(self):
         if self.title:
-            self._doc = _make_toc_html(self.title)
+            self._doc = self._make_toc_html()
         else:
             self._doc = lxml_open(self.fnew)
 
@@ -83,6 +76,11 @@ class Nodes(object):
     def __init__(self, urls, ufile):
         self.urls = urls
         self.ufile = ufile
+
+    @property
+    def toc_ufile(self):
+        root, ext = os.path.splitext(self.ufile)
+        return root + '-toc' + ext
 
     def _parse_url(self, url):
         m = re.match(r'^\s*(#+)?\s*(.+)?\s*$', url)
@@ -137,7 +135,7 @@ class Nodes(object):
             node.write()
 
         urls = '\n'.join([node.url for node in self if node.root is node])
-        with open(_make_toc_file(self.ufile), 'w') as f:
+        with open(self.toc_ufile, 'w') as f:
             f.write(urls)
 
     def __iter__(self):
