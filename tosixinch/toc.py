@@ -8,18 +8,19 @@ import logging
 import os
 import re
 
+from tosixinch import location
 from tosixinch.process import gen
 from tosixinch.util import (
-    parse_tocfile, make_path, make_new_fname,
     build_new_html, lxml_open, lxml_write, slugify,
     _relink_component)
 
 logger = logging.getLogger(__name__)
 
+COMMENT_PREFIX = (';',)
 TOCDOMAIN = 'http://tosixinch.example.com'
 
 
-class Node(object):
+class Node(location.Location):
     """Represent one non-blank line in ufile."""
 
     def __init__(self, level, url, title, root=None):
@@ -32,10 +33,6 @@ class Node(object):
             self.root = root
         self.last = False
         self._doc = None
-
-    @property
-    def fnew(self):
-        return make_new_fname(make_path(self.url))
 
     @property
     def doc(self):
@@ -70,16 +67,20 @@ class Node(object):
             lxml_write(self.root.fnew, self.root.doc)
 
 
-class Nodes(object):
+class Nodes(location.Locations):
     """Represent ufile."""
 
     def __init__(self, urls, ufile):
-        self.urls = urls
-        self.ufile = ufile
+        if not ufile:
+            msg = ('To run --toc, you can not use --input. '
+                'Use either --file, or implicit urls.txt.')
+            raise ValueError(msg)
+
+        super().__init__(urls, ufile)
 
     @property
     def toc_ufile(self):
-        root, ext = os.path.splitext(self.ufile)
+        root, ext = os.path.splitext(self._ufile)
         return root + '-toc' + ext
 
     def _parse_url(self, url):
@@ -97,16 +98,19 @@ class Nodes(object):
             url = None
         else:
             title = None
-            url = line
+            url = super()._parse_url(url)
 
         return cnt, url, title
 
-    def parse(self):
+    def _iterate(self):
         nodes = []
         level = 0
         node = None
         root = None
-        for url in self.urls:
+        for url in self._urls:
+            if url.startswith(COMMENT_PREFIX):
+                continue
+
             cnt, url, title = self._parse_url(url)
             if cnt:
                 if url is None:
@@ -130,6 +134,9 @@ class Nodes(object):
         node.last = True
         return nodes
 
+    def __iter__(self):
+        return self._iterate().__iter__()
+
     def write(self):
         for node in self:
             node.write()
@@ -138,16 +145,8 @@ class Nodes(object):
         with open(self.toc_ufile, 'w') as f:
             f.write(urls)
 
-    def __iter__(self):
-        return self.parse().__iter__()
-
 
 def run(conf):
     ufile = conf._ufile
-    if not ufile:
-        msg = ('To run --toc, you can not use --input. '
-            'Use either --file, or implicit urls.txt.')
-        raise ValueError(msg)
-    urls = parse_tocfile(ufile)
-    nodes = Nodes(urls, ufile)
+    nodes = Nodes(urls=None, ufile=ufile)
     nodes.write()
