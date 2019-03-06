@@ -69,10 +69,10 @@ class Locations(object):
             url = os.path.expanduser(url)
             url = os.path.expandvars(url)
             url = os.path.abspath(url)
-            if not os.path.exists(url):
-                raise FileNotFoundError('File not found: %r' % url)
-            if os.path.isdir(url):
-                raise IsADirectoryError('Got directory name: %r' % url)
+            # if not os.path.exists(url):
+            #     raise FileNotFoundError('File not found: %r' % url)
+            # if os.path.isdir(url):
+            #     raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
     def _iterate(self):
