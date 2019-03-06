@@ -359,10 +359,10 @@ def _main(args=sys.argv[1:], conf=None):
         extract.run(conf)
         runcmd(conf, conf.general.postcmd2)
     if args.toc:
-        toc.run(conf, ufile)
+        toc.run(conf)
     if args.convert:
         runcmd(conf, conf.general.precmd3)
-        convert.run(conf, ufile)
+        convert.run(conf)
         runcmd(conf, conf.general.postcmd3)
     if args.view:
         runcmd(conf, conf.general.viewcmd)

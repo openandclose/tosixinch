@@ -42,7 +42,7 @@ def _is_newer(oldfile, newfile):
 class Convert(object):
     """Base class for each application specific classes."""
 
-    def __init__(self, conf, ufile):
+    def __init__(self, conf):
         self._conf = conf
         self.path = conf.converter.cnvpath
         self.css = conf.converter.css
@@ -51,6 +51,7 @@ class Convert(object):
         self.style = conf.style
         self._encoding = conf.general.encoding
 
+        ufile = conf._ufile
         tocfile = self._get_tocfile(ufile)
         if conf.general.raw:
             files = [site.url for site in conf.sites]
@@ -227,16 +228,16 @@ class EbookConvertConvert(Convert):
         self._run()
 
 
-def run(conf, ufile):
+def run(conf):
     converter = conf.general.converter
     if converter == 'prince':
-        convert = PrinceConvert(conf, ufile)
+        convert = PrinceConvert(conf)
     elif converter == 'weasyprint':
-        convert = WeasyPrintConvert(conf, ufile)
+        convert = WeasyPrintConvert(conf)
     elif converter == 'wkhtmltopdf':
-        convert = WkhtmltopdfConvert(conf, ufile)
+        convert = WkhtmltopdfConvert(conf)
     elif converter == 'ebook_convert':
-        convert = EbookConvertConvert(conf, ufile)
+        convert = EbookConvertConvert(conf)
     else:
         raise KeyError('Not known converter: %s' % converter)
 

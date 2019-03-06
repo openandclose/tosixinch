@@ -142,7 +142,8 @@ class Nodes(object):
         return self.parse().__iter__()
 
 
-def run(conf, ufile):
+def run(conf):
+    ufile = conf._ufile
     urls = parse_tocfile(ufile)
     nodes = Nodes(urls, ufile)
     nodes.write()
