@@ -1,4 +1,5 @@
 
+import os
 import textwrap
 
 import pytest
@@ -11,7 +12,8 @@ def check(ulist, expected):
     expected = textwrap.dedent(expected).split('\n')[1:-1]
     nodes = toc.Nodes(ulist, 'url-toc.txt')
     for node, ref_line in zip(nodes, expected):
-        data = (_get_indent(node), node.url)
+        url = node.url.replace(os.path.abspath('.') + os.sep, '')
+        data = (_get_indent(node), url)
         line = '%s%s' % data
         if node.last:
             line += ' ]'
