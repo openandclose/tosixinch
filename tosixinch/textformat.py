@@ -1,7 +1,7 @@
 
 """Reformat text and convert to html.
 
-In extract action ('-2'), if texts are not html,
+In ``Extract`` action ('-2'), if text formats are not html,
 files are just passed to this module.
 """
 
@@ -86,7 +86,7 @@ class Prose(object):
 
 
 class NonProse(Prose):
-    """Text type with Significant line breaks. Require special text-wrap."""
+    """Text type with significant line breaks. Require special text-wrap."""
 
     def _wrap(self):
         wrapper = textwrap.TextWrapper()
@@ -107,7 +107,7 @@ class Code(NonProse):
 class PythonCode(Code):
     """Python code, a subclass of ``Code``.
 
-    Implement small text highlight
+    Implement a few text highlights
     (as far as fit for black-and-white e-readers).
     """
 
