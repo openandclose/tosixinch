@@ -161,7 +161,10 @@ TOC
 
 ``TOC`` means Table of Contents, ``bookmarks`` in pdf.
 
-Action ``toc`` can be called only after ``extract`` has been done.
+Action ``toc`` can be called if ``ufile`` is provided.
+(``--file`` or implicit ``urls.txt``. No ``--input``.)
+And it can be called only after ``extract`` has been done.
+
 The action bundles ``Extracted_Files``,
 writes to a single html, and creates a new ``url`` list
 (`toc-ufile <overview.html#dword-toc-ufile>`__).

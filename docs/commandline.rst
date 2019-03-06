@@ -93,7 +93,7 @@ Actions
 
 .. option:: --toc
 
-    create toc htmls and a toc url list
+    create toc htmls and a toc url list. conflicts with '--input'.
 
 .. option:: --link
 

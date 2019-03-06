@@ -84,7 +84,7 @@ def _build_cmd_parser():
             '(so you have to supply url some way)')
     actions.add_argument('-c', '--check', action='store_true', help=help)
 
-    help = 'create toc htmls and a toc url list'
+    help = "create toc htmls and a toc url list. conflicts with '--input'."
     actions.add_argument('--toc', action='store_true', help=help)
 
     help = 'get links in documents from urls (experimental)'

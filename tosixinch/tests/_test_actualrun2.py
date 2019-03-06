@@ -385,6 +385,7 @@ def short_run(urls, args):
         _run(urls, args, 'convert')
     if _need_toc_test():
         print('doing toc test...')
+        # Note: Here it uses all urls, the same as normal_run.
         _run_toc(args, 'toc')
     print('success!')
 

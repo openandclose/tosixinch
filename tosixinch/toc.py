@@ -144,6 +144,10 @@ class Nodes(object):
 
 def run(conf):
     ufile = conf._ufile
+    if not ufile:
+        msg = ('To run --toc, you can not use --input. '
+            'Use either --file, or implicit urls.txt.')
+        raise ValueError(msg)
     urls = parse_tocfile(ufile)
     nodes = Nodes(urls, ufile)
     nodes.write()
