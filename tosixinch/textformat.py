@@ -12,8 +12,6 @@ import re
 import sys
 import textwrap
 
-from tosixinch.util import (
-    make_directories)
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +72,7 @@ class Prose(object):
     def _write(self):
         fnew = self.fnew
         if not os.path.exists(fnew):
-            make_directories(fnew)
+            self._site.make_directories
         with open(fnew, 'w') as f:
             f.write(self.highlighted)
 
