@@ -98,8 +98,10 @@ class Locations(object):
 class _Location(object):
     """Calculate filepaths."""
 
-    def __init__(self, url):
+    def __init__(self, url, platform=sys.platform):
         self.url = url
+        self.platform = platform
+        self.sep = '\\' if platform == 'win32' else '/'
 
     def _make_directories(self, fname, on_error_exit=True):
         if not self._in_current_dir(fname):
@@ -121,7 +123,7 @@ class _Location(object):
         else:
             return False
 
-    def _make_path(self, url, ext='html', platform=sys.platform):
+    def _make_path(self, url, ext='html'):
         if _is_local(url):
             return url
         fname = SCHEMES.sub('', url)
@@ -131,16 +133,16 @@ class _Location(object):
         root, ext = posixpath.splitext(fname)
         if not ext:
             fname = posixpath.join(fname, 'index--tosixinch')
-        if platform == 'win32':
+        if self.platform == 'win32':
             fname = fname.replace('/', '\\')
         fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 
     def _make_new_fname(self,
-            fname, appendix='--extracted', ext='html', platform=sys.platform):
+            fname, appendix='--extracted', ext='html'):
         base = os.path.join(os.curdir, DOWNLOAD_DIR)
         if not self._in_current_dir(fname, base=base):
-            fname = self._strip_root(fname, platform)
+            fname = self._strip_root(fname)
             fname = os.path.join(DOWNLOAD_DIR, fname)
         return self._edit_fname(fname, appendix, ext)
 
@@ -155,8 +157,8 @@ class _Location(object):
                 ext = ext + '.' + default_ext
         return root + ext
 
-    def _strip_root(self, fname, platform):
-        if platform == 'win32':
+    def _strip_root(self, fname):
+        if self.platform == 'win32':
             drive = None
             m = WINROOTPATH.match(fname)
             # cf. 'C:aaa.txt' means 'aaa.txt' in current directory.
@@ -353,9 +355,8 @@ _delimiters = Delimiters(
 class _Component(Location):
     """Calculate component filepath."""
 
-    def __init__(self, url, base, platform=None):
-        if not platform:
-            self.platform = sys.platform
+    def __init__(self, url, base, platform=sys.platform):
+        super().__init__(url, platform)
 
         if isinstance(base, str):
             base = Location(base)
@@ -379,7 +380,7 @@ class _Component(Location):
 
     def _make_local_references(self, url):
         local_url = self._make_local_url(url)
-        fname = self._make_filename(url, self.platform)
+        fname = self._make_filename(url)
         return local_url, fname
 
     def _make_local_url(self, url):
@@ -393,7 +394,7 @@ class _Component(Location):
             newparts.append(part)
         return self._urlunsplit_no_query(newparts)
 
-    def _make_filename(self, url, platform=sys.platform):
+    def _make_filename(self, url):
         parts = urllib.parse.urlsplit(url)
         newparts = []
         for part, delimiters in zip(parts, _delimiters):
@@ -403,7 +404,7 @@ class _Component(Location):
         url = urllib.parse.urlunsplit(newparts)
 
         fname = urllib.parse.unquote(url)
-        if platform == 'win32':
+        if self.platform == 'win32':
             fname = fname.replace('/', '\\')
         return fname
 
@@ -439,7 +440,7 @@ class Component(_Component):
 
     @property
     def component_fname(self):
-        return self._make_filename(self.fname, self.platform)
+        return self._make_filename(self.fname)
 
     @property
     def relative_component_fname(self):

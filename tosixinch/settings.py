@@ -224,7 +224,8 @@ class Func(configfetch.Func):
 class Site(location.Location):
     """Settings for each url."""
 
-    def __init__(self, url, conf, siteconf):
+    def __init__(self, url, conf, siteconf, platform=sys.platform):
+        super().__init__(url, platform)
         self._conf = conf
         self._siteconf = siteconf
         self._config = siteconf._config

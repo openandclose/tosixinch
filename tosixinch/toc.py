@@ -7,6 +7,7 @@ Use comment structure in 'urls.txt' as directive.
 import logging
 import os
 import re
+import sys
 
 from tosixinch import location
 from tosixinch.process import gen
@@ -23,9 +24,9 @@ TOCDOMAIN = 'http://tosixinch.example.com'
 class Node(location.Location):
     """Represent one non-blank line in ufile."""
 
-    def __init__(self, level, url, title, root=None):
+    def __init__(self, level, url, title, root=None, platform=sys.platform):
+        super().__init__(url, platform)
         self.level = level
-        self.url = url
         self.title = title
         if root is None:
             self.root = self
