@@ -17,7 +17,6 @@ from tosixinch.util import (
 
 logger = logging.getLogger(__name__)
 
-COMMENT_PREFIX = (';',)
 TOCDOMAIN = 'http://tosixinch.example.com'
 
 
@@ -84,7 +83,11 @@ class Nodes(location.Locations):
         root, ext = os.path.splitext(self._ufile)
         return root + '-toc' + ext
 
-    def _parse_url(self, url):
+    def _parse_urls(self, urls):
+        comment = (';',)
+        yield from super()._parse_urls(urls, comment)
+
+    def _parse_toc_url(self, url):
         m = re.match(r'^\s*(#+)?\s*(.+)?\s*$', url)
         if m.group(1):
             cnt = len(m.group(1))
@@ -99,7 +102,7 @@ class Nodes(location.Locations):
             url = None
         else:
             title = None
-            url = super()._parse_url(url)
+            url = line
 
         return cnt, url, title
 
@@ -108,11 +111,8 @@ class Nodes(location.Locations):
         level = 0
         node = None
         root = None
-        for url in self._urls:
-            if url.startswith(COMMENT_PREFIX):
-                continue
-
-            cnt, url, title = self._parse_url(url)
+        for url in self.urls:
+            cnt, url, title = self._parse_toc_url(url)
             if cnt:
                 if url is None:
                     level -= 1

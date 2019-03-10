@@ -230,8 +230,6 @@ class Site(location.Location):
         self._siteconf = siteconf
         self._config = siteconf._config
 
-        self.url = url
-
         self.general = configfetch.Double(
             self._get_self(), self._conf.general)
         self.style = configfetch.Double(
@@ -299,7 +297,7 @@ class Conf(object):
         pname = self.general.pdfname
         if pname:
             return pname
-        if not self.sites._urls:
+        if not self.urls:
             return DEFAULT_PDFNAME
         return _get_pdfname(self.sites, self.minsep)
 

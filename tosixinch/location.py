@@ -23,6 +23,7 @@ import urllib.parse
 logger = logging.getLogger(__name__)
 
 COMMENT_PREFIX = ('#', ';',)
+DIRECTIVE_PREFIX = ('#',)
 
 DOWNLOAD_DIR = '_htmls'
 
@@ -38,16 +39,6 @@ ROOTPATH = re.compile('^/+')
 WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 
-def _is_local(url):
-    if SCHEMES.match(url):
-        return False
-    # m = OTHER_SCHEMES.match(url)
-    # if m:
-    #     msg = 'Only http, https and file schemes are supported, got %r'
-    #     raise ValueError(msg % m.group(1))
-    return True
-
-
 class Locations(object):
     """Make ``Location`` object and implement iteration."""
 
@@ -59,16 +50,54 @@ class Locations(object):
             except FileNotFoundError:
                 urls = []
 
-        self._ufile = ufile
         self._urls = urls
+        self._ufile = ufile
 
         self._iterobj = (Location,)
+
+    def _parse_urls(self, urls, comment=COMMENT_PREFIX):
+        for url in urls:
+            if url.startswith(comment):
+                continue
+            yield url
+
+    @property
+    def urls(self):
+        return list(self._parse_urls(self._urls))
 
     def __len__(self):
         return len(self.urls)
 
+    def _iterate(self):
+        for url in self.urls:
+            obj, *args = self._iterobj
+            yield obj(url, *args)
+
+    def __iter__(self):
+        return self._iterate()
+
+
+class _Location(object):
+    """Calculate filepaths."""
+
+    def __init__(self, url, platform=sys.platform):
+        self._url = url
+        self.platform = platform
+        self.sep = '\\' if platform == 'win32' else '/'
+
+    def _is_local(self, url):
+        if SCHEMES.match(url):
+            return False
+        # m = OTHER_SCHEMES.match(url)
+        # if m:
+        #     msg = 'Only http, https and file schemes are supported, got %r'
+        #     raise ValueError(msg % m.group(1))
+        if url.strip().startswith(DIRECTIVE_PREFIX):
+            return False
+        return True
+
     def _parse_url(self, url):
-        if _is_local(url):
+        if self._is_local(url):
             url = os.path.expanduser(url)
             url = os.path.expandvars(url)
             url = os.path.abspath(url)
@@ -77,31 +106,6 @@ class Locations(object):
             # if os.path.isdir(url):
             #     raise IsADirectoryError('Got directory name: %r' % url)
         return url
-
-    def _iterate(self):
-        for url in self._urls:
-            if url.startswith(COMMENT_PREFIX):
-                continue
-
-            url = self._parse_url(url)
-            obj, *args = self._iterobj
-            yield obj(url, *args)
-
-    def __iter__(self):
-        return self._iterate()
-
-    @property
-    def urls(self):
-        return list(self._iterate())
-
-
-class _Location(object):
-    """Calculate filepaths."""
-
-    def __init__(self, url, platform=sys.platform):
-        self.url = url
-        self.platform = platform
-        self.sep = '\\' if platform == 'win32' else '/'
 
     def _make_directories(self, fname, on_error_exit=True):
         if not self._in_current_dir(fname):
@@ -124,7 +128,7 @@ class _Location(object):
             return False
 
     def _make_path(self, url, ext='html'):
-        if _is_local(url):
+        if self._is_local(url):
             return url
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
@@ -174,6 +178,10 @@ class _Location(object):
 
 class Location(_Location):
     """Add convenient APIs."""
+
+    @property
+    def url(self):
+        return self._parse_url(self._url)
 
     @property
     def fname(self):
@@ -362,12 +370,6 @@ class _Component(Location):
             base = Location(base)
         self.base = base
 
-        if self.platform == 'win32':
-            url = self._remove_windows_chars(url)
-        url = self._normalize_source_url(url, base.url)
-        url = urllib.parse.urljoin(base.url, url)
-        self.url = url
-
     def _normalize_source_url(self, url, base):
         # It seems relative references are not uniformly handled by libraries.
         # So we'd better manually expand them.
@@ -425,6 +427,15 @@ class _Component(Location):
 
 class Component(_Component):
     """Add convenient APIs."""
+
+    @property
+    def url(self):
+        url = self._url
+        if self.platform == 'win32':
+            url = self._remove_windows_chars(url)
+        url = self._normalize_source_url(url, self.base.url)
+        url = urllib.parse.urljoin(self.base.url, url)
+        return url
 
     @property
     def fname(self):

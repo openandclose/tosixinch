@@ -328,7 +328,7 @@ def _main(args=sys.argv[1:], conf=None):
         print(ret)
         return
 
-    if not conf.sites._urls:
+    if not conf.sites.urls:
         if ufile == DEFAULT_UFILE:
             fmt = '%r (default ufile) not found in current directory.'
             raise ValueError(fmt % DEFAULT_UFILE)
