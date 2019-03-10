@@ -50,8 +50,7 @@ BINARY_EXTENSIONS = """
 
 
 def _get_pdfname(sites, minsep):
-    sitelist = [site for site in sites]
-    site = sitelist[0]
+    site = list(sites)[0]
     url = site.url
 
     parts = urllib.parse.urlsplit(url)
@@ -61,7 +60,7 @@ def _get_pdfname(sites, minsep):
     rootpath = parts.path.split('/')[minsep - 1]
     section = site.section.split(' : ')[0]
 
-    if len(sitelist) == 1:
+    if len(sites) == 1:
         name = path or host
         name = os.path.basename(name)
     else:
@@ -323,7 +322,7 @@ class Conf(object):
 
     def print_siteconf(self):
         if len(self.sites) == 1:
-            site = self.sites[0]
+            site = list(self.sites)[0]
             section = site.section
             general = site.general
             site = site._get_self()

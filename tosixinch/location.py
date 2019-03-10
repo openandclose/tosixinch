@@ -64,6 +64,9 @@ class Locations(object):
 
         self._iterobj = (Location,)
 
+    def __len__(self):
+        return len(self.urls)
+
     def _parse_url(self, url):
         if _is_local(url):
             url = os.path.expanduser(url)

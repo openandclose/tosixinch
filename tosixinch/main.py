@@ -336,7 +336,7 @@ def _main(args=sys.argv[1:], conf=None):
             raise ValueError('File not found: %r' % ufile)
 
     if args.browser:
-        html = conf.sites[0].fnew
+        html = list(conf.sites)[0].fnew
         if not os.path.exists(html):
             logger.error(
                 'File not found: no extracted html')
