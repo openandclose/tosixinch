@@ -46,11 +46,11 @@ class Locations(object):
         if not urls:
             try:
                 with open(ufile) as f:
-                    urls = [url.strip() for url in f if url.strip()]
+                    urls = f.readlines()
             except FileNotFoundError:
                 urls = []
 
-        self._urls = urls
+        self._urls = [url.strip() for url in urls if url.strip()]
         self._ufile = ufile
 
         self._iterobj = (Location,)
