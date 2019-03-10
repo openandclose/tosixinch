@@ -5,7 +5,7 @@ import sys
 
 import pytest
 
-import tosixinch.util as util
+from tosixinch import location
 
 
 @pytest.fixture(autouse=True)
@@ -16,9 +16,9 @@ def use_ntpath(monkeypatch):
 class TestWindowsLocalReference:
 
     def compare(self, url, local_url, fname):
-        u, f = util.make_local_references(url, platform='win32')
-        assert u == local_url
-        assert f == fname
+        comp = location.Component(url, '.', platform='win32')
+        assert comp.component_url == local_url
+        assert comp.component_fname == fname
 
     def test(self):
         url, local_url, fname = (
@@ -31,10 +31,9 @@ class TestWindowsLocalReference:
 class TestWindowsMakePath:
 
     def compare(self, url, fname, fnew):
-        f = util.make_path(url, platform='win32')
-        assert f == fname
-        f = util.make_new_fname(f, platform='win32')
-        assert f == fnew
+        loc = location.Location(url, platform='win32')
+        assert loc.fname == fname
+        assert loc.fnew == fnew
         
     def test(self):
         url, fname, fnew = (

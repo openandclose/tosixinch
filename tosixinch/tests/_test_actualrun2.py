@@ -39,9 +39,9 @@ import pytest
 
 from PIL import Image, ImageChops
 
+from tosixinch import location
 import tosixinch.main
 import tosixinch.settings
-import tosixinch.util
 
 
 COMPARE_ERROR_FATAL = True
@@ -111,8 +111,7 @@ def update_ufiles(ufile=UFILE):
 
 
 def get_urls(ufile=UFILE):
-    urls = tosixinch.util.parse_ufile(ufile)
-    return urls
+    return location.Locations(ufile=ufile).urls
 
 
 def print_urls(urls):
@@ -274,8 +273,7 @@ def _run_toc(args, action, do_compare=True):
             _compare(TOC_UFILE)
             urls = get_urls(ufile=TOC_UFILE)
             for url in urls:
-                fname = tosixinch.util.make_path(url)
-                fnew = tosixinch.util.make_new_fname(fname)
+                fnew = location.Location(url).fnew
                 _compare(fnew)
 
     # We can almost skip conversion test
@@ -309,7 +307,7 @@ def _copy_downloaded_files(urls):
     assert os.path.abspath(os.curdir) == REFERENCE
 
     for url in urls:
-        fname = tosixinch.util.make_path(url)
+        fname = location.Location(url).fname
         fname_outcome = os.path.join(OUTCOME, fname)
         if fname_outcome == fname:
             continue

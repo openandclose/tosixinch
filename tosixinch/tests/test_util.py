@@ -6,6 +6,7 @@ import lxml.html
 import pytest
 
 import tosixinch.util as util
+from tosixinch import location
 
 j = '\n'.join
 fromstring = lxml.html.fromstring
@@ -15,9 +16,14 @@ tostring = lambda el: lxml.html.tostring(el, encoding='unicode')
 class TestLocalReference:
 
     def compare(self, url, local_url, fname):
-        u, f = util.make_local_references(url)
-        assert u == local_url
-        assert f == fname
+        comp = location.Component(url, 'https:/aaa.org')
+        # TODO:
+        # Use .component_url and .component_fname instead.
+        # Fix 'bbb%3Fcc_index--tosixinch' to 'bbb%3Fcc/index--tosixinch' etc..
+        # assert comp.component_url == local_url
+        # assert comp.component_fname == fname
+        assert comp._make_local_url(url) == local_url
+        assert comp._make_filename(url) == fname
 
     def test(self):
         url, local_url, fname = (
@@ -90,10 +96,9 @@ class TestBlankHtml:
 class TestMakePath:
 
     def compare(self, url, fname, fnew):
-        f = util.make_path(url)
-        assert f == fname
-        f = util.make_new_fname(f)
-        assert f == fnew
+        loc = location.Location(url)
+        assert loc.fname == fname
+        assert loc.fnew == fnew
 
     def test(self):
         url, fname, fnew = (
@@ -104,9 +109,7 @@ class TestMakePath:
 
         url, fname, fnew = (
             'https://aaa.org/bbb',
-            # '_htmls/aaa.org/bbb',
             '_htmls/aaa.org/bbb/index--tosixinch',
-            # '_htmls/aaa.org/bbb--extracted.html')
             '_htmls/aaa.org/bbb/index--tosixinch--extracted.html')
         self.compare(url, fname, fnew)
 
