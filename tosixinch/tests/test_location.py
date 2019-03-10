@@ -47,9 +47,8 @@ class TestLocalReference:
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'
         component = loc.Component(url, base)
-        u, f = component._make_local_references(url)
-        assert u == local_url
-        assert f == fname
+        assert component._make_local_url(url) == local_url
+        assert component._make_filename(url) == fname
 
     def test(self):
         url, local_url, fname = (

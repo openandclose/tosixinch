@@ -380,11 +380,6 @@ class _Component(Location):
             url = '://'.join(urllib.parse.urlsplit(base)[0:2]) + url
         return url
 
-    def _make_local_references(self, url):
-        local_url = self._make_local_url(url)
-        fname = self._make_filename(url)
-        return local_url, fname
-
     def _make_local_url(self, url):
         parts = urllib.parse.urlsplit(url)
         newparts = []
@@ -440,10 +435,6 @@ class Component(_Component):
     @property
     def fname(self):
         return self._make_path(self.url, ext=None)
-
-    @property
-    def components(self):
-        return self._make_local_references(self.fname)
 
     @property
     def component_url(self):
