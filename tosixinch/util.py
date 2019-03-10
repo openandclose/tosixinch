@@ -527,8 +527,6 @@ def lxml_open(fname=None, text=None, codings=None):
 
 def lxml_write(fname, doc, doctype=DEFAULT_DOCTYPE):
     html = lxml.html.tostring(doc, encoding='unicode', doctype=doctype)
-    if not os.path.exists(fname):
-        make_directories(fname)
     with open(fname, 'w') as f:
         f.write(html)
 

@@ -64,6 +64,7 @@ class Node(location.Location):
             self._append_body()
 
         if self.last:
+            self.root.make_directories
             lxml_write(self.root.fnew, self.root.doc)
 
 

@@ -126,6 +126,7 @@ class Extract(object):
         cleaner.run()
 
     def _write(self):
+        self._site.make_directories
         lxml_write(self.fnew, self.doc, self.doctype)
 
     def _readability(self):
