@@ -6,7 +6,6 @@ import os
 import posixpath
 import re
 import subprocess
-import sys
 
 from tosixinch import _ImportError
 from tosixinch import imagesize
@@ -20,8 +19,6 @@ except ImportError:
     lxml = _ImportError('lxml')
 
 logger = logging.getLogger(__name__)
-
-PLATFORM = sys.platform
 
 HTMLEXT = ('htm', 'html')
 _COMMENT = r'\s*(<!--.+?-->\s*)*'
