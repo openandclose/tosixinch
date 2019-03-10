@@ -118,7 +118,7 @@ class _Location(object):
         current = os.path.abspath(base)
         filepath = os.path.abspath(fname)
         # note: the same filepath is not 'in' current dir.
-        if re.match(current + os.sep, filepath):
+        if filepath.startswith(current + self.sep):
             return True
         else:
             return False
