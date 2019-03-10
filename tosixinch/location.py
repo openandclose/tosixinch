@@ -166,7 +166,7 @@ class _Location(object):
             drive = None
             m = WINROOTPATH.match(fname)
             # cf. 'C:aaa.txt' means 'aaa.txt' in current directory.
-            if m.group(2):
+            if m and m.group(2):
                 drive = m.group(1).upper()
             fname = WINROOTPATH.sub('', fname)
             if drive:
