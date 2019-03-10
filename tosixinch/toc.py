@@ -27,10 +27,7 @@ class Node(location.Location):
         super().__init__(url, platform)
         self.level = level
         self.title = title
-        if root is None:
-            self.root = self
-        else:
-            self.root = root
+        self.root = root or self
         self.last = False
         self._doc = None
 

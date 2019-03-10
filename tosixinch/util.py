@@ -143,17 +143,15 @@ def lxml_write(fname, doc, doctype=DEFAULT_DOCTYPE):
 
 def build_new_html(title=None, content=''):
     """Build minimal html to further edit."""
-    if title is None:
-        title = DEFAULT_TITLE
+    title = title or DEFAULT_TITLE
     html = HTML_TEMPLATE % (title, content)
     root = lxml.html.document_fromstring(html)
     return root
 
 
 def build_blank_html(doctype=None):
-    """Built 'more' minimal html, used in `extract.Extract._prepare`."""
-    if doctype is None:
-        doctype = DEFAULT_DOCTYPE
+    """Build 'more' minimal html, used in `extract.Extract._prepare`."""
+    doctype = doctype or DEFAULT_DOCTYPE
     html = BLANK_HTML % doctype
     root = lxml.html.document_fromstring(html)
     return root
