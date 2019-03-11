@@ -84,10 +84,6 @@ OUTCOME = os.path.join(TEMP, 'actualrun', 'outcome')
 REFERENCE = os.path.join(TEMP, 'actualrun', 'reference')
 APPLICATION_ROOT = os.path.dirname(TESTDIR)
 
-os.chdir(OUTCOME)
-if not os.path.isdir(PNG_DIR):
-    os.mkdir(PNG_DIR)
-
 
 def _get_ufiles(ufile=UFILE):
     ufile = os.path.join(TESTDIR, ufile)
@@ -398,6 +394,23 @@ def normal_run(urls, args):
     print('success!')
 
 
+def sample_run(conf):
+    """Just generate a sample pdf in current dir.
+
+    It is not a part of tests. Maybe usuful for first-time users."""
+    ufile = os.path.join(TESTDIR, UFILE)
+    urls = location.Locations(ufile=ufile).urls
+    args = _minimum_args()
+    for url in urls:
+        if 'templite.py' in url:
+            url = os.path.join(APPLICATION_ROOT, 'templite.py')
+        args.extend(['-i', url])
+    args.extend(['-123', '--pdfname', 'sample.pdf'])
+    converter = conf.general.converter.replace('_', '-')
+    args.append('--' + converter)
+    tosixinch.main._main(args=args)
+
+
 def parse_args(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -523,4 +536,7 @@ def main():
 
 
 if __name__ == '__main__':
+    os.chdir(OUTCOME)
+    if not os.path.isdir(PNG_DIR):
+        os.mkdir(PNG_DIR)
     main()

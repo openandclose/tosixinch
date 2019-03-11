@@ -105,6 +105,10 @@ Actions
 
         choices=hackernews
 
+.. option:: --sample-pdf
+
+    generate a sample pdf
+
 Programs
 --------
 

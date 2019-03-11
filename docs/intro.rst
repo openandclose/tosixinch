@@ -156,6 +156,55 @@ Abstraction, consistency or support for multiple converters
 are not intended.
 
 
+Samples
+-------
+
+The script includes a sample ini file (``site.sample.ini``),
+and reads it into configuration if not disabled or overwritten.
+
+.. code-block:: none
+
+    https://*.wikipedia.org/wiki/* (only tested with 'en.wikipedia.org')
+    https://www.gnu.org/software/*
+    https://docs.python.org/*
+    https://www.python.org/dev/peps/*
+    https://bugs.python.org/issue*
+    https://news.ycombinator.com/item*
+    https://www.reddit.com/r/*
+    https://stackoverflow.com/questions/*
+    http://www.stackprinter.com/*
+    https://github.com/* (for https://github.com/*/README*)
+    https://github.com/*/issues/*
+    https://github.com/*/wiki/*
+    https://gist.github.com/*
+
+For urls that match one of them,
+you can test the script without preparing the configuration.
+
+An example::
+
+    $ tosixinch -i https://en.wikipedia.org/wiki/Xpath -123
+
+(For commandline options, see `next section <#usage>`__.)
+
+Or more simply::
+
+    $ tosixinch --sample-pdf
+
+This command creates 'sample.pdf'
+from some arbitrary urls in most of the domains above.
+
+.. note::
+
+    These commands create temporary files other than a pdf file
+    in current directory.
+
+    * '_html' directory, with many html files in it.
+    * 'sample.css'
+
+    You can delete them as you like.
+
+
 Usage
 -----
 
@@ -285,6 +334,9 @@ You want to create a pdf file from some of the Python PEP pages.
 * PEP 20 -- The Zen of Python
 * PEP 257 -- Docstring Conventions
 
+(The configuration is actually included in the `Samples <#samples>`__ above.
+But let's suppose it is not).
+
 You have to prepare the configuration,
 like the previous example.::
 
@@ -356,44 +408,6 @@ The meaning is::
 Now you can do::
 
     $ tosixinch -123
-
-.. note ::
-
-    The script already has a similar 'built-in' configuration
-    for the PEP site (see `below <#samples>`__).
-    So actually you don't have to write your configuration.
-
-Samples
--------
-
-The script includes a sample ini file (``site.sample.ini``),
-and reads it into configuration if not disabled or overwritten.
-
-.. code-block:: none
-
-    https://*.wikipedia.org/wiki/* (only tested with 'en.wikipedia.org')
-    https://www.gnu.org/software/*
-    https://docs.python.org/*
-    https://www.python.org/dev/peps/*
-    https://bugs.python.org/issue*
-    https://news.ycombinator.com/item*
-    https://www.reddit.com/r/*
-    https://stackoverflow.com/questions/*
-    http://www.stackprinter.com/*
-    https://github.com/* (for https://github.com/*/README*)
-    https://github.com/*/issues/*
-    https://github.com/*/wiki/*
-    https://gist.github.com/*
-
-For urls that match one of them,
-you don't have to prepare your own configuration.
-(But note they are 'samples',
-mainly for the convenience of the first-time users.)
-
-An example::
-
-    $ tosixinch -i https://en.wikipedia.org/wiki/Xpath -123
-
 
 Other Features
 --------------
