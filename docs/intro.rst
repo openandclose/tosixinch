@@ -173,6 +173,7 @@ and reads it into configuration if not disabled or overwritten.
     http://www.stackprinter.com/*
     https://github.com/* (for https://github.com/*/README*)
     https://github.com/*/issues/*
+    https://github.com/*/pull/*
     https://github.com/*/wiki/*
     https://gist.github.com/*
 
@@ -406,6 +407,7 @@ The meaning is::
 Now you can do::
 
     $ tosixinch -123
+
 
 Other Features
 --------------
