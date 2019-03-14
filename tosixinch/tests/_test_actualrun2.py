@@ -450,12 +450,12 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('--verbose',
         action='store_const', const='yes',
         help='turn on verbose flag')
-    parser.add_argument('--force-download',
-        action='store_const', const='yes',
-        help='turn on force_download flag')
-    parser.add_argument('--converter',
-        choices=['prince', 'weasyprint', 'wkhtmltopdf', 'ebook-convert'],
-        help='select converters')
+    # parser.add_argument('--force-download',
+    #     action='store_const', const='yes',
+    #     help='turn on force_download flag')
+    # parser.add_argument('--converter',
+    #     choices=['prince', 'weasyprint', 'wkhtmltopdf', 'ebook-convert'],
+    #     help='select converters')
 
     args = parser.parse_args(args)
     return parser, args
@@ -471,11 +471,11 @@ def build_cmd_args(args):
     if args.verbose:
         cmd_args.append('--verbose')
 
-    if args.force_download:
-        cmd_args.append('--force-download')
+    # if args.force_download:
+    #     cmd_args.append('--force-download')
 
-    if args.converter:
-        cmd_args.append('--' + converter)
+    # if args.converter:
+    #     cmd_args.append('--' + converter)
 
     return cmd_args
 
