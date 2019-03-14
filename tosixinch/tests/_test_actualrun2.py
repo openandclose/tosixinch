@@ -86,24 +86,24 @@ APPLICATION_ROOT = os.path.dirname(TESTDIR)
 
 
 def _get_ufiles(ufile=UFILE):
-    ufile = os.path.join(TESTDIR, ufile)
+    ufile_test = os.path.join(TESTDIR, ufile)
     ufile_ref = os.path.join(REFERENCE, ufile)
     ufile_outcome = os.path.join(OUTCOME, ufile)
-    return ufile, ufile_ref, ufile_outcome
+    return ufile_test, ufile_ref, ufile_outcome
 
 
 def _check_ufiles(ufile=UFILE):
-    ufile, ufile_ref, ufile_outcome = _get_ufiles(ufile)
-    assert os.path.getmtime(ufile) <= os.path.getmtime(ufile_ref)
-    assert os.path.getmtime(ufile) <= os.path.getmtime(ufile_outcome)
+    ufile_test, ufile_ref, ufile_outcome = _get_ufiles(ufile)
+    assert os.path.getmtime(ufile_test) <= os.path.getmtime(ufile_ref)
+    assert os.path.getmtime(ufile_test) <= os.path.getmtime(ufile_outcome)
 
 
 def update_ufiles(ufile=UFILE):
     """Copy 'urls.txt' from the canonical one in 'tests' direcrtory."""
     print('updating ufiles...')
-    ufile, ufile_ref, ufile_outcome = _get_ufiles(ufile)
-    shutil.copy(ufile, ufile_ref)
-    shutil.copy(ufile, ufile_outcome)
+    ufile_test, ufile_ref, ufile_outcome = _get_ufiles(ufile)
+    shutil.copy(ufile_test, ufile_ref)
+    shutil.copy(ufile_test, ufile_outcome)
 
 
 def get_urls(ufile=UFILE):
