@@ -10,7 +10,7 @@ https://www.python.org/dev/peps/pep-0420/
 https://bugs.python.org/issue9334
 # social news
 https://news.ycombinator.com/item?id=3846528
-https://www.reddit.com/r/Python/comments/w14ty/weasyprint_htmlcss_to_pdf_converter_now_passes/
+https://old.reddit.com/r/Python/comments/w14ty/weasyprint_htmlcss_to_pdf_converter_now_passes/
 # stackoverflow
 https://stackoverflow.com/questions/5686206/
 http://www.stackprinter.com/export?question=5686206&service=stackoverflow

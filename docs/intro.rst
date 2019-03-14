@@ -168,7 +168,7 @@ and reads it into configuration if not disabled or overwritten.
     https://www.python.org/dev/peps/*
     https://bugs.python.org/issue*
     https://news.ycombinator.com/item*
-    https://www.reddit.com/r/*
+    https://old.reddit.com/r/*
     https://stackoverflow.com/questions/*
     http://www.stackprinter.com/*
     https://github.com/* (for https://github.com/*/README*)
