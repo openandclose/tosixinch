@@ -414,9 +414,9 @@ def normal_run(urls, args):
 
 
 def sample_run(conf):
-    """Just generate a sample pdf in current dir.
+    """Just generate a sample pdf in 'current' dir.
 
-    It is not a part of tests. Maybe usuful for first-time users."""
+    It is not a part of tests, and called from main._main."""
     ufile = os.path.join(TESTDIR, UFILE)
     urls = location.Locations(ufile=ufile).urls
     args = _minimum_args()
@@ -436,12 +436,6 @@ def parse_args(args=sys.argv[1:]):
 
     parser.add_argument('-x', '--run', action='count',
         help='run test (-x: short, --xx: all urls).')
-    parser.add_argument('--run-ufile',
-        action='store_const', const='yes',
-        help='run test reading from ufile.')
-    parser.add_argument('--toc',
-        action='store_const', const='yes',
-        help='run toc test')
 
     parser.add_argument('-p', '--print',
         action='store_const', const='yes',
@@ -449,9 +443,6 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('-n', '--number',
         help='file number to process in urls.txt.')
 
-    parser.add_argument('--update-ufiles',
-        action='store_const', const='yes',
-        help='update ufiles')
     parser.add_argument('--create-ref',
         action='store_const', const='yes',
         help='create reference files from zero')
@@ -465,18 +456,6 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('--converter',
         choices=['prince', 'weasyprint', 'wkhtmltopdf', 'ebook-convert'],
         help='select converters')
-
-    parser.add_argument('--compare',
-        help='compare files, skipping files creation (for test)')
-    parser.add_argument('--download',
-        action='store_const', const='yes',
-        help='download htmls and compare them with the reference')
-    parser.add_argument('--extract',
-        action='store_const', const='yes',
-        help='extract htmls and compare them with the reference')
-    parser.add_argument('--convert',
-        action='store_const', const='yes',
-        help='convert htmls to pdf and compare it with the reference')
 
     args = parser.parse_args(args)
     return parser, args
@@ -504,9 +483,6 @@ def build_cmd_args(args):
 def main():
     parser, args = parse_args()
 
-    if args.compare:
-        filename = os.path.relpath(args.compare, start=OUTCOME)
-        _compare(args.compare)
     if args.create_ref:
         create_ref()
         return
@@ -517,10 +493,6 @@ def main():
 
     if args.print:
         print_urls(urls)
-        return
-
-    if args.update_ufiles:
-        update_ufiles()
         return
 
     if args.number:
@@ -537,21 +509,8 @@ def main():
             return
         else:
             raise ValueError('Not Implemented (only -x or -xx).')
-    if args.run_ufile:
-        _run_ufile(cmd_args)
-        return
-    if args.toc:
-        _run_toc(cmd_args, 'toc')
-        return
 
-    if args.download:
-        _run(urls, cmd_args, 'download')
-    elif args.extract:
-        _run(urls, cmd_args, 'extract')
-    elif args.convert:
-        _run(urls, cmd_args, 'convert')
-    else:
-        parser.print_help()
+    parser.print_help()
 
 
 if __name__ == '__main__':
