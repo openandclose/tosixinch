@@ -85,6 +85,19 @@ REFERENCE = os.path.join(TEMP, 'actualrun', 'reference')
 APPLICATION_ROOT = os.path.dirname(TESTDIR)
 
 
+def _mkdirs(d):
+    if not os.path.exists(d):
+        os.makedirs(d)
+
+
+def _prepare_directories():
+    _mkdirs(TEMP)
+    _mkdirs(OUTCOME)
+    _mkdirs(REFERENCE)
+
+    _mkdirs(os.path.join(OUTCOME, PNG_DIR))
+
+
 def _get_ufiles(ufile=UFILE):
     ufile_test = os.path.join(TESTDIR, ufile)
     ufile_ref = os.path.join(REFERENCE, ufile)
@@ -307,6 +320,7 @@ def _copy_downloaded_files(urls):
         fname_outcome = os.path.join(OUTCOME, fname)
         if fname_outcome == fname:
             continue
+        _mkdirs(os.path.dirname(fname_outcome))
         shutil.copy(fname, fname_outcome)
 
     # for _run_ufile
@@ -316,14 +330,15 @@ def _copy_downloaded_files(urls):
     shutil.copy(TOC_PDF, os.path.join(OUTCOME, TOC_PDF))
 
 
-def create_ref(urls):
+def create_ref():
+    _prepare_directories()
+
     curdir = os.curdir
     os.chdir(REFERENCE)
 
+    _clean_ref()
+    urls = get_urls()
     args = _minimum_args()
-
-    if len(urls) > 1:
-        _clean_ref()
 
     _run(urls, args, 'download', do_compare=False)
     _run(urls, args, 'extract', do_compare=False)
@@ -372,6 +387,8 @@ def _get_short_ulist(urls):
 
 
 def short_run(urls, args):
+    assert os.path.abspath(os.curdir) == OUTCOME
+
     urls = _get_short_ulist(urls)
     _run(urls, args, 'extract')
     if _need_convert_test():
@@ -385,6 +402,8 @@ def short_run(urls, args):
 
 
 def normal_run(urls, args):
+    assert os.path.abspath(os.curdir) == OUTCOME
+
     _check_ufiles()
     _run(urls, args, 'extract')
     _run(urls, args, 'convert')
@@ -488,7 +507,11 @@ def main():
     if args.compare:
         filename = os.path.relpath(args.compare, start=OUTCOME)
         _compare(args.compare)
+    if args.create_ref:
+        create_ref()
         return
+
+    os.chdir(OUTCOME)
 
     urls = get_urls()
 
@@ -498,10 +521,6 @@ def main():
 
     if args.update_ufiles:
         update_ufiles()
-        return
-
-    if args.create_ref:
-        create_ref(urls)
         return
 
     if args.number:
@@ -536,7 +555,4 @@ def main():
 
 
 if __name__ == '__main__':
-    os.chdir(OUTCOME)
-    if not os.path.isdir(PNG_DIR):
-        os.mkdir(PNG_DIR)
     main()
