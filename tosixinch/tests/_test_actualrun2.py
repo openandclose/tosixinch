@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
-"""Actualy invoke tosixinch.main.main().
+"""Actualy invoke tosixinch.main._main().
 
 For each url from urls.txt,
-Do download, extract, toc or convert.
-
+do download, extract, toc or convert.
 And compare the outputs with prepared reference files.
 
 And on error, make it so that I can see the diffs in some way or other.
@@ -14,16 +13,33 @@ Require Poppler commandline utilities (pdfinfo and pdftoppm).
 Require viewer applications (vim and sxiv).
 
 ---
-About run:
--x:       (short)
-          test extract,
-          and test convert only when related files are modified,
-          for selected 3 urls.
--xx:      (normal)
-          test extract and convert, for all urls (now 14).
-          also test ufile-convert, making an 'all in one' pdf.
-          also test toc extraction (merging htmls).
+This test creates and deletes a lot of files.
+And it may not yet be ready for other people than me.
+
+It creates two working directories (and intermediate directories)
+in application directory.
+    .../tosixinch/tosixinch/tests/temp/actualrun/reference
+    .../tosixinch/tosixinch/tests/temp/actualrun/outcome
+
+'--creater-ref' changes current directory to 'reference',
+cleans files, prepares (copying urls.txt), and runs main._main().
+The result is that it is populated with reference html and pdf files.
+
+Actual tests are always done with 'outcome' as current directory.
+
+---
+-x:     (short)
+        try to run only necesarry actions, for only a few selected urls.
+        test extract. (3 urls)
+        test convert, only when related files are modified. (3 urls)
+        test toc extraction, only when related files are modified.
+-xx:    (normal)
+        test extract.
+        test convert.
+        test ufile-convert, making an 'all in one' pdf.
+        test toc extraction (merging htmls).
 """
+
 
 # For now I am not deleting files if not necessary,
 # trusting the overwriting capability of the script.
