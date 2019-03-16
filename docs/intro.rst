@@ -373,7 +373,7 @@ So, let's change other ``<h1>`` tags to ``<h2>``,
 keeping ``<h1>`` only for the main title heading.
 
 You create a file
-(in `userprocess directory <overview.html#dword-userprocess_directory>`__,
+(in `userprocess directory <overview.html#dword-userprocess_directory>`__),
 and write a function in it::
 
     # in ~/.config/tosixinch/userprocess/myprocess.py
