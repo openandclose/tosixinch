@@ -54,6 +54,7 @@ class Locations(object):
         self._ufile = ufile
 
         self._iterobj = (Location,)
+        self._itercontainer = None
 
     def _parse_urls(self, urls, comment=COMMENT_PREFIX):
         for url in urls:
@@ -74,7 +75,10 @@ class Locations(object):
             yield obj(url, *args)
 
     def __iter__(self):
-        return self._iterate()
+        container = self._itercontainer
+        if container is None:
+            container = list(self._iterate())
+        return container.__iter__()
 
 
 class _Location(object):
