@@ -199,8 +199,8 @@ def _filter_urls(urllist, filters):
     urls = []
     for url in urllist:
         parts = url.rsplit('.', maxsplit=1)
-        if len(parts) == 2:
-            if parts[1] in filters:
+        if len(parts) > 1:
+            if parts[-1] in filters:
                 continue
         urls.append(url)
     return urls
