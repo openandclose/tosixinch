@@ -56,9 +56,11 @@ class Locations(object):
         self._iterobj = (Location,)
         self._itercontainer = None
 
-    def _parse_urls(self, urls, comment=COMMENT_PREFIX):
+        self._comment = COMMENT_PREFIX
+
+    def _parse_urls(self, urls):
         for url in urls:
-            if url.startswith(comment):
+            if url.startswith(self._comment):
                 continue
             yield url
 

@@ -76,14 +76,12 @@ class Nodes(location.Locations):
 
         super().__init__(urls, ufile)
 
+        self._comment = (';',)
+
     @property
     def toc_ufile(self):
         root, ext = os.path.splitext(self._ufile)
         return root + '-toc' + ext
-
-    def _parse_urls(self, urls):
-        comment = (';',)
-        yield from super()._parse_urls(urls, comment)
 
     def _parse_toc_url(self, url):
         m = re.match(r'^\s*(#+)?\s*(.+)?\s*$', url)
