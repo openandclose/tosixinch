@@ -230,14 +230,12 @@ class Site(location.Location):
         self._siteconf = siteconf
         self._config = siteconf._config
 
+        self.section = _checkmacth(self.url, self._config)
+
         self.general = configfetch.Double(
             self._get_self(), self._conf.general)
         self.style = configfetch.Double(
             self._get_self(), self._conf.style)
-
-    @property
-    def section(self):
-        return _checkmacth(self.url, self._config)
 
     def _get_self(self):
         return self._siteconf.get(self.section)
