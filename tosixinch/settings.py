@@ -206,29 +206,6 @@ class Func(configfetch.Func):
             reversed(values), BINARY_EXTENSIONS)
 
 
-class Site(location.Location):
-    """Settings for each url."""
-
-    def __init__(self, url, conf, siteconf, platform=sys.platform):
-        super().__init__(url, platform)
-        self._conf = conf
-        self._siteconf = siteconf
-        self._config = siteconf._config
-
-        self.section = _checkmacth(self.url, self._config)
-
-        self.general = configfetch.Double(
-            self._get_self(), self._conf.general)
-        self.style = configfetch.Double(
-            self._get_self(), self._conf.style)
-
-    def _get_self(self):
-        return self._siteconf.get(self.section)
-
-    def __getattr__(self, option):
-        return self._get_self().get(option)
-
-
 class Sites(location.Locations):
     """An object for ``Site`` iteratorion."""
 
@@ -257,6 +234,29 @@ class Sites(location.Locations):
             return urls
         else:
             return list(self._filter_urls(urls))
+
+
+class Site(location.Location):
+    """Settings for each url."""
+
+    def __init__(self, url, conf, siteconf, platform=sys.platform):
+        super().__init__(url, platform)
+        self._conf = conf
+        self._siteconf = siteconf
+        self._config = siteconf._config
+
+        self.section = _checkmacth(self.url, self._config)
+
+        self.general = configfetch.Double(
+            self._get_self(), self._conf.general)
+        self.style = configfetch.Double(
+            self._get_self(), self._conf.style)
+
+    def _get_self(self):
+        return self._siteconf.get(self.section)
+
+    def __getattr__(self, option):
+        return self._get_self().get(option)
 
 
 class Conf(object):
