@@ -191,21 +191,6 @@ def _check_platform_dirs():
             return path
 
 
-def _filter_urls(urllist, filters):
-    # If urls consists of a single url, It doesn't apply filters.
-    if len(urllist) == 1:
-        return urllist
-
-    urls = []
-    for url in urllist:
-        parts = url.rsplit('.', maxsplit=1)
-        if len(parts) > 1:
-            if parts[-1] in filters:
-                continue
-        urls.append(url)
-    return urls
-
-
 class Func(configfetch.Func):
     """Customize configfetch.Func for this application."""
 
@@ -254,6 +239,25 @@ class Sites(location.Locations):
         self._config = siteconf._config
         self._iterobj = (Site, conf, siteconf)
 
+        self._filters = conf.general.add_binary_extensions
+
+    def _filter_urls(self, urls):
+        for url in urls:
+            parts = url.rsplit('.', maxsplit=1)
+            if len(parts) > 1:
+                if parts[-1] in self._filters:
+                    continue
+            yield url
+
+    @property
+    def urls(self):
+        urls = super().urls
+        # If urls consists of a single url, It doesn't apply filters.
+        if len(urls) == 1:
+            return urls
+        else:
+            return list(self._filter_urls(urls))
+
 
 class Conf(object):
     """It possesses all configuration data."""
@@ -275,7 +279,6 @@ class Conf(object):
 
     def _sites_init(self, urls, ufile):
         sites = Sites(urls, ufile, self._appconf, self._siteconf)
-        # urls = self._filter_urls(urls)
 
         self._urls = sites._urls
         self._ufile = sites._ufile
@@ -313,10 +316,6 @@ class Conf(object):
         num_and_unit = r'^([0-9.]+)([A-Za-z]+)?$'
         w, h = [re.sub(num_and_unit, r'\1', size) for size in (w, h)]
         return int(h) / int(w)
-
-    def _filter_urls(self, urls):
-        filters = self.general.add_binary_extensions
-        return _filter_urls(urls, filters)
 
     def print_siteconf(self):
         if len(self.sites) == 1:
