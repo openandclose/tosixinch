@@ -58,15 +58,15 @@ class Locations(object):
 
         self._comment = COMMENT_PREFIX
 
-    def _parse_urls(self, urls):
-        for url in urls:
+    def _parse_urls(self):
+        for url in self._urls:
             if url.startswith(self._comment):
                 continue
             yield url
 
     @property
     def urls(self):
-        return list(self._parse_urls(self._urls))
+        return list(self._parse_urls())
 
     def __len__(self):
         return len(self.urls)
