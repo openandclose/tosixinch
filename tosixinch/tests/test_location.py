@@ -42,7 +42,7 @@ class TestMakePath:
         self.compare(url, fname, fnew)
 
 
-class TestLocalReference:
+class TestLocalReferenceRaw:
 
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'

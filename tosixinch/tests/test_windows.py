@@ -13,7 +13,7 @@ def use_ntpath(monkeypatch):
     monkeypatch.setattr(os, 'path', ntpath)
 
 
-class TestWindowsLocalReference:
+class TestWindowsLocalReferenceRaw:
 
     def compare(self, url, local_url, fname):
         comp = location.Component(url, '.', platform='win32')
