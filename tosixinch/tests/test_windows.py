@@ -17,8 +17,9 @@ class TestWindowsLocalReference:
 
     def compare(self, url, local_url, fname):
         comp = location.Component(url, '.', platform='win32')
-        assert comp.component_url == local_url
-        assert comp.component_fname == fname
+        url = comp._remove_windows_chars(url)
+        assert comp._make_local_url(url) == local_url
+        assert comp._make_filename(url) == fname
 
     def test(self):
         url, local_url, fname = (
