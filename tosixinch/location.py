@@ -134,8 +134,6 @@ class _Location(object):
             return False
 
     def _make_path(self, url, ext='html'):
-        if self._is_local(url):
-            return url
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
         if '/' not in fname:
@@ -191,6 +189,8 @@ class Location(_Location):
 
     @property
     def fname(self):
+        if self._is_local(self._url):
+            return self.url
         return self._make_path(self.url)
 
     @property
