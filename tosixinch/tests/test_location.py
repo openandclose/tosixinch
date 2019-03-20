@@ -105,6 +105,31 @@ class TestLocalReference:
         assert component.relative_component_fname == local_url
         assert component.component_fname == fname
 
+    def test(self):
+        url, local_url, fname = (
+            'https://aaa.org/bbb?cc',
+            './bbb%3Fcc_index--tosixinch',
+            '_htmls/aaa.org/bbb?cc_index--tosixinch')
+        self.compare(url, local_url, fname)
+
+        url, local_url, fname = (
+            'https://aaa.org/bbb%3Fcc',
+            './bbb%3Fcc/index--tosixinch',
+            '_htmls/aaa.org/bbb?cc/index--tosixinch')
+        self.compare(url, local_url, fname)
+
+        url, local_url, fname = (
+            'aaa/bbb?cc',
+            './aaa/bbb%3Fcc_index--tosixinch',
+            '_htmls/aaa.org/aaa/bbb?cc_index--tosixinch')
+        self.compare(url, local_url, fname)
+
+        url, local_url, fname = (
+            'aaa/bbb%3Fcc',
+            './aaa/bbb%3Fcc/index--tosixinch',
+            '_htmls/aaa.org/aaa/bbb?cc/index--tosixinch')
+        self.compare(url, local_url, fname)
+
     def test_relative_reference(self):
         url, local_url, fname = (
             '//aaa.org/bbb?cc',
