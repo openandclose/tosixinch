@@ -445,16 +445,12 @@ class Component(_Component):
         return self._make_path(self.url, ext=None)
 
     @property
-    def component_url(self):
-        return self._make_local_url(self.fname)
-
-    @property
     def component_fname(self):
         return self._make_filename(self.fname)
 
     @property
     def relative_component_fname(self):
-        local_url = self.component_url
+        local_url = self._make_local_url(self.fname)
         fname = self.component_fname
         if self._in_current_dir(fname, DOWNLOAD_DIR):
             src = './' + os.path.relpath(
