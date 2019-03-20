@@ -10,7 +10,7 @@ import tosixinch.location as loc
 class TestMakePath:
 
     def compare(self, url, fname, fnew):
-        location = loc.Location(url)
+        location = loc.Location(url, platform='linux')
         assert location.fname == fname
         assert location.fnew == fnew
 
@@ -46,7 +46,7 @@ class TestLocalReferenceRaw:
 
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'
-        component = loc.Component(url, base)
+        component = loc.Component(url, base, platform='linux')
         assert component._make_local_url(url) == local_url
         assert component._make_filename(url) == fname
 
@@ -93,7 +93,7 @@ class TestLocalReference:
 
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'
-        component = loc.Component(url, base)
+        component = loc.Component(url, base, platform='linux')
         assert component.component_url == local_url
         assert component.component_fname == fname
 
