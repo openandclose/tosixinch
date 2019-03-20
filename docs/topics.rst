@@ -390,3 +390,9 @@ They are all single file modules.
     `my library <https://github.com/openandclose/zconfigparser>`__.
 
     Implement section inheritance in ``site.ini``.
+
+
+Development
+-----------
+
+Tests are done on linux. Other platforms are not considered.
