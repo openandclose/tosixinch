@@ -97,6 +97,7 @@ class TestLocalReferenceRaw:
 
 
 class TestLocalReference:
+    # Fix 'bbb%3Fcc_index--tosixinch' to 'bbb%3Fcc/index--tosixinch' etc..
 
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'

@@ -13,57 +13,6 @@ fromstring = lxml.html.fromstring
 tostring = lambda el: lxml.html.tostring(el, encoding='unicode')
 
 
-class TestLocalReference:
-
-    def compare(self, url, local_url, fname):
-        comp = location.Component(url, 'https:/aaa.org')
-        # TODO:
-        # Use .component_url and .component_fname instead.
-        # Fix 'bbb%3Fcc_index--tosixinch' to 'bbb%3Fcc/index--tosixinch' etc..
-        # assert comp.component_url == local_url
-        # assert comp.component_fname == fname
-        assert comp._make_local_url(url) == local_url
-        assert comp._make_filename(url) == fname
-
-    def test(self):
-        url, local_url, fname = (
-            'https://aaa.org/bbb?cc',
-            'https://aaa.org/bbb%3Fcc',
-            'https://aaa.org/bbb?cc')
-        self.compare(url, local_url, fname)
-
-        url, local_url, fname = (
-            'https://aaa.org/bbb%3Fcc',
-            'https://aaa.org/bbb%3Fcc',
-            'https://aaa.org/bbb?cc')
-        self.compare(url, local_url, fname)
-
-        url, local_url, fname = (
-            'aaa/bbb?cc',
-            'aaa/bbb%3Fcc',
-            'aaa/bbb?cc')
-        self.compare(url, local_url, fname)
-
-        url, local_url, fname = (
-            'aaa/bbb%3Fcc',
-            'aaa/bbb%3Fcc',
-            'aaa/bbb?cc')
-        self.compare(url, local_url, fname)
-
-    def test_unicode(self):
-        url, local_url, fname = (
-            'aaa/fran%C3%A7ais',
-            'aaa/fran%C3%A7ais',
-            'aaa/français')
-        self.compare(url, local_url, fname)
-
-        # url, local_url, fname = (
-        #     'aaa/français',
-        #     'aaa/fran%C3%A7ais',
-        #     'aaa/français')
-        # self.compare(url, local_url, fname)
-
-
 class TestFilteredIter:
 
     def test(self):
@@ -91,39 +40,6 @@ class TestBlankHtml:
         expected = '<!DOCTYPE html>\n<html><body></body></html>'
         html = util.build_blank_html()
         assert tostring(html.getroottree()) == expected
-
-
-class TestMakePath:
-
-    def compare(self, url, fname, fnew):
-        loc = location.Location(url)
-        assert loc.fname == fname
-        assert loc.fnew == fnew
-
-    def test(self):
-        url, fname, fnew = (
-            'https://aaa.org/bbb.html',
-            '_htmls/aaa.org/bbb.html',
-            '_htmls/aaa.org/bbb--extracted.html')
-        self.compare(url, fname, fnew)
-
-        url, fname, fnew = (
-            'https://aaa.org/bbb',
-            '_htmls/aaa.org/bbb/index--tosixinch',
-            '_htmls/aaa.org/bbb/index--tosixinch--extracted.html')
-        self.compare(url, fname, fnew)
-
-        url, fname, fnew = (
-            'https://aaa.org/bbb/',
-            '_htmls/aaa.org/bbb/index--tosixinch',
-            '_htmls/aaa.org/bbb/index--tosixinch--extracted.html')
-        self.compare(url, fname, fnew)
-
-        url, fname, fnew = (
-            '/aaa.org/bbb.html',
-            '/aaa.org/bbb.html',
-            '_htmls/aaa.org/bbb--extracted.html')
-        self.compare(url, fname, fnew)
 
 
 class TestXpath:
