@@ -6,6 +6,9 @@ import pytest
 
 import tosixinch.location as loc
 
+dirname = os.path.dirname
+abspath = os.path.abspath
+
 
 class TestMakePath:
 
@@ -23,22 +26,26 @@ class TestMakePath:
 
         url, fname, fnew = (
             'https://aaa.org/bbb',
-            # '_htmls/aaa.org/bbb',
-            '_htmls/aaa.org/bbb/index--tosixinch',
-            # '_htmls/aaa.org/bbb--extracted.html')
-            '_htmls/aaa.org/bbb/index--tosixinch--extracted.html')
-        self.compare(url, fname, fnew)
-
-        url, fname, fnew = (
-            'https://aaa.org/bbb/',
             '_htmls/aaa.org/bbb/index--tosixinch',
             '_htmls/aaa.org/bbb/index--tosixinch--extracted.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
-            '/aaa.org/bbb.html',
-            '/aaa.org/bbb.html',
-            '_htmls/aaa.org/bbb--extracted.html')
+            'aaa/bbb.html',
+            abspath('.') + '/aaa/bbb.html',
+            '_htmls' + abspath('.') + '/aaa/bbb--extracted.html')
+        self.compare(url, fname, fnew)
+
+        url, fname, fnew = (
+            '../../aaa/bbb.html',
+            abspath('../../') + '/aaa/bbb.html',
+            '_htmls' + abspath('../..') + '/aaa/bbb--extracted.html')
+        self.compare(url, fname, fnew)
+
+        url, fname, fnew = (
+            '/aaa/bbb.html',
+            '/aaa/bbb.html',
+            '_htmls/aaa/bbb--extracted.html')
         self.compare(url, fname, fnew)
 
 
