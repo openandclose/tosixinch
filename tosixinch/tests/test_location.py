@@ -101,18 +101,18 @@ class TestLocalReference:
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'
         component = loc.Component(url, base, platform='linux')
-        assert component.component_url == local_url
+        assert component.relative_component_fname == local_url
         assert component.component_fname == fname
 
     def test_relative_reference(self):
         url, local_url, fname = (
             '//aaa.org/bbb?cc',
-            '_htmls/aaa.org/bbb%3Fcc_index--tosixinch',
+            './bbb%3Fcc_index--tosixinch',
             '_htmls/aaa.org/bbb?cc_index--tosixinch')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
             '/bbb/cc.jpg',
-            '_htmls/aaa.org/bbb/cc.jpg',
+            './bbb/cc.jpg',
             '_htmls/aaa.org/bbb/cc.jpg')
         self.compare(url, local_url, fname)
