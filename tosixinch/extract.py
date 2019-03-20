@@ -213,7 +213,7 @@ class Extract(object):
     def _get_component(self, el, url):
         comp = location.Component(url, self)
         url = comp.url
-        src = comp.relative_component_fname
+        src = comp.component_url
         fname = comp.component_fname
         el.attrib['src'] = src
         self._download_component(url, fname)

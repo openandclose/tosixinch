@@ -102,7 +102,7 @@ class TestLocalReference:
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'
         component = loc.Component(url, base, platform='linux')
-        assert component.relative_component_fname == local_url
+        assert component.component_url == local_url
         assert component.component_fname == fname
 
     def test(self):

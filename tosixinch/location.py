@@ -449,7 +449,7 @@ class Component(_Component):
         return self._make_filename(self.fname)
 
     @property
-    def relative_component_fname(self):
+    def component_url(self):
         local_url = self._make_local_url(self.fname)
         fname = self.component_fname
         if self._in_current_dir(fname, DOWNLOAD_DIR):
