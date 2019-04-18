@@ -70,8 +70,8 @@ class Nodes(location.Locations):
 
     def __init__(self, urls, ufile):
         if not ufile:
-            msg = ('To run --toc, you can not use --input. '
-                'Use either --file, or implicit urls.txt.')
+            msg = ("To run '--toc', you can not use '--input'. "
+                "Use either '--file', or implicit 'urls.txt'.")
             raise ValueError(msg)
 
         super().__init__(urls, ufile)

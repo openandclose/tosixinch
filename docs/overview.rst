@@ -165,22 +165,20 @@ But disposing of the files (deleting or moving) is users' job.
 
     .. note::
 
-        Recent servers extensively use no-extension urls with or without a slash,
-        and that causes trouble to filepath conversion.
+        Recent servers extensively use no-extension urls with or without a slash.
+        They tend to make each path component a veritable resource destination.
 
-        Because the clients doesn't have the same routing system as the servers,
-        they cannot determine univocally the location of these 'clean' urls.
+        These URLs are difficult to convert to filepath.
 
-        For example, some sites actually use the same path component
-        both as file and directory.
         E.g. they have both urls::
 
             'http://example.com/aaa'         # a document
             'http://example.com/aaa/bbb'     # a document
 
         and since the filesystems cannot have the same name ('aaa')
-        for a file and a directory,
+        for a file name and a directory name,
         we have to invent some artificial local routing rules.
+
         This is the reason for this rather verbose name changing.
 
         Extension check is a rough heuristic
