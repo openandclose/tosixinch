@@ -93,6 +93,14 @@ So path component now might have special characters for authority.
 They are '@:[]', in which '[]' are  illegal for path.
 Therefore we have to quote them.
 
+.. note::
+    ':' in the first path component in relative reference is illegal. But
+
+    1. We 'normalize' relative reference starting with slashes
+    2. We always add './' for relative-path reference
+
+    So we can ignore it.
+
 Query delimiter is the first '?',
 and query and fragment can have the second and third '?',
 so we have to quote 'all' occurrences of '?'.

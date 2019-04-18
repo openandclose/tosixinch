@@ -300,7 +300,8 @@ class _Component(Location):
         self.base = base
 
     def _normalize_source_url(self, url, base):
-        # It seems relative references are not uniformly handled by libraries.
+        # It seems relative references starting with slashes
+        # are not uniformly handled by libraries.
         # So we'd better manually expand them.
         # cf. https://tools.ietf.org/html/rfc3986#section-4.2
         if url.startswith('//'):
