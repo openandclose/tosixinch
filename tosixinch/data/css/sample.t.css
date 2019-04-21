@@ -213,6 +213,11 @@ h6 { prince-bookmark-level: {{ bm6 }} }
 /*     padding-inline-start: 1%; */
 /* } */
 
+
+/* prince exposes raw strings in noscript tags. */
+/* https://www.princexml.com/forum/topic/2562/junk-between-noscript-tags-getting-put-into-html */
+noscript { display: none }
+
 {% endif %}
 
 
