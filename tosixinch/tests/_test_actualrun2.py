@@ -12,10 +12,13 @@ Require Pillow or PIL python library.
 Require Poppler commandline utilities (pdfinfo and pdftoppm).
 Require viewer applications (vim and sxiv).
 
----
-This test creates and deletes a lot of files.
-And it may not yet be ready for other people than me.
+With these steep requirements,
+I'm afraid this test is not yet ready for other people to use.
 
+Besides, this test creates and deletes a lot of files.
+So it is a bit unsafe.
+
+---
 It creates two working directories (and intermediate directories)
 in application directory.
     .../tosixinch/tosixinch/tests/temp/actualrun/reference
