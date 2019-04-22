@@ -27,10 +27,8 @@ or, on the other hand too specific,
 making it hard to promptly adjust or intervene.
 
 The legend of this script says '*Browser to e-reader in a few minutes*'.
-Here, ``in a few minutes`` is a technical term,
-although the one whose user is only me.
-Using this rigorous concept,
-they are either ``in a few hours`` software, or ``in a few seconds`` software.
+Here, I mean the 'in a few minutes' part seriously.
+Too many programs are either 'in a few hours' or 'in a few seconds' kind.
 
 ---
 
