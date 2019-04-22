@@ -454,6 +454,37 @@ def sample_run(conf):
     tosixinch.main._main(args=args)
 
 
+def update_url_download(urls):
+    os.chdir(REFERENCE)
+    args = _minimum_args()
+    _run(urls, args, 'download', do_compare=False)
+    _copy_downloaded_files(urls)
+
+
+def update_url_extract(urls):
+    os.chdir(REFERENCE)
+    args = _minimum_args()
+    _run(urls, args, 'extract', do_compare=False)
+
+
+def update_url_convert(urls):
+    os.chdir(REFERENCE)
+    args = _minimum_args()
+    _run(urls, args, 'convert', do_compare=False)
+
+
+def test_url_extract(urls, args):
+    assert os.path.abspath(os.curdir) == OUTCOME
+    _run(urls, args, 'extract')
+    print('success!')
+
+
+def test_url_convert(urls, args):
+    assert os.path.abspath(os.curdir) == OUTCOME
+    _run(urls, args, 'convert')
+    print('success!')
+
+
 def parse_args(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -470,6 +501,22 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('--create-ref',
         action='store_const', const='yes',
         help='create reference files from zero')
+
+    parser.add_argument('-7', '--update-url-download',
+        action='store_const', const='yes',
+        help='update a reference downloaded file')
+    parser.add_argument('-8', '--update-url-extract',
+        action='store_const', const='yes',
+        help='update a reference extracted file')
+    parser.add_argument('-9', '--update-url-convert',
+        action='store_const', const='yes',
+        help='update a reference pdf file')
+    parser.add_argument('-2', '--test-url-extract',
+        action='store_const', const='yes',
+        help='test extraction for a single url')
+    parser.add_argument('-3', '--test-url-convert',
+        action='store_const', const='yes',
+        help='test conversion for a single url')
 
     parser.add_argument('--verbose',
         action='store_const', const='yes',
@@ -519,9 +566,6 @@ def main():
         print_urls(urls)
         return
 
-    if args.number:
-        urls = [urls[int(args.number) - 1]]
-
     cmd_args = build_cmd_args(args)
 
     if args.run:
@@ -533,6 +577,22 @@ def main():
             return
         else:
             raise ValueError('Not Implemented (only -x or -xx).')
+
+    if args.number:
+        urls = [urls[int(args.number) - 1]]
+        if args.update_url_download:
+            update_url_download(urls)
+        elif args.update_url_extract:
+            update_url_extract(urls)
+        elif args.update_url_convert:
+            update_url_convert(urls)
+        elif args.test_url_extract:
+            test_url_extract(urls, cmd_args)
+        elif args.test_url_convert:
+            test_url_convert(urls, cmd_args)
+        else:
+            raise ValueError("'--number' is used without some action")
+        return
 
     parser.print_help()
 
