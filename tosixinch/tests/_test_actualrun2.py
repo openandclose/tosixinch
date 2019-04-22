@@ -339,6 +339,10 @@ def _copy_downloaded_files(urls):
         _mkdirs(os.path.dirname(fname_outcome))
         shutil.copy(fname, fname_outcome)
 
+
+def _copy_pdf_files():
+    assert os.path.abspath(os.curdir) == REFERENCE
+
     # for _run_ufile
     shutil.copy(ALL_PDF, os.path.join(OUTCOME, ALL_PDF))
     # for _run_toc
@@ -364,6 +368,7 @@ def create_ref():
     _run_toc(args, 'convert', do_compare=False)
 
     _copy_downloaded_files(urls)
+    _copy_pdf_files()
 
     os.chdir(curdir)
 
