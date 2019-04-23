@@ -1,9 +1,7 @@
-# noqa: D412,D413 unintelligible errors
 """Clean html, using ``lxml.html.clean`` library.
 
 the object of cleanup is:
-
-1. strip style information, to make easier to apply 'our' style.
+1. strip style information, to make easier to apply user stylesheets.
 2. simplify html, removing those that might confuse or slow PDF rendering.
 
 We strip all inline and external css, for reason 1.
@@ -17,8 +15,6 @@ But I may be wrong.
 For now, we don't strip any other elements (tags) by default.
 ``form`` related tags are a candidate,
 but in some cases, we may need some texts in them.
-
-attributes:
 
 For now, we strip only 'color', 'width' and 'height' for attributes.
 
