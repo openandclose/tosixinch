@@ -122,7 +122,10 @@ class Extract(object):
             self._get_components()
 
     def _cleanup(self):
-        cleaner = clean.Clean(self.doc, self._site)
+        tags = self._site.general.add_clean_tags
+        attrs = self._site.general.add_clean_attrs
+
+        cleaner = clean.Clean(self.doc, tags, attrs)
         cleaner.run()
 
     def _write(self):

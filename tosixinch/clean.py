@@ -62,22 +62,14 @@ class Clean(object):
         whitelist_tags=set(['iframe', 'embed']),
     )
 
-    def __init__(self, doc, site):
+    def __init__(self, doc, tags=None, attrs=None):
         self.doc = doc
-        self._site = site
-
-    def _get_tags(self):
-        tags = self._site.general.add_clean_tags
-        return tags
-
-    def _get_attrs(self):
-        attrs = self._site.general.add_clean_attrs
-        return attrs
+        self.tags = tags
+        self.attrs = attrs
 
     def _clean_html(self):
-        clean_tags = self._get_tags()
-        if clean_tags:
-            self.kwargs['kill_tags'] = clean_tags
+        if self.tags:
+            self.kwargs['kill_tags'] = self.tags
         cleaner = lxml.html.clean.Cleaner(**self.kwargs)
         cleaner(self.doc)
 
@@ -92,12 +84,11 @@ class Clean(object):
         return False
 
     def _clean_attributes(self):
-        remove_attrs = self._get_attrs()
-        if not remove_attrs:
+        if not self.attrs:
             return
         for el in conditioned_iter(self.doc, self._skip_tags):
             for attribute in el.attrib:
-                if attribute in remove_attrs:
+                if attribute in self.attrs:
                     del el.attrib[attribute]
                     continue
                 if attribute == 'style':
