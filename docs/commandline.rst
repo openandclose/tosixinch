@@ -213,6 +213,10 @@ Configs
 
     override pdf file name
 
+.. option:: --cnvpath CNVPATH
+
+    override the converter executable path. you also need to set the converter itself
+
 Styles
 ------
 

@@ -215,6 +215,10 @@ def _build_conf_parser():
     help = 'override pdf file name'
     configs.add_argument('--pdfname', help=help)
 
+    help = ('override the converter executable path. '
+            'you also need to set the converter itself')
+    configs.add_argument('--cnvpath', help=help)
+
     # styles group
     choices = ['portrait', 'landscape']
     help = ('portrait(default) or landscape, determine which size data to use')

@@ -451,6 +451,8 @@ def sample_run(conf):
     args.extend(['-123', '--pdfname', 'sample.pdf'])
     converter = conf.general.converter.replace('_', '-')
     args.append('--' + converter)
+    cnvpath = conf.converter.cnvpath
+    args.extend(('--cnvpath', cnvpath))
     tosixinch.main._main(args=args)
 
 

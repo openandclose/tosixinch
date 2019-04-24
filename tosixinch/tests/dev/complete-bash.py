@@ -22,8 +22,9 @@ OUTPUT_FILE = SCRIPT_DIR + '/../../script/tosixinch-complete.bash'
 
 
 FILE_COMP = {
-    '-i', '--input',
     '-f', '--file',
+    '-i', '--input',
+    '--cnvpath',
 }
 
 DIR_COMP = {
