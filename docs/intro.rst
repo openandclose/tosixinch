@@ -195,6 +195,19 @@ from some arbitrary urls in most of the domains above.
 
 .. note::
 
+    You need to set the converter if not default (prince).
+
+    And if your installed the converter in unusual places (not in PATH),
+    you need to set the fullpath.
+
+        $ [...] --wkhtmltopdf --cnvpath /home/john/build/bin/wkhtmltopdf
+
+    (See `converter <options.html#confopt-converter>`__
+    and `cnvpath <options.html#confopt-cnvpath>`__.)
+
+
+.. note::
+
     These commands create temporary files other than a pdf file
     in current directory.
 
