@@ -11,14 +11,8 @@ Tests are done on linux. Other platforms are not considered.
 URL quoting memo
 ----------------
 
-This was a long comment in the source code,
-describing the details of the script's spec.
-But is is so inconvenient to keep this big lump in the code,
-I decided to move it somewhere.
-
----
-
-Spec:
+Spec
+^^^^
 
 ``URL`` is:
     ``scheme://authority/path;parameters?query#fragment``
@@ -33,7 +27,7 @@ Spec:
     * ``gen-delims:  #/:?@[]``
     * ``sub-delims:  !$&'()*+,;=``
 
-``Excluded characters`` are:
+``Excluded characters`` (not defined in RFC 3986) are:
     ``"%<>\^`{|}``
 
 Allowed characters for each url components are
@@ -52,22 +46,24 @@ Windows illegal filename characters are:
     * https://msdn.microsoft.com/en-us/library/aa365247
     * https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
 
-Note:
+Note
+^^^^
 
-I suppose that defining
-some conversion strategy for URL references to file references
-is a common enough concern,
-since many applications (such as site downloading or mirroring)
-have to implement it.
-But I cannot find the general documents
-(or stackoverflow Q&As).
+* I suppose that defining
+  some conversion strategy for URL references to file references
+  is a common enough concern,
+  since many applications (such as site downloading or mirroring)
+  have to implement it.
+  But I cannot find the general documents
+  (or stackoverflow Q&As).
 
-Even ``princexml`` began escaping '?' around 2015.
+* Even ``princexml`` began escaping '?' around 2015.
 
     * https://www.princexml.com/forum/topic/2914/svg-filenames-with-special-characters
 
 
-Rules:
+Rules
+^^^^^
 
 In some places in the script,
 We rewrite ``src`` or ``href`` links to refer to newly downloaded local files.
@@ -123,7 +119,10 @@ For now, we are ignoring ASCII control characters
 and non ASCII characters.
 
 
-The result::
+result
+^^^^^^
+
+.. code-block:: none
 
     _           quote       replace
     path        []

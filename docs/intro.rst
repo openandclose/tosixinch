@@ -45,12 +45,11 @@ Some points to consider:
   adjusting closely to specific intricacies of each site format.
   Rather, avoiding as far as possible the trouble of having to
   analyze arbitrary document markup structure,
-  having to follow what some delusional web programmer thought it cool,
-  is the point.
+  which you couldn't care less about, is the point.
 
 * Users select articles (urls) themselves.
   And users write configurations for each site themselves.
-  So it always takes some work, hopefully done in a few minutes.
+  So it always requires some work, hopefully done in a few minutes.
 
 * Extraction is the most important part of the script.
   But it is done by very simple and predetermined method.
@@ -184,9 +183,9 @@ An example::
 
     $ tosixinch -i https://en.wikipedia.org/wiki/Xpath -123
 
-(For commandline options, see `next section <#usage>`__.)
+(For basic commandline options, see `next section <#usage>`__.)
 
-Or more simply::
+Or if even this is a trouble::
 
     $ tosixinch --sample-pdf
 
