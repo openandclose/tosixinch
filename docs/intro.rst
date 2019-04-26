@@ -199,10 +199,12 @@ from some arbitrary urls in most of the domains above.
     And if your installed the converter in unusual places (not in PATH),
     you need to set the fullpath.
 
-        $ [...] --wkhtmltopdf --cnvpath /home/john/build/bin/wkhtmltopdf
+    .. code-block:: none
 
-    (See `converter <options.html#confopt-converter>`__
-    and `cnvpath <options.html#confopt-cnvpath>`__.)
+            $ [...] --wkhtmltopdf --cnvpath /home/john/build/bin/wkhtmltopdf
+
+    (See `Programs <commandline.html#programs>`__
+    and `cnvpath <commandline.html#cmdoption-cnvpath>`__.)
 
 
 .. note::
