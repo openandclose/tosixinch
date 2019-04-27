@@ -2,15 +2,13 @@
 """Collect utility functions to be used by other modules."""
 
 import logging
-import os
 import posixpath
 import re
-import subprocess
 
 from tosixinch import _ImportError
 from tosixinch import imagesize
 from tosixinch import manuopen
-from tosixinch import templite
+from tosixinch import system
 
 try:
     import lxml.etree
@@ -122,23 +120,6 @@ def is_code(fname, text=None):
     if PYTHONFILE.match(text):
         return True
     return False
-
-
-def lxml_open(fname=None, text=None, codings=None):
-    if not text:
-        text = manuopen.manuopen(fname, codings=codings)
-    parser = lxml.html.HTMLParser(encoding='utf-8')
-    # For now, follows ``readability.htmls``,
-    # in redundant utf-8 encoding-decoding.
-    root = lxml.html.document_fromstring(
-        text.encode('utf-8', 'replace'), parser=parser)
-    return root
-
-
-def lxml_write(fname, doc, doctype=DEFAULT_DOCTYPE):
-    html = lxml.html.tostring(doc, encoding='unicode', doctype=doctype)
-    with open(fname, 'w') as f:
-        f.write(html)
 
 
 def build_new_html(title=None, content=''):
@@ -270,7 +251,7 @@ def merge_htmls(paths, pdfname, codings=None):
         hname = pdfname.replace('.pdf', '.html')
         root = build_blank_html()
         _append_bodies(root, hname, paths, codings)
-        lxml_write(hname, root)
+        system.HtmlWriter(hname, doc=root)
         return hname
     else:
         return paths[0]
@@ -278,7 +259,8 @@ def merge_htmls(paths, pdfname, codings=None):
 
 def _append_bodies(root, rootname, fnames, codings=None):
     for fname in fnames:
-        bodies = lxml_open(fname, codings=codings).xpath('//body')
+        reader = system.HtmlReader(fname, codings=codings)
+        bodies = reader.read().xpath('//body')
         for b in bodies:
             _relink_component(b, rootname, fname)
             b.tag = 'div'
@@ -297,39 +279,39 @@ def _relink_component(doc, rootname, fname):
         el.attrib['src'] = url
 
 
-def render_template(csspath, new_csspath, context):
-    with open(csspath) as f:
-        template = f.read()
-    template = templite.Templite(template)
-    text = template.render(context)
-    with open(new_csspath, 'w') as f:
-        f.write(text)
+# def render_template(csspath, new_csspath, context):
+#     with open(csspath) as f:
+#         template = f.read()
+#     template = templite.Templite(template)
+#     text = template.render(context)
+#     with open(new_csspath, 'w') as f:
+#         f.write(text)
 
 
-def runcmd(conf, cmds):
-    if cmds:
-        cmds[:] = [_eval_conf(conf, word) for word in cmds]
-        paths = _add_path_env(conf)
+# def runcmd(conf, cmds):
+#     if cmds:
+#         cmds[:] = [_eval_conf(conf, word) for word in cmds]
+#         paths = _add_path_env(conf)
 
-        # return subprocess.Popen(cmds).pid
-        return subprocess.run(cmds, env=dict(os.environ, PATH=paths))
-
-
-def _eval_conf(conf, word):
-    if not word.startswith('conf.'):
-        return word
-
-    for w in word.split('.'):
-        if not w.isidentifier():
-            return word
-
-    return str(eval(word, {'conf': conf}))
+#         # return subprocess.Popen(cmds).pid
+#         return subprocess.run(cmds, env=dict(os.environ, PATH=paths))
 
 
-def _add_path_env(conf):
-    psep = os.pathsep
-    scriptdir = os.path.dirname(conf._configdir) + os.sep + 'script'
-    paths = conf._userdir + psep + scriptdir + psep
-    paths = paths + os.environ['PATH']
-    paths = paths.rstrip(psep)
-    return paths
+# def _eval_conf(conf, word):
+#     if not word.startswith('conf.'):
+#         return word
+
+#     for w in word.split('.'):
+#         if not w.isidentifier():
+#             return word
+
+#     return str(eval(word, {'conf': conf}))
+
+
+# def _add_path_env(conf):
+#     psep = os.pathsep
+#     scriptdir = os.path.dirname(conf._configdir) + os.sep + 'script'
+#     paths = conf._userdir + psep + scriptdir + psep
+#     paths = paths + os.environ['PATH']
+#     paths = paths.rstrip(psep)
+#     return paths

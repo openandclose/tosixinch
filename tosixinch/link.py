@@ -11,7 +11,7 @@ it can be used to register some site-specific procedures.
 import logging
 import urllib.parse
 
-from tosixinch.util import lxml_open
+from tosixinch import system
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ def getlinks(conf):
 
 
 def getlink(url, path):
-    root = lxml_open(url)
+    root = system.HtmlReader(url).read()
     links = root.xpath(path)
     links = [urllib.parse.urljoin(url, link.strip()) for link in links]
     return links

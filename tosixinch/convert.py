@@ -8,7 +8,8 @@ import shlex
 import subprocess
 
 from tosixinch import location
-from tosixinch.util import merge_htmls, render_template
+from tosixinch.system import render_template
+from tosixinch.util import merge_htmls
 
 logger = logging.getLogger(__name__)
 

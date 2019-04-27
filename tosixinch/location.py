@@ -19,6 +19,7 @@ import re
 import sys
 import urllib.parse
 
+from tosixinch.system import _in_current_dir
 
 logger = logging.getLogger(__name__)
 
@@ -115,26 +116,6 @@ class _Location(object):
             #     raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
-    def _make_directories(self, fname, on_error_exit=True):
-        if not self._in_current_dir(fname):
-            if on_error_exit:
-                msg = 'filename path is outside of current dir: %r' % fname
-                logger.error(msg)
-                sys.exit(1)
-            else:
-                return
-        dname = os.path.abspath(os.path.dirname(fname))
-        os.makedirs(dname, exist_ok=True)
-
-    def _in_current_dir(self, fname, base=os.curdir):
-        current = os.path.abspath(base)
-        filepath = os.path.abspath(fname)
-        # note: the same filepath is not 'in' current dir.
-        if filepath.startswith(current + self.sep):
-            return True
-        else:
-            return False
-
     def _make_path(self, url, ext='html'):
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
@@ -151,7 +132,7 @@ class _Location(object):
     def _make_new_fname(self,
             fname, appendix='--extracted', ext='html'):
         base = os.path.join(os.curdir, DOWNLOAD_DIR)
-        if not self._in_current_dir(fname, base=base):
+        if not _in_current_dir(fname, base=base, sep=self.sep):
             fname = self._strip_root(fname)
             fname = os.path.join(DOWNLOAD_DIR, fname)
         return self._edit_fname(fname, appendix, ext)
@@ -198,10 +179,6 @@ class Location(_Location):
     @property
     def fnew(self):
         return self._make_new_fname(self.fname)
-
-    @property
-    def make_directories(self):
-        return self._make_directories(self.fnew)
 
     @property
     def idna_url(self):

@@ -11,9 +11,8 @@ import sys
 
 from tosixinch import location
 from tosixinch.process import gen
-from tosixinch.util import (
-    build_new_html, lxml_open, lxml_write, slugify,
-    _relink_component)
+from tosixinch import system
+from tosixinch.util import build_new_html, slugify, _relink_component
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ class Node(location.Location):
         if self.title:
             self._doc = self._make_toc_html()
         else:
-            self._doc = lxml_open(self.fnew)
+            self._doc = system.HtmlReader(self.fnew).read()
 
     # TODO: consider using util.merge_htmls().
     def _append_body(self):
@@ -61,8 +60,7 @@ class Node(location.Location):
             self._append_body()
 
         if self.last:
-            self.root.make_directories
-            lxml_write(self.root.fnew, self.root.doc)
+            system.HtmlWriter(self.root.fnew, doc=self.root.doc).write()
 
 
 class Nodes(location.Locations):

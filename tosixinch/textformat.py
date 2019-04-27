@@ -12,6 +12,7 @@ import re
 import sys
 import textwrap
 
+from tosixinch import system
 
 logger = logging.getLogger(__name__)
 
@@ -70,11 +71,7 @@ class Prose(object):
         self.highlighted = self.built
 
     def _write(self):
-        fnew = self.fnew
-        if not os.path.exists(fnew):
-            self._site.make_directories
-        with open(fnew, 'w') as f:
-            f.write(self.highlighted)
+        system.Writer(self.fnew, text=self.highlighted).write()
 
     def run(self):
         self._wrap()

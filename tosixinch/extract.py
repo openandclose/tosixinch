@@ -23,10 +23,11 @@ from tosixinch import clean
 from tosixinch import download
 from tosixinch import location
 from tosixinch import process
+from tosixinch import system
 from tosixinch import textformat
 from tosixinch.util import (
     build_new_html, build_blank_html,
-    check_ftype, lxml_open, lxml_write, iter_component, xpath_select,
+    check_ftype, iter_component, xpath_select,
     get_component_size)
 
 try:
@@ -78,7 +79,9 @@ class Extract(object):
             logger.debug(fmt, os.path.join(userdir, 'userprocess'))
 
     def _load(self):
-        self.root = lxml_open(self.fname, self.text, self._encoding)
+        reader = system.HtmlReader(
+            self.fname, text=self.text, codings=self._encoding)
+        self.root = reader.read()
 
     def _prepare(self):
         title = self.root.xpath('//title/text()')
@@ -129,8 +132,9 @@ class Extract(object):
         cleaner.run()
 
     def _write(self):
-        self._site.make_directories
-        lxml_write(self.fnew, self.doc, self.doctype)
+        writer = system.HtmlWriter(
+            self.fnew, doc=self.doc, doctype=self.doctype)
+        writer.write()
 
     def _readability(self):
         title = readability.Document(self.root).title()
@@ -225,7 +229,7 @@ class Extract(object):
     def _download_component(self, url, fname):
         if not os.path.exists(fname) or self._force_download:
             logger.info('[img] %s', url)
-            self._site._make_directories(fname)
+            system.make_directories(fname)
             try:
                 download.download(url, fname)
             except urllib.error.HTTPError as e:

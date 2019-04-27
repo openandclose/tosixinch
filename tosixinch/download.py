@@ -13,6 +13,8 @@ import time
 import urllib.request
 import zlib
 
+from tosixinch import system
+
 logger = logging.getLogger(__name__)
 
 
@@ -239,7 +241,7 @@ def run(conf):
             if not site.general.force_download:
                 continue
 
-        site.make_directories
+        system.make_directories(fname)
         if js:
             if not QT_RUNNIG:
                 qt_app, QWebEngineView = start_qt(qt_ver)
