@@ -61,9 +61,9 @@ class Extract(object):
         self._force_download = site.general.force_download
         self._full_image = site.general.full_image
 
-        self._userpythondir_init()
+        self.userpythondir_init()
 
-    def _userpythondir_init(self):
+    def userpythondir_init(self):
         userdir = self._conf._userdir
         if userdir is None:
             return
@@ -78,12 +78,12 @@ class Extract(object):
             fmt = "user python directory is registered. (%r)"
             logger.debug(fmt, os.path.join(userdir, 'userprocess'))
 
-    def _load(self):
+    def load(self):
         reader = system.HtmlReader(
             self.fname, text=self.text, codings=self._encoding)
         self.root = reader.read()
 
-    def _prepare(self):
+    def prepare(self):
         title = self.root.xpath('//title/text()')
         title = title[0] if title else 'notitle'
         baseurl = self.root.base or self.url
@@ -103,40 +103,40 @@ class Extract(object):
         self.doctype = doctype
         self.doc = doc
 
-    def _select(self):
+    def select(self):
         if self.sel == '':
-            self.sel = self._guess_selection() or '*'
+            self.sel = self.guess_selection() or '*'
 
         for t in xpath_select(self.root.body, self.sel):
             self.doc.body.append(t)
 
-    def _exclude(self):
+    def exclude(self):
         if self.excl:
             for t in xpath_select(self.doc.body, self.excl):
                 if t.getparent() is not None:
                     t.getparent().remove(t)
 
-    def _process(self):
+    def process(self):
         for s in self.sp:
-            self._apply_function(self.doc, s)
+            self.apply_function(self.doc, s)
 
-    def _components(self):
+    def components(self):
         if self._parts_download:
-            self._get_components()
+            self.get_components()
 
-    def _cleanup(self):
+    def cleanup(self):
         tags = self._site.general.add_clean_tags
         attrs = self._site.general.add_clean_attrs
 
         cleaner = clean.Clean(self.doc, tags, attrs)
         cleaner.run()
 
-    def _write(self):
+    def write(self):
         writer = system.HtmlWriter(
             self.fnew, doc=self.doc, doctype=self.doctype)
         writer.write()
 
-    def _readability(self):
+    def readability_select(self):
         title = readability.Document(self.root).title()
         content = readability.Document(self.root).summary(html_partial=True)
 
@@ -153,23 +153,23 @@ class Extract(object):
         self.doc = doc
 
     def run(self):
-        self._load()
-        self._prepare()
-        self._select()
-        self._exclude()
-        self._process()
-        self._components()
-        self._cleanup()
-        self._write()
+        self.load()
+        self.prepare()
+        self.select()
+        self.exclude()
+        self.process()
+        self.components()
+        self.cleanup()
+        self.write()
 
     def readability_run(self):
-        self._load()
-        self._readability()
-        self._components()
-        self._write()
+        self.load()
+        self.readability_select()
+        self.components()
+        self.write()
 
     # TODO: pre-import modules in process.
-    def _apply_function(self, element, func_string):
+    def apply_function(self, element, func_string):
         """Search functions in ``process`` directories, and execute them.
 
         Modules and functions are delimitted by '.'.
@@ -202,7 +202,7 @@ class Extract(object):
         else:
             return func(element)
 
-    def _guess_selection(self):
+    def guess_selection(self):
         guesses = self._guess
         for guess in guesses:
             s = xpath_select(self.root, guess)
@@ -213,7 +213,7 @@ class Extract(object):
     # cf. Embedded contents are:
     #         audio, canvas, embed, iframe, img, math, object, svg, video
     # https://www.w3.org/TR/html5/dom.html#embedded-content-2
-    def _get_components(self):
+    def get_components(self):
         for el, url in iter_component(self.doc):
             self._get_component(el, url)
 
