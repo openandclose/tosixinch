@@ -9,7 +9,7 @@ import subprocess
 
 from tosixinch import location
 from tosixinch.system import render_template
-from tosixinch.util import merge_htmls
+from tosixinch.content import merge_htmls
 
 logger = logging.getLogger(__name__)
 

@@ -22,8 +22,8 @@ import urllib.parse
 from pkg_resources import resource_filename
 
 from tosixinch import configfetch
+from tosixinch.content import transform_xpath
 from tosixinch import location
-from tosixinch.util import transform_xpath
 from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)

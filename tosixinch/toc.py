@@ -12,7 +12,7 @@ import sys
 from tosixinch import location
 from tosixinch.process import gen
 from tosixinch import system
-from tosixinch.util import build_new_html, slugify, _relink_component
+from tosixinch.content import build_new_html, slugify, _relink_component
 
 logger = logging.getLogger(__name__)
 
