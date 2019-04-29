@@ -33,7 +33,7 @@ _COMMENT = r'\s*(<!--.+?-->\s*)*'
 _XMLDECL = r'(<\?xml version.+?\?>)?'
 _DOCTYPE = '(<!doctype .+?>)?'
 HTMLFILE = re.compile(
-    '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + '<html(| .+?)>',
+    '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + r'<html(|\s.+?)>',
     flags=re.IGNORECASE | re.DOTALL)
 
 PYTHONEXT = ('py',)
@@ -83,6 +83,8 @@ def check_ftype(fname, codings=None):
 
 def is_html(text):
     if len(text) > 1000 and HTMLFILE.match(text[:1000]):
+        return True
+    if len(text) > 4000 and HTMLFILE.match(text[:4000]):
         return True
     return False
 
