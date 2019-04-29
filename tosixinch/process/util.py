@@ -25,7 +25,7 @@ import logging
 
 import lxml.html
 
-from tosixinch.util import KEEP_STYLE  # noqa: F401
+from tosixinch.clean import KEEP_STYLE  # noqa: F401
 
 _logger = logging.getLogger(__name__)
 

@@ -28,9 +28,31 @@ you need ``color`` and ``width`` for svg image, for example.
 
 import lxml.html
 
-from tosixinch.util import KEEP_STYLE, conditioned_iter
-
 SKIPTAGS = ('svg', 'math')
+KEEP_STYLE = 'tsi-keep-style'
+
+
+def conditioned_iter(el, test):
+    """Recursively iterate on an element, yield just matching ones.
+
+    It is like ``element.iter(condition)``,
+    but this one skips unmatched element as a tree,
+    with its subelements all together.
+    It seems lxml doesn't have this functionality, ``iter`` or otherwise.
+
+    cf. ``.xpath()`` could do this kind of things,
+    but not suited for more than simplest condition tests.
+
+    Argument ``el`` is presupposed to be an single ``lxml.etree.element``.
+    No checks are done.
+    """
+    if not test(el):
+        return
+    yield el
+    if len(el) == 0:
+        return
+    for sub in el:
+        yield from conditioned_iter(sub, test)
 
 
 class Clean(object):
