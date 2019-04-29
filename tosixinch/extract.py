@@ -61,22 +61,7 @@ class Extract(object):
         self._force_download = site.general.force_download
         self._full_image = site.general.full_image
 
-        self.userpythondir_init()
-
-    def userpythondir_init(self):
-        userdir = self._conf._userdir
-        if userdir is None:
-            return
-        if not os.path.isdir(os.path.join(userdir, 'userprocess')):
-            return
-
-        # if userdir not in sys.path:
-        if 'userprocess' not in sys.modules:
-            sys.path.insert(0, userdir)
-            import userprocess  # noqa: F401 (unused import)
-            del sys.path[0]
-            fmt = "user python directory is registered. (%r)"
-            logger.debug(fmt, os.path.join(userdir, 'userprocess'))
+        system.userpythondir_init(self._conf._userdir)
 
     def load(self):
         reader = system.HtmlReader(
@@ -118,7 +103,7 @@ class Extract(object):
 
     def process(self):
         for s in self.sp:
-            self.apply_function(self.doc, s)
+            system.apply_function(self.doc, s)
 
     def components(self):
         if self._parts_download:
@@ -167,40 +152,6 @@ class Extract(object):
         self.readability_select()
         self.components()
         self.write()
-
-    # TODO: pre-import modules in process.
-    def apply_function(self, element, func_string):
-        """Search functions in ``process`` directories, and execute them.
-
-        Modules and functions are delimitted by '.'.
-        Functions must be top level ones.
-        The first argument is always 'element'.
-        Other argements are words splitted by '?' if any.
-        E.g. the string 'aaa.bbb?cc?dd' calls
-        '[user]process.aaa.bbb(element, cc, dd)'.
-        """
-        names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
-        if '.' not in names:
-            msg = ('You have to name functions with modulenames, '
-                "like 'modulename.funcname'")
-            raise ValueError(msg)
-        modname, func = names.rsplit('.', maxsplit=1)
-        try:
-            mod = importlib.import_module('userprocess.' + modname)
-        except ModuleNotFoundError:
-            try:
-                mod = importlib.import_module('tosixinch.process.' + modname)
-            except ModuleNotFoundError:
-                fmt = ('process module name (%r) is not found '
-                    'in user directory or application directory (%r, %r)')
-                d = (modname, self._conf._userdir, self._conf._configdir)
-                raise ModuleNotFoundError(fmt % d)
-
-        func = getattr(mod, func)
-        if args:
-            return func(element, *args)
-        else:
-            return func(element)
 
     def guess_selection(self):
         guesses = self._guess

@@ -1,6 +1,7 @@
 
 """Communicate with outside environments (OS, shell, python import)."""
 
+import importlib
 import logging
 import os
 import sys
@@ -178,3 +179,53 @@ def _add_path_env(conf):
     paths = paths + os.environ['PATH']
     paths = paths.rstrip(psep)
     return paths
+
+
+# python import ----------------------------------
+
+def userpythondir_init(userdir):
+    if userdir is None:
+        return
+    if not os.path.isdir(os.path.join(userdir, 'userprocess')):
+        return
+
+    # if userdir not in sys.path:
+    if 'userprocess' not in sys.modules:
+        sys.path.insert(0, userdir)
+        import userprocess  # noqa: F401 (unused import)
+        del sys.path[0]
+        fmt = "user python directory is registered. (%r)"
+        logger.debug(fmt, os.path.join(userdir, 'userprocess'))
+
+
+# TODO: pre-import modules in process.
+def apply_function(element, func_string):
+    """Search functions in ``process`` directories, and execute them.
+
+    Modules and functions are delimitted by '.'.
+    Functions must be top level ones.
+    The first argument is always 'element'.
+    Other argements are words splitted by '?' if any.
+    E.g. the string 'aaa.bbb?cc?dd' calls
+    '[user]process.aaa.bbb(element, cc, dd)'.
+    """
+    names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
+    if '.' not in names:
+        msg = ('You have to name functions with modulenames, '
+            "like 'modulename.funcname'")
+        raise ValueError(msg)
+    modname, func = names.rsplit('.', maxsplit=1)
+    try:
+        mod = importlib.import_module('userprocess.' + modname)
+    except ModuleNotFoundError:
+        try:
+            mod = importlib.import_module('tosixinch.process.' + modname)
+        except ModuleNotFoundError:
+            fmt = 'process module name (%r) is not found'
+            raise ModuleNotFoundError(fmt % modname)
+
+    func = getattr(mod, func)
+    if args:
+        return func(element, *args)
+    else:
+        return func(element)
