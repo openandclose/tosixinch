@@ -333,11 +333,16 @@ def _clean_ref():
     update_ufiles()
     
 
+def _get_downloaded_files(urls):
+    for url in urls:
+        yield location.Location(url).fname
+
+
 def _copy_downloaded_files(urls):
     assert os.path.abspath(os.curdir) == REFERENCE
 
-    for url in urls:
-        fname = location.Location(url).fname
+    fnames = _get_downloaded_files(urls)
+    for fname in fnames:
         fname_outcome = os.path.join(OUTCOME, fname)
         if fname_outcome == fname:
             continue
