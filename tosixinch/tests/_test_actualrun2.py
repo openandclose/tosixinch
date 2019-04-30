@@ -312,6 +312,8 @@ def _run_toc(args, action, do_compare=True):
         conf = tosixinch.main._main(args=action_args)
         if do_compare:
             _compare(conf.pdfname)
+    else:
+        raise ValueError("'_run_toc' action must be 'toc' or 'convert'.")
 
 
 def _clean_directory():
