@@ -316,20 +316,47 @@ def _run_toc(args, action, do_compare=True):
         raise ValueError("'_run_toc' action must be 'toc' or 'convert'.")
 
 
-def _clean_directory():
+def _clean_directory(excludes=None, top='.'):
+    abspath = lambda root, name: os.path.abspath(os.path.join(root, name))
+
+    for root, dirs, files in os.walk(top, topdown=False):
+        for name in files:
+            path = abspath(root, name)
+            if excludes and path in excludes:
+                continue
+            os.remove(path)
+
+        for name in dirs:
+            path = abspath(root, name)
+            if os.listdir(path):
+                continue
+            if excludes and path in excludes:
+                continue
+            os.rmdir(path)
+
+
+def _clean_outcome_directory(urls):
+    assert os.path.abspath(os.curdir) == OUTCOME
+
+    # Delete all files except 'urls.txt' and downloaded files.
+    ufile = _get_ufiles()[2]
+    png_dir = os.path.abspath(PNG_DIR)
+    fnames = [os.path.abspath(n) for n in _get_downloaded_files(urls)]
+    excludes = [ufile] + [png_dir] + fnames
+    # print(excludes)
+    _clean_directory(excludes=excludes)
+
+
+def _clean_ref_directory():
     assert os.path.abspath(os.curdir) == REFERENCE
 
-    for entry in os.listdir():
-        if os.path.isfile(entry):
-            os.remove(entry)
-        elif os.path.isdir:
-            shutil.rmtree(entry)
+    _clean_directory()
 
 
 def _clean_ref():
     assert os.path.abspath(os.curdir) == REFERENCE
 
-    _clean_directory()
+    _clean_ref_directory()
     update_ufiles()
     
 
