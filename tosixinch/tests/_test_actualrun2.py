@@ -53,6 +53,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 
 import pytest
 
@@ -102,6 +103,70 @@ TEMP = os.path.join(TESTDIR, 'temp')
 OUTCOME = os.path.join(TEMP, 'actualrun', 'outcome')
 REFERENCE = os.path.join(TEMP, 'actualrun', 'reference')
 APPLICATION_ROOT = os.path.dirname(TESTDIR)
+
+
+class Checker(object):
+    """Check file timestamps and the logfile.
+
+    the logfile keeps the last time some tests were run.
+
+    :param action_type: the type of tests to check
+    """
+
+    LOGFILE = os.path.join(TEMP, 'actualrun', '.testlog')
+    TABLE = {
+        'convert': CONVERT_RELATED_FILES,
+        'toc': TOC_RELATED_FILES,
+    }
+
+    def __init__(self, action_type):
+        self.action_type = action_type
+
+    def _read(self):
+        try:
+            with open(self.LOGFILE) as f:
+                return f.readlines()
+        except FileNotFoundError:
+            with open(self.LOGFILE, 'w') as f:
+                return []
+
+    def _parse(self):
+        data = {}
+        for line in self._read():
+            if not line:
+                continue
+            action_type, timestamp = map(str.strip, line.split(':', 1))
+            data[action_type] = timestamp
+        return data
+
+    def check(self):
+        """Check to see tests are needed. if needed, return True."""
+        timestamp = '0'
+        for k, v in self._parse().items():
+            if k == self.action_type:
+                timestamp = v
+                break
+        timestamp = float(timestamp)
+
+        files = self.TABLE[self.action_type]
+        files = [os.path.join(APPLICATION_ROOT, file) for file in files]
+
+        for file in files:
+            if os.path.getmtime(file) > timestamp:
+                return True
+        return False
+
+    def write(self):
+        data = []
+        for k, v in self._parse().items():
+            if k == self.action_type:
+                continue
+            data.append('%s: %s' % (k, v))
+        data.append('%s: %s' % (self.action_type, str(time.time())))
+        data = '\n'.join(data)
+
+        with open(self.LOGFILE, 'w') as f:
+            f.write(data)
 
 
 def _mkdirs(d):
@@ -410,30 +475,6 @@ def create_ref():
     os.chdir(curdir)
 
 
-def _is_newer(ref, files):
-    reftime = os.path.getmtime(ref)
-    for file in files:
-        if os.path.getmtime(file) > reftime:
-            return True
-    return False
-
-
-def _is_code_edited(ref, files):
-    ref = os.path.join(OUTCOME, ref)
-    files = [os.path.join(APPLICATION_ROOT, file) for file in files]
-    return _is_newer(ref, files)
-
-
-def _need_convert_test():
-    ref = 'Xpath.pdf'
-    return _is_code_edited(ref, CONVERT_RELATED_FILES)
-
-
-def _need_toc_test():
-    ref = '_htmls/tosixinch.example.com/mediawiki/index--tosixinch--extracted.html'  # noqa: E501
-    return _is_code_edited(ref, TOC_RELATED_FILES)
-
-
 def _in_short_ulist(url):
     for sel in SELECT_SHORT_ULIST:
         if sel in url:
@@ -447,20 +488,29 @@ def _get_short_ulist(urls):
 def short_run(urls, args):
     assert os.path.abspath(os.curdir) == OUTCOME
 
-    urls = _get_short_ulist(urls)
-    _run(urls, args, 'extract')
-    if _need_convert_test():
+    short_urls = _get_short_ulist(urls)
+    _run(short_urls, args, 'extract')
+
+    ch = Checker('convert')
+    if ch.check():
         print('doing conversion test...')
-        _run(urls, args, 'convert')
-    if _need_toc_test():
+        _run(short_urls, args, 'convert')
+        ch.write()
+
+    ch = Checker('toc')
+    if ch.check():
         print('doing toc test...')
         # Note: Here it uses all urls, the same as normal_run.
+        _run(urls, args, 'extract')
         _run_toc(args, 'toc')
+        ch.write()
+
     print('success!')
 
 
 def normal_run(urls, args):
     assert os.path.abspath(os.curdir) == OUTCOME
+    _clean_outcome_directory(urls)
 
     _check_ufiles()
     _run(urls, args, 'extract')
