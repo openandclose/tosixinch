@@ -71,14 +71,13 @@ We rewrite ``src`` or ``href`` links to refer to newly downloaded local files.
 The general principle is that
 for local filenames, we unquote all characters in urls,
 since they are easier to read.
-Human readability is more important here.
 
 It is 'lossy' conversion,
-e.g. filename 'aaa?bbb' might have been url 'aaa?bbb' or 'aaa%3Fbbb'.
+e.g. filename ``'aaa?bbb'`` might have been url ``'aaa?bbb'`` or ``'aaa%3Fbbb'``.
 
 Link urls are made using original urls as much as possible.
 Only delimiters for the relevant url components are newly quoted
-(A very limited set of reserved characters).
+(A very limited set of ``reserved characters``).
 
 Note that link urls are always scheme-less and authority-less,
 because they refer to local files the script creates.
@@ -86,33 +85,34 @@ Local references are made from
 stripping scheme and turning authority to the first path.
 
 So path component now might have special characters for authority.
-They are '@:[]', in which '[]' are  illegal for path.
+They are ``'@:[]'``, in which ``'[]'`` are  illegal for path.
 Therefore we have to quote them.
 
 .. note::
-    ':' in the first path component in relative reference is illegal. But
+    ``':'`` in the first path component in relative reference is illegal. But
 
     1. We 'normalize' relative reference starting with slashes
-    2. We always add './' for relative-path reference
+    2. We always add ``'./'`` for relative-path reference
 
     So we can ignore it.
 
-Query delimiter is the first '?',
-and query and fragment can have the second and third '?',
-so we have to quote 'all' occurrences of '?'.
+Query delimiter is the first ``'?'``,
+and query and fragment can have the second and third ``'?'``,
+so we have to quote *all* occurrences of ``'?'``.
 
-Query and fragment can also have '/',
+Query and fragment can also have ``'/'``,
 and tend to do some special things (by servers).
-For query, we change it to some other nonspecial character ('_'),
+For query, we change it to some other nonspecial character (``'_'``),
 because otherwise, it might make too many directories.
-For fragment, we keep it as it is.
+For fragment, we keep it as it is
+(The present implementation strips fragments in the first stages anyway).
 
 According to RFC, parameters are not used, password is deprecated.
-So we ignore ';', but consider ':', respectively.
+So we ignore ``';'``, but consider ``':'``, respectively.
 
-For Windows, illegal filename characters are all changed to '_'.
+For Windows, illegal filename characters are all changed to ``'_'``.
 More semantic changing may be possible
-(e.g. opening '<' to opening '['),
+(e.g. opening ``'<'`` to opening ``'['``),
 but the selecting the right ones is rather hard.
 
 For now, we are ignoring ASCII control characters
