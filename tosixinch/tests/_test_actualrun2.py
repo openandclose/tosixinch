@@ -36,7 +36,9 @@ Actual tests are always done with 'outcome' as current directory.
         test extract. (3 urls)
         test convert, only when related files are modified. (3 urls)
         test toc extraction, only when related files are modified.
--xx:    (normal)
+-xx:    (short-plus)
+        delete most files in the test derectory before runnnig short.
+-xxx:   (normal)
         test extract.
         test convert.
         test ufile-convert, making an 'all in one' pdf.
@@ -485,8 +487,10 @@ def _get_short_ulist(urls):
     return [url for url in urls if _in_short_ulist(url)]
 
 
-def short_run(urls, args):
+def short_run(urls, args, delete=False):
     assert os.path.abspath(os.curdir) == OUTCOME
+    if delete:
+        _clean_outcome_directory(urls)
 
     short_urls = _get_short_ulist(urls)
     _run(short_urls, args, 'extract')
@@ -576,7 +580,7 @@ def parse_args(args=sys.argv[1:]):
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('-x', '--run', action='count',
-        help='run test (-x: short, --xx: all urls).')
+        help='run test (-x: short, --xx: short-plus, --xxx: all urls).')
 
     parser.add_argument('-p', '--print',
         action='store_const', const='yes',
@@ -659,10 +663,13 @@ def main():
             short_run(urls, cmd_args)
             return
         elif args.run == 2:
+            short_run(urls, cmd_args, delete=True)
+            return
+        elif args.run == 3:
             normal_run(urls, cmd_args)
             return
         else:
-            raise ValueError('Not Implemented (only -x or -xx).')
+            raise ValueError('Not Implemented (only -x, -xx or -xxx).')
 
     if args.number:
         urls = [urls[int(args.number) - 1]]
