@@ -28,7 +28,7 @@ def download(url, fname,
         # 'Accept-Language': 'en-US,en;q=0.8',
     }
     # Many things are wrong.
-    # http://stackoverflow.com/questions/789856/turning-on-debug-output-for-python-3-urllib
+    # http://stackoverflow.com/questions/789856/turning-on-debug-output-for-python-3-urllib  # noqa: E501
     # https://bugs.python.org/issue26892
     debuglevel = 0
     if logger.getEffectiveLevel() == 10:
