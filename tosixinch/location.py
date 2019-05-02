@@ -40,6 +40,61 @@ ROOTPATH = re.compile('^/+')
 WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 
+# see Document (Development/URL quoting memo)
+_quotes = {
+    # reserved characters
+    '!': '%21',
+    '#': '%23',
+    '$': '%24',
+    '&': '%26',
+    "'": '%27',
+    '(': '%28',
+    ')': '%29',
+    '*': '%2A',
+    '+': '%2B',
+    ',': '%2C',
+    '/': '%2F',
+    ':': '%3A',
+    ';': '%3B',
+    '=': '%3D',
+    '?': '%3F',
+    '@': '%40',
+    '[': '%5B',
+    ']': '%5D',
+    # others
+    '"': '%22',
+    # '%': '%25',
+    '<': '%3C',
+    '>': '%3E',
+    '\\': '%5C',
+}
+
+_changes = {
+    '/': '_',
+}
+
+_win_changes = {
+    ':': '_',
+    '?': '_',
+    '*': '_',
+    '\\': '_',
+    '"': '_',
+    '<': '_',
+    '>': '_',
+}
+
+Rule = collections.namedtuple('Rule', ['quote', 'change'])
+Delimiters = collections.namedtuple(
+    'Delimiters', ['scheme', 'netloc', 'path', 'query', 'fragment'])
+_delimiters = Delimiters(
+    Rule('', ''),
+    Rule('@:[]', ''),
+    Rule('[]', ''),
+    Rule('?', '/'),
+    Rule('?', ''),
+)
+
+
 class Locations(object):
     """Make ``Location`` object and implement iteration."""
 
@@ -209,61 +264,6 @@ class Location(_Location):
             return urllib.parse.urlunsplit(parts)
         else:
             return url
-
-
-# see Document (Development/URL quoting memo)
-_quotes = {
-    # reserved characters
-    '!': '%21',
-    '#': '%23',
-    '$': '%24',
-    '&': '%26',
-    "'": '%27',
-    '(': '%28',
-    ')': '%29',
-    '*': '%2A',
-    '+': '%2B',
-    ',': '%2C',
-    '/': '%2F',
-    ':': '%3A',
-    ';': '%3B',
-    '=': '%3D',
-    '?': '%3F',
-    '@': '%40',
-    '[': '%5B',
-    ']': '%5D',
-    # others
-    '"': '%22',
-    # '%': '%25',
-    '<': '%3C',
-    '>': '%3E',
-    '\\': '%5C',
-}
-
-_changes = {
-    '/': '_',
-}
-
-_win_changes = {
-    ':': '_',
-    '?': '_',
-    '*': '_',
-    '\\': '_',
-    '"': '_',
-    '<': '_',
-    '>': '_',
-}
-
-Rule = collections.namedtuple('Rule', ['quote', 'change'])
-Delimiters = collections.namedtuple(
-    'Delimiters', ['scheme', 'netloc', 'path', 'query', 'fragment'])
-_delimiters = Delimiters(
-    Rule('', ''),
-    Rule('@:[]', ''),
-    Rule('[]', ''),
-    Rule('?', '/'),
-    Rule('?', ''),
-)
 
 
 class _Component(Location):
