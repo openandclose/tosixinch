@@ -5,6 +5,7 @@ import copy
 import logging
 import posixpath
 import re
+import urllib.error
 
 from tosixinch import _ImportError
 from tosixinch import clean
