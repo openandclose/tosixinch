@@ -5,7 +5,6 @@ import copy
 import logging
 import posixpath
 import re
-import urllib.error
 
 from tosixinch import _ImportError
 from tosixinch import clean
@@ -350,17 +349,7 @@ class HtmlContent(Content):
         # if not os.path.exists(fname) or self._force_download:
         logger.info('[img] %s', url)
         system.make_directories(fname)
-        try:
-            download.download(url, fname)
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
-                logger.info('[HTTPError 404 %s] %s' % (e.reason, url))
-            else:
-                logger.warning(
-                    '[HTTPError %s %s %s] %s' % (
-                        e.code, e.reason, e.headers, url))
-        except urllib.error.URLError as e:
-            logger.warning('[URLError %s] %s' % (e.reason, url))
+        download.download(url, fname, on_error_exit=False)
 
 
 class ReadabilityHtmlContent(HtmlContent):

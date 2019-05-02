@@ -18,7 +18,8 @@ from tosixinch import system
 logger = logging.getLogger(__name__)
 
 
-def download(url, fname, user_agent='Mozilla/5.0', cookies=None):
+def download(url, fname,
+        user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
     headers = {
         'User-Agent': user_agent,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # noqa: E501
@@ -44,17 +45,33 @@ def download(url, fname, user_agent='Mozilla/5.0', cookies=None):
         urllib.request.HTTPSHandler(debuglevel=debuglevel),
         urllib.request.HTTPCookieProcessor(cj))
 
-    with opener.open(req) as f, open(fname, 'wb') as g:
-        # '_io.BufferedReader' (local files) does not have 'getheader' method.
-        if isinstance(f, http.client.HTTPResponse):
-            if f.getheader('Content-Encoding') == 'gzip':
-                g.write(gzip.decompress(f.read()))
-                return
-            elif f.getheader('Content-Encoding') == 'deflate':
-                logger.info("[http] 'Content-Encoding' is 'deflate'")
-                g.write(zlib.decompress(f.read()))
-                return
-        shutil.copyfileobj(f, g)
+    try:
+        with opener.open(req) as f, open(fname, 'wb') as g:
+            # '_io.BufferedReader' (local files)
+            # does not have 'getheader' method.
+            if isinstance(f, http.client.HTTPResponse):
+                if f.getheader('Content-Encoding') == 'gzip':
+                    g.write(gzip.decompress(f.read()))
+                    return
+                elif f.getheader('Content-Encoding') == 'deflate':
+                    logger.info("[http] 'Content-Encoding' is 'deflate'")
+                    g.write(zlib.decompress(f.read()))
+                    return
+            shutil.copyfileobj(f, g)
+
+    except urllib.request.HTTPError as e:
+        if on_error_exit:
+            raise
+        if e.code == 404:
+            logger.info('[HTTPError 404 %s] %s' % (e.reason, url))
+        else:
+            logger.warning(
+                '[HTTPError %s %s %s] %s' % (
+                    e.code, e.reason, e.headers, url))
+    except urllib.request.URLError as e:
+        if on_error_exit:
+            raise
+        logger.warning('[URLError %s] %s' % (e.reason, url))
 
 
 def _add_cookie(cj, name, value, domain, path='/'):
