@@ -214,6 +214,19 @@ def print_urls(urls):
         print('%2d: %s' % (i, url))
 
 
+# It is not a part of tests. Called from main._main."""
+def get_absolute_urls():
+    def abspath(url):
+        if 'templite.py' in url:
+            url = os.path.join(APPLICATION_ROOT, 'templite.py')
+        return url
+
+    ufile = os.path.join(TESTDIR, UFILE)
+    urls = location.Locations(ufile=ufile).urls
+    urls = [abspath(url) for url in urls]
+    return urls
+
+
 def _bincmp(f1, f2):
     # Borrowed from ``filecmp._do_cmp()`` (Python Standard Library).
     bufsize = BUFSIZE
@@ -523,25 +536,6 @@ def normal_run(urls, args):
     _run_toc(args, 'toc')
     _run_toc(args, 'convert')
     print('success!')
-
-
-def sample_run(conf):
-    """Just generate a sample pdf in 'current' dir.
-
-    It is not a part of tests, and called from main._main."""
-    ufile = os.path.join(TESTDIR, UFILE)
-    urls = location.Locations(ufile=ufile).urls
-    args = _minimum_args()
-    for url in urls:
-        if 'templite.py' in url:
-            url = os.path.join(APPLICATION_ROOT, 'templite.py')
-        args.extend(['-i', url])
-    args.extend(['-123', '--pdfname', 'sample.pdf'])
-    converter = conf.general.converter.replace('_', '-')
-    args.append('--' + converter)
-    cnvpath = conf.converter.cnvpath
-    args.extend(('--cnvpath', cnvpath))
-    tosixinch.main._main(args=args)
 
 
 def update_url_download(urls):

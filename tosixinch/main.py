@@ -315,6 +315,13 @@ def _main(args=sys.argv[1:], conf=None):
     firstline = None
 
     urls = args.input
+
+    if args.sample_pdf:
+        import tosixinch.tests._test_actualrun2 as actualrun
+        urls = actualrun.get_absolute_urls()
+        if confargs.pdfname is None:
+            confargs.pdfname = 'sample.pdf'
+
     ufile = None if urls else args.file
 
     if conf is None:
@@ -333,10 +340,6 @@ def _main(args=sys.argv[1:], conf=None):
     elif args.news:
         ret = news.socialnews(args.news)
         print(ret)
-        return
-    elif args.sample_pdf:
-        import tosixinch.tests._test_actualrun2 as test_run
-        test_run.sample_run(conf)
         return
 
     if not conf.sites.urls:
