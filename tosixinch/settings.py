@@ -284,8 +284,6 @@ class Conf(object):
         self._ufile = sites._ufile
         self.sites = sites
 
-        self.minsep = self._get_minsep()
-
     def _get_minsep(self):
         seps = [len(site.url.split(os.sep)) for site in self.sites]
         return min(seps) - 2
@@ -293,6 +291,10 @@ class Conf(object):
     @property
     def urls(self):
         return self.sites.urls
+
+    @location.cached_property
+    def minsep(self):
+        return self._get_minsep()
 
     @property
     def pdfname(self):
