@@ -94,8 +94,8 @@ def _build_cmd_parser():
     help = 'fetch urls from socialnews site (experimental)'
     actions.add_argument('--news', choices=choices, help=help)
 
-    help = 'generate a sample pdf'
-    actions.add_argument('--sample-pdf', action='store_true', help=help)
+    help = 'inject sample urls'
+    actions.add_argument('--sample-urls', action='store_true', help=help)
 
     # TODO: '--printout' prints urls, fnames, fnews etc...
 
@@ -316,7 +316,7 @@ def _main(args=sys.argv[1:], conf=None):
 
     urls = args.input
 
-    if args.sample_pdf:
+    if args.sample_urls:
         import tosixinch.tests._test_actualrun2 as actualrun
         urls = actualrun.get_absolute_urls()
         if confargs.pdfname is None:

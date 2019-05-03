@@ -105,9 +105,9 @@ Actions
 
         choices=hackernews
 
-.. option:: --sample-pdf
+.. option:: --sample-urls
 
-    generate a sample pdf
+    inject sample urls
 
 Programs
 --------

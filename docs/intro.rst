@@ -187,7 +187,7 @@ An example::
 
 Or if even this is a trouble::
 
-    $ tosixinch --sample-pdf
+    $ tosixinch --sample-urls -123
 
 This command creates 'sample.pdf'
 from some arbitrary urls in most of the domains above.
