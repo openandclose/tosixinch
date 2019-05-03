@@ -2,6 +2,26 @@
 Changelog
 =========
 
+v0.0.10
+-------
+
+API Change:
+
+* Rename '--sample-pdf' to '--sample-urls',
+  and now it also requires action options additionally ('-123').
+
+Fix:
+
+* blank API documents (lack of a readthedocs config)
+* Accept very long html start tag (now support hatenablog.com).
+* Broken '--sample-pdf' and '--appcheck'.
+
+Dev:
+
+* Continuing the big refactoring (now util.py is gone).
+* x options of _test_actualrun2.py are again '-x', '-xx', and '-xxx'.
+
+
 v0.0.9
 ------
 
@@ -10,7 +30,7 @@ API Change:
 * Rename 'tsi-big' class attribute for large images, to 'tsi-wide'.
 * Remove file listing feature when urls consist of directories.
 
-Feature:
+Addition:
 
 * Update site.sample.ini.
 
@@ -22,7 +42,7 @@ Feature:
 * Add option '--sample-pdf'
 * Add option '--convpath'
 
-Fixes:
+Fix:
 
 * Fix detection whether an image is wide or tall.
 * Fix current directory check in making directories
@@ -37,13 +57,13 @@ Dev:
 v0.0.8
 ------
 
-Feature:
+Addition:
 
 * Add option '--force-download'.
 * Add Python3.7.
 * Improve Document.
 
-Fixes:
+Fix:
 
 * Fix around 'plus' functions (with configfetch updates).
 
