@@ -23,9 +23,13 @@ The aim is to keep the best name 'el' for main target or main concern.
 from copy import deepcopy
 import logging
 
-import lxml.html
-
+from tosixinch import _ImportError
 from tosixinch.clean import KEEP_STYLE  # noqa: F401
+
+try:
+    import lxml.html
+except ImportError:
+    lxml = _ImportError('lxml')
 
 _logger = logging.getLogger(__name__)
 
@@ -40,7 +44,7 @@ self_closing_tags = (
 # These short forms are used only in ``process`` package.
 # 'tostring' is perhaps only in doctests.
 # Other modules use longer 'lxml.html...' form.
-fromstring = lxml.html.fromstring
+fromstring = lambda el: lxml.html.fromstring(el)
 tostring = lambda el: lxml.html.tostring(el, encoding='unicode')
 
 
