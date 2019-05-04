@@ -24,8 +24,6 @@ from tosixinch import configfetch
 from tosixinch import download
 from tosixinch import extract
 from tosixinch import convert
-from tosixinch import link
-from tosixinch import news
 from tosixinch import settings
 from tosixinch.system import runcmd
 
@@ -330,13 +328,14 @@ def _main(args=sys.argv[1:], conf=None):
     # When handling urls the `news` module built,
     # (with various source sites and comments),
     # it is better to use `readability`.
-    if firstline == news.FL_SOCIALNEWS:
-        setv('extractor', 'readability')
+    # if firstline == news.FL_SOCIALNEWS:
+    #     setv('extractor', 'readability')
 
     if args.appcheck:
         conf.print_appconf()
         return
     elif args.news:
+        from tosixinch import news
         ret = news.socialnews(args.news)
         print(ret)
         return
@@ -361,6 +360,7 @@ def _main(args=sys.argv[1:], conf=None):
         conf.print_siteconf()
         return
     if args.link:
+        from tosixinch import link
         link.print_links(conf)
         return
 
