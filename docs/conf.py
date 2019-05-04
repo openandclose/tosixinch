@@ -198,6 +198,8 @@ intersphinx_mapping = {
 
 ## me
 
+import sys
+
 # https://jeffknupp.com/blog/2013/08/16/open-sourcing-a-python-project-the-right-way/
 import pkg_resources
 try:
