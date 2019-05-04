@@ -26,7 +26,7 @@ And attributes cleanup is skipped inside <svg> and <math> elements.
 you need ``color`` and ``width`` for svg image, for example.
 """
 
-import lxml.html
+import lxml.html.clean
 
 SKIPTAGS = ('svg', 'math')
 KEEP_STYLE = 'tsi-keep-style'
