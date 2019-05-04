@@ -27,7 +27,6 @@ from tosixinch import convert
 from tosixinch import link
 from tosixinch import news
 from tosixinch import settings
-from tosixinch import toc
 from tosixinch.system import runcmd
 
 logger = logging.getLogger(__name__)
@@ -374,6 +373,7 @@ def _main(args=sys.argv[1:], conf=None):
         extract.run(conf)
         runcmd(conf, conf.general.postcmd2)
     if args.toc:
+        from tosixinch import toc
         toc.run(conf)
     if args.convert:
         runcmd(conf, conf.general.precmd3)
