@@ -1,0 +1,22 @@
+
+# mediawiki
+https://en.wikipedia.org/wiki/Xpath
+https://wiki.mobileread.com/wiki/E-book_devices
+# gnu
+https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html
+# python
+https://docs.python.org/3/library/urllib.parse.html
+https://www.python.org/dev/peps/pep-0420/
+https://bugs.python.org/issue9334
+# social news
+https://news.ycombinator.com/item?id=3846528
+https://old.reddit.com/r/Python/comments/w14ty/weasyprint_htmlcss_to_pdf_converter_now_passes/
+# stackoverflow
+https://stackoverflow.com/questions/5686206/
+http://www.stackprinter.com/export?question=5686206&service=stackoverflow
+# github
+https://github.com/buriy/python-readability
+https://github.com/buriy/python-readability/issues/43
+https://github.com/redapple/parslepy/wiki
+# text
+../templite.py

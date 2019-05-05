@@ -49,6 +49,45 @@ BINARY_EXTENSIONS = """
 """.split()
 
 
+class Transform(object):
+    """Preprocess arguments before making ``Conf`` object."""
+
+    def __init__(self, urls=None, ufile=None, args=None):
+        self.urls = urls
+        self.ufile = ufile
+        self.args = args
+
+    def tranform(self):
+        pass
+
+    def __call__(self):
+        self.tranform()
+        return self.urls, self.ufile, self.args
+
+
+class SampleTransform(Transform):
+    """Get sample urls."""
+
+    SAMPLE_UFILE = 'urls.sample.txt'
+    PDFNAME = 'sample.pdf'
+
+    def tranform(self):
+        configdir = _get_configdir()
+        ufile = os.path.join(configdir, self.SAMPLE_UFILE)
+        urls = location.Locations(ufile=ufile).urls
+        urls = [self._resolve_url(url, configdir) for url in urls]
+        self.urls = urls
+
+        if self.args:
+            if self.args.pdfname is None:
+                self.args.pdfname = self.PDFNAME
+
+    def _resolve_url(self, url, base):
+        if url.startswith('.'):
+            return os.path.abspath(os.path.join(base, url))
+        return url
+
+
 def _get_pdfname(sites, minsep):
     site = list(sites)[0]
     url = site.url
@@ -109,8 +148,12 @@ def _checkmacth(url, siteconfig):
             return sec
 
 
+def _get_configdir():
+    return resource_filename('tosixinch', 'data').rstrip(os.sep)
+
+
 def _get_configs(paths, args, envs):
-    configdir = resource_filename('tosixinch', 'data').rstrip(os.sep)
+    configdir = _get_configdir()
 
     default_appconfig = os.path.join(configdir, 'tosixinch.default.ini')
     default_siteconfig = os.path.join(configdir, 'site.default.ini')

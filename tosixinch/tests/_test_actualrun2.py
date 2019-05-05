@@ -214,19 +214,6 @@ def print_urls(urls):
         print('%2d: %s' % (i, url))
 
 
-# It is not a part of tests. Called from main._main."""
-def get_absolute_urls():
-    def abspath(url):
-        if 'templite.py' in url:
-            url = os.path.join(APPLICATION_ROOT, 'templite.py')
-        return url
-
-    ufile = os.path.join(TESTDIR, UFILE)
-    urls = location.Locations(ufile=ufile).urls
-    urls = [abspath(url) for url in urls]
-    return urls
-
-
 def _bincmp(f1, f2):
     # Borrowed from ``filecmp._do_cmp()`` (Python Standard Library).
     bufsize = BUFSIZE

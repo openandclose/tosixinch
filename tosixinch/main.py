@@ -312,14 +312,11 @@ def _main(args=sys.argv[1:], conf=None):
     firstline = None
 
     urls = args.input
+    ufile = None if urls else args.file
 
     if args.sample_urls:
-        import tosixinch.tests._test_actualrun2 as actualrun
-        urls = actualrun.get_absolute_urls()
-        if confargs.pdfname is None:
-            confargs.pdfname = 'sample.pdf'
-
-    ufile = None if urls else args.file
+        loader = settings.SampleTransform(urls, ufile, confargs)
+        urls, ufile, confargs = loader()
 
     if conf is None:
         conf = settings.Conf(urls, ufile, args=confargs, envs=ENVS)
