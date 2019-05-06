@@ -260,10 +260,11 @@ Config Files
 
     It is the ``toc`` version of `ufile <#dword-ufile>`__.
 
-    It is generated automatically when action is ``toc``,
+    It is generated automatically in current directory,
+    when action is ``toc``,
     and processed automatically when ``convert``.
 
-    The filename is determined from ``--file`` input,
+    The filename is determined from ``--file`` input (basename part),
     adding '-toc' suffix before extension. e.g. ``urls-toc.txt``.
 
     see `TOC <topics.html#toc>`__ for details.

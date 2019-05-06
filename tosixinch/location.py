@@ -146,7 +146,7 @@ class Locations(object):
 
     def get_tocfile(self):
         if self._ufile:
-            root, ext = os.path.splitext(self._ufile)
+            root, ext = os.path.splitext(os.path.basename(self._ufile))
             return root + '-toc' + ext
 
     @property
