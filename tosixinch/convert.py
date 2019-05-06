@@ -53,7 +53,7 @@ class Convert(object):
         self._encoding = conf.general.encoding
 
         ufile = conf._ufile
-        tocfile = self._get_tocfile(ufile)
+        tocfile = self._get_tocfile()
         if conf.general.raw:
             files = [site.url for site in conf.sites]
         elif tocfile and _is_newer(ufile, tocfile):
@@ -65,16 +65,11 @@ class Convert(object):
 
         self.cmd = [self.path]
 
-    def _get_tocfile(self, ufile):
-        if not ufile:
-            return None
-
-        tocfile = os.path.splitext(ufile)
-        tocfile = tocfile[0] + '-toc' + tocfile[1]
-        if not os.path.isfile(tocfile):
-            return None
-
-        return tocfile
+    def _get_tocfile(self):
+        tocfile = self._conf.sites.get_tocfile()
+        if tocfile:
+            if os.path.isfile(tocfile):
+                return tocfile
 
     def _get_cssfile(self, css):
         configdir = self._conf._configdir

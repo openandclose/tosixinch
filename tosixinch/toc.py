@@ -5,7 +5,6 @@ Use comment structure in 'urls.txt' as directive.
 """
 
 import logging
-import os
 import re
 import sys
 
@@ -77,9 +76,8 @@ class Nodes(location.Locations):
         self._comment = (';',)
 
     @property
-    def toc_ufile(self):
-        root, ext = os.path.splitext(self._ufile)
-        return root + '-toc' + ext
+    def tocfile(self):
+        return self.get_tocfile()
 
     def _parse_toc_url(self, url):
         m = re.match(r'^\s*(#+)?\s*(.+)?\s*$', url)
@@ -137,7 +135,7 @@ class Nodes(location.Locations):
             node.write()
 
         urls = '\n'.join([node.url for node in self if node.root is node])
-        with open(self.toc_ufile, 'w') as f:
+        with open(self.tocfile, 'w') as f:
             f.write(urls)
 
 

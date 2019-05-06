@@ -144,6 +144,11 @@ class Locations(object):
                 continue
             yield url
 
+    def get_tocfile(self):
+        if self._ufile:
+            root, ext = os.path.splitext(self._ufile)
+            return root + '-toc' + ext
+
     @property
     def urls(self):
         return list(self._parse_urls())
