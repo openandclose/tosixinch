@@ -1,3 +1,4 @@
-include CHANGLOG.rst
+include CHANGELOG.rst
 include LICENSE
+include README.rst
 include VERSION
