@@ -256,7 +256,7 @@ Config Files
     Users are always on the same directory,
     reusing ``urls.txt`` (deleting and reediting the contents).
 
-.. dword:: toc-ufile
+.. dword:: tocfile
 
     It is the ``toc`` version of `ufile <#dword-ufile>`__.
 

@@ -167,7 +167,7 @@ And it can be called only after ``extract`` has been done.
 
 The action bundles ``Extracted_Files``,
 writes to a single html, and creates a new ``url`` list
-(`toc-ufile <overview.html#dword-toc-ufile>`__).
+(`tocfile <overview.html#dword-tocfile>`__).
 
 When ``--file`` is ``urls.txt`` (default),
 the toc ``url`` list is ``urls-toc.txt``.
