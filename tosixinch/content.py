@@ -12,7 +12,7 @@ from tosixinch import download
 from tosixinch import location
 from tosixinch import imagesize
 from tosixinch import manuopen
-from tosixinch import process
+from tosixinch.process import gen
 from tosixinch import system
 
 try:
@@ -363,9 +363,9 @@ class ReadabilityHtmlContent(HtmlContent):
         doc = build_new_html(title, content)
         heading = doc.xpath('//h1')
         if len(heading) == 0:
-            process.gen.add_title(doc)
+            gen.add_title(doc)
         if len(heading) > 1:
-            process.gen.decrease_heading(doc)
-            process.gen.add_title(doc)
+            gen.decrease_heading(doc)
+            gen.add_title(doc)
 
         self.doc = doc
