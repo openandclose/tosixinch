@@ -309,7 +309,7 @@ def _main(args=sys.argv[1:], conf=None):
     # Some special magic words do some special things.
     # It is commented out, machine generated,
     # so users don't have to care most of the times.
-    firstline = None
+    # firstline = None
 
     urls = args.input
     ufile = None if urls else args.file
@@ -320,7 +320,7 @@ def _main(args=sys.argv[1:], conf=None):
 
     if conf is None:
         conf = settings.Conf(urls, ufile, args=confargs, envs=ENVS)
-    setv = conf.general.set_value
+    # setv = conf.general.set_value
 
     # When handling urls the `news` module built,
     # (with various source sites and comments),
