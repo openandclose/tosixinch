@@ -2,6 +2,21 @@
 Changelog
 =========
 
+v0.1.0
+-------
+
+Fix:
+
+* sample.t.css exclusion in installation
+
+Dev:
+
+* Change version scheme.
+
+  I've been using only the third digit for version, since I thought v0.1.0 was too pretentious.
+  But I should express the difference between some improvements and stupid bug fixes.
+
+
 v0.0.11
 -------
 
@@ -12,8 +27,8 @@ API Change:
 
 Fix:
 
-* many import errors (no lxml, no readability cases etc.).
-* many import errors (installation related, importing (nonexistent) tests package etc.).
+* Many import errors (no lxml, no readability cases etc.).
+* Many import errors (installation related, importing (nonexistent) tests package etc.).
 * readthedocs.org build error
 
 
