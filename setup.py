@@ -36,7 +36,7 @@ setup(
     # packages=find_packages(exclude=['tests']),
     packages=['tosixinch', 'tosixinch.process'],
     package_data={
-        'tosixinch': ['data/*', 'script/*', ],
+        'tosixinch': ['data/*', 'data/css/*', 'script/*', ],
     },
     entry_points={
         'console_scripts': [
