@@ -2,6 +2,21 @@
 Changelog
 =========
 
+v0.0.11
+-------
+
+API Change:
+
+* tocfile (previously toc-ufile) is now always created in current directory.
+  Previously it was created in the same directory as the ufile.
+
+Fix:
+
+* many import errors (no lxml, no readability cases etc.).
+* many import errors (installation related, importing (nonexistent) tests package etc.).
+* readthedocs.org build error
+
+
 v0.0.10
 -------
 
@@ -14,7 +29,7 @@ Fix:
 
 * blank API documents (lack of a readthedocs config)
 * Accept very long html start tag (now support hatenablog.com).
-* Broken '--sample-pdf' and '--appcheck'.
+* Broken '--sample-pdf' and '--appcheck' (no urls case etc.).
 
 Dev:
 
