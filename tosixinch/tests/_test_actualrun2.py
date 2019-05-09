@@ -46,10 +46,6 @@ Actual tests are always done with 'outcome' as current directory.
 """
 
 
-# For now I am not deleting files if not necessary,
-# trusting the overwriting capability of the script.
-
-
 import argparse
 import os
 import shutil

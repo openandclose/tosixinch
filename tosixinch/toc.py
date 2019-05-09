@@ -45,7 +45,7 @@ class Node(location.Location):
         else:
             self._doc = system.HtmlReader(self.fnew).read()
 
-    # TODO: consider using util.merge_htmls().
+    # TODO: consider using content.merge_htmls().
     def _append_body(self):
         for t in self.doc.xpath('//body'):
             gen.decrease_heading(t)
