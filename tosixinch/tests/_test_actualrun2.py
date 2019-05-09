@@ -57,8 +57,6 @@ import subprocess
 import sys
 import time
 
-import pytest
-
 from PIL import Image, ImageChops
 
 from tosixinch import location
