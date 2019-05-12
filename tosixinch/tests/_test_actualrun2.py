@@ -55,9 +55,8 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
-
-from PIL import Image, ImageChops
 
 from tosixinch import location
 import tosixinch.main
@@ -275,6 +274,7 @@ def _create_png_page(num, ref, filename):
 
 def _create_diff_png_page(png1, png2, png3):
     # from https://stackoverflow.com/a/1311122
+    from PIL import Image, ImageChops
     im1 = Image.open(png1) 
     im2 = Image.open(png2) 
     im3 = ImageChops.difference(im1, im2)
@@ -523,6 +523,29 @@ def normal_run(urls, args):
     print('success!')
 
 
+def _tox_run(urls, args):
+    _run(urls, args, 'download', do_compare=False)
+    _run(urls, args, 'extract', do_compare=False)
+    _run(urls, args, 'convert', do_compare=False)
+    # _run_toc(urls, args, 'toc', do_compare=False)
+
+
+def tox_run():
+    """Just check if actual invocation doesn't raise Errors (for tox)."""
+
+    # Get only the first url (wikipedia.org).
+    urls = [tosixinch.settings.SampleTransform()()[0][0]]
+    args = []
+
+    # tmpdir = tempfile.mkdtemp(prefix='tosixinch-')
+    # os.chdir(tmpdir)
+    # _tox_run(urls,args)
+    # shutil.rmtree(tmpdir)
+
+    with tempfile.TemporaryDirectory(prefix='tosixinch-') as tmpdir:
+        os.chdir(tmpdir)
+        _tox_run(urls,args)
+
 def update_url_download(urls):
     os.chdir(REFERENCE)
     args = _minimum_args()
@@ -570,6 +593,9 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('--create-ref',
         action='store_const', const='yes',
         help='create reference files from zero')
+    parser.add_argument('--tox-run',
+        action='store_const', const='yes',
+        help='run -123 and --toc in temporary directory in tox environment.')
 
     parser.add_argument('-7', '--update-url-download',
         action='store_const', const='yes',
@@ -625,6 +651,10 @@ def main():
 
     if args.create_ref:
         create_ref()
+        return
+
+    if args.tox_run:
+        tox_run()
         return
 
     os.chdir(OUTCOME)
