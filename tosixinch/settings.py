@@ -77,6 +77,7 @@ class SampleTransform(Transform):
         urls = location.Locations(ufile=ufile).urls
         urls = [self._resolve_url(url, configdir) for url in urls]
         self.urls = urls
+        self.ufile = ufile
 
         if self.args:
             if self.args.pdfname is None:

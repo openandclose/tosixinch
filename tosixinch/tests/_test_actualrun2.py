@@ -64,10 +64,6 @@ COMPARE_ERROR_FATAL = True
 
 BUFSIZE = 8*1024
 
-UFILE = 'urls.txt'
-TOC_UFILE = 'urls-toc.txt'
-ALL_PDF = '_all.pdf'
-TOC_PDF = '_toc.pdf'
 PNG_DIR = '_png'
 IMG_PREFIX = 'pdfcmp'
 
@@ -177,29 +173,60 @@ def _prepare_directories():
     _mkdirs(os.path.join(OUTCOME, PNG_DIR))
 
 
-def _get_ufiles(ufile=UFILE):
-    ufile_test = os.path.join(TESTDIR, ufile)
-    ufile_ref = os.path.join(REFERENCE, ufile)
-    ufile_outcome = os.path.join(OUTCOME, ufile)
-    return ufile_test, ufile_ref, ufile_outcome
+class _URLData(object):
+    """Collect all URL retrieving functions."""
+
+    def __init__(self):
+        self.urls, self.ufile = self._get_sample()
+        self.tocfile = self._get_tocfile()
+
+    def _get_sample(self):
+        urls, ufile, args = tosixinch.settings.SampleTransform()()
+        ufile = self._get_ufile(urls, ufile)
+        return urls, ufile
+
+    def _get_ufile(self, urls, ufile):
+        UFILE = os.path.join(TEMP, 'actualrun', 'urls.txt')
+        if not os.path.isfile(UFILE):
+            self._write_ufile(ufile, UFILE)
+        else:
+            if os.path.getmtime(ufile) > os.path.getmtime(UFILE):
+                self._write_ufile(ufile, UFILE)
+        return UFILE
+
+    def _write_ufile(self, ufile, UFILE):
+        # Just change an inconvenient relative path (templite.py) to absolute.
+        new = []
+        with open(ufile) as f:
+            for ln in f:
+                if ln.startswith('.'):
+                    base = os.path.dirname(ufile)
+                    ln = os.path.abspath(os.path.join(base, ln))
+                new.append(ln)
+        with open(UFILE, 'w') as f:
+            f.write(''.join(new))
+
+    def _get_tocfile(self):
+        return location.Locations(ufile=self.ufile).get_tocfile()
+
+    def _get_toc_urls(self):
+        tocfile = self.tocfile
+        if not os.path.isfile(tocfile):
+            raise ValueError('tocfile is not created.')
+        return location.Locations(ufile=tocfile).urls
+
+    @property
+    def toc_urls(self):
+        return self._get_toc_urls()
 
 
-def _check_ufiles(ufile=UFILE):
-    ufile_test, ufile_ref, ufile_outcome = _get_ufiles(ufile)
-    assert os.path.getmtime(ufile_test) <= os.path.getmtime(ufile_ref)
-    assert os.path.getmtime(ufile_test) <= os.path.getmtime(ufile_outcome)
+URLData = _URLData()
+URLS = URLData.urls
+UFILE = URLData.ufile
+TOCFILE = URLData.tocfile
 
-
-def update_ufiles(ufile=UFILE):
-    """Copy 'urls.txt' from the canonical one in 'tests' direcrtory."""
-    print('updating ufiles...')
-    ufile_test, ufile_ref, ufile_outcome = _get_ufiles(ufile)
-    shutil.copy(ufile_test, ufile_ref)
-    shutil.copy(ufile_test, ufile_outcome)
-
-
-def get_urls(ufile=UFILE):
-    return location.Locations(ufile=ufile).urls
+ALL_PDF = '_all.pdf'
+TOC_PDF = '_toc.pdf'
 
 
 def print_urls(urls):
@@ -343,11 +370,10 @@ def _run_ufile(args, do_compare=True):
     # Instead of generating each pdf file, generates one big pdf file
     # from all urls.
     # Let's skip extraction test since it should be the same as ``_run``.
-    _check_ufiles()
-    if os.path.isfile(TOC_UFILE):
-        os.remove(TOC_UFILE)
+    if os.path.isfile(TOCFILE):
+        os.remove(TOCFILE)
 
-    action_args = args + ['--convert', '--pdfname', ALL_PDF]
+    action_args = args + ['-f', UFILE, '--convert', '--pdfname', ALL_PDF]
     conf = tosixinch.main._main(args=action_args)
 
     if do_compare:
@@ -355,12 +381,13 @@ def _run_ufile(args, do_compare=True):
 
 
 def _run_toc(args, action, do_compare=True):
+    args += ['-f', UFILE]
     if action == 'toc':
         action_args = args + ['--toc']
         conf = tosixinch.main._main(args=action_args)
         if do_compare:
-            _compare(TOC_UFILE)
-            urls = get_urls(ufile=TOC_UFILE)
+            _compare(TOCFILE)
+            urls = URLData.toc_urls
             for url in urls:
                 fnew = location.Location(url).fnew
                 _compare(fnew)
@@ -400,10 +427,9 @@ def _clean_outcome_directory(urls):
     assert os.path.abspath(os.curdir) == OUTCOME
 
     # Delete all files except 'urls.txt' and downloaded files.
-    ufile = _get_ufiles()[2]
     png_dir = os.path.abspath(PNG_DIR)
     fnames = [os.path.abspath(n) for n in _get_downloaded_files(urls)]
-    excludes = [ufile] + [png_dir] + fnames
+    excludes = [png_dir] + fnames
     # print(excludes)
     _clean_directory(excludes=excludes)
 
@@ -418,7 +444,6 @@ def _clean_ref():
     assert os.path.abspath(os.curdir) == REFERENCE
 
     _clean_ref_directory()
-    update_ufiles()
     
 
 def _get_downloaded_files(urls):
@@ -444,7 +469,7 @@ def _copy_pdf_files():
     # for _run_ufile
     shutil.copy(ALL_PDF, os.path.join(OUTCOME, ALL_PDF))
     # for _run_toc
-    shutil.copy(TOC_UFILE, os.path.join(OUTCOME, TOC_UFILE))
+    shutil.copy(TOCFILE, os.path.join(OUTCOME, TOCFILE))
     shutil.copy(TOC_PDF, os.path.join(OUTCOME, TOC_PDF))
 
 
@@ -455,7 +480,7 @@ def create_ref():
     os.chdir(REFERENCE)
 
     _clean_ref()
-    urls = get_urls()
+    urls = URLS
     args = _minimum_args()
 
     _run(urls, args, 'download', do_compare=False)
@@ -510,7 +535,6 @@ def normal_run(urls, args):
     assert os.path.abspath(os.curdir) == OUTCOME
     _clean_outcome_directory(urls)
 
-    _check_ufiles()
     _run(urls, args, 'extract')
     _run(urls, args, 'convert')
     _run_ufile(args)
@@ -655,7 +679,7 @@ def main():
 
     os.chdir(OUTCOME)
 
-    urls = get_urls()
+    urls = URLS
 
     if args.print:
         print_urls(urls)
