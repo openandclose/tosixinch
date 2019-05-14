@@ -160,19 +160,6 @@ class Checker(object):
             f.write(data)
 
 
-def _mkdirs(d):
-    if not os.path.exists(d):
-        os.makedirs(d)
-
-
-def _prepare_directories():
-    _mkdirs(TEMP)
-    _mkdirs(OUTCOME)
-    _mkdirs(REFERENCE)
-
-    _mkdirs(os.path.join(OUTCOME, PNG_DIR))
-
-
 class _URLData(object):
     """Collect all URL retrieving functions."""
 
@@ -227,6 +214,19 @@ TOCFILE = URLData.tocfile
 
 ALL_PDF = '_all.pdf'
 TOC_PDF = '_toc.pdf'
+
+
+def _mkdirs(d):
+    if not os.path.exists(d):
+        os.makedirs(d)
+
+
+def _prepare_directories():
+    _mkdirs(TEMP)
+    _mkdirs(OUTCOME)
+    _mkdirs(REFERENCE)
+
+    _mkdirs(os.path.join(OUTCOME, PNG_DIR))
 
 
 def print_urls(urls):
