@@ -1,8 +1,4 @@
 
-import argparse
-import os
-import sys
-
 import pytest  # noqa: F401
 
 import tosixinch.main
