@@ -179,7 +179,17 @@ class _URLData(object):
         else:
             if os.path.getmtime(ufile) > os.path.getmtime(UFILE):
                 self._write_ufile(ufile, UFILE)
+            if self._check_urls_in_tox_env(UFILE):
+                self._write_ufile(ufile, UFILE)
         return UFILE
+
+    def _check_urls_in_tox_env(self, UFILE):
+        toxdir = '/.tox/'
+        if toxdir in sys.executable:
+            return False
+        if toxdir in open(UFILE).read():
+            return True
+        return False
 
     def _write_ufile(self, ufile, UFILE):
         # Just change an inconvenient relative path (templite.py) to absolute.
