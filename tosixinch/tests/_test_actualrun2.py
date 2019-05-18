@@ -70,7 +70,7 @@ IMG_PREFIX = 'pdfcmp'
 SELECT_SHORT_ULIST = (
     'en.wikipedia.org',
     'news.ycombinator.com',
-    'templite.py'
+    'textwrap.py'
 )
 
 CONVERT_RELATED_FILES = (
@@ -164,44 +164,10 @@ class _URLData(object):
     """Collect all URL retrieving functions."""
 
     def __init__(self):
-        self.urls, self.ufile = self._get_sample()
-        self.tocfile = self._get_tocfile()
-
-    def _get_sample(self):
         urls, ufile, args = tosixinch.settings.SampleTransform()()
-        ufile = self._get_ufile(urls, ufile)
-        return urls, ufile
-
-    def _get_ufile(self, urls, ufile):
-        UFILE = os.path.join(TEMP, 'actualrun', 'urls.txt')
-        if not os.path.isfile(UFILE):
-            self._write_ufile(ufile, UFILE)
-        else:
-            if os.path.getmtime(ufile) > os.path.getmtime(UFILE):
-                self._write_ufile(ufile, UFILE)
-            if self._check_urls_in_tox_env(UFILE):
-                self._write_ufile(ufile, UFILE)
-        return UFILE
-
-    def _check_urls_in_tox_env(self, UFILE):
-        toxdir = '/.tox/'
-        if toxdir in sys.executable:
-            return False
-        if toxdir in open(UFILE).read():
-            return True
-        return False
-
-    def _write_ufile(self, ufile, UFILE):
-        # Just change an inconvenient relative path (templite.py) to absolute.
-        new = []
-        with open(ufile) as f:
-            for ln in f:
-                if ln.startswith('.'):
-                    base = os.path.dirname(ufile)
-                    ln = os.path.abspath(os.path.join(base, ln))
-                new.append(ln)
-        with open(UFILE, 'w') as f:
-            f.write(''.join(new))
+        self.urls = urls
+        self.ufile = ufile
+        self.tocfile = self._get_tocfile()
 
     def _get_tocfile(self):
         return location.Locations(ufile=self.ufile).get_tocfile()

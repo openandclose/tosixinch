@@ -75,18 +75,12 @@ class SampleTransform(Transform):
         configdir = _get_configdir()
         ufile = os.path.join(configdir, self.SAMPLE_UFILE)
         urls = location.Locations(ufile=ufile).urls
-        urls = [self._resolve_url(url, configdir) for url in urls]
         self.urls = urls
         self.ufile = ufile
 
         if self.args:
             if self.args.pdfname is None:
                 self.args.pdfname = self.PDFNAME
-
-    def _resolve_url(self, url, base):
-        if url.startswith('.'):
-            return os.path.abspath(os.path.join(base, url))
-        return url
 
 
 def _get_pdfname(sites, minsep):

@@ -19,4 +19,4 @@ https://github.com/buriy/python-readability
 https://github.com/buriy/python-readability/issues/43
 https://github.com/redapple/parslepy/wiki
 # text
-../templite.py
+https://raw.githubusercontent.com/python/cpython/master/Lib/textwrap.py
