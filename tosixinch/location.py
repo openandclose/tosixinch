@@ -24,7 +24,6 @@ from tosixinch.system import _in_current_dir
 logger = logging.getLogger(__name__)
 
 COMMENT_PREFIX = ('#', ';',)
-DIRECTIVE_PREFIX = ('#',)
 
 DOWNLOAD_DIR = '_htmls'
 
@@ -183,8 +182,6 @@ class _Location(object):
         # if m:
         #     msg = 'Only http, https and file schemes are supported, got %r'
         #     raise ValueError(msg % m.group(1))
-        if url.strip().startswith(DIRECTIVE_PREFIX):
-            return False
         return True
 
     def _parse_url(self):

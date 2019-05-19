@@ -15,6 +15,8 @@ from tosixinch.content import build_new_html, slugify, _relink_component
 
 logger = logging.getLogger(__name__)
 
+DIRECTIVE_PREFIX = ('#',)
+
 TOCDOMAIN = 'http://tosixinch.example.com'
 
 
@@ -28,6 +30,11 @@ class Node(location.Location):
         self.root = root or self
         self.last = False
         self._doc = None
+
+    def _is_local(self):
+        if self._url.strip().startswith(DIRECTIVE_PREFIX):
+            return False
+        return super()._is_local()
 
     @property
     def doc(self):
