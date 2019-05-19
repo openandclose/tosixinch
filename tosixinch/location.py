@@ -173,6 +173,7 @@ class _Location(object):
         self._url = url
         self.platform = platform
         self.sep = '\\' if platform == 'win32' else '/'
+        self.is_local = self._is_local()
 
     def _is_local(self):
         url = self._url
@@ -186,7 +187,7 @@ class _Location(object):
 
     def _parse_url(self):
         url = self._url
-        if self._is_local():
+        if self.is_local:
             url = os.path.expanduser(url)
             url = os.path.expandvars(url)
             url = os.path.abspath(url)
@@ -252,7 +253,7 @@ class Location(_Location):
 
     @property
     def fname(self):
-        if self._is_local():
+        if self.is_local:
             return self.url
         return self._make_path(self.url)
 
