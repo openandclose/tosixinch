@@ -134,7 +134,7 @@ class Locations(object):
         self._ufile = ufile
 
         self._iterobj = (Location,)
-        self._itercontainer = None
+        self._container = None
 
         self._comment = COMMENT_PREFIX
 
@@ -162,10 +162,9 @@ class Locations(object):
             yield obj(url, *args)
 
     def __iter__(self):
-        container = self._itercontainer
-        if container is None:
-            container = list(self._iterate())
-        return container.__iter__()
+        if self._container is None:
+            self._container = list(self._iterate())
+        return self._container.__iter__()
 
 
 class _Location(object):
