@@ -198,6 +198,9 @@ class _Location(object):
         return url
 
     def _make_path(self, url, ext='html'):
+        if self.is_local:
+            return url
+
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
         if '/' not in fname:
@@ -253,8 +256,6 @@ class Location(_Location):
 
     @property
     def fname(self):
-        if self.is_local:
-            return self.url
         return self._make_path(self.url)
 
     @property
@@ -297,6 +298,7 @@ class _Component(Location):
 
     def __init__(self, url, base, platform=sys.platform):
         super().__init__(url, platform)
+        self.is_local = False
 
         if isinstance(base, str):
             base = Location(base)
