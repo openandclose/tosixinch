@@ -169,6 +169,9 @@ class Locations(object):
 class _Location(object):
     """Calculate filepaths."""
 
+    INDEX = 'index--tosixinch'
+    APPENDIX = '--extracted'
+
     def __init__(self, url, platform=sys.platform):
         self._url = url
         self.platform = platform
@@ -207,24 +210,22 @@ class _Location(object):
             fname += '/'
         root, ext = posixpath.splitext(fname)
         if not ext:
-            fname = posixpath.join(fname, 'index--tosixinch')
+            fname = posixpath.join(fname, self.INDEX)
         if self.platform == 'win32':
             fname = fname.replace('/', '\\')
         fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 
-    def _make_fnew(self,
-            fname, appendix='--extracted', ext='html'):
+    def _make_fnew(self, fname, ext='html'):
         base = os.path.join(os.curdir, DOWNLOAD_DIR)
         if not _in_current_dir(fname, base=base, sep=self.sep):
             fname = self._strip_root(fname)
             fname = os.path.join(DOWNLOAD_DIR, fname)
-        return self._add_extension(fname, appendix, ext)
+        return self._add_extension(fname, ext)
 
-    def _add_extension(self, fname, appendix=None, default_ext=None):
+    def _add_extension(self, fname, default_ext=None):
         root, ext = os.path.splitext(fname)
-        if appendix:
-            root = root + appendix
+        root += self.APPENDIX
         if default_ext:
             if ext and ext[1:] == default_ext:
                 pass
