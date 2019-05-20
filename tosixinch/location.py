@@ -197,7 +197,7 @@ class _Location(object):
             #     raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
-    def _make_fname(self, url, ext='html'):
+    def _make_fname(self, url):
         if self.is_local:
             return url
 
@@ -366,10 +366,6 @@ class Component(_Component):
         url = self._normalize_source_url(url, self.base.url)
         url = urllib.parse.urljoin(self.base.url, url)
         return url
-
-    @property
-    def fname(self):
-        return self._make_fname(self.url, ext=None)
 
     @property
     def component_fname(self):
