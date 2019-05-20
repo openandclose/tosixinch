@@ -94,6 +94,21 @@ _delimiters = Delimiters(
 )
 
 
+def _normalize_path(path, platform=sys.platform):
+    if platform == 'win32':
+        return path.replace('\\', '/').lower()
+    return path
+
+
+def _normalize_url(url, platform=sys.platform):
+    if platform == 'win32':
+        for key, value in _win_changes.items():
+            url = url.replace(key, value)
+            url = url.replace(_quotes[key], value)
+        return url
+    return url
+
+
 # Use bottle.py version.
 # See also:
 # functool.cached_property (v3.8)
@@ -202,29 +217,29 @@ class _Location(object):
 
     def _make_fname(self, url):
         if self.is_local:
-            return url
+            return _normalize_path(url, self.platform)
 
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
+
+        fname = _normalize_url(fname, self.platform)
         if '/' not in fname:
             fname += '/'
         root, ext = posixpath.splitext(fname)
         if not ext:
             fname = posixpath.join(fname, self.INDEX)
-        if self.platform == 'win32':
-            fname = fname.replace('/', '\\')
-        fname = os.path.join(DOWNLOAD_DIR, fname)
+        fname = posixpath.join(DOWNLOAD_DIR, fname)
         return fname
 
     def _make_fnew(self, fname, ext='html'):
-        base = os.path.join(os.curdir, DOWNLOAD_DIR)
+        base = posixpath.join(os.curdir, DOWNLOAD_DIR)
         if not _in_current_dir(fname, base=base, sep=self.sep):
             fname = self._strip_root(fname)
-            fname = os.path.join(DOWNLOAD_DIR, fname)
+            fname = posixpath.join(DOWNLOAD_DIR, fname)
         return self._add_extension(fname, ext)
 
     def _add_extension(self, fname, default_ext=None):
-        root, ext = os.path.splitext(fname)
+        root, ext = posixpath.splitext(fname)
         root += self.APPENDIX
         if default_ext:
             if ext and ext[1:] == default_ext:
@@ -239,10 +254,10 @@ class _Location(object):
             m = WINROOTPATH.match(fname)
             # cf. 'C:aaa.txt' means 'aaa.txt' in current directory.
             if m and m.group(2):
-                drive = m.group(1).upper()
+                drive = m.group(1)
             fname = WINROOTPATH.sub('', fname)
             if drive:
-                fname = os.path.join(drive, fname)
+                fname = posixpath.join(drive, fname)
         else:
             fname = ROOTPATH.sub('', fname)
         return fname

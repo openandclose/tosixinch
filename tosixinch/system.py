@@ -27,8 +27,8 @@ DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 
 def get_filename(fname, platform=sys.platform):
     """Convert internal 'fname' to 'filename' OS actually uses."""
-    # if platform == 'win32':
-    #     return fname.replace('/', '\\')
+    if platform == 'win32':
+        return fname.replace('/', '\\')
     return fname
 
 

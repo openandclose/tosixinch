@@ -23,14 +23,18 @@ class TestWindowsMakePath:
     def test(self):
         url, fname, fnew = (
             'https://aaa.org/bbb.html',
-            r'_htmls\aaa.org\bbb.html',
-            r'_htmls\aaa.org\bbb--extracted.html')
+            # r'_htmls\aaa.org\bbb.html',
+            # r'_htmls\aaa.org\bbb--extracted.html')
+            r'_htmls/aaa.org/bbb.html',
+            r'_htmls/aaa.org/bbb--extracted.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
             r'C:\aaa.org\bbb.html',
-            r'C:\aaa.org\bbb.html',
-            r'_htmls\C\aaa.org\bbb--extracted.html')
+            # r'C:\aaa.org\bbb.html',
+            # r'_htmls\C\aaa.org\bbb--extracted.html')
+            r'c:/aaa.org/bbb.html',
+            r'_htmls/c/aaa.org/bbb--extracted.html')
         self.compare(url, fname, fnew)
 
 
