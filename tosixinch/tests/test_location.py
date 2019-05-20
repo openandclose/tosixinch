@@ -105,6 +105,33 @@ class TestLocalReference:
         assert component.component_fname == fname
 
     def test(self):
+        # No extension
+        url, local_url, fname = (
+            'https://aaa.org/bbb',
+            './bbb/index--tosixinch',
+            '_htmls/aaa.org/bbb/index--tosixinch')
+        self.compare(url, local_url, fname)
+
+        url, local_url, fname = (
+            'aaa/bbb',
+            './aaa/bbb/index--tosixinch',
+            '_htmls/aaa.org/aaa/bbb/index--tosixinch')
+        self.compare(url, local_url, fname)
+
+        # With extension
+        url, local_url, fname = (
+            'https://aaa.org/bbb.jpg',
+            './bbb.jpg',
+            '_htmls/aaa.org/bbb.jpg')
+        self.compare(url, local_url, fname)
+
+        url, local_url, fname = (
+            'aaa/bbb.jpg',
+            './aaa/bbb.jpg',
+            '_htmls/aaa.org/aaa/bbb.jpg')
+        self.compare(url, local_url, fname)
+
+        # With query
         url, local_url, fname = (
             'https://aaa.org/bbb?cc',
             './bbb%3Fcc_index--tosixinch',
