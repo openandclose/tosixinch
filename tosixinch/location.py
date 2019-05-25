@@ -197,7 +197,7 @@ class _Location(object):
             #     raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
-    def _make_path(self, url, ext='html'):
+    def _make_fname(self, url, ext='html'):
         if self.is_local:
             return url
 
@@ -213,15 +213,15 @@ class _Location(object):
         fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 
-    def _make_new_fname(self,
+    def _make_fnew(self,
             fname, appendix='--extracted', ext='html'):
         base = os.path.join(os.curdir, DOWNLOAD_DIR)
         if not _in_current_dir(fname, base=base, sep=self.sep):
             fname = self._strip_root(fname)
             fname = os.path.join(DOWNLOAD_DIR, fname)
-        return self._edit_fname(fname, appendix, ext)
+        return self._add_extension(fname, appendix, ext)
 
-    def _edit_fname(self, fname, appendix=None, default_ext=None):
+    def _add_extension(self, fname, appendix=None, default_ext=None):
         root, ext = os.path.splitext(fname)
         if appendix:
             root = root + appendix
@@ -256,11 +256,11 @@ class Location(_Location):
 
     @property
     def fname(self):
-        return self._make_path(self.url)
+        return self._make_fname(self.url)
 
     @property
     def fnew(self):
-        return self._make_new_fname(self.fname)
+        return self._make_fnew(self.fname)
 
     @property
     def idna_url(self):
@@ -324,7 +324,7 @@ class _Component(Location):
             for delim in delimiters.change:
                 part = part.replace(delim, _changes[delim])
             newparts.append(part)
-        return self._urlunsplit_no_query(newparts)
+        return self._urlunsplit_with_quote(newparts)
 
     def _make_filename(self, url):
         parts = urllib.parse.urlsplit(url)
@@ -346,7 +346,7 @@ class _Component(Location):
             url = url.replace(_quotes[key], value)
         return url
 
-    def _urlunsplit_no_query(self, parts):
+    def _urlunsplit_with_quote(self, parts):
         url = urllib.parse.urlunsplit((*parts[:3], '', ''))
         if parts[3]:
             url = '%3F'.join((url, parts[3]))
@@ -369,7 +369,7 @@ class Component(_Component):
 
     @property
     def fname(self):
-        return self._make_path(self.url, ext=None)
+        return self._make_fname(self.url, ext=None)
 
     @property
     def component_fname(self):
