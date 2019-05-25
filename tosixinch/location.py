@@ -224,11 +224,7 @@ class _Location(object):
         fname = fname.split('#', 1)[0]
 
         fname = _normalize_url(fname, self.platform)
-        if '/' not in fname:
-            fname += '/'
-        root, ext = posixpath.splitext(fname)
-        if not ext:
-            fname = posixpath.join(fname, self.INDEX)
+        fname = self._add_index(fname)
         fname = posixpath.join(DOWNLOAD_DIR, fname)
         return fname
 
@@ -238,6 +234,16 @@ class _Location(object):
             fname = self._strip_root(fname)
             fname = posixpath.join(DOWNLOAD_DIR, fname)
         return self._add_appendix(fname)
+
+    def _add_index(self, fname):
+        if '/' not in fname:
+            fname += '/'
+        root, ext = posixpath.splitext(fname)
+        if ext:
+            pass
+        else:
+            fname = posixpath.join(fname, self.INDEX)
+        return fname
 
     def _add_appendix(self, fname):
         root, ext = posixpath.splitext(fname)
