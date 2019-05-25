@@ -159,7 +159,7 @@ But disposing of the files (deleting or moving) is users' job.
     ``Downloaded_File`` is created inside ``_htmls`` directory,
     with URL ``domain`` and ``paths`` as subdirectories.
 
-    If ``url``'s last ``path`` doesn't have file extension,
+    If ``url``'s last ``path`` doesn't have file extension or ``'?'``,
     string ``'/index--tosixinch'`` is added.
     If it ends with ``'/'``, ``'index--tosixinch'`` is added.
 

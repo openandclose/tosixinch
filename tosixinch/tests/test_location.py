@@ -134,8 +134,8 @@ class TestLocalReference:
         # With query
         url, local_url, fname = (
             'https://aaa.org/bbb?cc',
-            './bbb%3Fcc_index--tosixinch',
-            '_htmls/aaa.org/bbb?cc_index--tosixinch')
+            './bbb%3Fcc',
+            '_htmls/aaa.org/bbb?cc')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
@@ -146,8 +146,8 @@ class TestLocalReference:
 
         url, local_url, fname = (
             'aaa/bbb?cc',
-            './aaa/bbb%3Fcc_index--tosixinch',
-            '_htmls/aaa.org/aaa/bbb?cc_index--tosixinch')
+            './aaa/bbb%3Fcc',
+            '_htmls/aaa.org/aaa/bbb?cc')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
@@ -159,8 +159,8 @@ class TestLocalReference:
     def test_relative_reference(self):
         url, local_url, fname = (
             '//aaa.org/bbb?cc',
-            './bbb%3Fcc_index--tosixinch',
-            '_htmls/aaa.org/bbb?cc_index--tosixinch')
+            './bbb%3Fcc',
+            '_htmls/aaa.org/bbb?cc')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (

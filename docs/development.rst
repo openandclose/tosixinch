@@ -79,6 +79,13 @@ since they are easier to read.
 It is 'lossy' conversion,
 e.g. filename ``'aaa?bbb'`` might have been url ``'aaa?bbb'`` or ``'aaa%3Fbbb'``.
 
+.. note::
+    But we add suffix to no extension path, and we don't for path with '?'.
+    So in this particular example, They are discernible.::
+
+        aaa?bbb     -> aaa?bbb
+        aaa%3Fbbb   -> aaa?bbb/index--tosixinch
+
 Link urls are made using original urls as much as possible.
 Only delimiters for the relevant url components are newly quoted
 (A very limited set of ``reserved characters``).

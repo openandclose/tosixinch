@@ -241,6 +241,8 @@ class _Location(object):
         root, ext = posixpath.splitext(fname)
         if ext:
             pass
+        elif '?' in fname:
+            pass
         else:
             fname = posixpath.join(fname, self.INDEX)
         return fname
