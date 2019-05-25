@@ -14,6 +14,8 @@ URL quoting memo
 Spec
 ^^^^
 
+(Mostly from RFC 3986)
+
 ``URL`` is:
     ``scheme://authority/path;parameters?query#fragment``
 
@@ -27,11 +29,7 @@ Spec
     * ``gen-delims:  #/:?@[]``
     * ``sub-delims:  !$&'()*+,;=``
 
-``Excluded characters`` (not defined in RFC 3986) are:
-    ``"%<>\^`{|}``
-
-Allowed characters for each url components are
-(This is a simplified version of RFC 3986 one.):
+Allowed characters for each url components are:
 
     * ``userinfo  = *( unreserved / pct-encoded / sub-delims / ":" )``
     * ``host      = *( unreserved / pct-encoded / sub-delims / "[" / "]" )``
@@ -40,11 +38,17 @@ Allowed characters for each url components are
     * ``query     = *( unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?" )``
     * ``fragment  = *( unreserved / pct-encoded / sub-delims / ":" / "@" / "/" / "?" )``
 
-Windows illegal filename characters are:
+Excluded US-ASCII characters (RFC 2396, not defined in RFC 3986):
+    * ``delim: <>#%"``
+    * ``unwise: {}|\^[]```
+
+Windows illegal filename characters:
+
+* https://msdn.microsoft.com/en-us/library/aa365247
+* https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
+
     ``/:?*\"<>|``
 
-    * https://msdn.microsoft.com/en-us/library/aa365247
-    * https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
 
 Note
 ^^^^
