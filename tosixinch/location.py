@@ -186,6 +186,7 @@ class _Location(object):
 
     INDEX = 'index--tosixinch'
     APPENDIX = '--extracted'
+    EXTENSION = 'html'
 
     def __init__(self, url, platform=sys.platform):
         self._url = url
@@ -236,16 +237,15 @@ class _Location(object):
         if not _in_current_dir(fname, base=base, sep=self.sep):
             fname = self._strip_root(fname)
             fname = posixpath.join(DOWNLOAD_DIR, fname)
-        return self._add_extension(fname, ext)
+        return self._add_appendix(fname)
 
-    def _add_extension(self, fname, default_ext=None):
+    def _add_appendix(self, fname):
         root, ext = posixpath.splitext(fname)
         root += self.APPENDIX
-        if default_ext:
-            if ext and ext[1:] == default_ext:
-                pass
-            else:
-                ext = ext + '.' + default_ext
+        if ext and ext[1:] == self.EXTENSION:
+            pass
+        else:
+            ext = ext + '.' + self.EXTENSION
         return root + ext
 
     def _strip_root(self, fname):
