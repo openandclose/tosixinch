@@ -80,7 +80,7 @@ class Extract(content.HtmlContent):
 
     def _get_component(self, el, url):
         comp = super()._get_component(el, url)
-        self._add_component_attributes(el, comp.component_fname)
+        self._add_component_attributes(el, comp.fname)
 
     def _download_component(self, url, fname):
         if not os.path.exists(fname) or self._force_download:

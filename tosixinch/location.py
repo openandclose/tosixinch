@@ -391,10 +391,6 @@ class Component(_Component):
         return url
 
     @property
-    def component_fname(self):
-        return self.fname
-
-    @property
     def component_url(self):
         local_url = self._make_local_url(self.fname)
         fname = self.component_fname

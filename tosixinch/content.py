@@ -339,7 +339,7 @@ class HtmlContent(Content):
         comp = location.Component(url, self.url)
         url = comp.url
         src = comp.component_url
-        fname = comp.component_fname
+        fname = comp.fname
         el.attrib['src'] = src
         self._download_component(url, fname)
         # self._add_component_attributes(el, fname)
