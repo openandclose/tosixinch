@@ -55,7 +55,8 @@ class TestLocalReferenceRaw:
         base = 'http://aaa.org'
         component = location.Component(url, base, platform='linux')
         assert component._make_local_url(url) == local_url
-        assert component._make_filename(url) == fname
+        # assert component._make_filename(url) == fname
+        assert location._make_filename(url) == fname
 
     def test(self):
         url, local_url, fname = (
@@ -102,7 +103,7 @@ class TestLocalReference:
         base = 'http://aaa.org'
         component = location.Component(url, base, platform='linux')
         assert component.component_url == local_url
-        assert component.component_fname == fname
+        assert component.fname == fname
 
     def test(self):
         # No extension

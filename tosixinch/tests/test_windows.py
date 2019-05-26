@@ -44,11 +44,13 @@ class TestWindowsLocalReferenceRaw:
         comp = location.Component(url, '.', platform='win32')
         url = comp._remove_windows_chars(url)
         assert comp._make_local_url(url) == local_url
-        assert comp._make_filename(url) == fname
+        # assert comp._make_filename(url) == fname
+        assert location._make_filename(url) == fname
 
     def test(self):
         url, local_url, fname = (
             'aaa/bbb?cc',
             'aaa/bbb_cc',
-            r'aaa\bbb_cc')
+            # r'aaa\bbb_cc')
+            r'aaa/bbb_cc')
         self.compare(url, local_url, fname)

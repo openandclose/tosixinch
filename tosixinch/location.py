@@ -109,6 +109,19 @@ def _normalize_url(url, platform=sys.platform):
     return url
 
 
+def _make_filename(url):
+    parts = urllib.parse.urlsplit(url)
+    newparts = []
+    for part, delimiters in zip(parts, _delimiters):
+        for delim in delimiters.change:
+            part = part.replace(delim, _changes[delim])
+        newparts.append(part)
+    url = urllib.parse.urlunsplit(newparts)
+
+    fname = urllib.parse.unquote(url)
+    return fname
+
+
 # Use bottle.py version.
 # See also:
 # functool.cached_property (v3.8)
@@ -224,6 +237,7 @@ class _Location(object):
         fname = self._add_index(fname)
 
         fname = _normalize_url(fname, self.platform)
+        fname = _make_filename(fname)
         fname = posixpath.join(DOWNLOAD_DIR, fname)
         return fname
 
@@ -349,20 +363,6 @@ class _Component(Location):
             newparts.append(part)
         return self._urlunsplit_with_quote(newparts)
 
-    def _make_filename(self, url):
-        parts = urllib.parse.urlsplit(url)
-        newparts = []
-        for part, delimiters in zip(parts, _delimiters):
-            for delim in delimiters.change:
-                part = part.replace(delim, _changes[delim])
-            newparts.append(part)
-        url = urllib.parse.urlunsplit(newparts)
-
-        fname = urllib.parse.unquote(url)
-        if self.platform == 'win32':
-            fname = fname.replace('/', '\\')
-        return fname
-
     def _remove_windows_chars(self, url):
         for key, value in _win_changes.items():
             url = url.replace(key, value)
@@ -392,7 +392,7 @@ class Component(_Component):
 
     @property
     def component_fname(self):
-        return self._make_filename(self.fname)
+        return self.fname
 
     @property
     def component_url(self):
