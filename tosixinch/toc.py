@@ -31,10 +31,10 @@ class Node(location.Location):
         self.last = False
         self._doc = None
 
-    def _is_local(self):
-        if self._url.strip().startswith(DIRECTIVE_PREFIX):
+    def _is_local(self, url):
+        if url.strip().startswith(DIRECTIVE_PREFIX):
             return False
-        return super()._is_local()
+        return super()._is_local(url)
 
     @property
     def doc(self):
