@@ -109,7 +109,7 @@ def _normalize_url(url, platform=sys.platform):
     return url
 
 
-def _make_filename(url):
+def _escape_filename(url):
     parts = urllib.parse.urlsplit(url)
     newparts = []
     for part, delimiters in zip(parts, _delimiters):
@@ -237,7 +237,7 @@ class _Location(object):
         fname = self._add_index(fname)
 
         fname = _normalize_url(fname, self.platform)
-        fname = _make_filename(fname)
+        fname = _escape_filename(fname)
         fname = posixpath.join(DOWNLOAD_DIR, fname)
         return fname
 

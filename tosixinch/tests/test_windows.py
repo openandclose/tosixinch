@@ -44,8 +44,7 @@ class TestWindowsLocalReferenceRaw:
         comp = location.Component(url, '.', platform='win32')
         url = comp._remove_windows_chars(url)
         assert comp._make_local_url(url) == local_url
-        # assert comp._make_filename(url) == fname
-        assert location._make_filename(url) == fname
+        assert location._escape_filename(url) == fname
 
     def test(self):
         url, local_url, fname = (
