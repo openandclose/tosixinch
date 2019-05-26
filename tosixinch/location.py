@@ -321,11 +321,13 @@ class _Component(Location):
 
     def __init__(self, url, base, platform=sys.platform):
         super().__init__(url, platform)
-        self.is_local = False
 
         if isinstance(base, str):
             base = Location(base)
         self.base = base
+
+        if not base.is_local:
+            self.is_local = False
 
     def _normalize_source_url(self, url, base):
         # It seems relative references starting with slashes

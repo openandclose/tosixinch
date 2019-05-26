@@ -336,7 +336,7 @@ class HtmlContent(Content):
         writer.write()
 
     def _get_component(self, el, url):
-        comp = location.Component(url, self)
+        comp = location.Component(url, self.url)
         url = comp.url
         src = comp.component_url
         fname = comp.component_fname
