@@ -221,9 +221,9 @@ class _Location(object):
 
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
+        fname = self._add_index(fname)
 
         fname = _normalize_url(fname, self.platform)
-        fname = self._add_index(fname)
         fname = posixpath.join(DOWNLOAD_DIR, fname)
         return fname
 
