@@ -346,8 +346,6 @@ class _Component(Location):
         for part, delimiters in zip(parts, _delimiters):
             for delim in delimiters.quote:
                 part = part.replace(delim, _quotes[delim])
-            for delim in delimiters.change:
-                part = part.replace(delim, _changes[delim])
             newparts.append(part)
         return self._urlunsplit_with_quote(newparts)
 
