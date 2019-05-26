@@ -392,11 +392,10 @@ class Component(_Component):
 
     @property
     def component_url(self):
-        local_url = self._make_local_url(self.fname)
-        fname = self.component_fname
+        fname = self.fname
         if _in_current_dir(fname, DOWNLOAD_DIR, sep='/'):
             src = './' + posixpath.relpath(
-                local_url, posixpath.dirname(self.base.fname))
+                fname, posixpath.dirname(self.base.fname))
         else:
-            src = local_url
-        return src
+            src = fname
+        return self._make_local_url(src)
