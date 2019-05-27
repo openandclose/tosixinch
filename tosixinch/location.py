@@ -288,6 +288,10 @@ class Location(_Location):
     """Add convenient APIs."""
 
     @property
+    def is_remote(self):
+        return not self.is_local
+
+    @property
     def url(self):
         return self._parse_url()
 
@@ -340,7 +344,7 @@ class _Component(Location):
             base = Location(base)
         self.base = base
 
-        if not base.is_local:
+        if base.is_remote:
             self.is_local = False
 
     def _normalize_source_url(self, url, base):
