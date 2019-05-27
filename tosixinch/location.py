@@ -369,6 +369,13 @@ class _Component(Location):
             url = url.replace(_quotes[key], value)
         return url
 
+    def _escape_colon_in_first_path(self, path):
+        firstpath = path.split('/')[0]
+        if firstpath:  # relative url
+            if ':' in firstpath:
+                return './' + path
+        return path
+
     def _urlunsplit_with_quote(self, parts):
         url = urllib.parse.urlunsplit((*parts[:3], '', ''))
         if parts[3]:
@@ -392,10 +399,7 @@ class Component(_Component):
 
     @property
     def component_url(self):
-        fname = self.fname
-        if _in_current_dir(fname, DOWNLOAD_DIR, sep='/'):
-            src = './' + posixpath.relpath(
-                fname, posixpath.dirname(self.base.fname))
-        else:
-            src = fname
+        src = posixpath.relpath(
+            self.fname, posixpath.dirname(self.base.fname))
+        src = self._escape_colon_in_first_path(src)
         return self._make_local_url(src)

@@ -108,63 +108,70 @@ class TestLocalReference:
         # No extension
         url, local_url, fname = (
             'https://aaa.org/bbb',
-            './bbb/index--tosixinch',
+            'bbb/index--tosixinch',
             '_htmls/aaa.org/bbb/index--tosixinch')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
             'aaa/bbb',
-            './aaa/bbb/index--tosixinch',
+            'aaa/bbb/index--tosixinch',
             '_htmls/aaa.org/aaa/bbb/index--tosixinch')
         self.compare(url, local_url, fname)
 
         # With extension
         url, local_url, fname = (
             'https://aaa.org/bbb.jpg',
-            './bbb.jpg',
+            'bbb.jpg',
             '_htmls/aaa.org/bbb.jpg')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
             'aaa/bbb.jpg',
-            './aaa/bbb.jpg',
+            'aaa/bbb.jpg',
             '_htmls/aaa.org/aaa/bbb.jpg')
         self.compare(url, local_url, fname)
 
         # With query
         url, local_url, fname = (
             'https://aaa.org/bbb?cc',
-            './bbb%3Fcc',
+            'bbb%3Fcc',
             '_htmls/aaa.org/bbb?cc')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
             'https://aaa.org/bbb%3Fcc',
-            './bbb%3Fcc/index--tosixinch',
+            'bbb%3Fcc/index--tosixinch',
             '_htmls/aaa.org/bbb?cc/index--tosixinch')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
             'aaa/bbb?cc',
-            './aaa/bbb%3Fcc',
+            'aaa/bbb%3Fcc',
             '_htmls/aaa.org/aaa/bbb?cc')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
             'aaa/bbb%3Fcc',
-            './aaa/bbb%3Fcc/index--tosixinch',
+            'aaa/bbb%3Fcc/index--tosixinch',
             '_htmls/aaa.org/aaa/bbb?cc/index--tosixinch')
+        self.compare(url, local_url, fname)
+
+        # colon in relative url
+        url, local_url, fname = (
+            'https://aaa.org/bbb:cc',
+            './bbb:cc/index--tosixinch',
+            '_htmls/aaa.org/bbb:cc/index--tosixinch')
         self.compare(url, local_url, fname)
 
     def test_relative_reference(self):
         url, local_url, fname = (
             '//aaa.org/bbb?cc',
-            './bbb%3Fcc',
+            'bbb%3Fcc',
             '_htmls/aaa.org/bbb?cc')
         self.compare(url, local_url, fname)
 
         url, local_url, fname = (
             '/bbb/cc.jpg',
-            './bbb/cc.jpg',
+            'bbb/cc.jpg',
             '_htmls/aaa.org/bbb/cc.jpg')
         self.compare(url, local_url, fname)
