@@ -19,8 +19,6 @@ import re
 import sys
 import urllib.parse
 
-from tosixinch.system import _in_current_dir
-
 logger = logging.getLogger(__name__)
 
 COMMENT_PREFIX = ('#', ';',)
@@ -242,8 +240,7 @@ class _Location(object):
         return fname
 
     def _make_fnew(self, fname, ext='html'):
-        base = posixpath.join(os.curdir, DOWNLOAD_DIR)
-        if not _in_current_dir(fname, base=base, sep=self.sep):
+        if self.is_local:
             fname = self._strip_root(fname)
             fname = posixpath.join(DOWNLOAD_DIR, fname)
         return self._add_appendix(fname)
