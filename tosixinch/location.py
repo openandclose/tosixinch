@@ -364,12 +364,6 @@ class _Component(Location):
             newparts.append(part)
         return self._urlunsplit_with_quote(newparts)
 
-    def _remove_windows_chars(self, url):
-        for key, value in _win_changes.items():
-            url = url.replace(key, value)
-            url = url.replace(_quotes[key], value)
-        return url
-
     def _escape_colon_in_first_path(self, path):
         firstpath = path.split('/')[0]
         if firstpath:  # relative url
@@ -392,8 +386,6 @@ class Component(_Component):
     @property
     def url(self):
         url = self._url
-        if self.platform == 'win32':
-            url = self._remove_windows_chars(url)
         url = self._normalize_source_url(url, self.base.url)
         url = urllib.parse.urljoin(self.base.url, url)
         return url

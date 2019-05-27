@@ -42,7 +42,7 @@ class TestWindowsLocalReferenceRaw:
 
     def compare(self, url, local_url, fname):
         comp = location.Component(url, '.', platform='win32')
-        url = comp._remove_windows_chars(url)
+        url = location._normalize_url(url, platform=comp.platform)
         assert comp._make_local_url(url) == local_url
         assert location._escape_filename(url) == fname
 
