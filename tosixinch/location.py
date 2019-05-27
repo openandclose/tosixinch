@@ -202,7 +202,6 @@ class _Location(object):
     def __init__(self, url, platform=sys.platform):
         self._url = url
         self.platform = platform
-        self.sep = '\\' if platform == 'win32' else '/'
         self.is_local = self._is_local(url)
 
     def _is_local(self, url):
