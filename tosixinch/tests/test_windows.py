@@ -8,11 +8,6 @@ import pytest
 from tosixinch import location
 
 
-@pytest.fixture(autouse=True)
-def use_ntpath(monkeypatch):
-    monkeypatch.setattr(os, 'path', ntpath)
-
-
 class TestWindowsMakePath:
 
     def compare(self, url, fname, fnew):

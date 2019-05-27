@@ -217,13 +217,14 @@ class _Location(object):
     def _parse_url(self):
         url = self._url
         if self.is_local:
-            url = os.path.expanduser(url)
-            url = os.path.expandvars(url)
-            url = os.path.abspath(url)
-            # if not os.path.exists(url):
-            #     raise FileNotFoundError('File not found: %r' % url)
-            # if os.path.isdir(url):
-            #     raise IsADirectoryError('Got directory name: %r' % url)
+            if self.platform == sys.platform:
+                url = os.path.expanduser(url)
+                url = os.path.expandvars(url)
+                url = os.path.abspath(url)
+                # if not os.path.exists(url):
+                #     raise FileNotFoundError('File not found: %r' % url)
+                # if os.path.isdir(url):
+                #     raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
     def _make_fname(self, url):
