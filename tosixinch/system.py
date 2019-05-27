@@ -44,11 +44,11 @@ def make_directories(fname, on_error_exit=True):
     os.makedirs(dname, exist_ok=True)
 
 
-def _in_current_dir(fname, base=os.curdir, sep=os.sep):
+def _in_current_dir(fname, base=os.curdir):
     current = os.path.abspath(base)
     filepath = os.path.abspath(fname)
     # note: the same filepath is not 'in' current dir.
-    if filepath.startswith(current + sep):
+    if filepath.startswith(current + os.sep):
         return True
     else:
         return False
