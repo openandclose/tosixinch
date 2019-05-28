@@ -19,6 +19,8 @@ import re
 import sys
 import urllib.parse
 
+from tosixinch import system
+
 logger = logging.getLogger(__name__)
 
 COMMENT_PREFIX = ('#', ';',)
@@ -271,6 +273,18 @@ class Location(_Location):
     @property
     def fnew(self):
         return self._make_fnew(self.fname)
+
+    @property
+    def url_(self):
+        return system.get_filename(self.url)
+
+    @property
+    def fname_(self):
+        return system.get_filename(self.fname)
+
+    @property
+    def fnew_(self):
+        return system.get_filename(self.fnew)
 
     @property
     def idna_url(self):
