@@ -37,34 +37,16 @@ ROOTPATH = re.compile('^/+')
 WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 
-# see Document (Development/URL quoting memo)
-_quotes = {
-    # reserved characters
-    '!': '%21',
-    '#': '%23',
-    '$': '%24',
-    '&': '%26',
-    "'": '%27',
-    '(': '%28',
-    ')': '%29',
-    '*': '%2A',
-    '+': '%2B',
-    ',': '%2C',
-    '/': '%2F',
-    ':': '%3A',
-    ';': '%3B',
-    '=': '%3D',
-    '?': '%3F',
-    '@': '%40',
-    '[': '%5B',
-    ']': '%5D',
-    # others
-    '"': '%22',
-    # '%': '%25',
-    '<': '%3C',
-    '>': '%3E',
-    '\\': '%5C',
-}
+Rule = collections.namedtuple('Rule', ['quote', 'change'])
+Delimiters = collections.namedtuple(
+    'Delimiters', ['scheme', 'netloc', 'path', 'query', 'fragment'])
+_delimiters = Delimiters(
+    Rule('', ''),
+    Rule('@:[]', ''),
+    Rule('[]', ''),
+    Rule('?', '/'),
+    Rule('?', ''),
+)
 
 _changes = {
     '/': '_',
@@ -80,17 +62,6 @@ _win_changes = {
     '>': '_',
 }
 
-Rule = collections.namedtuple('Rule', ['quote', 'change'])
-Delimiters = collections.namedtuple(
-    'Delimiters', ['scheme', 'netloc', 'path', 'query', 'fragment'])
-_delimiters = Delimiters(
-    Rule('', ''),
-    Rule('@:[]', ''),
-    Rule('[]', ''),
-    Rule('?', '/'),
-    Rule('?', ''),
-)
-
 
 def _normalize_path(path, platform=sys.platform):
     if platform == 'win32':
@@ -102,7 +73,7 @@ def _normalize_url(url, platform=sys.platform):
     if platform == 'win32':
         for key, value in _win_changes.items():
             url = url.replace(key, value)
-            url = url.replace(_quotes[key], value)
+            url = url.replace(urllib.parse.quote(key), value)
         return url
     return url
 
@@ -360,7 +331,7 @@ class _Component(Location):
         newparts = []
         for part, delimiters in zip(parts, _delimiters):
             for delim in delimiters.quote:
-                part = part.replace(delim, _quotes[delim])
+                part = part.replace(delim, urllib.parse.quote(delim))
             newparts.append(part)
         return self._urlunsplit_with_quote(newparts)
 
