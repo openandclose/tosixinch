@@ -54,8 +54,8 @@ class TestLocalReferenceRaw:
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'
         component = location.Component(url, base, platform='linux')
-        assert component._make_local_url(url) == local_url
-        assert location._escape_filename(url) == fname
+        assert component._escape_fname_reference(url) == local_url
+        assert location._tamper_fname(url) == fname
 
     def test(self):
         url, local_url, fname = (
@@ -101,7 +101,7 @@ class TestLocalReference:
     def compare(self, url, local_url, fname):
         base = 'http://aaa.org'
         component = location.Component(url, base, platform='linux')
-        assert component.component_url == local_url
+        assert component.fname_reference == local_url
         assert component.fname == fname
 
     def test(self):

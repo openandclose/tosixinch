@@ -63,13 +63,13 @@ _win_changes = {
 }
 
 
-def _normalize_path(path, platform=sys.platform):
+def _tamper_windows_path(path, platform=sys.platform):
     if platform == 'win32':
         return path.replace('\\', '/').lower()
     return path
 
 
-def _normalize_url(url, platform=sys.platform):
+def _tamper_windows_fname(url, platform=sys.platform):
     if platform == 'win32':
         for key, value in _win_changes.items():
             url = url.replace(key, value)
@@ -78,7 +78,7 @@ def _normalize_url(url, platform=sys.platform):
     return url
 
 
-def _escape_filename(url):
+def _tamper_fname(url):
     parts = urllib.parse.urlsplit(url)
     newparts = []
     for part, delimiters in zip(parts, _delimiters):
@@ -199,14 +199,14 @@ class _Location(object):
 
     def _make_fname(self, url):
         if self.is_local:
-            return _normalize_path(url, self.platform)
+            return _tamper_windows_path(url, self.platform)
 
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
         fname = self._add_index(fname)
 
-        fname = _normalize_url(fname, self.platform)
-        fname = _escape_filename(fname)
+        fname = _tamper_windows_fname(fname, self.platform)
+        fname = _tamper_fname(fname)
         fname = posixpath.join(DOWNLOAD_DIR, fname)
         return fname
 
@@ -326,7 +326,7 @@ class _Component(Location):
             url = '://'.join(urllib.parse.urlsplit(base)[0:2]) + url
         return url
 
-    def _make_local_url(self, url):
+    def _escape_fname_reference(self, url):
         parts = urllib.parse.urlsplit(url)
         newparts = []
         for part, delimiters in zip(parts, _delimiters):
@@ -362,8 +362,8 @@ class Component(_Component):
         return url
 
     @property
-    def component_url(self):
+    def fname_reference(self):
         src = posixpath.relpath(
             self.fname, posixpath.dirname(self.base.fname))
         src = self._escape_colon_in_first_path(src)
-        return self._make_local_url(src)
+        return self._escape_fname_reference(src)
