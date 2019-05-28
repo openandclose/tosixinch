@@ -195,11 +195,12 @@ class _Location(object):
                 #     raise FileNotFoundError('File not found: %r' % url)
                 # if os.path.isdir(url):
                 #     raise IsADirectoryError('Got directory name: %r' % url)
+            return _tamper_windows_path(url, self.platform)
         return url
 
     def _make_fname(self, url):
         if self.is_local:
-            return _tamper_windows_path(url, self.platform)
+            return url
 
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
