@@ -88,7 +88,8 @@ def _get_pdfname(sites, minsep):
     url = site.url
 
     parts = urllib.parse.urlsplit(url)
-    host = parts.netloc.replace('www.', '').split('.')[0]
+    domainparts = parts.netloc.replace('www.', '').split('.')
+    host = max(domainparts)
     # host = host.encode('ascii').decode('idna')
     path = parts.path.rstrip('/').split('/')[-1]
     rootpath = parts.path.split('/')[minsep - 1]
