@@ -69,7 +69,7 @@ def check_ftype(fname, codings=None):
 
     Return a tuple (ftype, kind, text)
     """
-    text = manuopen.manuopen(fname, codings=codings)
+    text = system.Reader(fname, codings=codings).read()
     if is_html(text):
         return 'html', None, text
     elif is_prose(text):
@@ -339,7 +339,7 @@ class HtmlContent(Content):
         comp = location.Component(url, self.url)
         url = comp.url
         src = comp.fname_reference
-        fname = comp.fname
+        fname = comp.fname_
         el.attrib['src'] = src
         self._download_component(url, fname)
         # self._add_component_attributes(el, fname)

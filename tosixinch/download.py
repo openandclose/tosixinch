@@ -250,7 +250,7 @@ def run(conf):
         qt_ver = site.general.qt
 
         url = site.idna_url
-        fname = site.fname
+        fname = site.fname_
         js = site.javascript
         cookies = site.cookie
 
