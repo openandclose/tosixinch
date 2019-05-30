@@ -15,6 +15,7 @@ import fnmatch
 import glob
 import logging
 import os
+import posixpath
 import re
 import sys
 import urllib.parse
@@ -324,8 +325,12 @@ class Conf(object):
         self.sites = sites
 
     def _get_minsep(self):
-        seps = [len(site.url_.split(os.sep)) for site in self.sites]
-        return min(seps) - 2
+        seps = [len(site.url_.split(posixpath.sep))
+            for site in self.sites if site.is_local]
+        if seps:
+            return max(min(seps) - 2, 1)
+        else:
+            return 1
 
     @property
     def urls(self):
