@@ -247,7 +247,7 @@ class Func(configfetch.Func):
 
 
 class Sites(location.Locations):
-    """An object for ``Site`` iteratorion."""
+    """An object for ``Site`` iteration."""
 
     def __init__(self, urls, ufile, conf, siteconf):
         super().__init__(urls, ufile)
@@ -372,10 +372,9 @@ class Conf(object):
             print('[%s]' % section)
             for option in sorted(site):
                 print('%-12s: %s' % (option, general.get(option)))
-            return
-
-        for site in self.sites:
-            print('[%s] %s' % (site.section, site.match))
+        else:
+            for site in self.sites:
+                print('[%s] %s' % (site.section, site.match))
 
     def print_appconf(self):
         print('general:')
