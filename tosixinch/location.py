@@ -58,17 +58,11 @@ _win_changes = {
     ':': '_',
     '?': '_',
     '*': '_',
-    '\\': '_',
     '"': '_',
     '<': '_',
     '>': '_',
+    '|': '_',
 }
-
-
-def _tamper_windows_path(path, platform=sys.platform):
-    if platform == 'win32':
-        return path.replace('\\', '/').lower()
-    return path
 
 
 def _tamper_windows_fname(url, platform=sys.platform):
@@ -76,7 +70,7 @@ def _tamper_windows_fname(url, platform=sys.platform):
         for key, value in _win_changes.items():
             url = url.replace(key, value)
             url = url.replace(urllib.parse.quote(key), value)
-        return url
+        return url.replace('/', '\\')
     return url
 
 
@@ -197,7 +191,6 @@ class _Location(object):
                 #     raise FileNotFoundError('File not found: %r' % url)
                 # if os.path.isdir(url):
                 #     raise IsADirectoryError('Got directory name: %r' % url)
-            return _tamper_windows_path(url, self.platform)
         return url
 
     def _make_fname(self, url):
@@ -210,29 +203,29 @@ class _Location(object):
 
         fname = _tamper_windows_fname(fname, self.platform)
         fname = _tamper_fname(fname)
-        fname = posixpath.join(DOWNLOAD_DIR, fname)
+        fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 
     def _make_fnew(self, fname, ext='html'):
         if self.is_local:
             fname = self._strip_root(fname)
-            fname = posixpath.join(DOWNLOAD_DIR, fname)
+            fname = os.path.join(DOWNLOAD_DIR, fname)
         return self._add_appendix(fname)
 
     def _add_index(self, fname):
         if '/' not in fname:
-            fname += '/'
-        root, ext = posixpath.splitext(fname)
+            fname += os.path.sep
+        root, ext = os.path.splitext(fname)
         if ext:
             pass
         elif '?' in fname:
             pass
         else:
-            fname = posixpath.join(fname, self.INDEX)
+            fname = os.path.join(fname, self.INDEX)
         return fname
 
     def _add_appendix(self, fname):
-        root, ext = posixpath.splitext(fname)
+        root, ext = os.path.splitext(fname)
         root += self.APPENDIX
         if ext and ext[1:] == self.EXTENSION:
             pass
@@ -249,7 +242,7 @@ class _Location(object):
                 drive = m.group(1)
             fname = WINROOTPATH.sub('', fname)
             if drive:
-                fname = posixpath.join(drive, fname)
+                fname = os.path.join(drive, fname)
         else:
             fname = ROOTPATH.sub('', fname)
         return fname
@@ -276,15 +269,17 @@ class Location(_Location):
 
     @property
     def url_(self):
-        return system.get_filename(self.url)
+        # 'slashify' windows filepath
+        if self.is_local and self.platform == 'win32':
+            return self.url.replace('\\', '/')
+        return self.url
 
     @property
     def fname_(self):
-        return system.get_filename(self.fname)
-
-    @property
-    def fnew_(self):
-        return system.get_filename(self.fnew)
+        # 'slashify' windows fname
+        if self.platform == 'win32':
+            return self.fname.replace('\\', '/')
+        return self.fname
 
     @property
     def idna_url(self):
@@ -324,7 +319,7 @@ class _Component(Location):
         super().__init__(url, platform)
 
         if isinstance(base, str):
-            base = Location(base)
+            base = Location(base, platform=self.platform)
         self.base = base
 
         if base.is_remote:
@@ -379,6 +374,6 @@ class Component(_Component):
     @property
     def fname_reference(self):
         src = posixpath.relpath(
-            self.fname, posixpath.dirname(self.base.fname))
+            self.fname_, posixpath.dirname(self.base.fname_))
         src = self._escape_colon_in_first_path(src)
         return self._escape_fname_reference(src)

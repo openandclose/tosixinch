@@ -7,6 +7,10 @@ import pytest
 
 from tosixinch import location
 
+@pytest.fixture(autouse=True)
+def use_ntpath(monkeypatch):
+    monkeypatch.setattr(os, 'path', ntpath)
+
 
 class TestWindowsMakePath:
 
@@ -18,18 +22,14 @@ class TestWindowsMakePath:
     def test(self):
         url, fname, fnew = (
             'https://aaa.org/bbb.html',
-            # r'_htmls\aaa.org\bbb.html',
-            # r'_htmls\aaa.org\bbb--extracted.html')
-            r'_htmls/aaa.org/bbb.html',
-            r'_htmls/aaa.org/bbb--extracted.html')
+            r'_htmls\aaa.org\bbb.html',
+            r'_htmls\aaa.org\bbb--extracted.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
             r'C:\aaa.org\bbb.html',
-            # r'C:\aaa.org\bbb.html',
-            # r'_htmls\C\aaa.org\bbb--extracted.html')
-            r'c:/aaa.org/bbb.html',
-            r'_htmls/c/aaa.org/bbb--extracted.html')
+            r'C:\aaa.org\bbb.html',
+            r'_htmls\C\aaa.org\bbb--extracted.html')
         self.compare(url, fname, fnew)
 
 
@@ -44,7 +44,22 @@ class TestWindowsLocalReferenceRaw:
     def test(self):
         url, local_url, fname = (
             'aaa/bbb?cc',
-            'aaa/bbb_cc',
-            # r'aaa\bbb_cc')
-            r'aaa/bbb_cc')
+            r'aaa\bbb_cc',
+            r'aaa\bbb_cc')
+        self.compare(url, local_url, fname)
+
+
+class TestWindowsLocalReference:
+
+    def compare(self, url, local_url, fname):
+        base = 'http://aaa.org'
+        comp= location.Component(url, base, platform='win32')
+        assert comp.fname_reference == local_url
+        assert comp.fname == fname
+
+    def test(self):
+        url, local_url, fname = (
+            'https://aaa.org/bbb',
+            'bbb/index--tosixinch',
+            r'_htmls\aaa.org\bbb\index--tosixinch')
         self.compare(url, local_url, fname)

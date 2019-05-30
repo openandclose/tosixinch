@@ -324,7 +324,7 @@ class Conf(object):
         self.sites = sites
 
     def _get_minsep(self):
-        seps = [len(site.url.split(os.sep)) for site in self.sites]
+        seps = [len(site.url_.split(os.sep)) for site in self.sites]
         return min(seps) - 2
 
     @property

@@ -25,13 +25,6 @@ logger = logging.getLogger(__name__)
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 
 
-def get_filename(fname, platform=sys.platform):
-    """Convert internal 'fname' to 'filename' OS actually uses."""
-    if platform == 'win32':
-        return fname.replace('/', '\\')
-    return fname
-
-
 def make_directories(fname, on_error_exit=True):
     if not _in_current_dir(fname):
         if on_error_exit:
@@ -58,9 +51,8 @@ class _File(object):
     """Common object for Reader and Writer."""
 
     def __init__(self, fname, platform):
-        self._fname = fname
+        self.fname = fname
         self.platform = platform
-        self.filename = get_filename(fname, platform)
 
 
 class Reader(_File):
@@ -74,7 +66,7 @@ class Reader(_File):
     def _prepare(self):
         if self.text:
             return
-        self.text = manuopen.manuopen(self.filename, self.codings)
+        self.text = manuopen.manuopen(self.fname, self.codings)
 
     def read(self):
         self._prepare()
@@ -96,11 +88,11 @@ class Writer(_File):
 
     def _prepare(self):
         self._serialize()
-        make_directories(self.filename)
+        make_directories(self.fname)
 
     def write(self):
         self._prepare()
-        with open(self.filename, 'w') as f:
+        with open(self.fname, 'w') as f:
             f.write(self.text)
 
 
@@ -127,6 +119,7 @@ class HtmlWriter(Writer):
     """html writer object.
 
     From document object, write serialized text to filename.
+    From document object, write serialized text to fname.
     """
 
     def __init__(self, fname, doc=None, text=None,

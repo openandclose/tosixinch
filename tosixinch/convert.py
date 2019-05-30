@@ -60,7 +60,7 @@ class Convert(object):
             locations = location.Locations(ufile=tocfile)
             files = [loc.fnew for loc in locations]
         else:
-            files = [site.fnew_ for site in conf.sites]
+            files = [site.fnew for site in conf.sites]
         self.files = files
 
         self.cmd = [self.path]
