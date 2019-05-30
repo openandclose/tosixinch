@@ -42,8 +42,8 @@ class Prose(object):
         self.text = text
 
         self.fname = site.fname
+        self.shortname = site.shortname
         self.fnew = site.fnew
-        self.minsep = conf.minsep
         self.width = int(conf.general.textwidth)
         self.indent = conf.general.textindent.strip('"\'')
 
@@ -54,11 +54,7 @@ class Prose(object):
         self.wrapped = self.text
 
     def _build(self):
-        fname = self.fname
-        fname = fname.split(os.sep, maxsplit=self.minsep)[-1]
-        if sys.platform == 'win32':
-            fname = fname.replace('\\', '/')
-
+        fname = self.shortname
         content = html.escape(self.wrapped)
         fdict = {
             'fname': fname,

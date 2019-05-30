@@ -217,6 +217,10 @@ Configs
 
     override the converter executable path. you also need to set the converter itself
 
+.. option:: --trimdirs TRIMDIRS
+
+    remove leading directories from local text name to shorten title
+
 Styles
 ------
 

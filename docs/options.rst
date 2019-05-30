@@ -381,6 +381,24 @@ General Section
     If not provided (default), the script makes up some name.
     see `PDF_File <overview.html#dword-PDF_File>`__.
 
+.. confopt:: trimdirs
+
+    | (``3``)
+
+    Designate the number of directories to remove local text filename.
+    Since text files don't have titles or h1 to put them in pdf bookmarks,
+    the script passes on full filepaths as their names.
+    They tend to be very long, so some means to shorten them is desirable.
+
+    This option is only for local text files.
+    Remote text files' names are just urls (schemes are removed).
+
+    C.f. `--check <commandline.html#cmdoption-c>`__ commandline option
+    prints out local files.
+    They include *html* files, so it is not perfect,
+    but it can be useful for
+    checking and adjusting this ``trimdirs`` option.
+
 
 Style Section
 ^^^^^^^^^^^^^

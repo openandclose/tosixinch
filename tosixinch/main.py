@@ -216,6 +216,9 @@ def _build_conf_parser():
             'you also need to set the converter itself')
     configs.add_argument('--cnvpath', help=help)
 
+    help = 'remove leading directories from local text name to shorten title'
+    configs.add_argument('--trimdirs', help=help)
+
     # styles group
     choices = ['portrait', 'landscape']
     help = ('portrait(default) or landscape, determine which size data to use')

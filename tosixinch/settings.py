@@ -84,7 +84,7 @@ class SampleTransform(Transform):
                 self.args.pdfname = self.PDFNAME
 
 
-def _get_pdfname(sites, minsep):
+def _get_pdfname(sites):
     site = list(sites)[0]
     url = site.url
 
@@ -93,7 +93,6 @@ def _get_pdfname(sites, minsep):
     host = max(domainparts)
     # host = host.encode('ascii').decode('idna')
     path = parts.path.rstrip('/').split('/')[-1]
-    rootpath = parts.path.split('/')[minsep - 1]
     section = site.section.split(' : ')[0]
 
     if len(sites) == 1:
@@ -101,7 +100,7 @@ def _get_pdfname(sites, minsep):
         name = os.path.basename(name)
     else:
         if section == 'scriptdefault':
-            name = host or rootpath
+            name = host or section
         else:
             name = section
 
@@ -298,6 +297,17 @@ class Site(location.Location):
     def __getattr__(self, option):
         return self._get_self().get(option)
 
+    @property
+    def shortname(self):
+        if self.is_remote:
+            num = 2  # remove scheme
+            sep = '/'
+        else:
+            num = int(self.general.trimdirs)
+            sep = os.sep
+        parts = self.url.split(sep)[num:]
+        return os.sep.join(parts)
+
 
 class Conf(object):
     """It possesses all configuration data."""
@@ -324,21 +334,9 @@ class Conf(object):
         self._ufile = sites._ufile
         self.sites = sites
 
-    def _get_minsep(self):
-        seps = [len(site.url_.split(posixpath.sep))
-            for site in self.sites if site.is_local]
-        if seps:
-            return max(min(seps) - 2, 1)
-        else:
-            return 1
-
     @property
     def urls(self):
         return self.sites.urls
-
-    @location.cached_property
-    def minsep(self):
-        return self._get_minsep()
 
     @property
     def pdfname(self):
@@ -347,7 +345,7 @@ class Conf(object):
             return pname
         if not self.urls:
             return DEFAULT_PDFNAME
-        return _get_pdfname(self.sites, self.minsep)
+        return _get_pdfname(self.sites)
 
     @property
     def pdfsize(self):
@@ -375,6 +373,15 @@ class Conf(object):
         else:
             for site in self.sites:
                 print('[%s] %s' % (site.section, site.match))
+
+        blankline = None
+        for site in self.sites:
+            if site.is_local:
+                if not blankline:
+                    print()
+                    print('local files:')
+                    blankline = 'done'
+                print(site.shortname)
 
     def print_appconf(self):
         print('general:')
