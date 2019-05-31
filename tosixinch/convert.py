@@ -25,7 +25,6 @@ def _extend(obj, args):
         if args:
             return obj.append(args)
     elif isinstance(args, Sequence):
-        args = [a for a in args if a.strip()]
         if args:
             return obj.extend(args)
     else:
