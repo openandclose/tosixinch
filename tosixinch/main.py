@@ -142,11 +142,6 @@ def _build_conf_parser():
         '--wkhtmltopdf', action='store_const',
         const='wkhtmltopdf', dest='converter', help=help)
 
-    help = 'convert by ebook-convert'
-    programs.add_argument(
-        '--ebook-convert', action='store_const',
-        const='ebook_convert', dest='converter', help=help)
-
     # configs group
     help = ('set http header user-agent when downloading by urllib '
             '(to see the default, run --appcheck)')

@@ -43,8 +43,7 @@ General Section
     (``prince``)
 
     Designate default converter.
-    One of ``prince``, ``weasyprint``, ``wkhtmltopdf``
-    or ``ebook-convert``.
+    One of ``prince``, ``weasyprint`` or ``wkhtmltopdf``.
 
 .. confopt:: user_agent \*
 
@@ -238,14 +237,6 @@ General Section
     If ``True``,
     ``url`` is used as input *as is* when ``convert``.
     In this case, ``url`` must be local filepath.
-
-    The intended use case is
-    to pass some non-html input to versatile ``ebook-convert``.
-    For example::
-
-        tosixinch -i somebook.mobi -3 --raw --ebook-convert
-
-    generates ``somebook.pdf``.
 
 .. confopt:: force_download \*
 
@@ -502,7 +493,7 @@ In the following, the roles in the sample file
 Converter Sections
 ^^^^^^^^^^^^^^^^^^
 
-Section ``prince``, ``weasyprint``, ``wkhtmltopdf`` and ``ebook-convert``
+Section ``prince``, ``weasyprint``, and ``wkhtmltopdf``
 are converters sections.
 They have common options.
 

@@ -140,10 +140,6 @@ Programs
 
     convert by wkhtmltopdf
 
-.. option:: --ebook-convert
-
-    convert by ebook-convert
-
 Configs
 -------
 

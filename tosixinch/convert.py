@@ -102,7 +102,6 @@ class Convert(object):
             'prince': using('prince'),
             'weasyprint': using('weasyprint'),
             'wkhtmltopdf': using('wkhtmltopdf'),
-            'ebook_convert': using('ebook_convert'),
         }
         context.update(conv_dict)
 
@@ -207,21 +206,6 @@ class WkhtmltopdfConvert(Convert):
         self._run()
 
 
-class EbookConvertConvert(Convert):
-    """Run ``ebook-convert``.
-
-    | https://calibre-ebook.com/
-    | https://manual.calibre-ebook.com/generated/en/ebook-convert.html
-    """
-
-    def run(self):
-        self._add_merged_files()
-        self._add_pdfname()
-        self._add_css_arguments('--extra-css')
-        self._add_arguments()
-        self._run()
-
-
 def run(conf):
     converter = conf.general.converter
     if converter == 'prince':
@@ -230,8 +214,6 @@ def run(conf):
         convert = WeasyPrintConvert(conf)
     elif converter == 'wkhtmltopdf':
         convert = WkhtmltopdfConvert(conf)
-    elif converter == 'ebook_convert':
-        convert = EbookConvertConvert(conf)
     else:
         raise KeyError('Not known converter: %s' % converter)
 

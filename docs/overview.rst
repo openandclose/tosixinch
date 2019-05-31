@@ -432,7 +432,7 @@ There are two types of configuration files.
 * ``general``
 * ``style``
 * each converter sections
-  (``prince``, ``weasyprint``, ``wkhtmltopdf`` and ``ebook-convert``).
+  (``prince``, ``weasyprint``, and ``wkhtmltopdf``).
 
 ``site.ini`` consists of sections for each specific website,
 and they all have the same options.
@@ -669,8 +669,8 @@ or `landscape_size <options.html#confopt-landscape_size>`__,
 according to the value of
 `orientation <options.html#confopt-orientation>`__.
 
-Bool variables ``prince``, ``weasyprint``, ``wkhtmltopdf``
-and ``ebook-convert`` are added.
+Bool variables ``prince``, ``weasyprint`` and ``wkhtmltopdf``
+are added.
 They are ``True`` or ``False``
 according to the currently selected converter.
 

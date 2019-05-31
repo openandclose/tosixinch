@@ -294,13 +294,6 @@ tr { page-break-inside: avoid }
 
 
 
-{% if ebook_convert %}
-/* ebook-convert -------------------------------------------------- */
-
-{% endif %}
-
-
-
 /* css for text --------------------------------------------------- */
 
 pre.tsi-text {

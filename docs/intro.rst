@@ -115,7 +115,6 @@ Converters are:
 * `prince (or princexml) <https://www.princexml.com>`__
 * `weasyprint <http://weasyprint.org>`__
 * `wkhtmltopdf <https://wkhtmltopdf.org>`__
-*  ``ebook-convert`` (included in `calibre <https://calibre-ebook.com>`__ suite)
 
 ``prince`` recommended, it is one of the oldest and the most famous.
 (It is free of charge for non-commercial use).
@@ -131,9 +130,9 @@ I want to keep it rather as a reference.
 These two treat ordinary css files as the main (or only) API for style options.
 And in general much care is taken to comply to the CSS standard.
 
-The other two use some old WebKit browser engine,
-so what they do is dependent on it, and in general harder to fathom.
-But precisely because they use veritable browser engine,
+``wkhtmltopdf`` uses some old WebKit browser engine,
+so what it does is dependent on it, and in general harder to fathom.
+But precisely because it uses veritable browser engine,
 some things are done better.
 
 .. note::
@@ -456,12 +455,6 @@ Other Features
   `ftfy <http://ftfy.readthedocs.io>`__
   and `chardet <http://chardet.readthedocs.io>`__,
   you can do smarter encode detection and configurations.
-
-* If you have installed ``ebook-convert`` above,
-  The script can convert epub, mobi or other format files to pdf.
-  It just wraps ``ebook-convert``,
-  so there is not much reason to run our script in this case,
-  but you can use the same API and configurations.
 
 * It has simple TOC (table of contents) rebounding feature,
   adding one level of structure.
