@@ -55,7 +55,7 @@ class Convert(object):
         tocfile = self._get_tocfile()
         if conf.general.raw:
             files = [site.url for site in conf.sites]
-        elif tocfile and _is_newer(ufile, tocfile):
+        elif ufile and tocfile and _is_newer(ufile, tocfile):
             locations = location.Locations(ufile=tocfile)
             files = [loc.fnew for loc in locations]
         else:
