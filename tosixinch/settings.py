@@ -15,7 +15,6 @@ import fnmatch
 import glob
 import logging
 import os
-import posixpath
 import re
 import sys
 import urllib.parse

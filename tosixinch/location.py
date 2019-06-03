@@ -19,8 +19,6 @@ import re
 import sys
 import urllib.parse
 
-from tosixinch import system
-
 logger = logging.getLogger(__name__)
 
 COMMENT_PREFIX = ('#', ';',)

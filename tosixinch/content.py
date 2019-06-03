@@ -11,7 +11,6 @@ from tosixinch import clean
 from tosixinch import download
 from tosixinch import location
 from tosixinch import imagesize
-from tosixinch import manuopen
 from tosixinch.process import gen
 from tosixinch import system
 

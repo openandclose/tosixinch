@@ -7,9 +7,7 @@ files are just passed to this module.
 
 import html
 import logging
-import os
 import re
-import sys
 import textwrap
 
 from tosixinch import system
