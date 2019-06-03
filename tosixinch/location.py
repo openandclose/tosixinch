@@ -87,6 +87,10 @@ def _tamper_fname(url):
     return fname
 
 
+def slashify(name):
+    return name.replace('\\', '/')
+
+
 # Use bottle.py version.
 # See also:
 # functool.cached_property (v3.8)
@@ -268,17 +272,15 @@ class Location(_Location):
         return self._make_fnew(self.fname)
 
     @property
-    def url_(self):
-        # 'slashify' windows filepath
+    def slash_url(self):
         if self.is_local and self.platform == 'win32':
-            return self.url.replace('\\', '/')
+            return slashify(self.url)
         return self.url
 
     @property
-    def fname_(self):
-        # 'slashify' windows fname
+    def slash_fname(self):
         if self.platform == 'win32':
-            return self.fname.replace('\\', '/')
+            return slashify(self.fname)
         return self.fname
 
     @property
@@ -374,6 +376,6 @@ class Component(_Component):
     @property
     def fname_reference(self):
         src = posixpath.relpath(
-            self.fname_, posixpath.dirname(self.base.fname_))
+            self.slash_fname, posixpath.dirname(self.base.slash_fname))
         src = self._escape_colon_in_first_path(src)
         return self._escape_fname_reference(src)
