@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 HTMLEXT = ('htm', 'html')
 _COMMENT = r'\s*(<!--.+?-->\s*)*'
 _XMLDECL = r'(<\?xml version.+?\?>)?'
-_DOCTYPE = '(<!doctype .+?>)?'
+_DOCTYPE = r'(<!doctype\s+.+?>)?'
 HTMLFILE = re.compile(
     '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + r'<html(|\s.+?)>',
     flags=re.IGNORECASE | re.DOTALL)
