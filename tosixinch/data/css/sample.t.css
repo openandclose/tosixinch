@@ -18,7 +18,10 @@ body {
 /* } */
 
 /* http://pythonhosted.org/feedparser uses 'div.pre'. */
-pre, code, kbd, samp, tt, div.pre {
+pre, code, kbd, samp, tt, div.pre,
+/* some ebook publisher and calibre seem to create pre1 etc. in div and p */
+div.pre1, div.pre2, div.pre3, div.pre4, div.pre5
+{
     font-family: {{ font_mono }};
     font-size: {{ font_size_mono }};
 }
