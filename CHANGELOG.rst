@@ -2,14 +2,14 @@
 Changelog
 =========
 
-v0.1.0
--------
+v0.1.0 (2019-05-09)
+-------------------
 
-Fix:
+**Fix:**
 
 * sample.t.css exclusion in installation
 
-Dev:
+**Dev:**
 
 * Change version scheme.
 
@@ -17,50 +17,50 @@ Dev:
   But I should express the difference between some improvements and stupid bug fixes.
 
 
-v0.0.11
--------
+v0.0.11 (2019-05-09)
+--------------------
 
-API Change:
+**Change:**
 
 * tocfile (previously toc-ufile) is now always created in current directory.
   Previously it was created in the same directory as the ufile.
 
-Fix:
+**Fix:**
 
 * Many import errors (no lxml, no readability cases etc.).
 * Many import errors (installation related, importing (nonexistent) tests package etc.).
 * readthedocs.org build error
 
 
-v0.0.10
--------
+v0.0.10 (2019-05-04)
+--------------------
 
-API Change:
+**Change:**
 
 * Rename '--sample-pdf' to '--sample-urls',
   and now it also requires action options additionally ('-123').
 
-Fix:
+**Fix:**
 
 * blank API documents (lack of a readthedocs config)
 * Accept very long html start tag (now support hatenablog.com).
 * Broken '--sample-pdf' and '--appcheck' (no urls case etc.).
 
-Dev:
+**Dev:**
 
 * Continuing the big refactoring (now util.py is gone).
 * x options of _test_actualrun2.py are again '-x', '-xx', and '-xxx'.
 
 
-v0.0.9
-------
+v0.0.9 (2019-04-26)
+-------------------
 
-API Change:
+**Change:**
 
 * Rename 'tsi-big' class attribute for large images, to 'tsi-wide'.
 * Remove file listing feature when urls consist of directories.
 
-Addition:
+**Add:**
 
 * Update site.sample.ini.
 
@@ -72,50 +72,50 @@ Addition:
 * Add option '--sample-pdf'
 * Add option '--convpath'
 
-Fix:
+**Fix:**
 
 * Fix detection whether an image is wide or tall.
 * Fix current directory check in making directories
 * Fix multiple extensions case in filtering binary-like extension urls.
 * Fix url escaping for '%' itself (never escape it).
 
-Dev:
+**Dev:**
 
 * Refactor half of util.py (Moved to 'location.py')
 
 
-v0.0.8
-------
+v0.0.8 (2019-02-05)
+-------------------
 
-Addition:
+**Add:**
 
 * Add option '--force-download'.
 * Add Python3.7.
 * Improve Document.
 
-Fix:
+**Fix:**
 
 * Fix around 'plus' functions (with configfetch updates).
 
-Dev:
+**Dev:**
 
 * Add new test (_test_actualrun2.py).
 
 
-v0.0.7
-------
+v0.0.7 (2018-11-24)
+-------------------
 
 * Fixes and small improvements.
 * Update configfetch.py library belatedly.
 
 
-v0.0.6
-------
+v0.0.6 (2018-04-25)
+-------------------
 
 * Several bug or inconvenience fixes.
 
 
-v0.0.5
-------
+v0.0.5 (2017-12-08)
+-------------------
 
 * First commit
