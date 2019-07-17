@@ -72,7 +72,7 @@ def reddit_indent(doc):
         el.classes |= (KEEP_STYLE,)
 
 
-def github_self_ancohr(doc):
+def github_self_anchor(doc):
     """Discard self anchors in <h3>.
 
     We stripped referents, and weasyprint warns it.

@@ -38,6 +38,7 @@ Changelog
 **Fix:**
 
 * Fix relative reference when base url is local. (_Component.__init__)
+* blank API documents (The previous fix was wrong.)
 
 **Dev:**
 
@@ -118,7 +119,7 @@ v0.0.9 (2019-04-26)
 
 * Add option '--pdfname'
 * Add option '--sample-pdf'
-* Add option '--convpath'
+* Add option '--cnvpath'
 
 **Fix:**
 

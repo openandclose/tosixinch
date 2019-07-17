@@ -118,7 +118,6 @@ class HtmlReader(Reader):
 class HtmlWriter(Writer):
     """html writer object.
 
-    From document object, write serialized text to filename.
     From document object, write serialized text to fname.
     """
 

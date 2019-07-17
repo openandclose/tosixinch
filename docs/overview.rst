@@ -344,7 +344,7 @@ Config Files
 
     If css file names match ``'*.t.css'``,
     they are rendered by a template engine
-    `templite.py <topics.html#script-templite.py>`__ (included.).
+    `templite.py <topics.html#script-templite.py>`__ (included).
 
     (for the syntax and values, see `CSS Template Values <#css-template-values>`__).
 
@@ -353,7 +353,7 @@ Config Files
     overwriting older one, if any.
 
     The css filenames are made by stripping ``'.t'`` from the template.
-    (For example, ``sample.t.css`` generates ``sample.css``,
+    (For example, ``sample.t.css`` generates ``sample.css``.)
 
 .. dword:: userprocess directory
 
@@ -385,6 +385,13 @@ Config Files
 
     The script may add more modules.
     Names ``my*.py`` and ``user*.py`` are reserved for ``userprocess files``.
+
+.. dword:: userscript directory
+
+    ``userdir`` can also have ``'userscript'`` sub directory.
+    The name is always 'script'. For example ::
+
+        ~/.config/tosixinch/script
 
 
 Config Format
@@ -724,7 +731,7 @@ Other useful attributes are::
 
 (For more advanced usage, you need to peek in the source code.)
 
-`userdir <#dword-userdir>`__ is inserted in the head of ``$PATH``.
+`userscript directory <#dword-userscript_directory>`__ is inserted in the head of ``$PATH``.
 So you can call your custom scripts only by filenames (not fuillpath),
 if they are in there.
 
