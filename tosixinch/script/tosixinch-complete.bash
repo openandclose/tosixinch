@@ -15,6 +15,10 @@ _tosixinch()
             COMPREPLY=( $( compgen -W 'portrait landscape' -- "$cur" ) )
             return
             ;;
+        --printout)
+            COMPREPLY=( $( compgen -W '0 1 2 3 all' -- "$cur" ) )
+            return
+            ;;
         --qt)
             COMPREPLY=( $( compgen -W 'webengine webkit' -- "$cur" ) )
             return
@@ -31,7 +35,7 @@ _tosixinch()
 
     $split && return
 
-    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --qt --raw --readability --readability-only --sample-urls --textindent --textwidth --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
+    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --qt --raw --readability --readability-only --sample-urls --textindent --textwidth --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
     return
 

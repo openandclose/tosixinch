@@ -26,6 +26,10 @@ Changelog
 
   Remove flaky automatic path shortening (minsep), Add this manual but reliable option.
 
+* Add printout option.
+
+  Print out filenames the scripts' actions would create.
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

@@ -392,3 +392,16 @@ class Conf(object):
         print('converter:')
         for option in self.converter:
             print('  %-14s = %s' % (option, self.converter.get(option)))
+
+    def print_files(self, opt):
+        for site in self.sites:
+            if opt == '0':
+                print(site.url)
+            elif opt == '1':
+                print(site.fname)
+            elif opt == '2':
+                print(site.fnew)
+            elif opt == 'all':
+                print('%s\t%s\t%s' % (site.url, site.fname, site.fnew))
+        if opt == '3':
+            print(self.pdfname)

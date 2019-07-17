@@ -41,6 +41,7 @@ So, the three invocations below make no difference. ::
     * `news  <commandline.html#cmdoption-news>`__
     * `browser <commandline.html#cmdoption-b>`__
     * `check <commandline.html#cmdoption-c>`__
+    * `printout  <commandline.html#cmdoption-printout>`__
     * `link  <commandline.html#cmdoption-link>`__
 
 The script executes only the first ``single action``

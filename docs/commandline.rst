@@ -109,6 +109,12 @@ Actions
 
     inject sample urls
 
+.. option:: --printout {0,1,2,3,all}
+
+    print filenames the scripts' actions would create  (0=url, 1=Downloaded_Files, 2=Extracted_Files, 3=pdfname, all=0<tab>1<tab>2)
+
+        choices=0, 1, 2, 3, all
+
 Programs
 --------
 

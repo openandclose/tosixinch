@@ -94,7 +94,11 @@ def _build_cmd_parser():
     help = 'inject sample urls'
     actions.add_argument('--sample-urls', action='store_true', help=help)
 
-    # TODO: '--printout' prints urls, fnames, fnews etc...
+    choices = ['0', '1', '2', '3', 'all']
+    help = ("print filenames the scripts' actions would create  "
+            '(0=url, 1=Downloaded_Files, 2=Extracted_Files, '
+            '3=pdfname, all=0<tab>1<tab>2)')
+    actions.add_argument('--printout', choices=choices, help=help)
 
     return parser
 
@@ -353,6 +357,9 @@ def _main(args=sys.argv[1:], conf=None):
         return
     if args.check:
         conf.print_siteconf()
+        return
+    if args.printout:
+        conf.print_files(args.printout)
         return
     if args.link:
         from tosixinch import link
