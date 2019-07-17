@@ -2,6 +2,50 @@
 Changelog
 =========
 
+
+**Unreleased:**
+---------------
+
+**Change:**
+
+* Change local templite.py to remote textwrap.py for one of sample urls.
+
+  Relative path resolution in installation was harder, so use some remote url instead.
+
+* Stop adding suffix to query url.
+
+  Previously url 'bb?cc' was changed to Downloaded_File 'bb?cc/index--tosixinch' or 'bb?cc_index--tosixinch'.
+  Now just to 'bb?cc'.
+
+* Stop adding './' prefix unconditionally for relative references.
+  Now only when necessary to comply to url spec (colon-in-first-path case).
+
+**Add:**
+
+* Add trimdirs option.
+
+  Remove flaky automatic path shortening (minsep), Add this manual but reliable option.
+
+**Remove:**
+
+* Remove 'support' for ebook-convert. Now converters are only one of the three
+  (prince, weasyprint or wkhtmltopdf).
+
+**Fix:**
+
+* Fix relative reference when base url is local. (_Component.__init__)
+
+**Dev:**
+
+* Develop abstract path functions to try to absorb windows path specifics,
+  only to revert them back in the end.
+  The period is especially unsuitable for forking or otherwise using the code::
+
+    From:
+    2019-05-21 401e27e408ba19627a9b1d452e009521cbdb09a8
+    Until:
+    2019-05-30 f1055f97dc6d8088906e43c6f150739c8d560174
+
 v0.1.0 (2019-05-09)
 -------------------
 
