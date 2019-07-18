@@ -68,7 +68,7 @@ def _tamper_windows_fname(url, platform=sys.platform):
         for key, value in _win_changes.items():
             url = url.replace(key, value)
             url = url.replace(urllib.parse.quote(key), value)
-        return url.replace('/', '\\')
+            url = url.replace('/', '\\')
     return url
 
 
@@ -91,7 +91,7 @@ def slashify(name):
 
 # Use bottle.py version.
 # See also:
-# functool.cached_property (v3.8)
+# functool.cached_property (new in Python3.8)
 # https://github.com/pydanny/cached-property
 # https://github.com/django/django/blob/master/django/utils/functional.py
 class cached_property(object):  # noqa N801
@@ -166,7 +166,7 @@ class _Location(object):
 
     INDEX = 'index--tosixinch'
     APPENDIX = '--extracted'
-    EXTENSION = 'html'
+    EXTENSION = '.html'
 
     def __init__(self, url, platform=sys.platform):
         self._url = url
@@ -208,7 +208,7 @@ class _Location(object):
         fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 
-    def _make_fnew(self, fname, ext='html'):
+    def _make_fnew(self, fname):
         if self.is_local:
             fname = self._strip_root(fname)
             fname = os.path.join(DOWNLOAD_DIR, fname)
@@ -229,10 +229,10 @@ class _Location(object):
     def _add_appendix(self, fname):
         root, ext = os.path.splitext(fname)
         root += self.APPENDIX
-        if ext and ext[1:] == self.EXTENSION:
+        if ext and ext == self.EXTENSION:
             pass
         else:
-            ext = ext + '.' + self.EXTENSION
+            ext = ext + self.EXTENSION
         return root + ext
 
     def _strip_root(self, fname):
@@ -285,8 +285,8 @@ class Location(_Location):
     def idna_url(self):
         # This is only used by `download` module internally.
         # So every other resource name representations are kept unicode.
+        # cf. https://github.com/kjd/idna implements newer idna spec.
         def to_ascii(s):
-            # cf. https://github.com/kjd/idna implements newer idna spec.
             return s.encode('idna').decode('ascii')
 
         url = self.url
