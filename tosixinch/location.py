@@ -216,8 +216,8 @@ class _Location(object):
 
     def _add_index(self, fname):
         if '/' not in fname:
-            fname += os.path.sep
-        root, ext = os.path.splitext(fname)
+            fname += '/'
+        root, ext = posixpath.splitext(fname)
         if ext:
             pass
         elif '?' in fname:
