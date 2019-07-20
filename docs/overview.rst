@@ -385,10 +385,9 @@ Config Files
     The script may add more modules.
     Names ``my*.py`` and ``user*.py`` are reserved for user process files.
 
-.. dword:: userscript directory
+.. dword:: script directory
 
-    ``userdir`` can also have ``'userscript'`` sub directory.
-    The name is always 'script'. For example ::
+    ``userdir`` can also have 'script' sub directory. For example::
 
         ~/.config/tosixinch/script
 
@@ -730,7 +729,7 @@ Other useful attributes are::
 
 (For more advanced usage, you need to peek in the source code.)
 
-`userscript directory <#dword-userscript_directory>`__ is inserted in the head of ``$PATH``.
+`script directory <#dword-script_directory>`__ is inserted in the head of ``$PATH``.
 So you can call your custom scripts only by filenames (not fuillpath),
 if they are in there.
 
