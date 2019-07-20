@@ -20,6 +20,9 @@ Changelog
 * Stop adding './' prefix unconditionally for relative references.
   Now only when necessary to comply to url spec (colon-in-first-path case).
 
+* Change 'userprocess' to just 'process'.
+  So your 'userprocess' directory must be renamed to 'process'.
+
 **Add:**
 
 * Add trimdirs option.

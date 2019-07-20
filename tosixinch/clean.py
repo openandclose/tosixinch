@@ -6,7 +6,7 @@ the object of cleanup is:
 
 We strip all inline and external css, for reason 1.
 (exception: when specially ordered to keep <style> tag
-in process or userprocess functions.)
+in process functions.)
 
 We strip all inline and external javascript, for reason 2.
 After downloading, I think we don't need javascript any more.

@@ -654,8 +654,8 @@ So the names below are taken
     And the function must be a top level one.
     (So each name should have exactly one dot (``'.'``)).
 
-    It is searched in user ``userprocess`` directory
-    and application ``process`` directory, in order.
+    It is searched in user process directory
+    and application ``tosixinch.process`` directory, in order.
 
     The first matched one is called with the argument ``'doc'`` auto-filled.
     It is ``lxml.html`` DOM object (``HtmlElement``),
@@ -669,11 +669,11 @@ So the names below are taken
 
     For example, ``'aaa.bbb?cc?dd'`` is made into code either::
 
-        userprocess.aaa.bbb(doc, cc, dd)
+        process.aaa.bbb(doc, cc, dd)
 
     or::
 
-        process.aaa.bbb(doc, cc, dd)
+        tosixinch.process.aaa.bbb(doc, cc, dd)
 
     You don't have to ``return`` anything,
     just manipulate ``doc`` as you like.
@@ -710,7 +710,7 @@ So the names below are taken
         With one exception.
         If a tag has ``'tsi-keep-style'`` in class attributes,
         ``style`` attributes are kept intact.
-        It can be used in ``userprocess`` functions.
+        It can be used in process functions.
         If you want to keep or create some inline ``style``,
         inject this class attribute.::
 

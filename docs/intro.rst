@@ -385,10 +385,10 @@ So, let's change other ``<h1>`` tags to ``<h2>``,
 keeping ``<h1>`` only for the main title heading.
 
 You create a file
-(in `userprocess directory <overview.html#dword-userprocess_directory>`__),
+(in `process directory <overview.html#dword-process_directory>`__),
 and write a function in it::
 
-    # in ~/.config/tosixinch/userprocess/myprocess.py
+    # in ~/.config/tosixinch/process/myprocess.py
     def decrease_heading(doc, to_keep_path):
         """change h1 to h2, except one (to_keep_path argument)"""
         for el in doc.xpath('//h1'):

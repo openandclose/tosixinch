@@ -355,13 +355,13 @@ Config Files
     The css filenames are made by stripping ``'.t'`` from the template.
     (For example, ``sample.t.css`` generates ``sample.css``.)
 
-.. dword:: userprocess directory
+.. dword:: process directory
 
-    ``userdir`` can also have ``'userprocess'`` sub directory. For example ::
+    ``userdir`` can also have 'process' sub directory. For example ::
 
-        ~/.config/tosixinch/userprocess
+        ~/.config/tosixinch/process
 
-.. dword:: userprocess files
+.. dword:: process files
 
     When Action is ``extract``,
     you can apply arbitrary functions to the html DOM elements,
@@ -370,21 +370,20 @@ Config Files
     (For the details, see `process option <options.html#confopt-process>`__).
 
     The script searches process functions in python files (``'*.py'``)
-    in ``userprocess`` directory.
+    in ``process directory``.
 
     If it cannot find the one,
-    it searches next in application's ``process`` directory
-    (It is in the installed application's root).
+    it searches next in application's ``tosixinch.process`` directory.
 
     You can choose any filename,
-    but there are three files in ``process`` directory at the present. ::
+    but there are three files in ``tosixinch.process`` directory at the present. ::
 
         gen.py
         site.py
         util.py
 
     The script may add more modules.
-    Names ``my*.py`` and ``user*.py`` are reserved for ``userprocess files``.
+    Names ``my*.py`` and ``user*.py`` are reserved for user process files.
 
 .. dword:: userscript directory
 

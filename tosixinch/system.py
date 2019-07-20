@@ -178,16 +178,16 @@ def _add_path_env(conf):
 def userpythondir_init(userdir):
     if userdir is None:
         return
-    if not os.path.isdir(os.path.join(userdir, 'userprocess')):
+    if not os.path.isdir(os.path.join(userdir, 'process')):
         return
 
     # if userdir not in sys.path:
-    if 'userprocess' not in sys.modules:
+    if 'process' not in sys.modules:
         sys.path.insert(0, userdir)
-        import userprocess  # noqa: F401 (unused import)
+        import process # noqa: F401 (unused import)
         del sys.path[0]
         fmt = "user python directory is registered. (%r)"
-        logger.debug(fmt, os.path.join(userdir, 'userprocess'))
+        logger.debug(fmt, os.path.join(userdir, 'process'))
 
 
 # TODO: pre-import modules in process.
@@ -199,7 +199,7 @@ def apply_function(element, func_string):
     The first argument is always 'element'.
     Other argements are words splitted by '?' if any.
     E.g. the string 'aaa.bbb?cc?dd' calls
-    '[user]process.aaa.bbb(element, cc, dd)'.
+    '[tosixinch.]process.aaa.bbb(element, cc, dd)'.
     """
     names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
     if '.' not in names:
@@ -208,7 +208,7 @@ def apply_function(element, func_string):
         raise ValueError(msg)
     modname, func = names.rsplit('.', maxsplit=1)
     try:
-        mod = importlib.import_module('userprocess.' + modname)
+        mod = importlib.import_module('process.' + modname)
     except ModuleNotFoundError:
         try:
             mod = importlib.import_module('tosixinch.process.' + modname)
