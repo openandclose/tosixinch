@@ -8,9 +8,7 @@ Changelog
 
 **Change:**
 
-* Change local templite.py to remote textwrap.py for one of sample urls.
-
-  Relative path resolution in installation was harder, so use some remote url instead.
+* Change one of sample urls. Local templite.py to remote textwrap.py.
 
 * Stop adding suffix to query url.
 
@@ -27,7 +25,7 @@ Changelog
 
 * Add trimdirs option.
 
-  Remove flaky automatic path shortening (minsep), Add this manual but reliable option.
+  Remove flaky automatic path shortening (minsep), add this manual but reliable option.
 
 * Add printout option.
 

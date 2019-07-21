@@ -184,7 +184,7 @@ def userpythondir_init(userdir):
     # if userdir not in sys.path:
     if 'process' not in sys.modules:
         sys.path.insert(0, userdir)
-        import process # noqa: F401 (unused import)
+        import process  # noqa: F401 (unused import)
         del sys.path[0]
         fmt = "user python directory is registered. (%r)"
         logger.debug(fmt, os.path.join(userdir, 'process'))
