@@ -217,7 +217,4 @@ def apply_function(element, func_string):
             raise ModuleNotFoundError(fmt % modname)
 
     func = getattr(mod, func)
-    if args:
-        return func(element, *args)
-    else:
-        return func(element)
+    return func(element, *args)
