@@ -305,7 +305,7 @@ class Site(location.Location):
             num = int(self.general.trimdirs)
             sep = os.sep
         parts = self.url.split(sep)[num:]
-        return os.sep.join(parts)
+        return sep.join(parts)
 
 
 class Conf(object):
