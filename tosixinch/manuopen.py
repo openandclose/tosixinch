@@ -25,7 +25,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-CODINGS = ('utf_8', 'utf-8-variants', 'latin_1', 'cp1252')
+CODINGS = ('utf_8',)
 
 
 def manuopen(fname, codings=None):

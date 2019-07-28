@@ -21,6 +21,8 @@ Changelog
 * Change 'userprocess' to just 'process'.
   So your 'userprocess' directory must be renamed to 'process'.
 
+* Change (rather Fix) default encodings, to only utf-8 and cp1252.
+
 **Add:**
 
 * Add trimdirs option.
