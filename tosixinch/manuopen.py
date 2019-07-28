@@ -26,6 +26,7 @@ def manuopen(fname, codings=None, errors='strict'):
     codings = codings or CODINGS
     text = None
     encoding = None
+    elist = []  # keep UnicodeDecodeError objects
 
     for coding in codings:
         if text is not None:
@@ -37,15 +38,14 @@ def manuopen(fname, codings=None, errors='strict'):
             logger.info('using chardet ... %s' % fname)
             try:
                 text, encoding = use_chardet(fname)
-            except UnicodeDecodeError:
-                pass
+            except UnicodeDecodeError as e:
+                elist.append(e)
         else:
-            if coding not in ('utf_8', 'utf-8'):
-                logger.info('trying %r... %s' % (coding, fname))
+            logger.info('trying %r... %s' % (coding, fname))
             try:
                 text, encoding = try_encoding(fname, coding, errors)
-            except UnicodeDecodeError:
-                pass
+            except UnicodeDecodeError as e:
+                elist.append(e)
 
     if text and 'ftfy' in codings:
         logger.info('using ftfy ... %s' % fname)
@@ -54,7 +54,8 @@ def manuopen(fname, codings=None, errors='strict'):
     if text is not None:
         return text, encoding
 
-    raise UnicodeError('All encodings failed to decode: %r' % codings)
+    msg = build_message(elist)
+    raise UnicodeError(msg)
 
 
 def try_encoding(fname, coding, errors):
@@ -71,3 +72,23 @@ def use_chardet(fname):
     logger.info('chardet: %s, %s' % (ret["encoding"], ret["confidence"]))
     text = open(fname, encoding=ret["encoding"]).read()
     return text, ret["encoding"]
+
+
+def build_message(elist):
+    # cf. original message
+    # https://github.com/python/cpython/blob/master/Objects/exceptions.c
+    # "'%U' codec can't decode byte 0x%02x in position %zd: %U"
+    message = ['\n']
+    fmt = ("    '%s' codec can't decode byte %#x in position %d: %s\n"
+        "        ... %s ...\n")
+    for e in elist:
+        bstr = _slice_bytestring(e.object, e.start)
+        args = (e.encoding, e.object[e.start], e.start, e.reason, bstr)
+        message.append(fmt % args)
+    return ''.join(message).rstrip()
+
+
+def _slice_bytestring(bstr, start):
+    startpos = max(0, start - 20)
+    endpos = min(start + 20, len(bstr))
+    return '%s  %s' % (bstr[startpos:start], bstr[start:endpos])
