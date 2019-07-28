@@ -58,15 +58,18 @@ class _File(object):
 class Reader(_File):
     """Text reader object."""
 
-    def __init__(self, fname, text=None, codings=None, platform=sys.platform):
+    def __init__(self, fname, text=None, codings=None,
+            errors='strict', platform=sys.platform):
         super().__init__(fname, platform)
         self.text = text
         self.codings = codings
+        self.errors = errors
 
     def _prepare(self):
         if self.text:
             return
-        self.text, self.encoding = manuopen.manuopen(self.fname, self.codings)
+        self.text, self.encoding = manuopen.manuopen(
+            self.fname, self.codings, self.errors)
 
     def read(self):
         self._prepare()

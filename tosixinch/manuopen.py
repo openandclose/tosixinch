@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 CODINGS = ('utf_8',)
 
 
-def manuopen(fname, codings=None):
+def manuopen(fname, codings=None, errors='strict'):
     codings = codings or CODINGS
     text = None
     encoding = None
@@ -43,7 +43,7 @@ def manuopen(fname, codings=None):
             if coding not in ('utf_8', 'utf-8'):
                 logger.info('trying %r... %s' % (coding, fname))
             try:
-                text, encoding = try_encoding(fname, coding)
+                text, encoding = try_encoding(fname, coding, errors)
             except UnicodeDecodeError:
                 pass
 
@@ -57,8 +57,8 @@ def manuopen(fname, codings=None):
     raise UnicodeError('All encodings failed to decode: %r' % codings)
 
 
-def try_encoding(fname, coding):
-    text = open(fname, encoding=coding).read()
+def try_encoding(fname, coding, errors):
+    text = open(fname, encoding=coding, errors=errors).read()
     return text, coding
 
 

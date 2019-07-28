@@ -63,12 +63,12 @@ DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
 
-def check_ftype(fname, codings=None):
+def check_ftype(fname, codings=None, errors='strict'):
     """Open a file and detect file type.
 
     Return a tuple (ftype, kind, text)
     """
-    text = system.Reader(fname, codings=codings).read()
+    text = system.Reader(fname, codings=codings, errors=errors).read()
     if is_html(text):
         return 'html', None, text
     elif is_prose(text):
@@ -232,20 +232,20 @@ def slugify(value):
 
 
 # TODO: Links to merged htmls should be rewritten to fragment links.
-def merge_htmls(paths, pdfname, codings=None):
+def merge_htmls(paths, pdfname, codings=None, errors='strict'):
     if len(paths) > 1:
         hname = pdfname.replace('.pdf', '.html')
         root = build_blank_html()
-        _append_bodies(root, hname, paths, codings)
+        _append_bodies(root, hname, paths, codings, errors)
         system.HtmlWriter(hname, doc=root).write()
         return hname
     else:
         return paths[0]
 
 
-def _append_bodies(root, rootname, fnames, codings=None):
+def _append_bodies(root, rootname, fnames, codings, errors):
     for fname in fnames:
-        reader = system.HtmlReader(fname, codings=codings)
+        reader = system.HtmlReader(fname, codings=codings, errors=errors)
         bodies = reader.read().xpath('//body')
         for b in bodies:
             _relink_component(b, rootname, fname)
@@ -268,20 +268,22 @@ def _relink_component(doc, rootname, fname):
 class Content(object):
     """Represent general content."""
 
-    def __init__(self, url, fname, fnew, text=None, codings=None):
+    def __init__(self, url, fname, fnew, text=None,
+            codings=None, errors='strict'):
         self.url = url
         self.fname = fname
         self.fnew = fnew
         self.text = text
         self.codings = codings
+        self.errors = errors
 
 
 class HtmlContent(Content):
     """Represent html content. Define HtmlElement manupulations."""
 
     def load(self):
-        reader = system.HtmlReader(
-            self.fname, text=self.text, codings=self.codings)
+        reader = system.HtmlReader(self.fname, text=self.text,
+            codings=self.codings, errors=self.errors)
         self.root = reader.read()
 
         doctype = self.root.getroottree().docinfo.doctype or DEFAULT_DOCTYPE

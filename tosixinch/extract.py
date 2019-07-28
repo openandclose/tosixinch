@@ -40,6 +40,7 @@ class Extract(content.HtmlContent):
 
         self._guess = conf.general.guess
         self.codings = site.general.encoding
+        self.errors = site.general.encoding_errors
         self._parts_download = site.general.parts_download
         self._force_download = site.general.force_download
         self._full_image = site.general.full_image
@@ -123,7 +124,9 @@ def run(conf):
     for site in conf.sites:
         fname = site.fname
         codings = site.general.encoding
-        ftype, kind, text = content.check_ftype(fname, codings=codings)
+        errors = site.general.encoding_errors
+        ftype, kind, text = content.check_ftype(
+            fname, codings=codings, errors=errors)
         if ftype == 'html':
             _run(conf, site, text)
         else:
