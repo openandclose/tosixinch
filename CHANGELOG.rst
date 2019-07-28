@@ -41,7 +41,10 @@ Changelog
 **Fix:**
 
 * Fix relative reference when base url is local. (_Component.__init__)
-* blank API documents (The previous fix was wrong.)
+
+* Fix blank API documents (The previous fix was wrong).
+
+* Fix ftfy calling procedure (it should be *after* successful decoding).
 
 **Dev:**
 

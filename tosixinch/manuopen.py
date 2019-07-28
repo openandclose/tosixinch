@@ -1,13 +1,7 @@
 
 """Open and read local files in appropriate encoding.
 
-Most aplications just provide an alternative: auto or an explicit encoding.
-I think 'auto' is too broad and one encoding is too limitted, for our purpose.
-
-* Let users specify multiple encodings in preference order
-  (like editors do).
-* So that they can put in ``ftfy`` and ``chardet`` at exactly desired places.
-* So that happen-to-be legal bytes can be interpreted first as ``mojibake``.
+The design is to fail early, but easy for users to check and experiment.
 """
 
 import logging
@@ -30,41 +24,50 @@ CODINGS = ('utf_8',)
 
 def manuopen(fname, codings=None):
     codings = codings or CODINGS
+    text = None
+    encoding = None
+
     for coding in codings:
+        if text is not None:
+            break
+
         if coding == 'ftfy':
-            logger.info('using ftfy ... %s' % fname)
-            try:
-                return use_ftfy(fname)
-            except UnicodeDecodeError:
-                pass
+            pass
         elif coding == 'chardet':
             logger.info('using chardet ... %s' % fname)
             try:
-                return use_chardet(fname)
+                text, encoding = use_chardet(fname)
             except UnicodeDecodeError:
                 pass
         else:
             if coding not in ('utf_8', 'utf-8'):
                 logger.info('trying %r... %s' % (coding, fname))
             try:
-                return try_encoding(fname, coding)
+                text, encoding = try_encoding(fname, coding)
             except UnicodeDecodeError:
                 pass
+
+    if text and 'ftfy' in codings:
+        logger.info('using ftfy ... %s' % fname)
+        text = use_ftfy(text)
+
+    if text is not None:
+        return text, encoding
 
     raise UnicodeError('All encodings failed to decode: %r' % codings)
 
 
 def try_encoding(fname, coding):
-    return open(fname, encoding=coding).read()
+    text = open(fname, encoding=coding).read()
+    return text, coding
 
 
-def use_ftfy(fname):
-    with open(fname, encoding='utf_8', errors='backslashreplace') as f:
-        text = f.read()
-    return ftfy.fixes.decode_escapes(text)
+def use_ftfy(text):
+    return ftfy.fixes.fix_encoding(text)
 
 
 def use_chardet(fname):
     ret = chardet.detect(open(fname, 'rb').read())
     logger.info('chardet: %s, %s' % (ret["encoding"], ret["confidence"]))
-    return open(fname, encoding=ret["encoding"]).read()
+    text = open(fname, encoding=ret["encoding"]).read()
+    return text, ret["encoding"]

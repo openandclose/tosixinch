@@ -66,7 +66,7 @@ class Reader(_File):
     def _prepare(self):
         if self.text:
             return
-        self.text = manuopen.manuopen(self.fname, self.codings)
+        self.text, self.encoding = manuopen.manuopen(self.fname, self.codings)
 
     def read(self):
         self._prepare()
