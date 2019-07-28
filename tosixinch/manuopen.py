@@ -51,7 +51,7 @@ def manuopen(fname, codings=None):
             except UnicodeDecodeError:
                 pass
 
-    raise UnicodeDecodeError('All encodings failed: %r' % codings)
+    raise UnicodeError('All encodings failed to decode: %r' % codings)
 
 
 def try_encoding(fname, coding):
