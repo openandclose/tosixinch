@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 import sys
 import subprocess
 
@@ -29,6 +30,7 @@ def print_args(print=print):
         for a in g._group_actions:
             # o = ', '.join(a.option_strings)
             o = formatter._format_action_invocation(a)
+            o = _check_too_long_choices(o)
             h = a.help
             print('.. option:: %s\n\n    %s\n' %  (o, h))
             d = a.default
@@ -37,6 +39,13 @@ def print_args(print=print):
                 print('        default=%s\n' % d)
             if c:
                 print('        choices=%s\n' % ', '.join(c))
+
+
+def _check_too_long_choices(s):
+    if len(s) < 100:
+        return s
+    shorter_s = re.sub(r'^(-.+?) {[^{}]+?}$', r'\1 { (choices...) }', s)
+    return shorter_s
 
 
 def edit():
