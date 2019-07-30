@@ -31,6 +31,9 @@ DIR_COMP = {
     '--userdir',
 }
 
+OPTIONAL_CHOICES = {
+}
+
 
 parser = tosixinch.main._build_parser()
 
@@ -39,6 +42,8 @@ _cls = lambda x: repr(x.__class__).split('.')[1].split("'")[0]
 _type = lambda x: x.type
 _choice = lambda x: x.choices
 _nargs = lambda x: x.nargs
+
+_opt_choice = lambda x: OPTIONAL_CHOICES.get(_get_longopt(_opt(x))[0])
 
 
 class Namespace(object):
@@ -73,10 +78,10 @@ def get_context():
     for a in parser._actions:
         all_opts.extend(_get_longopt(_opt(a)))
 
-        if _choice(a):
+        if _choice(a) or _opt_choice(a):
             c = Namespace()
             c.opt = '|'.join(_opt(a))
-            c.choices = ' '.join(_choice(a))
+            c.choices = ' '.join(_choice(a) or _opt_choice(a))
             c.name = sorted(_opt(a))[0]  # long options should come in front
             choices.append(c)
 
