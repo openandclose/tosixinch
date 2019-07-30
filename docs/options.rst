@@ -63,34 +63,39 @@ General Section
 
 .. confopt:: encoding \*
 
-    | (``utf-8, utf-8-variants, latin_1, cp1252``)
+    | (``utf-8, cp1252``)
     | ``[COMMA]``
 
-    Specify preferred encodings in order.
+    Specify preferred encoding or encodings.
     First successful one is used.
     Encoding names are as specified in
     `codecs library <https://docs.python.org/3/library/codecs.html#standard-encodings>`__,
-    and ``ftfy`` and ``chardet`` if they are installed.
+    and `chardet <https://chardet.readthedocs.io/en/latest/index.html>`__
+    and `ftfy <https://ftfy.readthedocs.io/en/latest/>`__ if they are installed.
 
-    `ftfy <https://ftfy.readthedocs.io/en/latest/>`__
-    is a library to fix bad Unicode strings.
-    A use case here is to aggressively interpret text as UTF-8,
-    by injecting it before false-positives.
+    If the name is ``chardet``, ``chardet.detect`` method is tried.
+    It may be able to auto-detect the right encoding.
 
-    E.g. many 'mojibake' in English pages
-    result in legal latin-1 character codes.
-    General encode detection capabilities can't handle this,
-    because they (rightly) decide them as latin-1.
-    ``ftfy`` decides preferentially for UTF-8,
-    and checks the possibilities of UTF-8 mojibakes.
+    After successful encoding by one of the encodings,
+    if the list include ``ftfy``,
+    ``ftfy.fixes.fix_encoding`` method is called with the decoded text.
+    It may be able to fix some 'mojibake'.
+    (So it is always called last, the place in the list is irrelevant.)
 
-    `chardet <https://chardet.readthedocs.io/en/latest/index.html>`__
-    is a popular encode detection library.
-    It can be used as a last resort.
+    .. note ::
 
-    An example::
+        The included `bash completion <topics.html#script-tosixinch-complete.bash>`__
+        only completes canonical codec names (with underline changed to dash).
+        But you can put any other alias name or names as long as they are legal in Python.
 
-        utf-8, utf-8-variants, ftfy, latin_1, cp1252, chardet
+.. confopt:: encoding_errors \*
+
+    | (``strict``)
+
+    Specify codec `Error Handler <https://docs.python.org/3/library/codecs.html#error-handlers>`__.
+
+    If you can't run ``extract`` because of decoding errors,
+    one solution is to change this option to 'replace' or 'backslashreplace'.
 
 .. confopt:: parts_download \*
 

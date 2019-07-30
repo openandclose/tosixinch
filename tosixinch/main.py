@@ -156,6 +156,17 @@ def _build_conf_parser():
     configs.add_argument(
         '--qt', choices=choices, help=help)
 
+    help = 'assign an encoding for file opening when extract [COMMA]'
+    configs.add_argument('--encoding', help=help)
+
+    # Python 3.7.4
+    choices = [
+        'strict', 'ignore', 'replace', 'xmlcharrefreplace', 'backslashreplace',
+        'namereplace', 'surrogateescape', 'surrogatepass'
+    ]
+    help = 'assign an encoding error handler (default: strict)'
+    configs.add_argument('--encoding-errors', choices=choices, help=help)
+
     help = ('if there is no matched url, '
             'use this xpath for content selection [LINE]')
     configs.add_argument('--guess', help=help)

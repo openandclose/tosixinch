@@ -159,6 +159,16 @@ Configs
 
         choices=webengine, webkit
 
+.. option:: --encoding ENCODING
+
+    assign an encoding for file opening when extract [COMMA]
+
+.. option:: --encoding-errors { (choices...) }
+
+    assign an encoding error handler (default: strict)
+
+        choices=strict, ignore, replace, xmlcharrefreplace, backslashreplace, namereplace, surrogateescape, surrogatepass
+
 .. option:: --guess GUESS
 
     if there is no matched url, use this xpath for content selection [LINE]

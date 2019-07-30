@@ -33,6 +33,8 @@ Changelog
 
   Print out filenames the scripts' actions would create.
 
+* Add encoding_errors option (for codec Error Handler).
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three
