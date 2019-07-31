@@ -2,6 +2,8 @@
 Changelog
 =========
 
+Important changes (that users especially need to know) are marked by '**[!]**.'
+
 
 **Unreleased:**
 ---------------
@@ -18,10 +20,11 @@ Changelog
 * Stop adding './' prefix unconditionally for relative references.
   Now only when necessary to comply to url spec (colon-in-first-path case).
 
-* Change 'userprocess' to just 'process'.
+* **[!]** Change 'userprocess' to just 'process'.
   So your 'userprocess' directory must be renamed to 'process'.
 
-* Change (rather Fix) default encodings, to only utf-8 and cp1252.
+* **[!]** Change (rather Fix) default encodings, to only utf-8 and cp1252.
+
 
 **Add:**
 
