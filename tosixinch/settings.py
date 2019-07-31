@@ -324,9 +324,10 @@ class Conf(object):
         self.style = self._appconf.style
         self.converter = getattr(self._appconf, self.general.converter)
 
-        self._sites_init(urls, ufile)
+        if urls or ufile:
+            self.sites_init(urls, ufile)
 
-    def _sites_init(self, urls, ufile):
+    def sites_init(self, urls=None, ufile=None):
         sites = Sites(urls, ufile, self._appconf, self._siteconf)
 
         self._urls = sites._urls
