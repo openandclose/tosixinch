@@ -164,7 +164,7 @@ class _URLData(object):
     """Collect all URL retrieving functions."""
 
     def __init__(self):
-        urls, ufile, args = tosixinch.settings.SampleTransform()()
+        urls, ufile = tosixinch.settings.SampleURLLoader().get_data()
         self.urls = urls
         self.ufile = ufile
         self.tocfile = self._get_tocfile()
@@ -530,7 +530,7 @@ def tox_run():
     """Just check if actual invocation doesn't raise Errors (for tox)."""
 
     # Get only the first url (wikipedia.org).
-    urls = [tosixinch.settings.SampleTransform()()[0][0]]
+    urls = [URLS[0]]
     args = []
 
     # tmpdir = tempfile.mkdtemp(prefix='tosixinch-')

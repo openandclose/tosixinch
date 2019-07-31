@@ -327,12 +327,8 @@ def _main(args=sys.argv[1:], conf=None):
     urls = args.input
     ufile = None if urls else args.file
 
-    if args.sample_urls:
-        loader = settings.SampleTransform(urls, ufile, confargs)
-        urls, ufile, confargs = loader()
-
     if conf is None:
-        conf = settings.Conf(urls, ufile, args=confargs, envs=ENVS)
+        conf = settings.Conf(args=confargs, envs=ENVS)
     # setv = conf.general.set_value
 
     # When handling urls the `news` module built,
@@ -340,6 +336,11 @@ def _main(args=sys.argv[1:], conf=None):
     # it is better to use `readability`.
     # if firstline == news.FL_SOCIALNEWS:
     #     setv('extractor', 'readability')
+
+    if args.sample_urls:
+        settings.SampleURLLoader(conf)()
+    else:
+        conf.sites_init(urls=urls, ufile=ufile)
 
     if args.appcheck:
         conf.print_appconf()

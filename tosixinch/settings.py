@@ -49,38 +49,41 @@ BINARY_EXTENSIONS = """
 """.split()
 
 
-class Transform(object):
-    """Preprocess arguments before making ``Conf`` object."""
+class URLLoader(object):
+    """Supply urls to ``Conf`` object."""
 
-    def __init__(self, urls=None, ufile=None, args=None):
+    def __init__(self, conf=None, urls=None, ufile=None):
         self.urls = urls
         self.ufile = ufile
-        self.args = args
+        self.conf = conf
 
-    def tranform(self):
+    def build(self):
         pass
 
     def __call__(self):
-        self.tranform()
-        return self.urls, self.ufile, self.args
+        self.build()
+        return self.conf
 
 
-class SampleTransform(Transform):
+class SampleURLLoader(URLLoader):
     """Get sample urls."""
 
     SAMPLE_UFILE = 'urls.sample.txt'
     PDFNAME = 'sample.pdf'
 
-    def tranform(self):
+    def get_data(self):
         configdir = _get_configdir()
         ufile = os.path.join(configdir, self.SAMPLE_UFILE)
         urls = location.Locations(ufile=ufile).urls
-        self.urls = urls
-        self.ufile = ufile
+        return urls, ufile
 
-        if self.args:
-            if self.args.pdfname is None:
-                self.args.pdfname = self.PDFNAME
+    def build(self):
+        urls, ufile = self.get_data()
+
+        pname = self.conf.general.pdfname
+        if not pname:
+            self.conf.general.pdfname = self.PDFNAME
+        self.conf.sites_init(urls=urls)
 
 
 def _get_pdfname(sites):
