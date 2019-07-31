@@ -35,20 +35,20 @@ def manuopen(fname, codings=None, errors='strict'):
         if coding == 'ftfy':
             pass
         elif coding == 'chardet':
-            logger.info('using chardet ... %s' % fname)
+            logger.debug('using chardet ... %s' % fname)
             try:
                 text, encoding = use_chardet(fname)
             except UnicodeDecodeError as e:
                 elist.append(e)
         else:
-            logger.info('trying %r... %s' % (coding, fname))
+            logger.debug('trying %r... %s' % (coding, fname))
             try:
                 text, encoding = try_encoding(fname, coding, errors)
             except UnicodeDecodeError as e:
                 elist.append(e)
 
     if text and 'ftfy' in codings:
-        logger.info('using ftfy ... %s' % fname)
+        logger.debug('using ftfy ... %s' % fname)
         text = use_ftfy(text)
 
     if text is not None:
@@ -69,7 +69,7 @@ def use_ftfy(text):
 
 def use_chardet(fname):
     ret = chardet.detect(open(fname, 'rb').read())
-    logger.info('chardet: %s, %s' % (ret["encoding"], ret["confidence"]))
+    logger.debug('chardet: %s, %s' % (ret["encoding"], ret["confidence"]))
     text = open(fname, encoding=ret["encoding"]).read()
     return text, ret["encoding"]
 
