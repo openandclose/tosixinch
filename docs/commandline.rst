@@ -233,6 +233,12 @@ Configs
 
     remove leading directories from local text name to shorten title
 
+.. option:: --use-urlreplace {yes,no}
+
+    use url replacement feature (default: yes)
+
+        choices=yes, no
+
 Styles
 ------
 

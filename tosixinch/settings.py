@@ -86,6 +86,24 @@ class SampleURLLoader(URLLoader):
         self.conf.sites_init(urls=urls)
 
 
+class ReplaceURLLoader(URLLoader):
+    """Preprocess urls before Conf.sites_init."""
+
+    REPLACEFILE = 'urlreplace.txt'
+
+    def get_urls(self):
+        userdir = self.conf._userdir
+        if not userdir:
+            return self.urls
+        replacefile = os.path.join(userdir, self.REPLACEFILE)
+        urls = location.ReplacementParser(replacefile, self.urls, self.ufile)()
+        return urls
+
+    def build(self):
+        urls = self.get_urls()
+        self.conf.sites_init(urls=urls, ufile=self.ufile)
+
+
 def _get_pdfname(sites):
     site = list(sites)[0]
     url = site.url

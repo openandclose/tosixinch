@@ -38,6 +38,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add encoding_errors option (for codec Error Handler).
 
+* Add urlreplace feature (see doc: topics.html#urlreplace).
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

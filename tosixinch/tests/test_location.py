@@ -1,4 +1,5 @@
 
+import io
 import os
 import sys
 
@@ -175,3 +176,68 @@ class TestLocalReference:
             'bbb/cc.jpg',
             '_htmls/aaa.org/bbb/cc.jpg')
         self.compare(url, local_url, fname)
+
+
+class TestReplacementParser:
+
+    URLS = ['https://www.reddit.com/aaa', 'https://www.reddit.com/bbb']
+
+    def compare(self, text, urls):
+        f = io.StringIO(text)
+        parser = location.ReplacementParser(f, self.URLS)
+        assert urls == parser._parse()
+
+    def compare_bad(self, text):
+        f = io.StringIO(text)
+        parser = location.ReplacementParser(f, self.URLS)
+        with pytest.raises(ValueError):
+            parser._parse()
+
+    def test(self):
+        text = r"""
+            https://www\.reddit\.com/
+            https://old.reddit.com/
+
+        """
+        urls = ['https://old.reddit.com/aaa', 'https://old.reddit.com/bbb']
+        self.compare(text, urls)
+
+        text = r"""
+
+
+            https://www\.reddit\.com/
+            https://old.reddit.com/"""
+        self.compare(text, urls)
+
+        text = r"""
+            # xxx
+            https://www\.reddit\.com/
+            # xxx
+            https://old.reddit.com/
+
+            # xxx
+        """
+        self.compare(text, urls)
+
+        text = r"""
+            (?<!\\)\.c\w+/
+            .org/
+        """
+        urls = ['https://www.reddit.org/aaa', 'https://www.reddit.org/bbb']
+        self.compare(text, urls)
+
+    def test_bad(self):
+        text = r"""
+            https://www\.reddit\.com/
+
+            https://old.reddit.com/
+        """
+        self.compare_bad(text)
+
+        text = r"""
+            https://www\.reddit\.com/
+            https://old.reddit.com/
+            xxx
+
+        """
+        self.compare_bad(text)

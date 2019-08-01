@@ -309,6 +309,54 @@ So, ``convert`` doesn't do anything special for ``urls-toc.txt``,
 just processes pre-built htmls and produces a more structured pdf.
 
 
+URLReplace
+----------
+
+If there is a file ``'urlreplace.txt'`` in `userdir <overview.html#dword-userdir>`__,
+it is used for regex url preprocess.
+
+The urls matching the pattern are internally changed to replacement urls,
+and processed accordingly.
+
+If there are lines in the file::
+
+    https://www\.reddit\.com/
+    https://old.reddit.com/
+
+the first line is a regex pattern, the second line is a regex replacement
+(for Python `re.sub() <https://docs.python.org/3/library/re.html#re.sub>`__).
+So that
+
+.. code-block:: bash
+
+    $ tosixinch -i https://www.reddit.com/aaa.html -123
+
+downloads, extracts and creates the pdf file
+from ``'https://old.reddit.com/aaa.html'``.
+
+The format of the file is:
+
+.. code-block:: none
+
+    the file consists of zero or more units.
+
+    the unit consists of:
+        one regex pattern line
+        one regex replacement line
+        one or more blank lines or EOF
+
+So if there are lines, they are always two consecutive lines,
+separated by blank lines.
+(blank lines in the very first line and the very last line of the file
+are optional.)
+
+The lines starting with '#' are ignored (comments).
+You can put them in any place in units.
+
+If this feature is not desirable,
+you can disable it in the config file or in commandline.
+
+
 Scripts
 -------
 

@@ -31,6 +31,10 @@ _tosixinch()
             COMPREPLY=( $( compgen -W 'webengine webkit' -- "$cur" ) )
             return
             ;;
+        --use-urlreplace)
+            COMPREPLY=( $( compgen -W 'yes no' -- "$cur" ) )
+            return
+            ;;
         --cnvpath|--file|--input|-f|-i)
             _filedir
             return
@@ -43,7 +47,7 @@ _tosixinch()
 
     $split && return
 
-    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --qt --raw --readability --readability-only --sample-urls --textindent --textwidth --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
+    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --qt --raw --readability --readability-only --sample-urls --textindent --textwidth --toc --toc-depth --trimdirs --urllib --use-urlreplace --user-agent --userdir --verbose --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
     return
 

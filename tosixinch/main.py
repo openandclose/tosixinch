@@ -229,6 +229,10 @@ def _build_conf_parser():
     help = 'remove leading directories from local text name to shorten title'
     configs.add_argument('--trimdirs', help=help)
 
+    choices = ['yes', 'no']
+    help = ('use url replacement feature (default: yes)')
+    configs.add_argument('--use-urlreplace', choices=choices, help=help)
+
     # styles group
     choices = ['portrait', 'landscape']
     help = ('portrait(default) or landscape, determine which size data to use')
@@ -339,6 +343,8 @@ def _main(args=sys.argv[1:], conf=None):
 
     if args.sample_urls:
         settings.SampleURLLoader(conf)()
+    elif conf.general.use_urlreplace:
+        settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
     else:
         conf.sites_init(urls=urls, ufile=ufile)
 

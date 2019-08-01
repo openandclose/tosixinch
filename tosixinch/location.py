@@ -12,6 +12,8 @@ component URL localizer:
 """
 
 import collections
+import functools
+import io
 import logging
 import os
 import posixpath
@@ -377,3 +379,81 @@ class Component(_Component):
             self.slash_fname, posixpath.dirname(self.base.slash_fname))
         src = self._escape_colon_in_first_path(src)
         return self._escape_fname_reference(src)
+
+
+class ReplacementParser(object):
+    """Parse url replacement file and return new urls.
+
+    The format:
+        zero or more units
+
+    The unit:
+        one regex pattern line
+        one regex replacement line
+        blank line(s) or EOF
+        (lines starting with '#' are ignored)
+    """
+
+    def __init__(self, replacefile, urls=None, ufile=None):
+        loc = Locations(urls=urls, ufile=ufile)
+        self.urls, self.ufile = loc.urls, loc._ufile
+        self.replacefile = replacefile
+        self.state = None
+        self.result = None
+
+    def __call__(self):
+        if not os.path.isfile(self.replacefile):
+            return self.urls
+        urls = self._parse()
+        return urls
+
+    def _parse(self):
+        self.state = 0
+        self.result = []
+        if isinstance(self.replacefile, io.TextIOBase):
+            f = self.replacefile
+        else:
+            f = open(self.replacefile)
+        for i, line in enumerate(f):
+            self._parse_line(i, line)
+        self._parse_line(i + 1, '')
+        return self._apply_regex()
+
+    def _parse_line(self, i, line):
+        """
+        Parse a line of url replacement file.
+
+        state:
+            0: before the first line
+            1: done reading the first line
+            2: done reading the second line
+        """
+        line = line.strip()
+        errormsg = "Can't parse urlreplace.txt: [%d] %s" % (i, line or "''")
+        if line.startswith('#'):
+            return
+        if self.state == 0:
+            if line:
+                self.result.append([line])
+                self.state = 1
+        elif self.state == 1:
+            if line:
+                self.result[-1].append(line)
+                self.state = 2
+            else:
+                raise ValueError(errormsg)
+        elif self.state == 2:
+            if line:
+                raise ValueError(errormsg)
+            else:
+                func = functools.partial(re.sub, *self.result[-1])
+                self.result[-1] = func
+                self.state = 0
+
+    def _apply_regex(self):
+        newurls = []
+        for url in self.urls:
+            for regex in self.result:
+                url = regex(url)
+            newurls.append(url)
+        return newurls

@@ -395,6 +395,14 @@ General Section
     but it can be useful for
     checking and adjusting this ``trimdirs`` option.
 
+.. confopt:: use_urlreplace
+
+    | (``True``)
+    | ``[BOOL]``
+
+    Specifies whether to use urlreplace feature or not.
+    See `URLReplace <topics.html#urlreplace>`__.
+
 
 Style Section
 ^^^^^^^^^^^^^
