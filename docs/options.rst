@@ -82,11 +82,11 @@ General Section
     It may be able to fix some 'mojibake'.
     (So it is always called last, the place in the list is irrelevant.)
 
-    .. note ::
+.. note ::
 
-        The included `bash completion <topics.html#script-tosixinch-complete.bash>`__
-        only completes canonical codec names (with underline changed to dash).
-        But you can put any other alias name or names as long as they are legal in Python.
+    The included `bash completion <topics.html#script-tosixinch-complete.bash>`__
+    only completes canonical codec names (with underline changed to dash).
+    But you can put any other alias name or names as long as they are legal in Python.
 
 .. confopt:: encoding_errors \*
 

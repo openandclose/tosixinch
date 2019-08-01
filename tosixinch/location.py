@@ -93,7 +93,7 @@ def slashify(name):
 
 # Use bottle.py version.
 # See also:
-# functool.cached_property (new in Python3.8)
+# functools.cached_property (new in Python3.8)
 # https://github.com/pydanny/cached-property
 # https://github.com/django/django/blob/master/django/utils/functional.py
 class cached_property(object):  # noqa N801

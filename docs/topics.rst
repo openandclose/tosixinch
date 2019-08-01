@@ -2,7 +2,7 @@
 Topics
 ======
 
-'Advanced' or miscellaneous subjects are discussed here.
+'Advanced' subjects are discussed here.
 
 Text Format
 -----------
@@ -20,7 +20,7 @@ The actual code is now::
 
     _COMMENT = r'\s*(<!--.+?-->\s*)*'
     _XMLDECL = r'(<\?xml version.+?\?>)?'
-    _DOCTYPE = '(<!doctype .+?>)?'
+    _DOCTYPE = r'(<!doctype\s+.+?>)?'
     HTMLFILE = re.compile(
         '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + '<html(| .+?)>',
         flags=re.IGNORECASE | re.DOTALL)
