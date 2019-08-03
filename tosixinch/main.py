@@ -390,7 +390,7 @@ def _main(args=sys.argv[1:], conf=None):
         runcmd(conf, conf.general.postcmd1)
     if args.extract:
         runcmd(conf, conf.general.precmd2)
-        extract.run(conf)
+        extract.dispatch(conf)
         runcmd(conf, conf.general.postcmd2)
     if args.toc:
         from tosixinch import toc

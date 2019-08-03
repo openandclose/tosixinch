@@ -63,12 +63,11 @@ DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
 
-def check_ftype(fname, codings=None, errors='strict'):
-    """Open a file and detect file type.
+def check_ftype(fname, text):
+    """Detect file type.
 
     Return a tuple (ftype, kind, text)
     """
-    text = system.Reader(fname, codings=codings, errors=errors).read()
     if is_html(text):
         return 'html', None, text
     elif is_prose(text):

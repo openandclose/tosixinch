@@ -120,20 +120,22 @@ class ReadabilityExtract(content.ReadabilityHtmlContent):
         self.write()
 
 
-def run(conf):
+def dispatch(conf):
     for site in conf.sites:
         fname = site.fname
+        fnew = site.fnew
         codings = site.general.encoding
         errors = site.general.encoding_errors
-        ftype, kind, text = content.check_ftype(
-            fname, codings=codings, errors=errors)
+        text = system.Reader(fname, codings=codings, errors=errors).read()
+
+        ftype, kind, text = content.check_ftype(fname, text)
         if ftype == 'html':
-            _run(conf, site, text)
+            run(conf, site, text)
         else:
             textformat.dispatch(conf, site, ftype, kind, text)
 
 
-def _run(conf, site, text):
+def run(conf, site, text):
     extractor = conf.general.extractor
     if extractor == 'lxml':
         runner = Extract
