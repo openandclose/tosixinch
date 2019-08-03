@@ -181,19 +181,19 @@ def _add_path_env(conf):
 def userpythondir_init(userdir):
     if userdir is None:
         return
-    if not os.path.isdir(os.path.join(userdir, 'process')):
-        return
 
-    # if userdir not in sys.path:
-    if 'process' not in sys.modules:
-        sys.path.insert(0, userdir)
-        try:
-            import process  # noqa: F401 (unused import)
-        except ImportError:
-            pass
-        del sys.path[0]
-        fmt = "user python directory is registered. (%r)"
-        logger.debug(fmt, os.path.join(userdir, 'process'))
+    sys.path.insert(0, userdir)
+
+    if os.path.isdir(os.path.join(userdir, 'process')):
+        if 'process' not in sys.modules:
+            try:
+                import process  # noqa: F401 (unused import)
+                fmt = "user 'process' directory is registered. (%r)"
+                logger.debug(fmt, os.path.join(userdir, 'process'))
+            except ImportError:
+                pass
+
+    del sys.path[0]
 
 
 # TODO: pre-import modules in process.
