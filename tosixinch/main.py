@@ -91,14 +91,14 @@ def _build_cmd_parser():
     help = 'fetch urls from socialnews site (experimental)'
     actions.add_argument('--news', choices=choices, help=help)
 
-    help = 'inject sample urls'
-    actions.add_argument('--sample-urls', action='store_true', help=help)
-
     choices = ['0', '1', '2', '3', 'all']
     help = ("print filenames the scripts' actions would create  "
             '(0=url, 1=Downloaded_Files, 2=Extracted_Files, '
             '3=pdfname, all=0<tab>1<tab>2)')
     actions.add_argument('--printout', choices=choices, help=help)
+
+    help = 'inject sample urls'
+    actions.add_argument('--sample-urls', action='store_true', help=help)
 
     return parser
 
@@ -185,6 +185,11 @@ def _build_conf_parser():
         '--no-parts-download', action='store_const',
         const='no', dest='parts_download', help=help)
 
+    help = ('force --download or --parts-download '
+            'even if the file already exists')
+    configs.add_argument(
+        '--force-download', action='store_const', const='yes', help=help)
+
     help = 'add or subtract to-skip-binaries-extension list [PLUS]'
     configs.add_argument('--add-binary-extensions', help=help)
 
@@ -194,21 +199,26 @@ def _build_conf_parser():
     help = 'add or subtract to-delete-attribute list [PLUS]'
     configs.add_argument('--add-clean-attrs', help=help)
 
-    help = ('use input paths as is '
-            '(no url transformation, and only for local files)')
-    configs.add_argument(
-        '--raw', action='store_const', const='yes', help=help)
-
-    help = ('force --download or --parts-download '
-            'even if the file already exists')
-    configs.add_argument(
-        '--force-download', action='store_const', const='yes', help=help)
-
     help = 'width (character numbers) for rendering non-prose text'
     configs.add_argument('--textwidth', help=help)
 
     help = 'line continuation marker for rendering non-prose text'
     configs.add_argument('--textindent', help=help)
+
+    help = 'remove leading directories from local text name to shorten title'
+    configs.add_argument('--trimdirs', help=help)
+
+    help = ('use input paths as is '
+            '(no url transformation, and only for local files)')
+    configs.add_argument(
+        '--raw', action='store_const', const='yes', help=help)
+
+    help = 'override pdf file name'
+    configs.add_argument('--pdfname', help=help)
+
+    help = ('override the converter executable path. '
+            'you also need to set the converter itself')
+    configs.add_argument('--cnvpath', help=help)
 
     help = 'commandline string to open the pdf viewer [CMD]'
     configs.add_argument('--viewcmd', help=help)
@@ -218,16 +228,6 @@ def _build_conf_parser():
 
     help = 'do not parse user configuration (intended for testing)'
     configs.add_argument('--nouserdir', action='store_true', help=help)
-
-    help = 'override pdf file name'
-    configs.add_argument('--pdfname', help=help)
-
-    help = ('override the converter executable path. '
-            'you also need to set the converter itself')
-    configs.add_argument('--cnvpath', help=help)
-
-    help = 'remove leading directories from local text name to shorten title'
-    configs.add_argument('--trimdirs', help=help)
 
     choices = ['yes', 'no']
     help = ('use url replacement feature (default: yes)')

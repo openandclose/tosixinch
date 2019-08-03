@@ -105,15 +105,15 @@ Actions
 
         choices=hackernews
 
-.. option:: --sample-urls
-
-    inject sample urls
-
 .. option:: --printout {0,1,2,3,all}
 
     print filenames the scripts' actions would create  (0=url, 1=Downloaded_Files, 2=Extracted_Files, 3=pdfname, all=0<tab>1<tab>2)
 
         choices=0, 1, 2, 3, all
+
+.. option:: --sample-urls
+
+    inject sample urls
 
 Programs
 --------
@@ -181,6 +181,10 @@ Configs
 
     not download components before PDF conversion
 
+.. option:: --force-download
+
+    force --download or --parts-download even if the file already exists
+
 .. option:: --add-binary-extensions ADD_BINARY_EXTENSIONS
 
     add or subtract to-skip-binaries-extension list [PLUS]
@@ -193,14 +197,6 @@ Configs
 
     add or subtract to-delete-attribute list [PLUS]
 
-.. option:: --raw
-
-    use input paths as is (no url transformation, and only for local files)
-
-.. option:: --force-download
-
-    force --download or --parts-download even if the file already exists
-
 .. option:: --textwidth TEXTWIDTH
 
     width (character numbers) for rendering non-prose text
@@ -208,6 +204,22 @@ Configs
 .. option:: --textindent TEXTINDENT
 
     line continuation marker for rendering non-prose text
+
+.. option:: --trimdirs TRIMDIRS
+
+    remove leading directories from local text name to shorten title
+
+.. option:: --raw
+
+    use input paths as is (no url transformation, and only for local files)
+
+.. option:: --pdfname PDFNAME
+
+    override pdf file name
+
+.. option:: --cnvpath CNVPATH
+
+    override the converter executable path. you also need to set the converter itself
 
 .. option:: --viewcmd VIEWCMD
 
@@ -220,18 +232,6 @@ Configs
 .. option:: --nouserdir
 
     do not parse user configuration (intended for testing)
-
-.. option:: --pdfname PDFNAME
-
-    override pdf file name
-
-.. option:: --cnvpath CNVPATH
-
-    override the converter executable path. you also need to set the converter itself
-
-.. option:: --trimdirs TRIMDIRS
-
-    remove leading directories from local text name to shorten title
 
 .. option:: --use-urlreplace {yes,no}
 
