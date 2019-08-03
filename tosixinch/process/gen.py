@@ -122,7 +122,7 @@ def decrease_heading_order(doc, tag=1, order=1):
     """Decrease heading number except specified element (by order).
 
     The purpose is the same as `decrease_heading`,
-    except you designate keep-element by heading number and order.
+    except you specify keep-element by heading number and order.
     So e.g. argument ``'tag=2, order=3'`` means
     third ``<h2>`` tag element in the document.
 

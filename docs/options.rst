@@ -4,10 +4,10 @@ Config Options
 
 .. note ::
 
-    ``Default Value`` is designated by parenthesis in the first lines.
+    ``Default Value`` is specified by parenthesis in the first lines.
 
     `Value Function <overview.html#value-functions>`__
-    is designated by bracket in the first lines.
+    is specified by bracket in the first lines.
 
 tosixinch.ini
 -------------
@@ -24,13 +24,13 @@ General Section
 
     (``urllib``)
 
-    Designate default downloader. Currently only ``urllib``.
+    Specify default downloader. Currently only ``urllib``.
 
 .. confopt:: extractor
 
     (``lxml``)
 
-    Designate default extractor.
+    Specify default extractor.
     Either ``lxml`` (recommended) or ``readability``.
 
     The intended use case of ``readability`` is
@@ -42,7 +42,7 @@ General Section
 
     (``prince``)
 
-    Designate default converter.
+    Specify default converter.
     One of ``prince``, ``weasyprint`` or ``wkhtmltopdf``.
 
 .. confopt:: user_agent \*
@@ -50,13 +50,13 @@ General Section
     (some arbitrary browser user agent.
     Run ``'tosixinch -a'`` to actually see.)
 
-    Designate user agent for downloader (only for ``urllib``).
+    Specify user agent for downloader (only for ``urllib``).
 
 .. confopt:: qt \*
 
     (``webkit``)
 
-    Designate rendering engine when using ``qt``.
+    Specify rendering engine when using ``qt``.
     Either ``webkit`` or ``webengine``.
     ``webengine`` is a newer one,
     and newer functionalities are not used in this script.
@@ -106,7 +106,7 @@ General Section
     Most important ones are images,
     and currently the script only concerns images
     (in html tag ``<img src=...>``).
-    The value designate whether it downloads these components
+    The value specifies whether it downloads these components
     when ``extract``.
 
     Note downloading may occur anyway by pdf converters.
@@ -373,7 +373,7 @@ General Section
 
     | (None)
 
-    Designate output PDF file name.
+    Specify output PDF file name.
     If not provided (default), the script makes up some name.
     see `PDF_File <overview.html#dword-PDF_File>`__.
 
@@ -381,7 +381,7 @@ General Section
 
     | (``3``)
 
-    Designate the number of directories to remove local text filename.
+    Specify the number of directories to remove local text filename.
     Since text files don't have titles or h1 to put them in pdf bookmarks,
     the script passes on full filepaths as their names.
     They tend to be very long, so some means to shorten them is desirable.
@@ -422,13 +422,13 @@ In the following, the roles in the sample file
 
     (``portrait``)
 
-    Designate page orientation, portrait or landscape.
+    Specify page orientation, portrait or landscape.
 
 .. confopt:: portrait_size
 
     (``90mm 118mm``)
 
-    Designate portrait page size (width and height).
+    Specify portrait page size (width and height).
     The script uses this value when ``orientation`` is ``portrait``.
 
     The display size of common 6-inch e-readers seems
@@ -443,14 +443,14 @@ In the following, the roles in the sample file
 
     (``118mm 90mm``)
 
-    Designate landscape page size (width and height).
+    Specify landscape page size (width and height).
     The script use this value when ``orientation`` is ``landscape``.
 
 .. confopt:: toc_depth
 
     (``3``)
 
-    Designate (max) tree level of pdf bookmarks (Table of Contents).
+    Specify (max) tree level of pdf bookmarks (Table of Contents).
     The option can only be used
     when ``converter`` is ``prince`` or ``weasyprint``.
 
@@ -458,13 +458,13 @@ In the following, the roles in the sample file
 
     (``"DejaVu Sans", sans-serif``)
 
-    Designate default font to use.
+    Specify default font to use.
 
 .. confopt:: font_mono
 
     (``"Dejavu Sans Mono", monospace``)
 
-    Designate default monospaced font to use.
+    Specify default monospaced font to use.
 
 .. confopt:: font_serif
 
@@ -482,13 +482,13 @@ In the following, the roles in the sample file
 
     (``9px``)
 
-    Designate default font size.
+    Specify default font size.
 
 .. confopt:: font_size_mono
 
     (``8px``)
 
-    Designate default monospaced font size.
+    Specify default monospaced font size.
 
 .. confopt:: font_scale
 
@@ -500,7 +500,7 @@ In the following, the roles in the sample file
 
     (``1.3``)
 
-    Designate default line height.
+    Specify default line height.
 
 
 Converter Sections

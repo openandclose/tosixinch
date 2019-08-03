@@ -105,7 +105,7 @@ decides which ``converter`` to use.
 Target Files
 ------------
 
-The point of the script is that you don't have to designate
+The point of the script is that you don't have to specify
 each input and output for each consecutive action.
 For this, given ``url``, target files' names are uniquely determined.
 
