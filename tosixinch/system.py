@@ -197,7 +197,7 @@ def userpythondir_init(userdir):
 
 
 # TODO: pre-import modules in process.
-def apply_function(element, func_string):
+def run_process(element, func_string):
     """Search functions in ``process`` directories, and execute them.
 
     Modules and functions are delimitted by '.'.

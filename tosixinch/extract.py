@@ -58,7 +58,7 @@ class Extract(content.HtmlContent):
 
     def process(self):
         for s in self.sp:
-            system.apply_function(self.doc, s)
+            system.run_process(self.doc, s)
 
     def components(self):
         if self._parts_download:
