@@ -169,10 +169,8 @@ def _eval_conf(conf, word):
 
 def _add_path_env(conf):
     psep = os.pathsep
-    scriptdir = os.path.dirname(conf._configdir) + os.sep + 'script'
-    paths = conf._userdir + psep + scriptdir + psep
-    paths = paths + os.environ['PATH']
-    paths = paths.rstrip(psep)
+    paths = psep.join((conf._userscriptdir, conf._scriptdir))
+    paths = psep.join((paths, os.environ['PATH']))
     return paths
 
 

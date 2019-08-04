@@ -340,6 +340,13 @@ class Conf(object):
         _confs = _get_configs(paths, args, envs)
         self._configdir, self._userdir, self._appconf, self._siteconf = _confs
 
+        self._scriptdir = os.path.join(
+            os.path.dirname(self._configdir), 'script')
+        if self._userdir:
+            self._userscriptdir = os.path.join(self._userdir, 'script')
+        else:
+            self._userscriptdir = None
+
         # shortcuts
         self.general = self._appconf.general
         self.style = self._appconf.style

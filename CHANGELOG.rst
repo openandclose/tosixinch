@@ -53,6 +53,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Fix ftfy calling procedure (it should be *after* successful decoding).
 
+* Fix (user) script directory resolution in runcmd.
+
 **Dev:**
 
 * Develop abstract path functions to try to absorb windows path specifics,
