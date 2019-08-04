@@ -147,14 +147,14 @@ def render_template(csspath, new_csspath, context):
         f.write(text)
 
 
-def run_cmd(conf, site, cmds):
-    if cmds:
-        cmds[:] = [_eval_obj(conf, 'conf', word) for word in cmds]
-        cmds[:] = [_eval_obj(site, 'site', word) for word in cmds]
+def run_cmd(conf, site, cmd):
+    if cmd:
+        cmd[:] = [_eval_obj(conf, 'conf', word) for word in cmd]
+        cmd[:] = [_eval_obj(site, 'site', word) for word in cmd]
         paths = _add_path_env(conf)
 
-        # return subprocess.Popen(cmds).pid
-        return subprocess.run(cmds, env=dict(os.environ, PATH=paths))
+        # return subprocess.Popen(cmd).pid
+        return subprocess.run(cmd, env=dict(os.environ, PATH=paths))
 
 
 def _eval_obj(obj, objname, word):
