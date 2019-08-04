@@ -25,7 +25,7 @@ from tosixinch import download
 from tosixinch import extract
 from tosixinch import convert
 from tosixinch import settings
-from tosixinch.system import run_cmd
+from tosixinch.system import run_cmds
 
 logger = logging.getLogger(__name__)
 
@@ -385,22 +385,25 @@ def _main(args=sys.argv[1:], conf=None):
         return
 
     if args.download:
-        run_cmd(conf, None, conf.general.precmd1)
-        download.run(conf)
-        run_cmd(conf, None, conf.general.postcmd1)
+        returncode = run_cmds(conf, None, conf.general.precmd1)
+        if returncode not in (101,):
+            download.run(conf)
+        run_cmds(conf, None, conf.general.postcmd1)
     if args.extract:
-        run_cmd(conf, None, conf.general.precmd2)
-        extract.dispatch(conf)
-        run_cmd(conf, None, conf.general.postcmd2)
+        returncode = run_cmds(conf, None, conf.general.precmd2)
+        if returncode not in (101,):
+            extract.dispatch(conf)
+        run_cmds(conf, None, conf.general.postcmd2)
     if args.toc:
         from tosixinch import toc
         toc.run(conf)
     if args.convert:
-        run_cmd(conf, None, conf.general.precmd3)
-        convert.run(conf)
-        run_cmd(conf, None, conf.general.postcmd3)
+        returncode = run_cmds(conf, None, conf.general.precmd3)
+        if returncode not in (101,):
+            convert.run(conf)
+        run_cmds(conf, None, conf.general.postcmd3)
     if args.view:
-        run_cmd(conf, None, conf.general.viewcmd)
+        run_cmds(conf, None, conf.general.viewcmd)
 
     return conf
 

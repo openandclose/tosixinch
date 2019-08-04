@@ -40,6 +40,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add urlreplace feature (see doc: topics.html#urlreplace).
 
+* Add multi commands feature for hookcmds.
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

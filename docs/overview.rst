@@ -548,6 +548,11 @@ Users have to fill the value accordingly, if setting.
     You write value string as you would write in the shell.
     So words with spaces need quotes, and special characters need escapes.
 
+.. dword:: CMDS
+
+    Like CMD, but accept a list as input.
+    The Value is a list of commandline ready strings.
+
 .. dword:: PLUS
 
     Values are comma separated list as ``COMMA``,
@@ -706,7 +711,7 @@ The script calls arbitrary shell commands,
 according to precmds and postcmds options in ``tosixinch.ini``.
 
 One useful use case of ``postcmds`` is notification,
-since ``download`` and ``convert`` sometimes take a time.
+since ``download`` and ``convert`` sometimes take time.
 For example, if you are using linux::
 
     postcmd1=   notify-send -t 3000 'Done -- tosixinch.download'
@@ -714,24 +719,41 @@ For example, if you are using linux::
 should bring some notification balloon
 when ``download`` is complete.
 
+**Variables:**
+
+`script directory <#dword-script_directory>`__ is inserted in the head of ``$PATH``.
+So you can call your custom scripts only by filenames (not fullpath),
+if they are in there.
+
 If a word in the statement begins with ``'conf.'``,
 and the rest is dot-separated identifier (``[a-zA-Z_][a-zA-Z_0-9]+``),
 it is evaluated as the object ``conf``. For example::
 
-    postcmd1=   echo conf._configdir
+    postcmd1=   echo conf._configdir conf._userdir
 
-will print application config directory name.
+will print application config directory name and user config directory name.
 
-Other useful attributes are::
+(For more advanced usage, you need to peek in the source code.
+It uses ``eval``, so be careful.)
 
-    conf._userdir  (userdir)
-    conf.pdfname   (would-be pdf filename)
+**Multiple Commands:**
 
-(For more advanced usage, you need to peek in the source code.)
+Their value function signatures are actually ``[LINE][CMDS]``, that is,
+you can run multiple commands in a hookcmd, one command for each line.
 
-`script directory <#dword-script_directory>`__ is inserted in the head of ``$PATH``.
-So you can call your custom scripts only by filenames (not fuillpath),
-if they are in there.
+If the return code of a command is 0,
+the script runs the next command, if any.
+
+If the return code of a command is 100,
+the script skips the following commands, if any.
+
+If the return code of a command is 101,
+and the command is one of precmds (not postcmds),
+the script skips the following commands,
+and the following action altogether.
+(the following postcmds are executed.)
+
+Other return codes (not 0, 100, 101) aborts the script.
 
 
 Viewcmd
