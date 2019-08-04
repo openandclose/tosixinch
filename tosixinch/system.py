@@ -147,7 +147,7 @@ def render_template(csspath, new_csspath, context):
         f.write(text)
 
 
-def runcmd(conf, cmds):
+def run_cmd(conf, cmds):
     if cmds:
         cmds[:] = [_eval_conf(conf, word) for word in cmds]
         paths = _add_path_env(conf)
