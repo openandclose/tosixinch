@@ -149,22 +149,22 @@ def render_template(csspath, new_csspath, context):
 
 def run_cmd(conf, cmds):
     if cmds:
-        cmds[:] = [_eval_conf(conf, word) for word in cmds]
+        cmds[:] = [_eval_obj(conf, 'conf', word) for word in cmds]
         paths = _add_path_env(conf)
 
         # return subprocess.Popen(cmds).pid
         return subprocess.run(cmds, env=dict(os.environ, PATH=paths))
 
 
-def _eval_conf(conf, word):
-    if not word.startswith('conf.'):
+def _eval_obj(obj, objname, word):
+    if not word.startswith(objname + '.'):
         return word
 
     for w in word.split('.'):
         if not w.isidentifier():
             return word
 
-    return str(eval(word, {'conf': conf}))
+    return str(eval(word, {objname: obj}))
 
 
 def _add_path_env(conf):
