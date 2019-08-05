@@ -181,7 +181,10 @@ def _eval_obj(obj, objname, word):
 
 def _add_path_env(conf):
     psep = os.pathsep
-    paths = psep.join((conf._userscriptdir, conf._scriptdir))
+    if conf._userscriptdir:
+        paths = psep.join((conf._userscriptdir, conf._scriptdir))
+    else:
+        paths = conf._scriptdir
     paths = psep.join((paths, os.environ['PATH']))
     return paths
 
