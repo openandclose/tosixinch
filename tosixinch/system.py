@@ -170,7 +170,18 @@ def run_cmd(conf, site, cmd):
     env.update(paths)
     env.update(files)
     ret = subprocess.run(cmd, env=env)
-    return ret.returncode
+
+    returncode = ret.returncode
+    if returncode not in (0, 100, 101):
+        args = {
+            'returncode': returncode,
+            'cmd': ret.args,
+            'output': ret.stdout,
+            'stderr': ret.stderr,
+        }
+        raise subprocess.CalledProcessError(**args)
+
+    return returncode
 
 
 def _eval_obj(obj, objname, word):
