@@ -23,7 +23,7 @@ FNAME = os.environ['TOSIXINCH_FNAME']
 FNEW = os.environ['TOSIXINCH_FNEW']
 
 
-def man():
+def man(delete=True):
     env = {'MANROFFOPT': '-rIN=2n'}
     cmd = ['man', '-Thtml', FNAME]
     ret = subprocess.run(
@@ -32,7 +32,16 @@ def man():
     print('tosixinch.script.sample_extractor: [man] %s' % FNEW)
     text = ret.stdout.decode(sys.stdout.encoding)
     system.Writer(FNEW, text=text).write()
+    if delete:
+        delete_images()
     return 101
+
+
+def delete_images():
+    img = r'grohtml-[0-9]+\.png$'
+    for entry in os.scandir('.'):
+        if re.match(img, entry.name):
+            os.remove(entry)
 
 
 EXTENSION_TABLE = {
