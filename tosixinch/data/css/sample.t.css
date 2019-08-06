@@ -55,6 +55,14 @@ table, th, td {
     /* white-space: pre-wrap; */
 }
 
+/* 'groff -Thtml' and news.ycombinator.com use html attribute border="0" */
+table[border="0"],
+table[border="0"] th,
+table[border="0"] td
+{
+    border: 0;
+}
+
 /* https://stackoverflow.com/questions/18401707/is-it-possible-to-merge-two-table-borders-into-one-another */
 /* table + table, */
 /* table + table tr:first-child > * { */
