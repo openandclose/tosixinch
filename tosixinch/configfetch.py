@@ -126,6 +126,11 @@ class Func(object):
         return shlex.split(value, comments='#')
 
     @register
+    def _cmds(self, value):
+        """List version of ``_cmd``."""
+        return [self._cmd(v) for v in value]
+
+    @register
     def _fmt(self, value):
         """Evaluate part of value, using `str.format`.
 
