@@ -157,13 +157,20 @@ def run_cmds(conf, site, cmds):
 
 
 def run_cmd(conf, site, cmd):
-    if cmd:
-        cmd[:] = [_eval_obj(conf, 'conf', word) for word in cmd]
-        cmd[:] = [_eval_obj(site, 'site', word) for word in cmd]
-        paths = _add_path_env(conf)
+    if not cmd:
+        return
 
-        ret = subprocess.run(cmd, env=dict(os.environ, PATH=paths))
-        return ret.returncode
+    cmd[:] = [_eval_obj(conf, 'conf', word) for word in cmd]
+    cmd[:] = [_eval_obj(site, 'site', word) for word in cmd]
+
+    paths = _add_path_env(conf)
+    files = _add_files_env(site) if site else {}
+
+    env = os.environ
+    env.update(paths)
+    env.update(files)
+    ret = subprocess.run(cmd, env=env)
+    return ret.returncode
 
 
 def _eval_obj(obj, objname, word):
@@ -186,7 +193,15 @@ def _add_path_env(conf):
     else:
         paths = conf._scriptdir
     paths = psep.join((paths, os.environ['PATH']))
-    return paths
+    return {'PATH': paths}
+
+
+def _add_files_env(site):
+    return {
+        'TOSIXINCH_URL': site.url,
+        'TOSIXINCH_FNAME': site.fname,
+        'TOSIXINCH_FNEW': site.fnew,
+    }
 
 
 # python import ----------------------------------
