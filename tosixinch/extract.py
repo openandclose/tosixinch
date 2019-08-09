@@ -121,7 +121,18 @@ class ReadabilityExtract(content.ReadabilityHtmlContent):
 
 
 def dispatch(conf):
+    extractors = conf.general.add_extractors
+    if extractors:
+        cmd = ['sample_extractor.py', '--prog']
+        cmd.append(','.join(extractors))
+        cmd = [cmd]
+
     for site in conf.sites:
+        if extractors:
+            returncode = system.run_cmds(conf, site, cmd)
+            if returncode in (101,):
+                continue
+
         fname = site.fname
         fnew = site.fnew
         codings = site.general.encoding

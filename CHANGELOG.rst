@@ -42,6 +42,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add multi commands feature for hookcmds.
 
+* Add add_extractors option (now only for man).
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

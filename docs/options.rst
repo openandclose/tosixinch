@@ -369,6 +369,25 @@ General Section
     Run arbitrary shell command
     when specified in commandline options (``-4`` or ``--view``).
 
+.. confopt:: add_extractors
+
+    | (None)
+    | ``[PLUS]``
+
+    Before ``extract``, if some conditions match,
+    run external programs, skipping the builtin ``extract``
+    (which means creating the ``Extracted_File`` themselves somehow).
+
+    Valid values are now only 'man':
+
+    ``man``:
+
+    if filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
+    (e.g. grep.1, grep.1.gz, grep.1p.gz),
+    run man program with ``'man -Thtml'``.
+    So only unixes users can uses it.
+
+
 .. confopt:: pdfname
 
     | (None)
