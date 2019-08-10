@@ -147,16 +147,16 @@ def render_template(csspath, new_csspath, context):
         f.write(text)
 
 
-def run_cmds(conf, site, cmds):
+def run_cmds(cmds, conf, site=None):
     returncode = 0
     for cmd in cmds:
-        returncode = run_cmd(conf, site, cmd)
+        returncode = run_cmd(cmd, conf, site)
         if returncode == 100:
             break
     return returncode
 
 
-def run_cmd(conf, site, cmd):
+def run_cmd(cmd, conf, site=None):
     if not cmd:
         return
 

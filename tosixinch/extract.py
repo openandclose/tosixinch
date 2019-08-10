@@ -127,7 +127,7 @@ def dispatch(conf):
 
     for site in conf.sites:
         if extractors:
-            returncode = system.run_cmds(conf, site, cmd)
+            returncode = system.run_cmds(cmd, conf, site)
             if returncode in (101,):
                 continue
 

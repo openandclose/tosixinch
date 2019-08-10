@@ -385,25 +385,25 @@ def _main(args=sys.argv[1:], conf=None):
         return
 
     if args.download:
-        returncode = run_cmds(conf, None, conf.general.precmd1)
+        returncode = run_cmds(conf.general.precmd1, conf)
         if returncode not in (101,):
             download.run(conf)
-        run_cmds(conf, None, conf.general.postcmd1)
+        run_cmds(conf.general.postcmd1, conf)
     if args.extract:
-        returncode = run_cmds(conf, None, conf.general.precmd2)
+        returncode = run_cmds(conf.general.precmd2, conf)
         if returncode not in (101,):
             extract.dispatch(conf)
-        run_cmds(conf, None, conf.general.postcmd2)
+        run_cmds(conf.general.postcmd2, conf)
     if args.toc:
         from tosixinch import toc
         toc.run(conf)
     if args.convert:
-        returncode = run_cmds(conf, None, conf.general.precmd3)
+        returncode = run_cmds(conf.general.precmd3, conf)
         if returncode not in (101,):
             convert.run(conf)
-        run_cmds(conf, None, conf.general.postcmd3)
+        run_cmds(conf.general.postcmd3, conf)
     if args.view:
-        run_cmds(conf, None, conf.general.viewcmd)
+        run_cmds(conf.general.viewcmd, conf)
 
     return conf
 
