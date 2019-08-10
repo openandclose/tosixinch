@@ -250,19 +250,25 @@ def run_process(userdir, element, func_string):
     _load_user_package(userdir, 'process')
 
     names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
-    if names.split('.') != 2:
+    if len(names.split('.')) != 2:
         msg = ('You have to name a top-level function with a modulename, '
             "like 'modulename.funcname'")
         raise ValueError(msg)
-    modname, func = names.rsplit('.', maxsplit=1)
+    modname, funcname = names.rsplit('.', maxsplit=1)
+
     try:
         mod = importlib.import_module('process.' + modname)
+        func = getattr(mod, funcname, None)
     except ModuleNotFoundError:
+        func = None
+    if not func:
         try:
             mod = importlib.import_module('tosixinch.process.' + modname)
+            func = getattr(mod, funcname, None)
         except ModuleNotFoundError:
-            fmt = 'process module name (%r) is not found'
-            raise ModuleNotFoundError(fmt % modname)
+            pass
+    if not func:
+        fmt = "process function name ('%s.%s') is not found"
+        raise ModuleNotFoundError(fmt % (modname, funcname))
 
-    func = getattr(mod, func)
     return func(element, *args)

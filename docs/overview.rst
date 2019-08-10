@@ -375,16 +375,6 @@ Config Files
     If it cannot find the one,
     it searches next in application's ``tosixinch.process`` directory.
 
-    You can choose any filename,
-    but there are three files in ``tosixinch.process`` directory at the present. ::
-
-        gen.py
-        site.py
-        util.py
-
-    The script may add more modules.
-    Names ``my*.py`` and ``user*.py`` are reserved for user process files.
-
 .. dword:: script directory
 
     ``userdir`` can also have 'script' sub directory. For example::
