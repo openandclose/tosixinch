@@ -45,8 +45,6 @@ class Extract(content.HtmlContent):
         self._force_download = site.general.force_download
         self._full_image = site.general.full_image
 
-        system._load_user_package(self._conf._userdir)
-
     def select(self):
         if self.sel == '':
             self.sel = self.guess_selection(self._guess) or '*'
@@ -58,7 +56,7 @@ class Extract(content.HtmlContent):
 
     def process(self):
         for s in self.sp:
-            system.run_process(self.doc, s)
+            system.run_process(self._conf._userdir, self.doc, s)
 
     def components(self):
         if self._parts_download:

@@ -217,26 +217,27 @@ def _add_files_env(site):
 
 # python import ----------------------------------
 
-def _load_user_package(userdir):
+def _load_user_package(userdir, package_name):
+    if package_name in sys.modules:
+        return
     if userdir is None:
+        return
+    package_dir = os.path.join(userdir, package_name)
+    if not os.path.isdir(package_dir):
         return
 
     sys.path.insert(0, userdir)
-
-    if os.path.isdir(os.path.join(userdir, 'process')):
-        if 'process' not in sys.modules:
-            try:
-                import process  # noqa: F401 (unused import)
-                fmt = "user 'process' directory is registered. (%r)"
-                logger.debug(fmt, os.path.join(userdir, 'process'))
-            except ImportError:
-                pass
-
+    try:
+        importlib.import_module(package_name)
+    except ImportError:
+        pass
+    else:
+        fmt = "user %r directory is registered. (%r)"
+        logger.debug(fmt, package_name, package_dir)
     del sys.path[0]
 
 
-# TODO: pre-import modules in process.
-def run_process(element, func_string):
+def run_process(userdir, element, func_string):
     """Search functions in ``process`` directories, and execute them.
 
     Modules and functions are delimitted by '.'.
@@ -246,6 +247,8 @@ def run_process(element, func_string):
     E.g. the string 'aaa.bbb?cc?dd' calls
     '[tosixinch.]process.aaa.bbb(element, cc, dd)'.
     """
+    _load_user_package(userdir, 'process')
+
     names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
     if '.' not in names:
         msg = ('You have to name functions with modulenames, '
