@@ -237,6 +237,21 @@ def _load_user_package(userdir, package_name):
     del sys.path[0]
 
 
+def _run_module(userdir, modname, conf, site=None):
+    _load_user_package(userdir, 'script')
+
+    try:
+        mod = importlib.import_module('script.' + modname)
+    except ModuleNotFoundError:
+        try:
+            mod = importlib.import_module('tosixinch.script.' + modname)
+        except ModuleNotFoundError:
+            fmt = "module name ('script.%s') is not found"
+            raise ModuleNotFoundError(fmt % modname)
+
+    return mod.run(conf, site)
+
+
 def run_process(userdir, element, func_string):
     """Search functions in ``process`` directories, and execute them.
 
