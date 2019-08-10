@@ -250,8 +250,8 @@ def run_process(userdir, element, func_string):
     _load_user_package(userdir, 'process')
 
     names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
-    if '.' not in names:
-        msg = ('You have to name functions with modulenames, '
+    if names.split('.') != 2:
+        msg = ('You have to name a top-level function with a modulename, '
             "like 'modulename.funcname'")
         raise ValueError(msg)
     modname, func = names.rsplit('.', maxsplit=1)
