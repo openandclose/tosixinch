@@ -357,6 +357,90 @@ If this feature is not desirable,
 you can disable it in the config file or in commandline.
 
 
+Hookcmds
+--------
+
+
+Precmds and Postcmds
+^^^^^^^^^^^^^^^^^^^^
+
+Before and after main actions (``'-1'``, ``'-2'`` and ``'-3``),
+The script calls arbitrary shell commands,
+according to precmds and postcmds options in ``tosixinch.ini``.
+
+One useful use case of ``postcmds`` is notification,
+since ``download`` and ``convert`` sometimes take time.
+For example, if you are using linux::
+
+    postcmd1=   notify-send -t 3000 'Done -- tosixinch.download'
+
+should bring some notification balloon
+when ``download`` is complete.
+
+**Variables:**
+
+`script directory <#dword-script_directory>`__ is inserted in the head of ``$PATH``.
+So you can call your custom scripts only by filenames (not fullpath),
+if they are in there.
+
+If a word in the statement begins with ``'conf.'``,
+and the rest is dot-separated identifier (``[a-zA-Z_][a-zA-Z_0-9]+``),
+it is evaluated as the object ``conf``. For example::
+
+    postcmd1=   echo conf._configdir conf._userdir
+
+will print application config directory name and user config directory name.
+
+(For more advanced usage, you need to peek in the source code.
+It uses ``eval``, so be careful.)
+
+**Multiple Commands:**
+
+Their value function signatures are actually ``[LINE][CMDS]``, that is,
+you can run multiple commands in a hookcmd, one command for each line.
+
+If the return code of a command is 0,
+the script runs the next command, if any.
+
+If the return code of a command is 100,
+the script skips the following commands, if any.
+
+If the return code of a command is 101,
+and the command is one of precmds (not postcmds),
+the script skips the following commands,
+and the following action altogether.
+(the following postcmds are executed.)
+
+Other return codes (not 0, 100, 101) aborts the script.
+
+
+Viewcmd
+^^^^^^^
+
+A special case of ``hookcmds`` is ``viewcmd``.
+
+While ``precmds`` and ``postcmds`` are always executed,
+``viewcmd``  needs additional commandline switch to run
+(``-4`` or ``--view``).
+
+The intended use case is to open a pdf viewer
+to see the generated pdf.
+
+So, if you are using `okular <https://okular.kde.org/>`__
+as pdf viewer, ::
+
+    # in tosixinch.ini
+    viewcmd=    okular conf.pdfname
+
+    $ tosixinch -4
+
+will opens the viewer with the generated pdf file.
+
+Also, the script includes a sample file `open_viewer.py <topics.html#script-open_viewer>`__.
+(It does basically the same thing as above,
+but cancels duplicate openings.)
+
+
 Scripts
 -------
 
