@@ -217,7 +217,7 @@ def _add_files_env(site):
 
 # python import ----------------------------------
 
-def userpythondir_init(userdir):
+def _load_user_package(userdir):
     if userdir is None:
         return
 

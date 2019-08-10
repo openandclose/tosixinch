@@ -45,7 +45,7 @@ class Extract(content.HtmlContent):
         self._force_download = site.general.force_download
         self._full_image = site.general.full_image
 
-        system.userpythondir_init(self._conf._userdir)
+        system._load_user_package(self._conf._userdir)
 
     def select(self):
         if self.sel == '':
