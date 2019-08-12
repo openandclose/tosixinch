@@ -150,27 +150,41 @@ def render_template(csspath, new_csspath, context):
 def run_cmds(cmds, conf, site=None):
     returncode = 0
     userdir = conf._userdir
+    scriptdir = conf._scriptdir
+    userscriptdir = conf._userscriptdir
+    scriptd = conf.scriptd
+
     for cmd in cmds:
-        modname = _check_module(userdir, cmd)
+        modname = _check_module(userscriptdir, cmd)
         if modname:
-            returncode = run_module(userdir, modname, conf, site)
-            if returncode == None:
-                returncode = 0
-        else:
-            returncode = run_cmd(cmd, conf, site)
-        if returncode == 100:
-            break
-    return returncode
+            returncode = run_module(userdir, scriptd, modname, conf, site)
+            if returncode in (100, 101):
+                break
+            else:
+                continue
+
+        modname = _check_module(scriptdir, cmd)
+        if modname:
+            returncode = run_module(None, scriptd, modname, conf, site)
+            if returncode in (100, 101):
+                break
+            else:
+                continue
+
+        returncode = run_cmd(cmd, userscriptdir, scriptdir, conf, site)
+
+    # If returncode is None, normalize it to 0
+    return returncode or 0
 
 
-def run_cmd(cmd, conf, site=None):
+def run_cmd(cmd, userscriptdir, scriptdir, conf, site=None):
     if not cmd:
         return
 
     cmd[:] = [_eval_obj(conf, 'conf', word) for word in cmd]
     cmd[:] = [_eval_obj(site, 'site', word) for word in cmd]
 
-    paths = _add_path_env(conf)
+    paths = _add_path_env(userscriptdir, scriptdir)
     files = _add_files_env(site) if site else {}
 
     env = os.environ
@@ -191,6 +205,25 @@ def run_cmd(cmd, conf, site=None):
     return returncode
 
 
+def _check_module(directory, cmd):
+    """Check if the command looks like a module.
+
+    If a command consists of one word, without 'dot',
+    the script tries to import and run it internally
+    (as opposed to run it as a system subprocess command).
+    """
+    if len(cmd) > 1:
+        return
+    if '.' in cmd[0]:
+        return
+    modname = cmd[0]
+
+    if directory:
+        pyfile = os.path.join(directory, modname + '.py')
+        if os.path.isfile(pyfile):
+            return modname
+
+
 def _eval_obj(obj, objname, word):
     if not obj:
         return word
@@ -204,12 +237,12 @@ def _eval_obj(obj, objname, word):
     return str(eval(word, {objname: obj}))
 
 
-def _add_path_env(conf):
+def _add_path_env(userscriptdir, scriptdir):
     psep = os.pathsep
-    if conf._userscriptdir:
-        paths = psep.join((conf._userscriptdir, conf._scriptdir))
+    if userscriptdir:
+        paths = psep.join((userscriptdir, scriptdir))
     else:
-        paths = conf._scriptdir
+        paths = scriptdir
     paths = psep.join((paths, os.environ['PATH']))
     return {'PATH': paths}
 
@@ -244,34 +277,62 @@ def _load_user_package(userdir, package_name):
     del sys.path[0]
 
 
-def _check_module(userdir, cmd):
-    if len(cmd) > 1:
-        return
-    cmd = cmd[0]
-    if '.' in cmd:
-        return
+def _get_module(userdir, package_name, modname, on_error_exit=False):
+    if userdir:
+        _load_user_package(userdir, package_name)
 
-    pyfile = os.path.join(userdir, 'script', cmd + '.py')
-    if os.path.isfile(pyfile):
-        return cmd
-
-
-def run_module(userdir, modname, conf, site=None):
-    _load_user_package(userdir, 'script')
+    if userdir:
+        name = '%s.%s' % (package_name, modname)
+    else:
+        name = 'tosixinch.%s.%s' % (package_name, modname)
 
     try:
-        mod = importlib.import_module('script.' + modname)
+        return importlib.import_module(name)
     except ModuleNotFoundError:
-        try:
-            mod = importlib.import_module('tosixinch.script.' + modname)
-        except ModuleNotFoundError:
-            fmt = "module name ('script.%s') is not found"
-            raise ModuleNotFoundError(fmt % modname)
+        if on_error_exit:
+            fmt = "module ('%s.%s') is not found"
+            raise ModuleNotFoundError(fmt % (package_name, modname))
 
+
+def _get_modules(userdir, package_name, modname):
+    mod = _get_module(userdir, package_name, modname)
+    if mod:
+        exit = False
+    else:
+        exit = True
+    mod2 = _get_module(None, package_name, modname, on_error_exit=exit)
+
+    return mod, mod2
+
+
+def _get_function(userdir, package_name, modname, funcname):
+    mod, mod2 = _get_modules(userdir, package_name, modname)
+    func = getattr(mod, funcname, None)  # note: it is OK when mod == None.
+    func2 = getattr(mod2, funcname, None)
+
+    if func is None and func2 is None:
+        fmt = "function ('%s.%s') is not found"
+        raise AttributeError(fmt % (modname, funcname))
+
+    return func or func2
+
+
+def _parse_func_string(func_string):
+    names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
+    if len(names.split('.')) != 2:
+        msg = ('You have to name a top-level function with a modulename, '
+            "like 'modulename.funcname'")
+        raise ValueError(msg)
+    modname, funcname = names.split('.', maxsplit=1)
+    return modname, funcname, args
+
+
+def run_module(userdir, package_name, modname, conf, site=None):
+    mod = _get_module(userdir, package_name, modname, True)
     return mod.run(conf, site)
 
 
-def run_process(userdir, element, func_string):
+def run_function(userdir, package_name, element, func_string):
     """Search functions in ``process`` directories, and execute them.
 
     Modules and functions are delimitted by '.'.
@@ -281,28 +342,6 @@ def run_process(userdir, element, func_string):
     E.g. the string 'aaa.bbb?cc?dd' calls
     '[tosixinch.]process.aaa.bbb(element, cc, dd)'.
     """
-    _load_user_package(userdir, 'process')
-
-    names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
-    if len(names.split('.')) != 2:
-        msg = ('You have to name a top-level function with a modulename, '
-            "like 'modulename.funcname'")
-        raise ValueError(msg)
-    modname, funcname = names.rsplit('.', maxsplit=1)
-
-    try:
-        mod = importlib.import_module('process.' + modname)
-        func = getattr(mod, funcname, None)
-    except ModuleNotFoundError:
-        func = None
-    if not func:
-        try:
-            mod = importlib.import_module('tosixinch.process.' + modname)
-            func = getattr(mod, funcname, None)
-        except ModuleNotFoundError:
-            pass
-    if not func:
-        fmt = "process function name ('%s.%s') is not found"
-        raise ModuleNotFoundError(fmt % (modname, funcname))
-
+    modname, funcname, args = _parse_func_string(func_string)
+    func = _get_function(userdir, package_name, modname, funcname)
     return func(element, *args)

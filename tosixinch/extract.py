@@ -56,7 +56,7 @@ class Extract(content.HtmlContent):
 
     def process(self):
         for s in self.sp:
-            system.run_process(self._conf._userdir, self.doc, s)
+            system.run_function(self._conf._userdir, 'process', self.doc, s)
 
     def components(self):
         if self._parts_download:
@@ -121,9 +121,12 @@ class ReadabilityExtract(content.ReadabilityHtmlContent):
 def dispatch(conf):
     extractors = conf.general.add_extractors
     if extractors:
+        # subprocess version
         cmd = ['sample_extractor.py', '--prog']
         cmd.append(','.join(extractors))
         cmd = [cmd]
+        # import version
+        # cmd = [['sample_extractor']]
 
     for site in conf.sites:
         if extractors:

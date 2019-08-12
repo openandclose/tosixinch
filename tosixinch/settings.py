@@ -332,6 +332,8 @@ class Site(location.Location):
 class Conf(object):
     """It possesses all configuration data."""
 
+    scriptd = 'script'
+
     def __init__(self, urls=None, ufile=None,
             paths=None, args=None, envs=None):
         paths = paths or {}
@@ -341,9 +343,9 @@ class Conf(object):
         self._configdir, self._userdir, self._appconf, self._siteconf = _confs
 
         self._scriptdir = os.path.join(
-            os.path.dirname(self._configdir), 'script')
+            os.path.dirname(self._configdir), self.scriptd)
         if self._userdir:
-            self._userscriptdir = os.path.join(self._userdir, 'script')
+            self._userscriptdir = os.path.join(self._userdir, self.scriptd)
         else:
             self._userscriptdir = None
 
