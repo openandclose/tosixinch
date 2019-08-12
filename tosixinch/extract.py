@@ -122,11 +122,11 @@ def dispatch(conf):
     extractors = conf.general.add_extractors
     if extractors:
         # subprocess version
-        cmd = ['sample_extractor.py', '--prog']
-        cmd.append(','.join(extractors))
-        cmd = [cmd]
+        # cmd = ['sample_extractor.py', '--prog']
+        # cmd.append(','.join(extractors))
+        # cmd = [cmd]
         # import version
-        # cmd = [['sample_extractor']]
+        cmd = [['sample_extractor']]
 
     for site in conf.sites:
         if extractors:

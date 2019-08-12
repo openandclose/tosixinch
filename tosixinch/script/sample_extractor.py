@@ -19,19 +19,16 @@ import sys
 
 from tosixinch import system
 
-FNAME = os.environ['TOSIXINCH_FNAME']
-FNEW = os.environ['TOSIXINCH_FNEW']
 
-
-def man(delete=True):
+def man(fname, fnew, delete=True):
     env = {'MANROFFOPT': '-rIN=2n'}
-    cmd = ['man', '-Thtml', FNAME]
+    cmd = ['man', '-Thtml', fname]
     ret = subprocess.run(
         cmd, capture_output=True, check=True, env=os.environ.update(env))
     # TODO: use logging.debug
-    print('tosixinch.script.sample_extractor: [man] %s' % FNEW)
+    print('tosixinch.script.sample_extractor: [man] %s' % fnew)
     text = ret.stdout.decode(sys.stdout.encoding)
-    system.Writer(FNEW, text=text).write()
+    system.Writer(fnew, text=text).write()
     if delete:
         delete_images()
     return 101
@@ -53,8 +50,8 @@ FUNCTION_TABLE = {
 }
 
 
-def check_ext(prog):
-    basename = os.path.basename(FNAME)
+def check_ext(fname, fnew, prog):
+    basename = os.path.basename(fname)
     func = None
     for p in prog:
         for k, v in EXTENSION_TABLE.items():
@@ -63,7 +60,12 @@ def check_ext(prog):
                     func = FUNCTION_TABLE[p]
                     break
     if func:
-        return func()
+        return func(fname, fnew)
+
+
+def run(conf, site):
+    extractors = conf.general.add_extractors
+    return check_ext(site.fname, site.fnew, extractors)
 
 
 def parse_args(args=sys.argv[1:]):
@@ -78,9 +80,13 @@ def parse_args(args=sys.argv[1:]):
 
 
 def main():
+    fname = os.environ.get('TOSIXINCH_FNAME')
+    fnew = os.environ.get('TOSIXINCH_FNEW')
+
     parser, args = parse_args()
     prog = [p.strip() for p in args.prog.split(',')]
-    return check_ext(prog)
+
+    return check_ext(fname, fnew, prog)
 
 
 if __name__ == '__main__':
