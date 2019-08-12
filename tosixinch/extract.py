@@ -119,32 +119,37 @@ class ReadabilityExtract(content.ReadabilityHtmlContent):
 
 
 def dispatch(conf):
-    extractors = conf.general.add_extractors
-    if extractors:
-        # subprocess version
-        # cmd = ['sample_extractor.py', '--prog']
-        # cmd.append(','.join(extractors))
-        # cmd = [cmd]
-        # import version
-        cmd = [['sample_extractor']]
+    pre_percmd = conf.general.pre_percmd2
+    post_percmd = conf.general.pre_percmd2
+
+    extractors = conf.general.add_extractors  # noqa: F841 variable not used
+    # subprocess version
+    # e_cmd = ['sample_extractor.py', '--prog']
+    # e_cmd.append(','.join(extractors))
+    # e_cmd = [e_cmd]
+    # import version
+    e_cmd = [['sample_extractor']]
 
     for site in conf.sites:
-        if extractors:
-            returncode = system.run_cmds(cmd, conf, site)
-            if returncode in (101,):
-                continue
+        returncode = system.run_cmds(pre_percmd, conf, site)
 
-        fname = site.fname
-        fnew = site.fnew
-        codings = site.general.encoding
-        errors = site.general.encoding_errors
-        text = system.Reader(fname, codings=codings, errors=errors).read()
+        if returncode not in (101, 102):
+            returncode = system.run_cmds(e_cmd, conf, site)
 
-        ftype, kind, text = content.check_ftype(fname, text)
-        if ftype == 'html':
-            run(conf, site, text)
-        else:
-            textformat.dispatch(conf, site, ftype, kind, text)
+        if returncode not in (101, 102):
+            fname = site.fname
+            codings = site.general.encoding
+            errors = site.general.encoding_errors
+            text = system.Reader(fname, codings=codings, errors=errors).read()
+
+            ftype, kind, text = content.check_ftype(fname, text)
+            if ftype == 'html':
+                run(conf, site, text)
+            else:
+                textformat.dispatch(conf, site, ftype, kind, text)
+
+        if returncode not in (102,):
+            returncode = system.run_cmds(post_percmd, conf, site)
 
 
 def run(conf, site, text):
