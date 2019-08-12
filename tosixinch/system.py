@@ -158,7 +158,7 @@ def run_cmds(cmds, conf, site=None):
         modname = _check_module(user_scriptdir, cmd)
         if modname:
             returncode = run_module(userdir, scriptd, modname, conf, site)
-            if returncode in (100, 101):
+            if returncode in (100, 101, 102):
                 break
             else:
                 continue
@@ -166,7 +166,7 @@ def run_cmds(cmds, conf, site=None):
         modname = _check_module(scriptdir, cmd)
         if modname:
             returncode = run_module(None, scriptd, modname, conf, site)
-            if returncode in (100, 101):
+            if returncode in (100, 101, 102):
                 break
             else:
                 continue
@@ -193,7 +193,7 @@ def run_cmd(cmd, user_scriptdir, scriptdir, conf, site=None):
     ret = subprocess.run(cmd, env=env)
 
     returncode = ret.returncode
-    if returncode not in (0, 100, 101):
+    if returncode not in (0, 100, 101, 102):
         args = {
             'returncode': returncode,
             'cmd': ret.args,

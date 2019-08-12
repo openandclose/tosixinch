@@ -437,11 +437,27 @@ If the return code of a command is 101,
 and the command is one of precmds (not postcmds),
 the script skips the following commands,
 and the following action altogether.
-(the following postcmds are executed.)
+The following *postcmd* are executed.
 
-In running subprocess, other return codes (not 0, 100, 101) aborts the script.
+If the return code of a command is 102,
+the script skips the following postcmd in addition.
 
-In running module, any other return codes and values (not 0, 100, 101)
+.. code-block:: none
+
+    precmd: cmd,   cmd,   cmd,   cmd,   cmd...
+                   | 100  | 101  | 102
+                   |      |      |
+                  action  |      |
+                          |      |
+                       postcmd   |
+                                 |
+                           (to next action group)
+
+
+
+In running subprocess, other return codes (not 0, 100, 101, 102) aborts the script.
+
+In running module, any other return codes and values (not 0, 100, 101, 102)
 are interpreted as 0.
 (Python itself aborts the script if something went wrong.)
 
