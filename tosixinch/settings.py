@@ -345,9 +345,9 @@ class Conf(object):
         self._scriptdir = os.path.join(
             os.path.dirname(self._configdir), self.scriptd)
         if self._userdir:
-            self._userscriptdir = os.path.join(self._userdir, self.scriptd)
+            self._user_scriptdir = os.path.join(self._userdir, self.scriptd)
         else:
-            self._userscriptdir = None
+            self._user_scriptdir = None
 
         # shortcuts
         self.general = self._appconf.general

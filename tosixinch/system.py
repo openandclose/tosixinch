@@ -151,11 +151,11 @@ def run_cmds(cmds, conf, site=None):
     returncode = 0
     userdir = conf._userdir
     scriptdir = conf._scriptdir
-    userscriptdir = conf._userscriptdir
+    user_scriptdir = conf._user_scriptdir
     scriptd = conf.scriptd
 
     for cmd in cmds:
-        modname = _check_module(userscriptdir, cmd)
+        modname = _check_module(user_scriptdir, cmd)
         if modname:
             returncode = run_module(userdir, scriptd, modname, conf, site)
             if returncode in (100, 101):
@@ -171,20 +171,20 @@ def run_cmds(cmds, conf, site=None):
             else:
                 continue
 
-        returncode = run_cmd(cmd, userscriptdir, scriptdir, conf, site)
+        returncode = run_cmd(cmd, user_scriptdir, scriptdir, conf, site)
 
     # If returncode is None, normalize it to 0
     return returncode or 0
 
 
-def run_cmd(cmd, userscriptdir, scriptdir, conf, site=None):
+def run_cmd(cmd, user_scriptdir, scriptdir, conf, site=None):
     if not cmd:
         return
 
     cmd[:] = [_eval_obj(conf, 'conf', word) for word in cmd]
     cmd[:] = [_eval_obj(site, 'site', word) for word in cmd]
 
-    paths = _add_path_env(userscriptdir, scriptdir)
+    paths = _add_path_env(user_scriptdir, scriptdir)
     files = _add_files_env(site) if site else {}
 
     env = os.environ
@@ -237,10 +237,10 @@ def _eval_obj(obj, objname, word):
     return str(eval(word, {objname: obj}))
 
 
-def _add_path_env(userscriptdir, scriptdir):
+def _add_path_env(user_scriptdir, scriptdir):
     psep = os.pathsep
-    if userscriptdir:
-        paths = psep.join((userscriptdir, scriptdir))
+    if user_scriptdir:
+        paths = psep.join((user_scriptdir, scriptdir))
     else:
         paths = scriptdir
     paths = psep.join((paths, os.environ['PATH']))
