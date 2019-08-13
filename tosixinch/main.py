@@ -393,7 +393,7 @@ def _dispatch(args, conf):
     if args.download:
         returncode = run_cmds(conf.general.precmd1, conf)
         if returncode not in (101, 102):
-            download.run(conf)
+            download.dispatch(conf)
         if returncode not in (102,):
             run_cmds(conf.general.postcmd1, conf)
     if args.extract:

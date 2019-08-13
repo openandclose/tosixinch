@@ -17,6 +17,8 @@ from tosixinch import system
 
 logger = logging.getLogger(__name__)
 
+QT_APP = None
+
 
 def download(url, fname,
         user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
@@ -242,42 +244,59 @@ def qt_webengine_download(url, fname, render):
         g.write(html)
 
 
-def run(conf):
-    QT_RUNNIG = False
+def dispatch(conf):
+    global QT_APP
+
+    pre_percmd = conf.general.pre_percmd1
+    post_percmd = conf.general.pre_percmd1
     # downloader = conf.general.downloader
+
     for site in conf.sites:
-        user_agent = site.general.user_agent
-        qt_ver = site.general.qt
+        returncode = system.run_cmds(pre_percmd, conf, site)
 
-        url = site.idna_url
-        fname = site.fname
-        js = site.javascript
-        cookies = site.cookie
+        if returncode not in (101, 102):
+            run(site)
 
-        if os.path.exists(fname):
-            if not site.general.force_download:
-                continue
+        if returncode not in (102,):
+            returncode = system.run_cmds(post_percmd, conf, site)
 
-        system.make_directories(fname)
-        if js:
-            if not QT_RUNNIG:
-                qt_app, QWebEngineView = start_qt(qt_ver)
-                QT_RUNNIG = True
-                if qt_ver == 'webengine':
-                    render = qt_webengine_init(url, qt_app, QWebEngineView)
-                    qt_download = qt_webengine_download
-                elif qt_ver == 'webkit':
-                    render = qt_webkit_init(url, qt_app)
-                    qt_download = qt_webkit_download
-                else:
-                    msg = ("You have to set option 'qt' to "
-                            "either 'webengine' or 'webkit'")
-                    logger.critical(msg)
-                    raise KeyError(msg)
-            qt_download(url, fname, render)
-        else:
-            download(url, fname, user_agent, cookies)
-        logger.info('[url] %s', url)
+    if QT_APP:
+        end_qt(QT_APP)
+        QT_APP = None
 
-    if QT_RUNNIG:
-        end_qt(qt_app)
+
+def run(site):
+    global QT_APP
+
+    user_agent = site.general.user_agent
+    qt_ver = site.general.qt
+
+    url = site.idna_url
+    fname = site.fname
+    js = site.javascript
+    cookies = site.cookie
+
+    if os.path.exists(fname):
+        if not site.general.force_download:
+            return
+    system.make_directories(fname)
+
+    if js:
+        if not QT_APP:
+            qt_app, QWebEngineView = start_qt(qt_ver)
+            QT_APP = qt_app
+            if qt_ver == 'webengine':
+                render = qt_webengine_init(url, qt_app, QWebEngineView)
+                qt_download = qt_webengine_download
+            elif qt_ver == 'webkit':
+                render = qt_webkit_init(url, qt_app)
+                qt_download = qt_webkit_download
+            else:
+                msg = ("You have to set option 'qt' to "
+                        "either 'webengine' or 'webkit'")
+                logger.critical(msg)
+                raise KeyError(msg)
+        qt_download(url, fname, render)
+    else:
+        download(url, fname, user_agent, cookies)
+    logger.info('[url] %s', url)
