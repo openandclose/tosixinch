@@ -249,7 +249,7 @@ def dispatch(conf):
 
     pre_percmd = conf.general.pre_percmd1
     post_percmd = conf.general.pre_percmd1
-    # downloader = conf.general.downloader
+    # downloader = site.general.downloader
 
     for site in conf.sites:
         returncode = system.run_cmds(pre_percmd, conf, site)

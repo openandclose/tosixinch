@@ -153,7 +153,7 @@ def dispatch(conf):
 
 
 def run(conf, site, text):
-    extractor = conf.general.extractor
+    extractor = site.general.extractor
     if extractor == 'lxml':
         runner = Extract
     elif extractor == 'readability':
