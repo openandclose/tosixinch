@@ -127,6 +127,80 @@ General Section
         but we can't apply our css rules
         (They are different domains).
 
+.. confopt:: force_download \*
+
+    | (``False``)
+    | ``[BOOL]``
+
+    By default, The script does not download the same files again.
+
+    If this options is ``True``:
+
+    In case of ``-1``,
+    it (re-) downloads ``url`` even if ``Downloaded_File`` exists.
+
+    In case of ``-2``,
+    it (re-) downloads component files (images etc.)
+    even if they exist.
+
+.. confopt:: add_extractors
+
+    | (None)
+    | ``[PLUS]``
+
+    Before ``extract``, if some conditions match,
+    run external programs, skipping the builtin ``extract``
+    (which means creating the ``Extracted_File`` themselves somehow).
+
+    Valid values are now only 'man':
+
+    ``man``:
+
+    if filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
+    (e.g. grep.1, grep.1.gz, grep.1p.gz),
+    run man program with ``'man -Thtml'``.
+    So only unixes users can uses it.
+
+
+.. confopt:: guess
+
+    | (``//div[@itemprop="articleBody"]``
+    | ``//div[@id="main"]``
+    | ``//div[@id="content"]``
+    | ``//div[@class=="body"]``)
+
+    ``[LINE][XPATH]``
+
+    If ``url`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
+    ``select`` is done according to this value.
+
+    The procedure is different from ordinary ``select``
+    (with a little bit of extra precaution).
+
+    * The xpaths in this value are searched in order.
+    * If match is found and match is a single element
+      (not multiple occurrences),
+      the script ``select`` s the xpath.
+
+.. confopt:: preprocess \*
+
+    | (``gen.add_title, gen.youtube_video_to_thumbnail``)
+    | ``[COMMA][XPATH]``
+
+    Before site specific ``process`` functions,
+    the script applies default ``process`` functions to all ``url``,
+    according to this value.
+
+    The syntax is the same as `process <#confopt-process>`__ option, in ``site.ini``.
+
+    About default functions:
+
+        * ``add_title``: If there is no ``<h1>``,
+          make ``<h1>`` tag from ``<title>`` tag text.
+          It is to help make pdf bookmarks (TOC).
+        * ``youtube_video_to_thumbnail``: Change embedded youtube video object
+          to thumbnail image.
+
 .. confopt:: full_image \*
 
     (``200``)
@@ -214,78 +288,6 @@ General Section
 
     Width and height conflict with user css rules.
 
-.. confopt:: guess
-
-    | (``//div[@itemprop="articleBody"]``
-    | ``//div[@id="main"]``
-    | ``//div[@id="content"]``
-    | ``//div[@class=="body"]``)
-
-    ``[LINE][XPATH]``
-
-    If ``url`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
-    ``select`` is done according to this value.
-
-    The procedure is different from ordinary ``select``
-    (with a little bit of extra precaution).
-
-    * The xpaths in this value are searched in order.
-    * If match is found and match is a single element
-      (not multiple occurrences),
-      the script ``select`` s the xpath.
-
-.. confopt:: raw
-
-    | (``False``)
-    | ``[BOOL]``
-
-    If ``True``,
-    ``url`` is used as input *as is* when ``convert``.
-    In this case, ``url`` must be local filepath.
-
-.. confopt:: force_download \*
-
-    | (``False``)
-    | ``[BOOL]``
-
-    By default, The script does not download the same files again.
-
-    If this options is ``True``:
-
-    In case of ``-1``,
-    it (re-) downloads ``url`` even if ``Downloaded_File`` exists.
-
-    In case of ``-2``,
-    it (re-) downloads component files (images etc.)
-    even if they exist.
-
-.. confopt:: use_sample
-
-    | (``True``)
-    | ``[BOOL]``
-
-    The value specifies whether site config includes ``site.sample.ini``.
-    See `Samples <intro.html#samples>`__.
-
-.. confopt:: preprocess \*
-
-    | (``gen.add_title, gen.youtube_video_to_thumbnail``)
-    | ``[COMMA][XPATH]``
-
-    Before site specific ``process`` functions,
-    the script applies default ``process`` functions to all ``url``,
-    according to this value.
-
-    The syntax is the same as `process <#confopt-process>`__ option, in ``site.ini``.
-
-    About default functions:
-
-        * ``add_title``: If there is no ``<h1>``,
-          make ``<h1>`` tag from ``<title>`` tag text.
-          It is to help make pdf bookmarks (TOC).
-        * ``youtube_video_to_thumbnail``: Change embedded youtube video object
-          to thumbnail image.
-
 .. confopt:: textwidth
 
     (``65``)
@@ -308,9 +310,44 @@ General Section
 
 .. confopt:: textcss
 
-    ()
+    (None)
 
     Not used.
+
+.. confopt:: trimdirs
+
+    | (``3``)
+
+    Specify the number of directories to remove local text filename.
+    Since text files don't have titles or h1 to put them in pdf bookmarks,
+    the script passes on full filepaths as their names.
+    They tend to be very long, so some means to shorten them is desirable.
+
+    This option is only for local text files.
+    Remote text files' names are just urls (schemes are removed).
+
+    C.f. `--check <commandline.html#cmdoption-c>`__ commandline option
+    prints out local files.
+    They include *html* files, so it is not perfect,
+    but it can be useful for
+    checking and adjusting this ``trimdirs`` option.
+
+.. confopt:: raw
+
+    | (``False``)
+    | ``[BOOL]``
+
+    If ``True``,
+    ``url`` is used as input *as is* when ``convert``.
+    In this case, ``url`` must be local filepath.
+
+.. confopt:: pdfname
+
+    | (None)
+
+    Specify output PDF file name.
+    If not provided (default), the script makes up some name.
+    see `PDF_File <overview.html#dword-PDF_File>`__.
 
 ---
 
@@ -396,51 +433,6 @@ General Section
 
     Run arbitrary command after each ``extract``.
 
-.. confopt:: add_extractors
-
-    | (None)
-    | ``[PLUS]``
-
-    Before ``extract``, if some conditions match,
-    run external programs, skipping the builtin ``extract``
-    (which means creating the ``Extracted_File`` themselves somehow).
-
-    Valid values are now only 'man':
-
-    ``man``:
-
-    if filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
-    (e.g. grep.1, grep.1.gz, grep.1p.gz),
-    run man program with ``'man -Thtml'``.
-    So only unixes users can uses it.
-
-
-.. confopt:: pdfname
-
-    | (None)
-
-    Specify output PDF file name.
-    If not provided (default), the script makes up some name.
-    see `PDF_File <overview.html#dword-PDF_File>`__.
-
-.. confopt:: trimdirs
-
-    | (``3``)
-
-    Specify the number of directories to remove local text filename.
-    Since text files don't have titles or h1 to put them in pdf bookmarks,
-    the script passes on full filepaths as their names.
-    They tend to be very long, so some means to shorten them is desirable.
-
-    This option is only for local text files.
-    Remote text files' names are just urls (schemes are removed).
-
-    C.f. `--check <commandline.html#cmdoption-c>`__ commandline option
-    prints out local files.
-    They include *html* files, so it is not perfect,
-    but it can be useful for
-    checking and adjusting this ``trimdirs`` option.
-
 .. confopt:: use_urlreplace
 
     | (``True``)
@@ -448,6 +440,14 @@ General Section
 
     Specifies whether to use urlreplace feature or not.
     See `URLReplace <topics.html#urlreplace>`__.
+
+.. confopt:: use_sample
+
+    | (``True``)
+    | ``[BOOL]``
+
+    The value specifies whether site config includes ``site.sample.ini``.
+    See `Samples <intro.html#samples>`__.
 
 
 Style Section
