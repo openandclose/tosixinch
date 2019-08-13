@@ -61,7 +61,7 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Fix relative reference when base url is local. (_Component.__init__)
 
-* Fix blank API documents (The previous fix was wrong).
+* Fix blank API documents in readthedocs site (The previous fix was wrong).
 
 * Fix ftfy calling procedure (it should be *after* successful decoding).
 

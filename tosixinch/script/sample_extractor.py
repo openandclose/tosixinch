@@ -8,7 +8,7 @@ and create the ``Extracted_File``.
 (in place of the builtin extractor).
 
 Usage:
-    sample_extractor.py --prog PROG[,PROG]...
+    sample_extractor.py --prog PROG[,PROG...]
 """
 
 import argparse
@@ -79,7 +79,7 @@ def parse_args(args=sys.argv[1:]):
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('--prog',
-        help='specify the programs you want to run if conditionas match')
+        help='specify the programs you want to run if conditions match')
 
     args = parser.parse_args(args)
     return parser, args

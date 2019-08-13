@@ -47,15 +47,15 @@ def hackernews_indent(doc):
         # changing image width (px) to padding-left (px),
         # dividing number arbitrarily.
         block = fromstring(
-            # '<div class = "%s" style="padding-left:%dpx;"></div>' % (
-            '<div class = "%s" style="margin-bottom:1em;padding-left:%dpx;"></div>' % (  # noqa: E501
+            # '<div class="%s" style="padding-left:%dpx;"></div>' % (
+            '<div class="%s" style="margin-bottom:1em;padding-left:%dpx;"></div>' % (  # noqa: E501
                 KEEP_STYLE, int(int(width) / 4)))
         block.append(comhead)
         block.append(comment)
         ddd = dd.getparent()
         ddd.replace(dd, block)
 
-    # different for /item? and /threads? urls
+    # /item? and /threads? urls are different
     if doc.xpath('./body/table[1]'):
         table = doc.xpath('./body/table[1]')[0]
         wrap_tag(table, 'p')

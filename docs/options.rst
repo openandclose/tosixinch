@@ -314,7 +314,7 @@ General Section
 
     Not used.
 
-.. confopt:: trimdirs
+.. confopt:: trimdirs \*
 
     | (``3``)
 
