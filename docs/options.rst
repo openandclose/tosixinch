@@ -316,8 +316,7 @@ General Section
 
 .. note ::
 
-    For ``hookcmds`` (``precmd*``, ``postcmd*`` and ``viewcmd``),
-    see `Hookcmds <overview.html#hookcmds>`__.
+    For ``hookcmds``, see `Hookcmds <topics.html#hookcmds>`__.
 
 .. confopt:: precmd1
 
@@ -368,6 +367,34 @@ General Section
 
     Run arbitrary command
     when specified in commandline options (``-4`` or ``--view``).
+
+.. confopt:: pre_percmd1
+
+    | (None)
+    | ``[LINE][CMDS]``
+
+    Run arbitrary command before each ``download``.
+
+.. confopt:: post_percmd1
+
+    | (None)
+    | ``[LINE][CMDS]``
+
+    Run arbitrary command after each ``download``.
+
+.. confopt:: pre_percmd2
+
+    | (None)
+    | ``[LINE][CMDS]``
+
+    Run arbitrary command before each ``extract``.
+
+.. confopt:: post_percmd2
+
+    | (None)
+    | ``[LINE][CMDS]``
+
+    Run arbitrary command after each ``extract``.
 
 .. confopt:: add_extractors
 

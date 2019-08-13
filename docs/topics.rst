@@ -489,6 +489,31 @@ Also, the script includes a sample file `open_viewer.py <topics.html#script-open
 but cancels duplicate openings.)
 
 
+Pre_Percmds and Post_Percmds
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+An action group consists of precmd, action, postcmd.
+But when ``download`` or ``extract``,
+action itself is a collection of jobs, one job for each ``url``.
+For this job, there are corresponding pre- and post- hookcmds.
+
+The specification (return codes etc.) is the same as precmds and postcmds.
+
+Additionally, the following environment variables are exposed
+(in running subprocess case).
+
+.. code-block:: none
+
+    TOSIXINCH_URL:     url (or filepath)
+    TOSIXINCH_FNAME:   Downloaded_File
+    TOSIXINCH_FNEW:    Extracted_File
+
+For example, You can implement your own ``--add-extractors``,
+by using ``pre_percmd2``
+(calling external program and creating ``Extracted_File`` yourself,
+instead of the builtin extract action).
+
+
 Scripts
 -------
 

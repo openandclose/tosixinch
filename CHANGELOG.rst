@@ -44,6 +44,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add add_extractors option (now only for man).
 
+* Add per-cmd hooks (pre_percmds and post_percmds).
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three
