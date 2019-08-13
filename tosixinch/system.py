@@ -149,8 +149,15 @@ def render_template(csspath, new_csspath, context):
 
 def run_cmds(cmds, conf, site=None):
     returncode = 0
+    userdir = conf._userdir
     for cmd in cmds:
-        returncode = run_cmd(cmd, conf, site)
+        modname = _check_module(userdir, cmd)
+        if modname:
+            returncode = run_module(userdir, modname, conf, site)
+            if returncode == None:
+                returncode = 0
+        else:
+            returncode = run_cmd(cmd, conf, site)
         if returncode == 100:
             break
     return returncode
@@ -237,7 +244,19 @@ def _load_user_package(userdir, package_name):
     del sys.path[0]
 
 
-def _run_module(userdir, modname, conf, site=None):
+def _check_module(userdir, cmd):
+    if len(cmd) > 1:
+        return
+    cmd = cmd[0]
+    if '.' in cmd:
+        return
+
+    pyfile = os.path.join(userdir, 'script', cmd + '.py')
+    if os.path.isfile(pyfile):
+        return cmd
+
+
+def run_module(userdir, modname, conf, site=None):
     _load_user_package(userdir, 'script')
 
     try:

@@ -365,7 +365,7 @@ Precmds and Postcmds
 ^^^^^^^^^^^^^^^^^^^^
 
 Before and after main actions (``'-1'``, ``'-2'`` and ``'-3``),
-The script calls arbitrary shell commands,
+The script calls arbitrary commands,
 according to precmds and postcmds options in ``tosixinch.ini``.
 
 One useful use case of ``postcmds`` is notification,
@@ -394,6 +394,34 @@ will print application config directory name and user config directory name.
 (For more advanced usage, you need to peek in the source code.
 It uses ``eval``, so be careful.)
 
+**Running Module:**
+
+If a command consists of one word, without 'dot',
+and the module actually exists in `script directory <#dword-script_directory>`__,
+the script runs the command as module internally
+(as opposed to running it as a system subprocess).
+
+That is, if a cmd is ``['foo']``, for example::
+
+    precmd1=    foo
+
+and there is a file ``foo.py`` in ``script directory``,
+the script does roughly::
+
+    import script.foo
+    script.foo.run(conf, site)
+
+So the module must have ``run`` function with this signature.
+
+The difference from running subprocess is that
+it should be a bit faster, and ``conf`` and ``site`` are writable.
+
+.. note::
+
+    If you want to run a python file as subprocess, put in the actual filename::
+
+        precmd1=    foo.py
+
 **Multiple Commands:**
 
 Their value function signatures are actually ``[LINE][CMDS]``, that is,
@@ -411,7 +439,11 @@ the script skips the following commands,
 and the following action altogether.
 (the following postcmds are executed.)
 
-Other return codes (not 0, 100, 101) aborts the script.
+In running subprocess, other return codes (not 0, 100, 101) aborts the script.
+
+In running module, any other return codes and values (not 0, 100, 101)
+are interpreted as 0.
+(Python itself aborts the script if something went wrong.)
 
 
 Viewcmd

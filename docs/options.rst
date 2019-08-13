@@ -324,49 +324,49 @@ General Section
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary shell command before ``download``.
+    Run arbitrary command before ``download``.
 
 .. confopt:: postcmd1
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary shell command after ``download``.
+    Run arbitrary command after ``download``.
 
 .. confopt:: precmd2
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary shell command before ``extract``.
+    Run arbitrary command before ``extract``.
 
 .. confopt:: postcmd2
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary shell command after ``extract``.
+    Run arbitrary command after ``extract``.
 
 .. confopt:: precmd3
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary shell command before ``convert``.
+    Run arbitrary command before ``convert``.
 
 .. confopt:: postcmd3
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary shell command after ``convert``.
+    Run arbitrary command after ``convert``.
 
 .. confopt:: viewcmd
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary shell command
+    Run arbitrary command
     when specified in commandline options (``-4`` or ``--view``).
 
 .. confopt:: add_extractors
