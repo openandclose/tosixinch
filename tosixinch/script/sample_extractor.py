@@ -12,12 +12,15 @@ Usage:
 """
 
 import argparse
+import logging
 import os
 import re
 import subprocess
 import sys
 
 from tosixinch import system
+
+logger = logging.getLogger(__name__)
 
 
 def man(fname, fnew, delete=True):
@@ -26,7 +29,10 @@ def man(fname, fnew, delete=True):
     ret = subprocess.run(
         cmd, capture_output=True, check=True, env=os.environ.update(env))
     # TODO: use logging.debug
-    print('tosixinch.script.sample_extractor: [man] %s' % fnew)
+    if logger.name == '__main__':
+        print('sample_extractor (subprocess): [man] processed %r' % fname)
+    else:
+        logger.info('[man] processed %r', fname)
     text = ret.stdout.decode(sys.stdout.encoding)
     system.Writer(fnew, text=text).write()
     if delete:
