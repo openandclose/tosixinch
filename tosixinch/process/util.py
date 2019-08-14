@@ -22,6 +22,7 @@ The aim is to keep the best name 'el' for main target or main concern.
 
 from copy import deepcopy
 import logging
+import re
 
 from tosixinch import _ImportError
 from tosixinch.clean import KEEP_STYLE  # noqa: F401
@@ -222,3 +223,15 @@ def get_metadata(el):
     return dict(authors=authors, description=description,
         generator=generator, keywords=keywords,
         created=created, modified=modified)
+
+
+def transform_xpath(path):
+    """Create a selector for a class from multi classes element.
+
+    >>> transform_xpath('//div[@class=="main-article"]')
+    '//div[contains(concat(" ", normalize-space(@class), " "), " main-article ")]'
+    """  # noqa: E501 line too long
+    pat = r'([a-zA-Z]+|[hH][1-6]|\*)\[@class==([\'"])([_a-zA-Z0-9-]+)\2\]'
+    pat = re.compile(pat)
+    repl = r'\1[contains(concat(" ", normalize-space(@class), " "), " \3 ")]'
+    return pat.sub(repl, path)

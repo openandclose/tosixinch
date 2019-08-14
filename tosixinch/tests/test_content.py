@@ -25,14 +25,6 @@ class TestBlankHtml:
         assert tostring(html.getroottree()) == expected
 
 
-class TestXpath:
-
-    def test(self):
-        before = '//div[@class=="main-article"]'
-        after = '//div[contains(concat(" ", normalize-space(@class), " "), " main-article ")]'
-        assert content.transform_xpath(before) == after
-
-
 class TestRelinkComponent:
     fname = 'aaa/bb/cc'
     base = 'xxx/yy'
