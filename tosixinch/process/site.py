@@ -72,9 +72,9 @@ def reddit_indent(doc):
     They are in the site's external css.
     So we have to insert inline css made from it.
     """
-    for el in doc.xpath('//div[contains(@class, " comment ")]'):
-        el.attrib["style"] = 'margin-left: 8px;'
-        el.classes |= (KEEP_STYLE,)
+    for el in doc.xpath(transform_xpath('//div[@class=="comment"]')):
+        el.set('style', 'margin-left:8px;')
+        el.classes.add(KEEP_STYLE)
 
     # Add sitename to h1
     h1 = doc.xpath('./body/h1')[0]
