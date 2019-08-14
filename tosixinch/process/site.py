@@ -37,7 +37,8 @@ def hackernews_indent(doc):
             t.attrib.pop('width')
 
     for d in doc.xpath('//td[@class="ind"]'):
-        width = d.xpath('./img/@width')[0]
+        width = d.xpath('./img/@width')
+        width = width[0] if width else '0'
         dd = d.getparent()
         comhead = dd.xpath('.//span[@class="comhead"]')[0]
         newcomhead = make_tag('strong')
