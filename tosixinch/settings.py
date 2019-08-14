@@ -282,6 +282,7 @@ class Sites(location.Locations):
             parts = url.rsplit('.', maxsplit=1)
             if len(parts) > 1:
                 if parts[-1] in self._filters:
+                    logger.info('skipping url with binary extension: %r', url)
                     continue
             yield url
 
