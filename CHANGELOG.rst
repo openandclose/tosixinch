@@ -46,6 +46,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add per-cmd hooks (pre_percmds and post_percmds).
 
+* Add file url support for input.
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

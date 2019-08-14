@@ -27,9 +27,13 @@ COMMENT_PREFIX = ('#', ';',)
 
 DOWNLOAD_DIR = '_htmls'
 
-# Only http and https schemes are permitted.
+# Only http, https and file schemes are suported.
+# Also file scheme is only for local files.
 SCHEMES = re.compile('^https?://', flags=re.IGNORECASE)
+FILESCHEME = re.compile(
+    '^file:/(/(|localhost)/)*(?=[^/])', flags=re.IGNORECASE)
 
+# Not used.
 # Borrows from https://github.com/Kozea/WeasyPrint/blob/master/weasyprint/urls.py  # noqa: E501
 # cf. urlsplit(r'c:\aaa\bb') returns
 #     SplitResult(scheme='c', netloc='', path='\\aaa\\bb')
@@ -187,14 +191,17 @@ class _Location(object):
     def _parse_url(self):
         url = self._url
         if self.is_local:
-            if self.platform == sys.platform:
+            if url.startswith('file:/'):
+                if not FILESCHEME.match(url):
+                    raise ValueError('Not local file url: %r' % url)
+            elif self.platform == sys.platform:
                 url = os.path.expanduser(url)
                 url = os.path.expandvars(url)
                 url = os.path.abspath(url)
-                # if not os.path.exists(url):
-                #     raise FileNotFoundError('File not found: %r' % url)
-                # if os.path.isdir(url):
-                #     raise IsADirectoryError('Got directory name: %r' % url)
+            # if not os.path.exists(url):
+            #     raise FileNotFoundError('File not found: %r' % url)
+            # if os.path.isdir(url):
+            #     raise IsADirectoryError('Got directory name: %r' % url)
         return url
 
     def _make_fname(self, url):
@@ -238,6 +245,7 @@ class _Location(object):
         return root + ext
 
     def _strip_root(self, fname):
+        fname = FILESCHEME.sub('', fname)
         if self.platform == 'win32':
             drive = None
             m = WINROOTPATH.match(fname)
@@ -248,6 +256,7 @@ class _Location(object):
             if drive:
                 fname = os.path.join(drive, fname)
         else:
+            # note: one root slash is already removed.
             fname = ROOTPATH.sub('', fname)
         return fname
 

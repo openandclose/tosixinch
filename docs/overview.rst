@@ -56,7 +56,7 @@ Downloads ``url``, and saves it as ``Downloaded_File``.
 If `force_download <options.html#confopt-force_download>`__ is ``False`` (default),
 the script skips downloading if the file already exists.
 
-If ``url`` is a local filepath, it also does nothing.
+If ``url`` is a local filepath (or file url), it also does nothing.
 ``Downloaded_File`` is the same as ``url``.
 
 For the actual downloading, it just uses
@@ -80,7 +80,7 @@ Opens ``Downloaded_File``, and generates ``Extracted_File``.
 
 It always runs, overwriting existing ``Extracted_File`` if any.
 
-(If ``url`` is local filepath, ``Downloaded_File`` is not created,
+(If ``url`` is local filepath (or file url), ``Downloaded_File`` is not created,
 but ``Extracted_File`` *is* created).
 
 Extraction procedure is predetermined,
@@ -120,11 +120,19 @@ But disposing of the files (deleting or moving) is users' job.
 .. dword:: url
 
     Input resource location. URL or local filepath.
-    File url (``file://..``) is currently not supported.
+    Only ``http``, ``https`` and ``file`` schemes are supported for URL.
 
     Example::
 
         https://en.wikipedia.org/wiki/Xpath
+
+.. note::
+
+    file urls are only for regular local files, starting from one of::
+
+        file:/
+        file://localhost/
+        file:///
 
 .. dword:: ufile
 
