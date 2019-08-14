@@ -41,9 +41,8 @@ def hackernews_indent(doc):
         width = width[0] if width else '0'
         dd = d.getparent()
         comhead = dd.xpath('.//span[@class="comhead"]')[0]
-        newcomhead = make_tag('strong')
-        newcomhead.append(comhead)
-        comhead = newcomhead
+        comhead.classes.add(KEEP_STYLE)
+        comhead.set('style', 'font-weight:bold;')
         comment = dd.xpath('.//div[@class="comment"]')[0]
         # changing image width (px) to padding-left (px),
         # dividing number arbitrarily.
@@ -75,6 +74,10 @@ def reddit_indent(doc):
     for el in doc.xpath(transform_xpath('//div[@class=="comment"]')):
         el.set('style', 'margin-left:8px;')
         el.classes.add(KEEP_STYLE)
+        path = transform_xpath('.//p[@class="tagline"]/a[@class=="author"]')
+        for e in el.xpath(path):
+            e.set('style', 'font-weight:bold;')
+            e.classes.add(KEEP_STYLE)
 
     # Add sitename to h1
     h1 = doc.xpath('./body/h1')[0]
