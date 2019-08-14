@@ -61,6 +61,10 @@ def hackernews_indent(doc):
         table = doc.xpath('./body/table[1]')[0]
         wrap_tag(table, 'p')
 
+    # Add sitename hint to h1
+    h1 = doc.xpath('./body/h1')[0]
+    h1.text = 'hn - ' + h1.text.split(' | ')[0]
+
 
 def reddit_indent(doc):
     """Render reddit.com's comment indent styles.
@@ -71,6 +75,10 @@ def reddit_indent(doc):
     for el in doc.xpath('//div[contains(@class, " comment ")]'):
         el.attrib["style"] = 'margin-left: 8px;'
         el.classes |= (KEEP_STYLE,)
+
+    # Add sitename to h1
+    h1 = doc.xpath('./body/h1')[0]
+    h1.text = 'reddit - ' + h1.text
 
 
 def github_self_anchor(doc):
