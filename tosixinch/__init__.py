@@ -31,9 +31,6 @@ def _set_logger():
     logger.setLevel(logging.INFO)
 
 
-_set_logger()
-
-
 def _set_verbose():
     """Set logging level to DEBUG, changing the format a little."""
     # root logger

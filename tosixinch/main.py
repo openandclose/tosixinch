@@ -19,7 +19,7 @@ import os
 import sys
 import webbrowser
 
-from tosixinch import _set_verbose
+from tosixinch import _set_logger, _set_verbose
 from tosixinch import configfetch
 from tosixinch import download
 from tosixinch import extract
@@ -27,6 +27,8 @@ from tosixinch import convert
 from tosixinch import settings
 from tosixinch.system import run_cmds
 
+# set logging level to INFO
+_set_logger()
 logger = logging.getLogger(__name__)
 
 ENVS = {'userdir': 'TOSIXINCH_USERDIR'}
