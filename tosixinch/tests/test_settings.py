@@ -34,7 +34,7 @@ class TestParse:
         assert conf.general.encoding == encode_value
 
     def test_parse_pdfname(self, conf):
-        assert conf.pdfname == 'xxx.pdf'
+        assert conf.pdfname == 'bbb-xxx.pdf'
 
     def test_parse_fnew(self, site):
         # fnew_value = '_htmls/bbb.com/ttt/xxx#yyy--extracted.html'
@@ -56,3 +56,31 @@ class TestParse:
     def test_parse_cnvopts(self, conf):
         opts = ['--javascript', '--font', 'DejaVu Sans Mono', '-A', '1', '-B', '2']
         assert conf.converter.cnvopts == opts
+
+
+class TestPDFName:
+
+    def compare(self, url, section, length, pdfname):
+        f = tosixinch.settings._getpdf
+        assert f(url, section, length) == pdfname
+
+    def test(self):
+        # for pdfname, we assume an url always has top level domain.
+        url = 'https://aaa'
+        with pytest.raises(ValueError):
+            self.compare(url, 'x', 1, 'x-aaa.pdf')
+
+        url = 'https://aaa.com'
+        self.compare(url, 'x', 1, 'x-aaa.pdf')
+        url = 'https://aaa.com/'
+        self.compare(url, 'x', 1, 'x-aaa.pdf')
+        url = 'https://aaa.com//'
+        self.compare(url, 'x', 1, 'x-aaa.pdf')
+        url = 'https://aaa.com/bbb.txt'
+        self.compare(url, 'x', 1, 'x-bbb.txt.pdf')
+        url = 'https://aaa.com/bbb.txt'
+        self.compare(url, 'x', 2, 'x.pdf')
+
+        # with querry
+        url = 'https://aaa.com/bbb?s=3+t=5&u=7+8'
+        self.compare(url, 'x', 1, 'x-bbb-s3t5u78.pdf')

@@ -22,7 +22,7 @@ import urllib.parse
 from pkg_resources import resource_filename
 
 from tosixinch import configfetch
-from tosixinch.content import transform_xpath
+from tosixinch.content import slugify, transform_xpath
 from tosixinch import location
 from tosixinch.zconfigparser import ZConfigParser
 
@@ -107,25 +107,32 @@ class ReplaceURLLoader(URLLoader):
 def _get_pdfname(sites):
     site = list(sites)[0]
     url = site.url
+    section = site.section
+    length = len(sites)
+    return _getpdf(url, section, length)
 
+
+def _getpdf(url, section, length=1):
     parts = urllib.parse.urlsplit(url)
-    domainparts = parts.netloc.replace('www.', '').split('.')
+    domainparts = parts.netloc.replace('www.', '').split('.')[:-1]
     host = max(domainparts)
     # host = host.encode('ascii').decode('idna')
     path = parts.path.rstrip('/').split('/')[-1]
-    section = site.section.split(' : ')[0]
+    query = parts.query[:20]
+    if query:
+        path = path + '-' + slugify(query)
+    section = section.split(' : ')[0]
 
-    if len(sites) == 1:
-        name = path or host
-        name = os.path.basename(name)
+    if section == 'scriptdefault':
+        name = host or section
     else:
-        if section == 'scriptdefault':
-            name = host or section
-        else:
-            name = section
+        name = section
+    if length == 1:
+        path = path or host
+        path = os.path.basename(path)
+        name = name + '-' + path
 
-    pdfname = name + '.pdf'
-    return pdfname
+    return name + '.pdf'
 
 
 # TODO: refactor

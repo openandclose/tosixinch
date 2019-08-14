@@ -226,13 +226,14 @@ But disposing of the files (deleting or moving) is users' job.
 
 .. dword:: PDF_File
 
-    If input consists of a single ``url``,
-    The filename is created from ``url``'s last ``path``.
-    If not, it is created from the section name of the first ``url``.
+    When ``--pdfname`` option is not provided,
+    the script auto-creates the pdf filename.
+    The name is made up from ``url``'s last path,
+    query, section name and host name *of the first url*.
 
     Example::
 
-        ~/Download/tosixinch/Xpath.pdf (from single input)
+        ~/Download/tosixinch/wikipedia-Xpath.pdf (from single input)
         ~/Download/tosixinch/wikipedia.pdf (from multiple input)
 
     Even if ``urls`` are from multiple domains (e.g. wikipedia and reddit),

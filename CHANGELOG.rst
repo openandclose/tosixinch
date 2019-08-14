@@ -28,6 +28,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 * **[!]** Change 'preprocess' option name to 'defaultprocess'.
   Again, users have to rename this option if used.
 
+* pdfname (when the script creates) is made more descriptive.
+
 **Add:**
 
 * Add trimdirs option.
