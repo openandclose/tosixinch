@@ -35,7 +35,7 @@ class Extract(content.HtmlContent):
         self.fnew = site.fnew
         self.sel = site.select
         self.excl = site.exclude
-        self.sp = site.general.preprocess + site.process
+        self.sp = site.general.defaultprocess + site.process
         self.section = site.section
 
         self._guess = conf.general.guess

@@ -182,7 +182,7 @@ General Section
       (not multiple occurrences),
       the script ``select`` s the xpath.
 
-.. confopt:: preprocess \*
+.. confopt:: defaultprocess \*
 
     | (``gen.add_title, gen.youtube_video_to_thumbnail``)
     | ``[COMMA][XPATH]``

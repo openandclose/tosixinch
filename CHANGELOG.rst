@@ -21,10 +21,12 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
   Now only when necessary to comply to url spec (colon-in-first-path case).
 
 * **[!]** Change 'userprocess' to just 'process'.
-  So your 'userprocess' directory must be renamed to 'process'.
+  So Users have to rename this 'userprocess' directory if used.
 
 * **[!]** Change (rather Fix) default encodings, to only utf-8 and cp1252.
 
+* **[!]** Change 'preprocess' option name to 'defaultprocess'.
+  Again, users have to rename this option if used.
 
 **Add:**
 
