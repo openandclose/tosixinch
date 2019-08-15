@@ -74,7 +74,7 @@ def _tamper_windows_fname(url, platform=sys.platform):
         for key, value in _win_changes.items():
             url = url.replace(key, value)
             url = url.replace(urllib.parse.quote(key), value)
-            url = url.replace('/', '\\')
+        url = url.replace('/', '\\')
     return url
 
 
