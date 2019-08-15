@@ -69,12 +69,11 @@ _win_changes = {
 }
 
 
-def _tamper_windows_fname(url, platform=sys.platform):
-    if platform == 'win32':
-        for key, value in _win_changes.items():
-            url = url.replace(key, value)
-            url = url.replace(urllib.parse.quote(key), value)
-        url = url.replace('/', '\\')
+def _tamper_windows_fname(url):
+    for key, value in _win_changes.items():
+        url = url.replace(key, value)
+        url = url.replace(urllib.parse.quote(key), value)
+    url = url.replace('/', '\\')
     return url
 
 
@@ -86,8 +85,14 @@ def _tamper_fname(url):
             part = part.replace(delim, _changes[delim])
         newparts.append(part)
     url = urllib.parse.urlunsplit(newparts)
+    return url
 
-    fname = urllib.parse.unquote(url)
+
+def _url2path(url, platform=sys.platform):
+    fname = _tamper_fname(url)
+    if platform == 'win32':
+        fname = _tamper_windows_fname(fname)
+    fname = urllib.parse.unquote(fname)
     return fname
 
 
@@ -211,9 +216,7 @@ class _Location(object):
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
         fname = self._add_index(fname)
-
-        fname = _tamper_windows_fname(fname, self.platform)
-        fname = _tamper_fname(fname)
+        fname = _url2path(fname, platform=self.platform)
         fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 

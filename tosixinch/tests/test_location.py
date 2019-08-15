@@ -77,7 +77,7 @@ class TestLocalReferenceRaw:
         base = 'http://aaa.org'
         component = location.Component(url, base, platform='linux')
         assert component._escape_fname_reference(url) == local_url
-        assert location._tamper_fname(url) == fname
+        assert location._url2path(url, platform='linux') == fname
 
     def test(self):
         url, local_url, fname = (
