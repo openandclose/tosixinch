@@ -115,9 +115,11 @@ def _get_pdfname(sites):
 
 def _getpdf(url, section, length=1):
     parts = urllib.parse.urlsplit(url)
-    domainparts = parts.netloc.replace('www.', '').split('.')[:-1]
-    host = max(domainparts)
-    # host = host.encode('ascii').decode('idna')
+    host = ''
+    if parts.netloc:
+        domainparts = parts.netloc.replace('www.', '').split('.')[:-1]
+        host = max(domainparts)
+        # host = host.encode('ascii').decode('idna')
     path = parts.path.rstrip('/').split('/')[-1]
     query = parts.query[:20]
     if query:
