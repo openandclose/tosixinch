@@ -67,6 +67,10 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Fix (user) script directory resolution in runcmd.
 
+* Fix image downloading error when input is a file url
+  (The file url handling has changed: immediately change it to filepath
+  in url phase).
+
 **Dev:**
 
 * Develop abstract path functions to try to absorb windows path specifics,

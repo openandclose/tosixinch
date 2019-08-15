@@ -35,7 +35,7 @@ class TestWindowsMakePath:
     def test_filescheme(self):
         url, fname, fnew = (
             'file:///c:/aaa.txt',
-            'file:///c:/aaa.txt',
+            r'c:\aaa.txt',
             r'_htmls\c\aaa--extracted.txt.html')
         self.compare(url, fname, fnew)
 

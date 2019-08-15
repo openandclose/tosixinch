@@ -66,7 +66,7 @@ class TestMakePath:
     def test_filescheme(self):
         url, fname, fnew = (
             'file:///aaa/bbb.html',
-            'file:///aaa/bbb.html',
+            '/aaa/bbb.html',
             '_htmls/aaa/bbb--extracted.html')
         self.compare(url, fname, fnew)
 

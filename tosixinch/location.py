@@ -196,13 +196,28 @@ class _Location(object):
     def _parse_url(self):
         url = self._url
         if self.is_local:
-            if url.startswith('file:/'):
-                if not FILESCHEME.match(url):
-                    raise ValueError('Not local file url: %r' % url)
+            if self._check_filescheme(url):
+                url = self._strip_filescheme(url)
             elif self.platform == sys.platform:
                 url = os.path.expanduser(url)
                 url = os.path.expandvars(url)
                 url = os.path.abspath(url)
+        return url
+
+    def _check_filescheme(self, url):
+        return True if url.startswith('file:/') else False
+
+    def _strip_filescheme(self, url):
+        m = FILESCHEME.match(url)
+        if m:
+            if self.platform == 'win32':
+                url = url[m.end(0):]
+                url = url.replace('/', '\\')
+            else:
+                url = '/' + url[m.end(0):]
+            url = urllib.parse.unquote(url)
+        else:
+            raise ValueError('Not local file url: %r' % url)
         return url
 
     def _make_fname(self, url):
@@ -244,7 +259,6 @@ class _Location(object):
         return root + ext
 
     def _strip_root(self, fname):
-        fname = FILESCHEME.sub('', fname)
         if self.platform == 'win32':
             drive = None
             m = WINROOTPATH.match(fname)
@@ -255,7 +269,6 @@ class _Location(object):
             if drive:
                 fname = os.path.join(drive, fname)
         else:
-            # note: one root slash is already removed.
             fname = ROOTPATH.sub('', fname)
         return fname
 
