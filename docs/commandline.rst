@@ -177,10 +177,6 @@ Configs
 
         choices=strict, ignore, replace, xmlcharrefreplace, backslashreplace, namereplace, surrogateescape, surrogatepass
 
-.. option:: --guess GUESS
-
-    if there is no matched url, use this xpath for content selection [LINE]
-
 .. option:: --parts-download
 
     download components (images etc.) before PDF conversion (default)
@@ -192,6 +188,10 @@ Configs
 .. option:: --force-download
 
     force --download or --parts-download even if the file already exists
+
+.. option:: --guess GUESS
+
+    if there is no matched url, use this xpath for content selection [LINE]
 
 .. option:: --add-binary-extensions ADD_BINARY_EXTENSIONS
 
@@ -225,10 +225,6 @@ Configs
 
     override pdf file name
 
-.. option:: --cnvpath CNVPATH
-
-    override the converter executable path. you also need to set the converter itself
-
 .. option:: --viewcmd VIEWCMD
 
     commandline string to open the pdf viewer [CMD]
@@ -246,6 +242,10 @@ Configs
     use url replacement feature (default: yes)
 
         choices=yes, no
+
+.. option:: --cnvpath CNVPATH
+
+    override the converter executable path. you also need to set the converter itself
 
 Styles
 ------

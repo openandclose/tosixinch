@@ -30,6 +30,8 @@ DOWNLOAD_DIR = '_htmls'
 # Only http, https and file schemes are suported.
 # Also file scheme is only for local files.
 SCHEMES = re.compile('^https?://', flags=re.IGNORECASE)
+# Note: Wikipedia says 'file://localhost/c:/aaa' is an illegal UNC.
+# https://en.wikipedia.org/wiki/File_URI_scheme
 FILESCHEME = re.compile(
     '^file:/(/(|localhost)/)*(?=[^/])', flags=re.IGNORECASE)
 

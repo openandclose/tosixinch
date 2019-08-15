@@ -173,10 +173,6 @@ def _build_conf_parser():
     help = 'assign an encoding error handler (default: strict)'
     configs.add_argument('--encoding-errors', choices=choices, help=help)
 
-    help = ('if there is no matched url, '
-            'use this xpath for content selection [LINE]')
-    configs.add_argument('--guess', help=help)
-
     # Toggling is difficult, see Paul Jacobson (hpaulj)'s explanation.
     # https://stackoverflow.com/a/34750557
     help = (
@@ -195,6 +191,10 @@ def _build_conf_parser():
             'even if the file already exists')
     configs.add_argument(
         '--force-download', action='store_const', const='yes', help=help)
+
+    help = ('if there is no matched url, '
+            'use this xpath for content selection [LINE]')
+    configs.add_argument('--guess', help=help)
 
     help = 'add or subtract to-skip-binaries-extension list [PLUS]'
     configs.add_argument('--add-binary-extensions', help=help)
@@ -222,10 +222,6 @@ def _build_conf_parser():
     help = 'override pdf file name'
     configs.add_argument('--pdfname', help=help)
 
-    help = ('override the converter executable path. '
-            'you also need to set the converter itself')
-    configs.add_argument('--cnvpath', help=help)
-
     help = 'commandline string to open the pdf viewer [CMD]'
     configs.add_argument('--viewcmd', help=help)
 
@@ -238,6 +234,10 @@ def _build_conf_parser():
     choices = ['yes', 'no']
     help = ('use url replacement feature (default: yes)')
     configs.add_argument('--use-urlreplace', choices=choices, help=help)
+
+    help = ('override the converter executable path. '
+            'you also need to set the converter itself')
+    configs.add_argument('--cnvpath', help=help)
 
     # styles group
     choices = ['portrait', 'landscape']

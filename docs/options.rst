@@ -206,9 +206,11 @@ General Section
     (``200``)
 
     If width or height of component pixel size is equal or above this value,
-    class attribute ``tsi-wide`` or ``tsi-tall`` is added to the image tag,
-    ``tsi-wide`` if width is longer than height, ``tsi-tall`` if the opposite.
-    'tsi' is short for 'tosixinch'.
+    class attribute ``tsi-tall`` or ``tsi-wide`` is added to the image tag,
+    ``tsi-tall`` if height/width ratio is greater than
+    the ratio of the e-reader display,
+    ``tsi-wide`` if the opposite.
+
 
     By itself, it does nothing. However, In ``sample.css``,
     it is used to make medium sized images expand almost full display size,
@@ -260,6 +262,8 @@ General Section
     This is for user convenience. If you copy and paste many urls,
     checking strange extensions is a bit of work.
     But I'm afraid sometimes it gets in the way.
+
+    (An example I found: some old unix software uses ``README.doc`` for README.)
 
 .. confopt:: add_clean_tags \*
 

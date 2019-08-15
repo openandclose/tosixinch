@@ -268,7 +268,7 @@ to keep ``url`` transformation rules consistent
         </html>
 
     .. code-block:: html
-        
+
         <html>
           <body>
             <h1>bbb</h1>
@@ -481,7 +481,7 @@ as pdf viewer, ::
 
     $ tosixinch -4
 
-will opens the viewer with the generated pdf file.
+will open the viewer with the generated pdf file.
 
 Also, the script includes a sample file `open_viewer.py <topics.html#script-open_viewer>`__.
 (It does basically the same thing as above,
@@ -491,10 +491,22 @@ but cancels duplicate openings.)
 Pre_Percmds and Post_Percmds
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An action group consists of precmd, action, postcmd.
+An action group consists of ``precmd``, ``action``, ``postcmd``.
 But when ``download`` or ``extract``,
-action itself is a collection of jobs, one job for each ``url``.
+``action`` itself is a collection of jobs, one job for each ``url``.
 For this job, there are corresponding pre- and post- hookcmds.
+
+.. code-block:: none
+
+    precmd                  pre_percmd
+    action (urls) ----+---  job (an url)
+    postcmd           |     post_percmd
+                      |
+                      |     pre_percmd
+                      +---  job (an url)
+                      |     post_percmd
+                      |
+                      :     ...
 
 The specification (return codes etc.) is the same as precmds and postcmds.
 
@@ -510,7 +522,7 @@ Additionally, the following environment variables are exposed
 For example, You can implement your own ``--add-extractors``,
 by using ``pre_percmd2``
 (calling external program and creating ``Extracted_File`` yourself,
-instead of the builtin extract action).
+returning 101).
 
 
 Scripts

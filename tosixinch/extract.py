@@ -124,8 +124,8 @@ def dispatch(conf):
     pre_percmd = conf.general.pre_percmd2
     post_percmd = conf.general.pre_percmd2
 
-    extractors = conf.general.add_extractors  # noqa: F841 variable not used
     # subprocess version
+    # extractors = conf.general.add_extractors
     # e_cmd = ['sample_extractor.py', '--prog']
     # e_cmd.append(','.join(extractors))
     # e_cmd = [e_cmd]
