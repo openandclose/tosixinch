@@ -12,7 +12,6 @@
 """
 
 import logging
-import os
 
 from tosixinch import content
 from tosixinch import system
@@ -82,8 +81,11 @@ class Extract(content.HtmlContent):
         self._add_component_attributes(el, comp.fname)
 
     def _download_component(self, url, fname):
-        if not os.path.exists(fname) or self._force_download:
-            super()._download_component(url, fname)
+        # if not os.path.exists(fname) or self._force_download:
+        if self._site.check_fname():
+            return
+        logger.info('[img] %s', url)
+        super()._download_component(url, fname)
 
     def _add_component_attributes(self, el, fname):
         full = int(self._full_image)

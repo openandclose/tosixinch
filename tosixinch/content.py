@@ -339,7 +339,6 @@ class HtmlContent(Content):
         return comp
 
     def _download_component(self, url, fname):
-        logger.info('[img] %s', url)
         system.make_directories(fname)
         download.download(url, fname, on_error_exit=False)
 

@@ -7,7 +7,6 @@ Either by ``urllib`` or ``pyqt5``.
 import http.cookiejar
 import gzip
 import logging
-import os
 import shutil
 import time
 import urllib.request
@@ -276,9 +275,8 @@ def run(site):
     js = site.javascript
     cookies = site.cookie
 
-    if os.path.exists(fname):
-        if not site.general.force_download:
-            return
+    if site.check_fname():
+        return
     system.make_directories(fname)
 
     if js:
