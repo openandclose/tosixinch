@@ -52,6 +52,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add file url support for input.
 
+* Add font_scale option
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

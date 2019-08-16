@@ -290,4 +290,4 @@ Styles
 
 .. option:: --font-scale FONT_SCALE
 
-    number like 1.5 to scale font sizes (not yet used by sample)
+    number like 1.5 to scale base font sizes (default: 1.0)

@@ -6,6 +6,7 @@ import logging
 import os
 import shlex
 import subprocess
+import re
 
 from tosixinch import location
 from tosixinch.system import render_template
@@ -37,6 +38,15 @@ def _is_newer(oldfile, newfile):
     if os.path.getmtime(oldfile) < os.path.getmtime(newfile):
         return True
     return False
+
+
+def _get_scale_func(scale):
+    def func(css_size):
+        m = re.match(r'([0-9]+)([A-Za-z]*)', css_size)
+        num, unit = m.group(1), m.group(2)
+        num = int(num) * float(scale)
+        return str(num) + unit
+    return func
 
 
 class Convert(object):
@@ -96,6 +106,7 @@ class Convert(object):
         context = {key: self.style.get(key) for key in self.style}
 
         context['size'] = self._conf.pdfsize
+        context['scale_font'] = _get_scale_func(self.style.font_scale)
 
         using = lambda x: self._conf.converter._section == x
         conv_dict = {

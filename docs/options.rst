@@ -538,9 +538,15 @@ In the following, the roles in the sample file
 
 .. confopt:: font_scale
 
-    (``1``)
+    (``1.0``)
 
-    Not used.
+    Specify scaling factor for css ``font_size`` and ``font_size_mono``.
+
+    It is to make easier to test font sizes.
+
+    (To use it for other font sizes in your template,
+    add ``'scale_font'`` function,
+    e.g. ``'{{ font_serif|scale_font }}'`` instead of just ``'{{ font_serif }}'``.)
 
 .. confopt:: line_height
 

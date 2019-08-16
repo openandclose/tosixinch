@@ -270,7 +270,7 @@ def _build_conf_parser():
     help = "'adjust spaces between lines, number like '1.3'"
     styles.add_argument('--line-height', help=help)
 
-    help = 'number like 1.5 to scale font sizes (not yet used by sample)'
+    help = 'number like 1.5 to scale base font sizes (default: 1.0)'
     styles.add_argument('--font-scale', help=help)
 
     return parser
