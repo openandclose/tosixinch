@@ -39,8 +39,8 @@ FILESCHEME = re.compile(
 #     SplitResult(scheme='c', netloc='', path='\\aaa\\bb')
 OTHER_SCHEMES = re.compile('^([a-zA-Z][a-zA-Z0-9.+-]+):')
 
-ROOTPATH = re.compile('^/+')
-WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
+ROOTPATH = re.compile('^//?(/*)')
+WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?([/\\])*|\\\\([?.\\]*)')
 
 
 _Rule = collections.namedtuple('_Rule', ['quote', 'change'])
@@ -262,13 +262,18 @@ class _Location(object):
         if self.platform == 'win32':
             drive = None
             m = WINROOTPATH.match(fname)
-            # cf. 'C:aaa.txt' means 'aaa.txt' in current directory.
-            if m and m.group(2):
-                drive = m.group(1)
+            # cf. 'C:aaa.txt' means 'aaa.txt' in current directory in C.
+            # but the result of this function is the same as 'C:\aaa.txt'.
+            if m:
+                if m.group(2) or m.group(3):
+                    raise ValueError('Unsupported filename format: %r' % fname)
+                if m.group(1):
+                    drive = m.group(1)
             fname = WINROOTPATH.sub('', fname)
             if drive:
                 fname = os.path.join(drive, fname)
         else:
+            # Note: normalization is already done by os.path.abspath
             fname = ROOTPATH.sub('', fname)
         return fname
 

@@ -49,6 +49,28 @@ class TestWindowsMakePath:
         with pytest.raises(ValueError):
             self.compare(url, fname, fnew)
 
+    def test_rootpath(self):
+        fname = r'c:\aaa\bbb.html'
+        fnew = r'_htmls\c\aaa\bbb--extracted.html'
+
+        url = r'c:\aaa\bbb.html'
+        self.compare(url, fname, fnew)
+        url = r'c:\\aaa\bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, url, fnew)  # note arguments: url, url, fnew
+
+        fnew = r'_htmls\aaa\bbb--extracted.html'
+
+        url = r'\\aaa\bbb.html'
+        self.compare(url, url, fnew)  # note arguments: url, url, fnew
+
+        url = r'\\?\aaa\bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, url, fnew)
+        url = r'\\.\aaa\bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, url, fnew)
+
 
 class TestWindowsLocalReferenceRaw:
 

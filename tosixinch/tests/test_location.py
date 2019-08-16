@@ -67,6 +67,18 @@ class TestMakePath:
             self.compare(url, fname, fnew)
 
 
+    def test_rootpath(self):
+        fname = '/aaa/bbb.html'
+        fnew = '_htmls/aaa/bbb--extracted.html'
+
+        url = '/aaa/bbb.html'
+        self.compare(url, fname, fnew)
+        url = '//aaa/bbb.html'
+        self.compare(url, url, fnew)  # note arguments: url, url, fnew
+        url = '///aaa/bbb.html'
+        self.compare(url, fname, fnew)
+
+
 class TestLocalReferenceRaw:
 
     def compare(self, url, local_url, fname):
