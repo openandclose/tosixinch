@@ -43,15 +43,15 @@ ROOTPATH = re.compile('^/+')
 WINROOTPATH = re.compile(r'^(?:([a-zA-z]):([/\\]*)|[/?\\]+)')
 
 
-Rule = collections.namedtuple('Rule', ['quote', 'change'])
-Delimiters = collections.namedtuple(
-    'Delimiters', ['scheme', 'netloc', 'path', 'query', 'fragment'])
-_delimiters = Delimiters(
-    Rule('', ''),
-    Rule('@:[]', ''),
-    Rule('[]', ''),
-    Rule('?', '/'),
-    Rule('?', ''),
+_Rule = collections.namedtuple('_Rule', ['quote', 'change'])
+_Delimiters = collections.namedtuple(
+    '_Delimiters', ['scheme', 'netloc', 'path', 'query', 'fragment'])
+_delimiters = _Delimiters(
+    _Rule('', ''),
+    _Rule('@:[]', ''),
+    _Rule('[]', ''),
+    _Rule('?', '/'),
+    _Rule('?', ''),
 )
 
 _changes = {
