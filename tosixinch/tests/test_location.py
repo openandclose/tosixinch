@@ -49,26 +49,22 @@ class TestMakePath:
             '_htmls/aaa/bbb--extracted.html')
         self.compare(url, fname, fnew)
 
-    def test_filescheme_regex(self):
-        fscheme = location.FILESCHEME
-        urls = [
-            ('file:/c:/aaa.txt', 'file:/'),
-            ('file://c:/aaa.txt', ''),
-            ('file:///c:/aaa.txt', 'file:///'),
-            ('file://localhost/c:/aaa.txt', 'file://localhost/'),
-            ('file:////c:/aaa.txt', ''),
-        ]
-        for url, match in urls:
-            m = fscheme.match(url)
-            head = m.group(0) if m else ''
-            assert head  == match
-
     def test_filescheme(self):
-        url, fname, fnew = (
-            'file:///aaa/bbb.html',
-            '/aaa/bbb.html',
-            '_htmls/aaa/bbb--extracted.html')
+        fname = '/aaa/bbb.html'
+        fnew = '_htmls/aaa/bbb--extracted.html'
+
+        url = 'file:/aaa/bbb.html'
         self.compare(url, fname, fnew)
+        url = 'file://aaa/bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, fname, fnew)
+        url = 'file:///aaa/bbb.html'
+        self.compare(url, fname, fnew)
+        url = 'file://localhost/aaa/bbb.html'
+        self.compare(url, fname, fnew)
+        url = 'file:////aaa/bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, fname, fnew)
 
 
 class TestLocalReferenceRaw:

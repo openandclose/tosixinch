@@ -33,11 +33,21 @@ class TestWindowsMakePath:
         self.compare(url, fname, fnew)
 
     def test_filescheme(self):
-        url, fname, fnew = (
-            'file:///c:/aaa.txt',
-            r'c:\aaa.txt',
-            r'_htmls\c\aaa--extracted.txt.html')
+        fname = r'c:\aaa\bbb.html'
+        fnew = r'_htmls\c\aaa\bbb--extracted.html'
+
+        url = 'file:/c:/aaa/bbb.html'
         self.compare(url, fname, fnew)
+        url = 'file://c:/aaa/bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, fname, fnew)
+        url = 'file:///c:/aaa/bbb.html'
+        self.compare(url, fname, fnew)
+        url = 'file://localhost/c:/aaa/bbb.html'
+        self.compare(url, fname, fnew)
+        url = 'file:////c:/aaa/bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, fname, fnew)
 
 
 class TestWindowsLocalReferenceRaw:
