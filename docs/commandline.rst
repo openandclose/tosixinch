@@ -64,6 +64,10 @@ General
 
     supress non-critical log messages
 
+.. option:: -V, --version
+
+    print version and exit
+
 Actions
 -------
 

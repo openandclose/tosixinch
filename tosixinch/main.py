@@ -61,6 +61,9 @@ def _build_cmd_parser():
     help = 'supress non-critical log messages'
     general.add_argument('-q', '--quiet', action='store_true', help=help)
 
+    help = 'print version and exit'
+    general.add_argument('-V', '--version', action='store_true', help=help)
+
     # actions group
     help = 'download by default downloader'
     actions.add_argument('-1', '--download', action='store_true', help=help)
@@ -311,6 +314,9 @@ def _main(args=sys.argv[1:], conf=None):
     conf_parser = _build_conf_parser()
     confargs, _ = conf_parser.parse_known_args(_args)
 
+    if args.version:
+        print_version()
+
     if args.help:
         usage(parser)
 
@@ -428,6 +434,14 @@ def main():
 
 def usage(parser):
     parser.print_help()
+    sys.exit()
+
+
+def print_version():
+    vfile = os.path.join(settings._get_configdir(), '..', '..', 'VERSION')
+    vfile = os.path.abspath(vfile)
+    with open(vfile) as f:
+        print(f.read().strip())
     sys.exit()
 
 

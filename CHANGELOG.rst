@@ -56,6 +56,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add quiet option
 
+* Add version option
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three
