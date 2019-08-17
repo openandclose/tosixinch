@@ -19,30 +19,31 @@ def _add_handler(logger, formatter):
     logger.addHandler(handler)
 
 
-def _set_logger():
+def _set_logger(level='info'):
     """Configure logging for application."""
+    if level == 'warning':
+        num = 30
+        fmt = '%(message)s'
+    elif level == 'info':
+        num = 20
+        fmt = '%(message)s'
+    elif level == 'debug':
+        num = 10
+        fmt = '%(name)s:%(levelname)s: %(message)s'
+
     # root logger
     logger = logging.getLogger()
-    formatter = logging.Formatter('%(message)s')
-    _add_handler(logger, formatter)
+    if level == 'debug':
+        logger.setLevel(num)
+    if not logger.hasHandlers():
+        formatter = logging.Formatter(fmt)
+        _add_handler(logger, formatter)
 
     # tosixinch logger
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(num)
 
-
-def _set_verbose():
-    """Set logging level to DEBUG, changing the format a little."""
-    # root logger
-    logger = logging.getLogger()
-    logger.removeHandler(logger.handlers[0])
-    logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(name)s:%(levelname)s: %(message)s')
-    _add_handler(logger, formatter)
-
-    # tosixinch logger
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
+    del logger
 
 
 class _ImportError(object):

@@ -60,6 +60,10 @@ General
 
     print out more detailed log messages
 
+.. option:: -q, --quiet
+
+    supress non-critical log messages
+
 Actions
 -------
 

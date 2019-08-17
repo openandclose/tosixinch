@@ -19,7 +19,7 @@ import os
 import sys
 import webbrowser
 
-from tosixinch import _set_logger, _set_verbose
+from tosixinch import _set_logger
 from tosixinch import configfetch
 from tosixinch import download
 from tosixinch import extract
@@ -27,8 +27,6 @@ from tosixinch import convert
 from tosixinch import settings
 from tosixinch.system import run_cmds
 
-# set logging level to INFO
-_set_logger()
 logger = logging.getLogger(__name__)
 
 ENVS = {'userdir': 'TOSIXINCH_USERDIR'}
@@ -59,6 +57,9 @@ def _build_cmd_parser():
 
     help = 'print out more detailed log messages'
     general.add_argument('-v', '--verbose', action='store_true', help=help)
+
+    help = 'supress non-critical log messages'
+    general.add_argument('-q', '--quiet', action='store_true', help=help)
 
     # actions group
     help = 'download by default downloader'
@@ -314,7 +315,11 @@ def _main(args=sys.argv[1:], conf=None):
         usage(parser)
 
     if args.verbose:
-        _set_verbose()
+        _set_logger('debug')
+    elif args.quiet:
+        _set_logger('warning')
+    else:
+        _set_logger('info')
 
     # (to debug logging messages)
     # import logging_tree

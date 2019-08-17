@@ -54,6 +54,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add font_scale option
 
+* Add quiet option
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three
