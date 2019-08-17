@@ -196,6 +196,9 @@ def _build_conf_parser():
             'use this xpath for content selection [LINE]')
     configs.add_argument('--guess', help=help)
 
+    help = 'pxel size to add special class attributes to images'
+    configs.add_argument('--full-image', help=help)
+
     help = 'add or subtract to-skip-binaries-extension list [PLUS]'
     configs.add_argument('--add-binary-extensions', help=help)
 

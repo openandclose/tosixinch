@@ -58,6 +58,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add version option
 
+* Expose full-image option to commandline
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

@@ -193,6 +193,10 @@ Configs
 
     if there is no matched url, use this xpath for content selection [LINE]
 
+.. option:: --full-image FULL_IMAGE
+
+    pxel size to add special class attributes to images
+
 .. option:: --add-binary-extensions ADD_BINARY_EXTENSIONS
 
     add or subtract to-skip-binaries-extension list [PLUS]
