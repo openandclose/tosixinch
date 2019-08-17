@@ -60,6 +60,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Expose full-image option to commandline
 
+* Add --null option to script/open_viewer.py
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

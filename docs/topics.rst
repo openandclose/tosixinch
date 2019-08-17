@@ -547,18 +547,20 @@ just copied in the tosixinch installation directory
 
     It can be used without full path.::
 
-        viewcmd=    open_viewer.py --command okular --check conf.pdfname
+        viewcmd=    open_viewer.py --command okular --check --null conf.pdfname
 
     * ``--command`` accepts arbitrary commands with some options,
       but you need to quote.
       (e.g. ``--command 'okular --page 5'``).
     * ``--check`` is the option flag to do above duplicate checks.
+    * ``--null`` is to suppress *this* command's stdout and stderr.
 
     And one way to see the help is::
 
-        $ tosixinch -4 --viewcmd 'open_viewer.py --help'
+        $ tosixinch -4 --viewcmd 'open_viewer.py --help' -i aaa
 
-    (note if ``urls.txt`` doesn't exist or is blank, this does not work.)
+    (This doesn't work if ``urls`` is not supplied,
+    so you have to supply something, like the above ``-i aaa``.)
 
 
 .. script:: tosixinch-complete.bash

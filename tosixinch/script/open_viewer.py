@@ -7,13 +7,18 @@ import os
 import subprocess
 
 
-def open_viewer(cmd, pdfname, check=False):
+def open_viewer(cmd, pdfname, check=False, null=False):
+    devnull = subprocess.DEVNULL
+
     if check:
         if _check_viewer(cmd, pdfname):
             return
     cmd = cmd.split()
     cmd.append(pdfname)
-    pid = subprocess.Popen(cmd).pid
+    if null:
+        pid = subprocess.Popen(cmd, stdout=devnull, stderr=devnull).pid
+    else:
+        pid = subprocess.Popen(cmd).pid
     return pid
 
 
@@ -37,13 +42,15 @@ def main():
         help=('check if the same file is opened with the command '
               "(the first word of the '--command'), "
               'if so, skip another opening.'))
+    parser.add_argument('--null', action='store_true',
+        help='redirect stdout and stderror to /dev/null')
     parser.add_argument('pdfname',
         help='the pdf file path to open')
 
     args = parser.parse_args()
 
     if os.path.isfile(args.pdfname):
-        open_viewer(args.command, args.pdfname, args.check)
+        open_viewer(args.command, args.pdfname, args.check, args.null)
 
 
 if __name__ == '__main__':
