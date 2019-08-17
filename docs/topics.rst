@@ -467,12 +467,11 @@ Viewcmd
 
 A special case of ``hookcmds`` is ``viewcmd``.
 
-While ``precmds`` and ``postcmds`` are always executed,
-``viewcmd``  needs additional commandline switch to run
-(``-4`` or ``--view``).
+``viewcmd`` triggers when ``-4`` or ``--view`` option is supplied.
+But actually there is no action called ``4`` or ``view``.
 
-The intended use case is to open a pdf viewer
-to see the generated pdf.
+It is intended to open a pdf viewer,
+after pdf generation is done (``-3``).
 
 So, if you are using `okular <https://okular.kde.org/>`__
 as pdf viewer, ::
