@@ -328,26 +328,6 @@ class Site(location.Location):
     def __getattr__(self, option):
         return self._get_self().get(option)
 
-    def check_url(self):
-        if self.is_local:
-            url = self.url
-            if not os.path.exists(url):
-                raise FileNotFoundError('[url] File not found: %r' % url)
-            if os.path.isdir(url):
-                raise IsADirectoryError('[url] Got directory name: %r' % url)
-
-    def check_fname(self):
-        """Check if downloading is not necessary (done).
-
-        True:  not needed
-        False: needed
-        """
-        self.check_url()
-        if os.path.exists(self.fname):
-            if not self.general.force_download:
-                return True
-        return False
-
     @property
     def shortname(self):
         if self.is_remote:

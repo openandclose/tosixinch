@@ -275,7 +275,7 @@ def run(site):
     js = site.javascript
     cookies = site.cookie
 
-    if site.check_fname():
+    if site.check_fname(force=site.general.force_download):
         return
     system.make_directories(fname)
 

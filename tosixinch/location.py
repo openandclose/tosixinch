@@ -341,6 +341,26 @@ class Location(_Location):
         else:
             return url
 
+    def check_url(self):
+        if self.is_local:
+            url = self.url
+            if not os.path.exists(url):
+                raise FileNotFoundError('[url] File not found: %r' % url)
+            if os.path.isdir(url):
+                raise IsADirectoryError('[url] Got directory name: %r' % url)
+
+    def check_fname(self, force=False):
+        """Check if downloading is necessary (done).
+
+        True:  not necessary
+        False: necessary
+        """
+        self.check_url()
+        if os.path.exists(self.fname):
+            if not force:
+                return True
+        return False
+
 
 class _Component(Location):
     """Calculate component filepath."""

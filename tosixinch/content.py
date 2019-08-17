@@ -334,11 +334,10 @@ class HtmlContent(Content):
         src = comp.fname_reference
         fname = comp.fname
         el.attrib['src'] = src
-        self._download_component(url, fname)
-        # self._add_component_attributes(el, fname)
+        self._download_component(comp, url, fname)
         return comp
 
-    def _download_component(self, url, fname):
+    def _download_component(self, comp, url, fname):
         system.make_directories(fname)
         download.download(url, fname, on_error_exit=False)
 

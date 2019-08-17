@@ -80,12 +80,11 @@ class Extract(content.HtmlContent):
         comp = super()._get_component(el, url)
         self._add_component_attributes(el, comp.fname)
 
-    def _download_component(self, url, fname):
-        # if not os.path.exists(fname) or self._force_download:
-        if self._site.check_fname():
+    def _download_component(self, comp, url, fname):
+        if comp.check_fname(force=self._site.general.force_download):
             return
         logger.info('[img] %s', url)
-        super()._download_component(url, fname)
+        super()._download_component(comp, url, fname)
 
     def _add_component_attributes(self, el, fname):
         full = int(self._full_image)
