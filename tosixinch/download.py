@@ -247,7 +247,7 @@ def dispatch(conf):
     global QT_APP
 
     pre_percmd = conf.general.pre_percmd1
-    post_percmd = conf.general.pre_percmd1
+    post_percmd = conf.general.post_percmd1
     # downloader = site.general.downloader
 
     for site in conf.sites:

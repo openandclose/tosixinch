@@ -121,7 +121,7 @@ class ReadabilityExtract(content.ReadabilityHtmlContent):
 
 def dispatch(conf):
     pre_percmd = conf.general.pre_percmd2
-    post_percmd = conf.general.pre_percmd2
+    post_percmd = conf.general.post_percmd2
 
     # subprocess version
     # extractors = conf.general.add_extractors
