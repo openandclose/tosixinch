@@ -146,6 +146,10 @@ class Convert(object):
         # Add other arguments.
         _extend(self.cmd, self.arguments)
 
+    def _add_args(self, args):
+        # Add additional arguments.
+        _extend(self.cmd, args)
+
     def _add_files(self):
         _extend(self.cmd, self.files)
 
@@ -212,6 +216,7 @@ class WkhtmltopdfConvert(Convert):
     def run(self):
         self._add_css_arguments('--user-style-sheet')
         self._add_arguments()
+        self._add_args(['--outline-depth', self.style.toc_depth or '3'])
         self._add_files()
         self._add_pdfname()
         self._run()

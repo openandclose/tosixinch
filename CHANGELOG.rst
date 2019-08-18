@@ -64,6 +64,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add browsercmd option
 
+* Add toc_depth option to wkhtmltopdf converter.
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

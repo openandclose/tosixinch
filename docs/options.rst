@@ -515,8 +515,7 @@ In the following, the roles in the sample file
     (``3``)
 
     Specify (max) tree level of pdf bookmarks (Table of Contents).
-    The option can only be used
-    when ``converter`` is ``prince`` or ``weasyprint``.
+    It uses html headings for structuring, so valid values are 0 to 6.
 
 .. confopt:: font_family
 
