@@ -20,13 +20,13 @@ tosixinch.ini
 General Section
 ^^^^^^^^^^^^^^^
 
-.. confopt:: downloader
+.. confopt:: downloader \*
 
     (``urllib``)
 
     Specify default downloader. Currently only ``urllib``.
 
-.. confopt:: extractor
+.. confopt:: extractor \*
 
     (``lxml``)
 
