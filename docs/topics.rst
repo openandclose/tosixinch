@@ -412,6 +412,8 @@ the script does roughly::
     script.foo.run(conf, site)
 
 So the module must have ``run`` function with this signature.
+(In this context, ``site`` should be ``None``,
+since it is not available.)
 
 The difference from running subprocess is that
 it should be a bit faster, and ``conf`` and ``site`` are writable.
@@ -510,7 +512,19 @@ For this job, there are corresponding pre- and post- hookcmds.
 
 The specification (return codes etc.) is the same as precmds and postcmds.
 
-Additionally, the following environment variables are exposed
+In this context, there are ``url`` specific configurations,
+in addition to the general configuration.
+So you can use ``site`` variable, in addition to ``conf``:
+
+If a word in the statement begins with ``'site.'``,
+and the rest is dot-separated identifier (``[a-zA-Z_][a-zA-Z_0-9]+``),
+it is evaluated as the object ``site``. For example::
+
+    post_percmd1=   echo site.fnew site.match
+
+will print each ``Extracted_File`` and url glob pattern.
+
+Also, the following environment variables are exposed
 (in running subprocess case).
 
 .. code-block:: none
@@ -519,10 +533,30 @@ Additionally, the following environment variables are exposed
     TOSIXINCH_FNAME:   Downloaded_File
     TOSIXINCH_FNEW:    Extracted_File
 
-For example, You can implement your own ``--add-extractors``,
-by using ``pre_percmd2``
-(calling external program and creating ``Extracted_File`` yourself,
-returning 101).
+(The usage is a bit complex, though.
+Python runs subprocess without shell by default,
+so the commandline strings themselves are not evaluated. That is::
+
+    post_percmd1=   echo $TOSIXINCH_FNAME
+
+doesn't work;
+
+.. code-block:: none
+
+    # in foo.sh
+    echo $TOSIXINCH_FNAME
+
+    # in ~/.config/tosixinch/tosixinch.ini
+    post_percmd1=   foo.sh
+
+will work.)
+
+.. note::
+
+    You can implement your own ``--add-extractors``,
+    by using ``pre_percmd2``
+    (calling external program and creating ``Extracted_File`` yourself,
+    returning 101).
 
 
 Scripts
