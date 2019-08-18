@@ -62,6 +62,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add --null option to script/open_viewer.py
 
+* Add browsercmd option
+
 **Remove:**
 
 * Remove 'support' for ebook-convert. Now converters are only one of the three

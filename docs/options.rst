@@ -437,6 +437,20 @@ General Section
 
     Run arbitrary command after each ``extract``.
 
+.. confopt:: browsercmd
+
+    | (None)
+    | ``[LINE][CMDS]``
+
+    When action is ``--browser``,
+    specify commands to open a browser,
+    if the default (using Python stdlib webbrowser) is not desirable. E.g.::
+
+        firefox 'site.fnew'
+
+    Here, you have to use a magic word ``site.fnew``.
+    It evaluates to the intended ``Extracted_File``.
+
 .. confopt:: use_urlreplace
 
     | (``True``)

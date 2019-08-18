@@ -383,12 +383,7 @@ def _main(args=sys.argv[1:], conf=None):
             raise ValueError('File not found: %r' % ufile)
 
     if args.browser:
-        html = list(conf.sites)[0].fnew
-        if not os.path.exists(html):
-            logger.error(
-                'File not found: no extracted html')
-        else:
-            webbrowser.open(html)
+        open_browser(conf)
         return
     if args.check:
         conf.print_siteconf()
@@ -447,6 +442,22 @@ def print_version():
     with open(vfile) as f:
         print(f.read().strip())
     sys.exit()
+
+
+def open_browser(conf):
+    site = list(conf.sites)[0]
+    html = site.fnew
+    if not os.path.exists(html):
+        FileNotFoundError('No extracted html to open: %r' % html)
+
+    cmds = conf.general.browsercmd
+    if cmds:
+        returncode = run_cmds(cmds, conf, site)
+    else:
+        ret = webbrowser.open(html)
+        # ret is True or False
+        returncode = int(not ret)
+    sys.exit(returncode)
 
 
 if __name__ == "__main__":
