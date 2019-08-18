@@ -177,12 +177,12 @@ def run_cmds(cmds, conf, site=None):
     return returncode or 0
 
 
-def run_cmd(cmd, user_scriptdir, scriptdir, conf, site=None):
-    if not cmd:
+def run_cmd(_cmd, user_scriptdir, scriptdir, conf, site=None):
+    if not _cmd:
         return
 
-    cmd[:] = [_eval_obj(conf, 'conf', word) for word in cmd]
-    cmd[:] = [_eval_obj(site, 'site', word) for word in cmd]
+    cmd = [_eval_obj(conf, 'conf', word) for word in _cmd]
+    cmd = [_eval_obj(site, 'site', word) for word in cmd]
 
     paths = _add_path_env(user_scriptdir, scriptdir)
     files = _add_files_env(site) if site else {}
