@@ -349,16 +349,22 @@ class Location(_Location):
             if os.path.isdir(url):
                 raise IsADirectoryError('[url] Got directory name: %r' % url)
 
-    def check_fname(self, force=False):
+    def check_fname(self, force=False, cache=None):
         """Check if downloading is necessary (done).
 
         True:  not necessary
         False: necessary
         """
         self.check_url()
-        if os.path.exists(self.fname):
+        fname = self.fname
+        if os.path.exists(fname):
             if not force:
                 return True
+            else:
+                if cache and cache.get(fname):
+                    return True
+
+        cache[fname] = 1
         return False
 
 

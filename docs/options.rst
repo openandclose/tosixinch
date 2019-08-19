@@ -132,7 +132,7 @@ General Section
     | (``False``)
     | ``[BOOL]``
 
-    By default, The script does not download the same files again.
+    By default, The script does not download if the destination file exists.
 
     If this options is ``True``:
 
@@ -142,6 +142,9 @@ General Section
     In case of ``-2``,
     it (re-) downloads component files (images etc.)
     even if they exist.
+
+    But in one invocation, this re-downloading is always once for one ``url``.
+    (The script doesn't download the same icon files again and again.)
 
 .. confopt:: add_extractors
 

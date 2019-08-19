@@ -254,7 +254,7 @@ def dispatch(conf):
         returncode = system.run_cmds(pre_percmd, conf, site)
 
         if returncode not in (101, 102):
-            run(site)
+            run(conf, site)
 
         if returncode not in (102,):
             returncode = system.run_cmds(post_percmd, conf, site)
@@ -264,7 +264,7 @@ def dispatch(conf):
         QT_APP = None
 
 
-def run(site):
+def run(conf, site):
     global QT_APP
 
     user_agent = site.general.user_agent
@@ -274,8 +274,10 @@ def run(site):
     fname = site.fname
     js = site.javascript
     cookies = site.cookie
+    force = site.general.force_download
+    cache = conf._dlcache
 
-    if site.check_fname(force=site.general.force_download):
+    if site.check_fname(force=force, cache=cache):
         return
     system.make_directories(fname)
 

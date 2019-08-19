@@ -81,7 +81,9 @@ class Extract(content.HtmlContent):
         self._add_component_attributes(el, comp.fname)
 
     def _download_component(self, comp, url, fname):
-        if comp.check_fname(force=self._site.general.force_download):
+        force = self._site.general.force_download
+        cache = self._conf._dlcache
+        if comp.check_fname(force=force, cache=cache):
             return
         logger.info('[img] %s', url)
         super()._download_component(comp, url, fname)

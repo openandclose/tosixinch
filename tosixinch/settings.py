@@ -360,6 +360,8 @@ class Conf(object):
         else:
             self._user_scriptdir = None
 
+        self._dlcache = {}  # download cache
+
         # shortcuts
         self.general = self._appconf.general
         self.style = self._appconf.style
