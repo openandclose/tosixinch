@@ -30,9 +30,62 @@ HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
   </body>
 </html>"""
 
+PYTHONEXT = ('py',)
+PYTHONFILE = re.compile((
+    r'^(?:'
+    r'#!.+python'
+    r'|\s*import'
+    ')'
+))
+
+
+def is_prose(fname, text):
+    """Check if text is prose or not.
+
+    Here 'prose' means general texts
+    other than non-prose (source code or poetry etc.).
+    We want to separate them
+    because the roles of newline are somewhat different between them.
+    They require different text wrap strategies.
+    """
+    lines = text[:10000].split('\n')[:-1]
+    counts = (len(line) for line in lines)
+    if any((count > 400 for count in counts)):
+        # If lines are unusually long, we give up.
+        return True
+    width = 0
+    continuation = 0
+    times = 0
+    for count in counts:
+        if count > width:
+            width = count
+            if count > width + 1:
+                continuation = 0
+        elif count in (width, width - 1):
+            continuation += 1
+        else:
+            if continuation > 1:
+                times += 1
+            continuation = 0
+        if times > 1:
+            return True
+    return False
+
+
+def is_python(fname, text=None):
+    # For now, only for python code
+    ext = fname.rsplit('.', maxsplit=1)
+    if len(ext) == 2 and ext[1] in PYTHONEXT:
+        return True
+    if PYTHONFILE.match(text):
+        return True
+    return False
+
 
 class Prose(object):
     """General text type, paragraph oriented."""
+
+    ftype = 'prose'
 
     def __init__(self, conf, site, text):
         self._conf = conf
@@ -77,6 +130,8 @@ class Prose(object):
 class NonProse(Prose):
     """Text type with significant line breaks. Require special text-wrap."""
 
+    ftype = 'nonprose'
+
     def _wrap(self):
         wrapper = textwrap.TextWrapper()
         wrapper.width = self.width
@@ -92,6 +147,8 @@ class NonProse(Prose):
 class Code(NonProse):
     """Source code, a subclass of `NonProse`."""
 
+    ftype = 'code'
+
 
 class PythonCode(Code):
     """Python code, a subclass of ``Code``.
@@ -99,6 +156,8 @@ class PythonCode(Code):
     Implement a few text highlights
     (as far as fit for black-and-white e-readers).
     """
+
+    ftype = 'python'
 
     LEAD = '|(?:    )+'
     KW = 'def +|class +'
@@ -151,14 +210,13 @@ class PythonCode(Code):
         self.highlighted = text
 
 
-def dispatch(conf, site, ftype, kind, text):
-    runner = None
-    if ftype == 'prose':
-        runner = Prose(conf, site, text)
-    elif ftype == 'nonprose':
-        runner = NonProse(conf, site, text)
-    elif ftype == 'code':
-        if kind == 'python':
-            runner = PythonCode(conf, site, text)
-    if runner:
-        runner.run()
+def dispatch(conf, site, fname, text):
+    if is_prose(fname, text):
+        runner = Prose
+    elif is_python(fname, text):
+        runner = PythonCode
+    else:
+        runner = NonProse
+
+    logger.info('[ftype] %s: %r', runner.ftype, fname)
+    runner(conf, site, text).run()

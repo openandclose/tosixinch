@@ -35,14 +35,6 @@ HTMLFILE = re.compile(
     '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + r'<html(|\s.+?)>',
     flags=re.IGNORECASE | re.DOTALL)
 
-PYTHONEXT = ('py',)
-PYTHONFILE = re.compile((
-    r'^(?:'
-    r'#!.+python'
-    r'|\s*import'
-    ')'
-))
-
 _HTML_HEAD = """<!DOCTYPE html>
 <html>
   <head>
@@ -63,69 +55,10 @@ DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
 
-def check_ftype(fname, text):
-    """Detect file type.
-
-    Return a tuple (ftype, kind, text)
-    """
-    if is_html(text):
-        return 'html', None, text
-    elif is_prose(text):
-        return 'prose', None, text
-    else:
-        if is_code(fname, text):
-            return 'code', 'python', text
-        else:
-            return 'nonprose', None, text
-
-
-def is_html(text):
+def is_html(fname, text):
     if len(text) > 1000 and HTMLFILE.match(text[:1000]):
         return True
     if len(text) > 4000 and HTMLFILE.match(text[:4000]):
-        return True
-    return False
-
-
-def is_prose(text):
-    """Check if text is prose or not.
-
-    Here 'prose' means general texts
-    other than non-prose (source code or poetry etc.).
-    We want to separate them
-    because the roles of newline are somewhat different between them.
-    They require different text wrap strategies.
-    """
-    lines = text[:10000].split('\n')[:-1]
-    counts = (len(line) for line in lines)
-    if any((count > 400 for count in counts)):
-        # If lines are unusually long, we give up.
-        return True
-    width = 0
-    continuation = 0
-    times = 0
-    for count in counts:
-        if count > width:
-            width = count
-            if count > width + 1:
-                continuation = 0
-        elif count in (width, width - 1):
-            continuation += 1
-        else:
-            if continuation > 1:
-                times += 1
-            continuation = 0
-        if times > 1:
-            return True
-    return False
-
-
-def is_code(fname, text=None):
-    # For now, only for python code
-    ext = fname.rsplit('.', maxsplit=1)
-    if len(ext) == 2 and ext[1] in PYTHONEXT:
-        return True
-    if PYTHONFILE.match(text):
         return True
     return False
 

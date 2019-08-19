@@ -143,11 +143,10 @@ def dispatch(conf):
             errors = site.general.encoding_errors
             text = system.Reader(fname, codings=codings, errors=errors).read()
 
-            ftype, kind, text = content.check_ftype(fname, text)
-            if ftype == 'html':
+            if content.is_html(fname, text):
                 run(conf, site, text)
             else:
-                textformat.dispatch(conf, site, ftype, kind, text)
+                textformat.dispatch(conf, site, fname, text)
 
         if returncode not in (102,):
             returncode = system.run_cmds(post_percmd, conf, site)
