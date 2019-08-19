@@ -209,6 +209,12 @@ Configs
 
     add or subtract to-delete-attribute list [PLUS]
 
+.. option:: --ftype {html,prose,nonprose,python}
+
+    specify file type
+
+        choices=html, prose, nonprose, python
+
 .. option:: --textwidth TEXTWIDTH
 
     width (character numbers) for rendering non-prose text

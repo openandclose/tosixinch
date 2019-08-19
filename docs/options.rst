@@ -306,6 +306,27 @@ General Section
 
     Width and height conflict with user css rules.
 
+.. confopt:: ftype
+
+    | (None)
+
+    Specify file type when ``extract``.
+
+    Valid values are::
+
+        'html', 'prose', 'nonprose', 'python'
+
+.. note ::
+
+    It needs improvement, but the following seems to work now.
+
+    .. code-block:: ini
+
+        # in ~/.config/tosixinch/site.ini
+        [test]
+        match=  *py
+        ftype=  python
+
 .. confopt:: textwidth
 
     (``65``)

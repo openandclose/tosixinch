@@ -15,6 +15,10 @@ _tosixinch()
             COMPREPLY=( $( compgen -W 'strict ignore replace xmlcharrefreplace backslashreplace namereplace surrogateescape surrogatepass' -- "$cur" ) )
             return
             ;;
+        --ftype)
+            COMPREPLY=( $( compgen -W 'html prose nonprose python' -- "$cur" ) )
+            return
+            ;;
         --news)
             COMPREPLY=( $( compgen -W 'hackernews' -- "$cur" ) )
             return
@@ -47,7 +51,7 @@ _tosixinch()
 
     $split && return
 
-    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --full-image --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --qt --quiet --raw --readability --readability-only --sample-urls --textindent --textwidth --toc --toc-depth --trimdirs --urllib --use-urlreplace --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
+    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --ftype --full-image --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --qt --quiet --raw --readability --readability-only --sample-urls --textindent --textwidth --toc --toc-depth --trimdirs --urllib --use-urlreplace --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
     return
 

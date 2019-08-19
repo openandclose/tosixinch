@@ -210,8 +210,33 @@ class PythonCode(Code):
         self.highlighted = text
 
 
+def _get_ftype(name):
+    if not name:
+        return
+
+    name = name.lower()
+    if name == 'nonprose':
+        return NonProse
+    elif name == 'prose':
+        return Prose
+
+    classname = name[0].upper() + name[1:].lower() + 'Code'
+    try:
+        obj = globals()[classname]
+    except LookupError:
+        pass
+    else:
+        if issubclass(obj, Prose):
+            return obj
+
+    raise ValueError('Got unknown ftype: %r' % name)
+
+
 def dispatch(conf, site, fname, text):
-    if is_prose(fname, text):
+    runner = _get_ftype(site.ftype)
+    if runner:
+        pass
+    elif is_prose(fname, text):
         runner = Prose
     elif is_python(fname, text):
         runner = PythonCode

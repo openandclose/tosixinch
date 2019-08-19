@@ -208,6 +208,10 @@ def _build_conf_parser():
     help = 'add or subtract to-delete-attribute list [PLUS]'
     configs.add_argument('--add-clean-attrs', help=help)
 
+    choices = ['html', 'prose', 'nonprose', 'python']
+    help = 'specify file type'
+    configs.add_argument('--ftype', choices=choices, help=help)
+
     help = 'width (character numbers) for rendering non-prose text'
     configs.add_argument('--textwidth', help=help)
 

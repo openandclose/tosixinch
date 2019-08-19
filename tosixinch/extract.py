@@ -143,7 +143,7 @@ def dispatch(conf):
             errors = site.general.encoding_errors
             text = system.Reader(fname, codings=codings, errors=errors).read()
 
-            if content.is_html(fname, text):
+            if site.ftype == 'html' or content.is_html(fname, text):
                 run(conf, site, text)
             else:
                 textformat.dispatch(conf, site, fname, text)
