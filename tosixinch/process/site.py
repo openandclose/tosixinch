@@ -104,6 +104,8 @@ def github_issues_comment_header(doc):
     Also discard self anchors in date part of headers
     e.g. 'href="#issuecomment-223857939"'.
     We stripped referents, and weasyprint warns it.
+
+    Also delete the repetetive sentence 'This comment...' (display: none).
     """
     for el in doc.xpath('//h3'):
         if 'timeline-comment-header-text' in el.classes:
@@ -112,3 +114,7 @@ def github_issues_comment_header(doc):
             for element in el.xpath('.//a'):
                 if 'timestamp' in element.classes:
                     element.set('href', '')
+
+            if 'This comment has been minimized.' in el.text:
+                if 'text-gray' in el.classes:
+                    el.text = ''
