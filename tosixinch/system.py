@@ -132,8 +132,8 @@ class HtmlWriter(Writer):
     def _serialize(self):
         if self.text:
             return
-        self.text = lxml.html.tostring(
-            self.doc, encoding='unicode', doctype=self.doctype)
+        tree = self.doc.getroottree()
+        self.text = lxml.html.tostring(tree, encoding='unicode')
 
 
 # shell invocation ------------------------------

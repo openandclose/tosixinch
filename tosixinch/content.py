@@ -71,8 +71,7 @@ def build_new_html(title=None, content=''):
 
 def build_blank_html(doctype=None):
     """Build 'more' minimal html, used in `extract.Extract._prepare`."""
-    doctype = doctype or DEFAULT_DOCTYPE
-    html = BLANK_HTML % doctype
+    html = BLANK_HTML % (doctype or DEFAULT_DOCTYPE)
     root = lxml.html.document_fromstring(html)
     return root
 
@@ -222,9 +221,6 @@ class HtmlContent(Content):
         head = self.root.head
         if head is not None:
             doc.insert(0, copy.deepcopy(head))
-        # or...
-        # doc = copy.deepcopy(self.root)
-        # doc.body.clear()
 
         self.title = title
         self.baseurl = baseurl
@@ -255,8 +251,7 @@ class HtmlContent(Content):
         cleaner.run()
 
     def write(self):
-        writer = system.HtmlWriter(
-            self.fnew, doc=self.doc, doctype=self.doctype)
+        writer = system.HtmlWriter(self.fnew, doc=self.doc)
         writer.write()
 
     def _get_component(self, el, url):
