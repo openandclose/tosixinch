@@ -59,8 +59,7 @@ import tosixinch.main
 import tosixinch.settings
 
 
-COMPARE_ERROR_FATAL = True
-# COMPARE_ERROR_FATAL = False
+_FAIL = 0
 
 BUFSIZE = 8*1024
 
@@ -192,6 +191,24 @@ ALL_PDF = '_all.pdf'
 TOC_PDF = '_toc.pdf'
 
 
+def _get_env_bool(name, default=True):
+    e = os.environ.get(name)
+    if e and e.lower() in ('true', 'yes', 'on', '1'):
+        return True
+    if e and e.lower() in ('false', 'no', 'off', '0'):
+        return False
+    return default
+
+
+COMPARE_ERROR_SKIP = _get_env_bool('TSI_COMPARE_ERROR_SKIP', False)
+COMPARE_OPEN_VIEWER = _get_env_bool('TSI_COMPARE_OPEN_VIEWER', False)
+
+
+def success():
+    if _FAIL == 0:
+        print('success!')
+
+
 def _mkdirs(d):
     if not os.path.exists(d):
         os.makedirs(d)
@@ -232,7 +249,8 @@ def  _open_editor(ref, filename):
 
 
 def _check_htmls(ref, filename):
-    _open_editor(ref, filename)
+    if COMPARE_OPEN_VIEWER:
+        _open_editor(ref, filename)
     compare_error(filename)
 
 
@@ -296,7 +314,8 @@ def _check_pdfs(ref, filename):
 
         print('creating png images from %r, at page: %d...' % (filename, num))
         _create_diff_png_page(png1, png2, png3)
-        _open_image_viewer(png1, png2, png3)
+        if COMPARE_OPEN_VIEWER:
+            _open_image_viewer(png1, png2, png3)
         compare_error(filename)
 
 
@@ -326,11 +345,14 @@ def compare(conf, action):
 
 
 def compare_error(filename):
-    if COMPARE_ERROR_FATAL:
+    global _FAIL
+
+    if COMPARE_ERROR_SKIP:
+        print('Compare Failed: %r' % filename)
+        _FAIL = 1
+    else:
         fmt = '%r differs from the reference file.'
         raise ValueError(fmt % filename)
-    else:
-        print('Compare Failed: %r' % filename)
 
 
 def _run(urls, args, action, do_compare=True):
@@ -504,7 +526,7 @@ def short_run(urls, args, delete=False):
         _run_toc(args, 'toc')
         ch.write()
 
-    print('success!')
+    success()
 
 
 def normal_run(urls, args):
@@ -516,7 +538,7 @@ def normal_run(urls, args):
     _run_ufile(args)
     _run_toc(args, 'toc')
     _run_toc(args, 'convert')
-    print('success!')
+    success()
 
 
 def _tox_run(urls, args):
@@ -564,13 +586,13 @@ def update_url_convert(urls):
 def test_url_extract(urls, args):
     assert os.path.abspath(os.curdir) == OUTCOME
     _run(urls, args, 'extract')
-    print('success!')
+    success()
 
 
 def test_url_convert(urls, args):
     assert os.path.abspath(os.curdir) == OUTCOME
     _run(urls, args, 'convert')
-    print('success!')
+    success()
 
 
 def parse_args(args=sys.argv[1:]):
@@ -697,3 +719,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    if _FAIL:
+        raise ValueError('Errors happened.')
