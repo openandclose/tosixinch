@@ -39,17 +39,31 @@ def add_title_force(doc):
     add_title(doc, True)
 
 
-# http://stackoverflow.com/questions/4085717/xslt-remove-duplicate-br-tags-from-running-text  # noqa: E501
-def delete_duplicate_br(doc):
-    """Continuous ``<br>`` tags to one ``<br>``, to save display space.
+def delete_duplicate_br(doc, maxnum=2):
+    """Continuous ``<br>`` tags to maxnum ``<br>``, to save display space.
 
-    >>> el = fromstring('<div>aaa<br><br><br>bbb</div>')
+    >>> el = fromstring('<div>aaa<br><br>  <br><br/><br>bbb<br><br></div>')
     >>> delete_duplicate_br(el)
     >>> tostring(el)
-    '<div>aaa<br>bbb</div>'
+    '<div>aaa<br><br>  bbb<br><br></div>'
     """
-    for el in doc.xpath('//br[following-sibling::node()[not(self::text() and normalize-space(.) = "")][1][self::br]]'):  # noqa: E501
-        remove_tag(el)
+    num = 0
+    _remove = []
+
+    for el in doc.iter():
+        if el.tag == 'br':
+            num += 1
+            if num > maxnum:
+                _remove.append(el)
+            if el.tail is None or el.tail.strip() == '':
+                num = min(num, maxnum)
+            else:
+                num = 0
+        else:
+            num = 0
+
+    for el in list(_remove):
+        el.drop_tag()
 
 
 def youtube_video_to_thumbnail(doc):

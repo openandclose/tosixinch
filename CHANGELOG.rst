@@ -30,6 +30,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * pdfname (when the script creates) is made more descriptive.
 
+* Add maximum argument to delete_duplicate_br (process/gen.py)
+
 **Add:**
 
 * Add trimdirs option.
