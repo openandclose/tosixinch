@@ -53,10 +53,10 @@ DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
 
-def is_html(fname, text):
-    if len(text) > 1000 and HTMLFILE.match(text[:1000]):
-        return True
-    if len(text) > 4000 and HTMLFILE.match(text[:4000]):
+def is_html(fname, text, min_chars=4096):
+    if len(text) < min_chars:
+        return False
+    if HTMLFILE.match(text[:4096]):
         return True
     return False
 
