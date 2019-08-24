@@ -30,7 +30,7 @@ The result is that it is populated with reference html and pdf files.
 
 Actual tests are always done with 'outcome' as current directory.
 
----
+Main Command line options are:
 -x:     (short)
         try to run only necesarry actions, for only a few selected urls.
         test extract. (3 urls)
@@ -43,6 +43,20 @@ Actual tests are always done with 'outcome' as current directory.
         test convert.
         test ufile-convert, making an 'all in one' pdf.
         test toc extraction (merging htmls).
+
+Environment Variable:
+
+TSI_COMPARE_ERROR_SKIP (default: False)
+    if the value (case insensitive) is one of true, yes, on ,1,
+    it means ``True``.
+    if ``True``, the test does not abort on the first error,
+    just reporting there were errors at the last.
+
+TSI_COMPARE_OPEN_VIEWER (default: False)
+    if the value (case insensitive) is one of true, yes, on ,1,
+    it means ``True``.
+    if ``True``, on each error, the test opens a diff viewer (vim or sxiv),
+    and blocks.
 """
 
 
@@ -424,11 +438,10 @@ def _clean_directory(excludes=None, top='.'):
 def _clean_outcome_directory(urls):
     assert os.path.abspath(os.curdir) == OUTCOME
 
-    # Delete all files except 'urls.txt' and downloaded files.
+    # Delete files, but keep ``Downloaded_Files``.
     png_dir = os.path.abspath(PNG_DIR)
     fnames = [os.path.abspath(n) for n in _get_downloaded_files(urls)]
     excludes = [png_dir] + fnames
-    # print(excludes)
     _clean_directory(excludes=excludes)
 
 
@@ -554,11 +567,6 @@ def tox_run():
     # Get only the first url (wikipedia.org).
     urls = [URLS[0]]
     args = []
-
-    # tmpdir = tempfile.mkdtemp(prefix='tosixinch-')
-    # os.chdir(tmpdir)
-    # _tox_run(urls,args)
-    # shutil.rmtree(tmpdir)
 
     with tempfile.TemporaryDirectory(prefix='tosixinch-') as tmpdir:
         os.chdir(tmpdir)
