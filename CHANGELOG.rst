@@ -52,17 +52,17 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add file url support for input.
 
-* Add font_scale option
+* Add font_scale option.
 
-* Add quiet option
+* Add quiet option.
 
-* Add version option
+* Add version option.
 
-* Expose full-image option to commandline
+* Expose full-image option to commandline.
 
-* Add --null option to script/open_viewer.py
+* Add --null option to script/open_viewer.py.
 
-* Add browsercmd option
+* Add browsercmd option.
 
 * Add toc_depth option to wkhtmltopdf converter.
 

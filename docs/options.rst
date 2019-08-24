@@ -149,18 +149,32 @@ General Section
     | ``[PLUS]``
 
     Before ``extract``, if some conditions match,
-    run external programs, skipping the builtin ``extract``
-    (which means creating the ``Extracted_File`` themselves somehow).
+    it runs external programs and creates the ``Extracted_File``,
+    skipping the builtin ``extract``.
 
-    Valid values are now only 'man':
+    Valid values are now only ``man``:
 
     ``man``:
 
-    if filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
+    if the filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
     (e.g. grep.1, grep.1.gz, grep.1p.gz),
     run man program with ``'man -Thtml'``.
     So only unixes users can uses it.
 
+.. note ::
+
+    If you supply multiple ``*.gz`` files for ``urls``,
+    it actually triggers the binary-extension filter.
+    In this case, you have to subtract ``gz`` from the list.
+    (see `add_binary_extensions <#confopt-add_binary_extensions>`__).
+
+    .. code-block:: bash
+
+        # in urls.txt
+        /usr/share/man/man1/cp.1.gz
+        /usr/share/man/man1/grep.1.gz
+
+        $ tosixinch -123 --add-binary-extensions -gz
 
 .. confopt:: guess
 
