@@ -35,19 +35,17 @@ HTMLFILE = re.compile(
     '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + r'<html(|\s.+?)>',
     flags=re.IGNORECASE | re.DOTALL)
 
-_HTML_HEAD = """<!DOCTYPE html>
+HTML_TEMPLATE = """<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>%s</title>
   </head>
   <body>
+    %s
+  </body>
+</html>
 """
-
-_HTML_TAIL = """  </body>
-</html>"""
-
-HTML_TEMPLATE = _HTML_HEAD + '%s' + _HTML_TAIL
 
 BLANK_HTML = '%s<html><body></body></html>'
 
