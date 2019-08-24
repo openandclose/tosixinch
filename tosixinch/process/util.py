@@ -155,13 +155,12 @@ def check_parents_tag(el, tag='div', generation=2):
     >>> el.tag
     'table'
     """
-    parents = []
     for i in range(int(generation)):
         el = el.getparent()
-        parents.append(el)
-    for parent in parents:
-        if parent is not None and parent.tag == tag:
-            return parent
+        if el is None:
+            return
+        if el.tag == tag:
+            return el
 
 
 # ``HtmlElement.text_content()``, or ```etree.tostring(el, method="text")``
