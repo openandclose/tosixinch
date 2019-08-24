@@ -1,9 +1,5 @@
 
-"""Reformat text and convert to html.
-
-In ``Extract`` action ('-2'), if text formats are not html,
-files are just passed to this module.
-"""
+"""Module for text (non-html) content nmanipulations."""
 
 import html
 import logging

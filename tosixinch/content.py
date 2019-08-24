@@ -1,5 +1,5 @@
 
-"""Module for content nmanipulations (html and text)."""
+"""Module for html content nmanipulations."""
 
 import copy
 import logging

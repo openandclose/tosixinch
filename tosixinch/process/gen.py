@@ -40,7 +40,7 @@ def add_title_force(doc):
 
 
 def delete_duplicate_br(doc, maxnum=2):
-    """Continuous ``<br>`` tags to maxnum ``<br>``, to save display space.
+    """Continuous ``<br>`` tags to maximum ``<br>``, to save display space.
 
     >>> el = fromstring('<div>aaa<br><br>  <br><br/><br>bbb<br><br></div>')
     >>> delete_duplicate_br(el)

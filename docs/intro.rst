@@ -195,7 +195,7 @@ from some arbitrary urls in most of the domains above.
 
     You need to set the converter if not default (prince).
 
-    And if your installed the converter in unusual places (not in PATH),
+    And if you installed the converter in unusual places (not in PATH),
     you need to set the fullpath.
 
     .. code-block:: none

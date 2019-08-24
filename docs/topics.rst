@@ -149,13 +149,6 @@ and give up and doesn't do anything for duplicate names
     if ``toc`` action is run.)
 
 
-problem
-^^^^^^^
-
-Currently these filetype detection is automatically done by the script,
-and users cannot intervene. Admittedly this is bad.
-
-
 TOC
 ---
 
@@ -633,12 +626,10 @@ They are all single file modules.
 
 .. script:: configfetch.py
 
-    `my library <https://github.com/openandclose/configfetch>`__.
-
     Simplify parsing commandline and config options.
+    `(configfetch) <https://github.com/openandclose/configfetch>`__.
 
 .. script:: zconfigparser.py
 
-    `my library <https://github.com/openandclose/zconfigparser>`__.
-
     Implement section inheritance in ``site.ini``.
+    `(zconfigparser) <https://github.com/openandclose/zconfigparser>`__.

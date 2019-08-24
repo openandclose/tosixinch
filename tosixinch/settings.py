@@ -337,7 +337,7 @@ class Site(location.Location):
             num = int(self.general.trimdirs)
             sep = os.sep
         parts = self.url.split(sep)
-        num = min(num, len(parts) -1)
+        num = min(num, len(parts) - 1)
         return sep.join(parts[num:])
 
 
