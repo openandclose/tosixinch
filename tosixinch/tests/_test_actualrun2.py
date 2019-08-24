@@ -507,6 +507,30 @@ def create_ref():
     os.chdir(curdir)
 
 
+def update_one_ref(urls):
+    """Update reference Extracted_File and PDFFile.
+
+    If the present code changes and generated files changes is to remain,
+    from this new model, recreate reference files, only for one url."""
+
+    curdir = os.curdir
+    os.chdir(REFERENCE)
+
+    args = _minimum_args()
+
+    update_url_extract(urls)
+    update_url_convert(urls)
+
+    urls = URLS
+    _run_ufile(args, do_compare=False)
+    _run_toc(args, 'toc', do_compare=False)
+    _run_toc(args, 'convert', do_compare=False)
+
+    _copy_pdf_files()
+
+    os.chdir(curdir)
+
+
 def _in_short_ulist(url):
     for sel in SELECT_SHORT_ULIST:
         if sel in url:
@@ -619,6 +643,9 @@ def parse_args(args=sys.argv[1:]):
     parser.add_argument('--create-ref',
         action='store_const', const='yes',
         help='create reference files from zero')
+    parser.add_argument('--update-one-ref',
+        action='store_const', const='yes',
+        help='update reference files for one url')
     parser.add_argument('--tox-run',
         action='store_const', const='yes',
         help='run -123 and --toc in temporary directory in tox environment.')
@@ -708,7 +735,9 @@ def main():
 
     if args.number:
         urls = [urls[int(args.number) - 1]]
-        if args.update_url_download:
+        if args.update_one_ref:
+            update_one_ref(urls)
+        elif args.update_url_download:
             update_url_download(urls)
         elif args.update_url_extract:
             update_url_extract(urls)
