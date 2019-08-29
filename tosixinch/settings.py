@@ -296,7 +296,7 @@ class Sites(location.Locations):
                     continue
             yield url
 
-    @property
+    @location.cached_property
     def urls(self):
         urls = super().urls
         # If urls consists of a single url, It doesn't apply filters.
