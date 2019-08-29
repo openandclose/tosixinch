@@ -331,13 +331,14 @@ class Site(location.Location):
     @property
     def shortname(self):
         if self.is_remote:
-            num = 2  # remove scheme
+            num = 2  # remove '_htmls' and scheme
             sep = '/'
         else:
             num = int(self.general.trimdirs)
             sep = os.sep
-        parts = self.url.split(sep)[num:]
-        return sep.join(parts)
+        parts = self.url.split(sep)
+        num = min(num, len(parts) -1)
+        return sep.join(parts[num:])
 
 
 class Conf(object):
