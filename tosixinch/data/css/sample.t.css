@@ -117,6 +117,13 @@ ul ul, ul ol, ol ul, ol ol {
 /*     padding: 0%; */
 /* } */
 
+/* https://stackoverflow.com/a/4151770 */
+hr {
+    border: none;
+    height: 1px;
+    background-color: gray;
+}
+
 /* Default underlines (color or gray) are actually more unpleasant in B&W screen. */
 /* a:link { color: black; } */
 a:link { color: inherit; }
