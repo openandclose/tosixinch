@@ -53,6 +53,7 @@ class _File(object):
     def __init__(self, fname, platform):
         self.fname = fname
         self.platform = platform
+        self.encoding = 'utf-8'
 
 
 class Reader(_File):
@@ -106,11 +107,8 @@ class HtmlReader(Reader):
     """
 
     def _parse(self):
-        parser = lxml.html.HTMLParser(encoding='utf-8')
-        # For now, follows ``readability.htmls``,
-        # in redundant utf-8 encoding-decoding.
-        self.doc = lxml.html.document_fromstring(
-            self.text.encode('utf-8', 'replace'), parser=parser)
+        parser = lxml.html.HTMLParser(encoding=self.encoding)
+        self.doc = lxml.html.document_fromstring(self.text, parser=parser)
 
     def read(self):
         self._prepare()
