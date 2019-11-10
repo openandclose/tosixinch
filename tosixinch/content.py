@@ -3,6 +3,7 @@
 
 import copy
 import logging
+import os
 import posixpath
 import re
 
@@ -51,6 +52,8 @@ BLANK_HTML = '%s<html><body></body></html>'
 
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
+
+EXTERNAL_CSS = '<link href="%s" rel="stylesheet">'
 
 
 def is_html(fname, text, min_chars=4096):
@@ -249,6 +252,15 @@ class HtmlContent(Content):
     def clean(self, tags, attrs):
         cleaner = clean.Clean(self.doc, tags, attrs)
         cleaner.run()
+
+    def add_auto_css(self, cssfiles):
+        for cssfile in cssfiles:
+            if os.path.isfile(cssfile):
+                d = os.path.dirname(self.fnew)
+                cssfile = os.path.relpath(cssfile, start=d)
+                cssurl = location._path2url(cssfile)
+                style = lxml.html.fragment_fromstring(EXTERNAL_CSS % cssurl)
+                self.doc.head.append(style)
 
     def write(self):
         writer = system.HtmlWriter(self.fnew, doc=self.doc)

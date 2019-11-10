@@ -34,6 +34,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 **Add:**
 
+* Add auto_css feature (see doc: overview.html#dword-auto_css_directory).
+
 * Add trimdirs option.
 
   Remove flaky automatic path shortening (minsep), add this manual but reliable option.
