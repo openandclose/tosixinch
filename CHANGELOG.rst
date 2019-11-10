@@ -5,8 +5,8 @@ Changelog
 Important changes (that users especially need to know) are marked by '**[!]**.'
 
 
-**Unreleased:**
----------------
+v0.2.0 (2019-11-10)
+-------------------
 
 **Change:**
 
