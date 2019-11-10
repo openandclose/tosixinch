@@ -45,7 +45,8 @@ OTHER_SCHEMES = re.compile('^([a-zA-Z][a-zA-Z0-9.+-]+):')
 ROOTPATH = re.compile('^//?(/*)')
 WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?([/\\])*|\\\\([?.\\]*)')
 
-RESERVED = ':/?#[]@' + "!$&'()*+,;="  # defined special characters in RFC 3986
+# sub-delims, legal gen-delims, and segment separator
+PATHSAFECHARS = "!$&'()*+,;=" + ':@' + '/'
 
 
 _Rule = collections.namedtuple('_Rule', ['quote', 'change'])
@@ -112,16 +113,13 @@ def _path2url(path, platform=sys.platform):
                     or comp[0] not in string.ascii_letters.split()):
                 raise OSError('Invalid filepath: %r' % path)
             path = '///%s:%s' % (comp[0], comp[1])
-    return urllib.parse.quote(path)
+    return urllib.parse.quote(path, safe=PATHSAFECHARS)
 
 
 def _url_quote(url):
-    """Quote only path part of url.
-
-    Only for characters not defined in RFC 3986.
-    """
+    """Quote only path part of url."""
     scheme, netloc, path, query, fragment = urllib.parse.urlsplit(url)
-    path = urllib.parse.quote(path, safe='/%' + RESERVED)
+    path = urllib.parse.quote(path, safe=PATHSAFECHARS + '%')
     return urllib.parse.urlunsplit((scheme, netloc, path, query, fragment))
 
 
