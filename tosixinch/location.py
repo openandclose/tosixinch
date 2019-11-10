@@ -94,12 +94,11 @@ def _tamper_fname(url):
     return url
 
 
-def _url2path(url, platform=sys.platform, unquote=True):
+def _url2path(url, platform=sys.platform):
     fname = _tamper_fname(url)
     if platform == 'win32':
         fname = _tamper_windows_fname(fname)
-    if unquote:
-        fname = urllib.parse.unquote(fname)
+    fname = urllib.parse.unquote(fname)
     return fname
 
 
@@ -247,14 +246,14 @@ class _Location(object):
             raise ValueError('Not local file url: %r' % url)
         return url
 
-    def _make_fname(self, url, unquote=True):
+    def _make_fname(self, url):
         if self.is_local:
             return url
 
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
         fname = self._add_index(fname)
-        fname = _url2path(fname, platform=self.platform, unquote=unquote)
+        fname = _url2path(fname, platform=self.platform)
         fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 
@@ -326,16 +325,17 @@ class Location(_Location):
 
     @property
     def slash_url(self):
-        if self.is_local and self.platform == 'win32':
-            return slashify(self.url)
+        if self.is_local:
+            return _path2url(self.url, self.platform)
         return self.url
 
     @property
     def slash_fname(self):
-        fname = self._make_fname(self.url, unquote=False)
-        if self.platform == 'win32':
-            return slashify(fname)
-        return fname
+        return _path2url(self.fname, self.platform)
+
+    @property
+    def slash_fnew(self):
+        return _path2url(self.fnew, self.platform)
 
     @property
     def idna_url(self):
