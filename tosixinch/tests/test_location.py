@@ -186,6 +186,21 @@ class TestLocalReference:
             '_htmls/aaa.org/aaa/bbb?cc/index--tosixinch')
         self.compare(url, local_url, fname)
 
+        # With unquoted characters
+        url, local_url, fname = (
+            'https://aaa.org/bbb 1.jpg',
+            'bbb%201.jpg',
+            # 'bbb 1.jpg',
+            '_htmls/aaa.org/bbb 1.jpg')
+        self.compare(url, local_url, fname)
+
+        url, local_url, fname = (
+            'aaa/bbb 1.jpg',
+            'aaa/bbb%201.jpg',
+            # 'aaa/bbb 1.jpg',
+            '_htmls/aaa.org/aaa/bbb 1.jpg')
+        self.compare(url, local_url, fname)
+
         # colon in relative url
         url, local_url, fname = (
             'https://aaa.org/bbb:cc',

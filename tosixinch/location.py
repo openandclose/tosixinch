@@ -18,6 +18,7 @@ import logging
 import os
 import posixpath
 import re
+import string
 import sys
 import urllib.parse
 
@@ -43,6 +44,8 @@ OTHER_SCHEMES = re.compile('^([a-zA-Z][a-zA-Z0-9.+-]+):')
 
 ROOTPATH = re.compile('^//?(/*)')
 WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?([/\\])*|\\\\([?.\\]*)')
+
+RESERVED = ':/?#[]@' + "!$&'()*+,;="  # defined special characters in RFC 3986
 
 
 _Rule = collections.namedtuple('_Rule', ['quote', 'change'])
@@ -90,12 +93,36 @@ def _tamper_fname(url):
     return url
 
 
-def _url2path(url, platform=sys.platform):
+def _url2path(url, platform=sys.platform, unquote=True):
     fname = _tamper_fname(url)
     if platform == 'win32':
         fname = _tamper_windows_fname(fname)
-    fname = urllib.parse.unquote(fname)
+    if unquote:
+        fname = urllib.parse.unquote(fname)
     return fname
+
+
+def _path2url(path, platform=sys.platform):
+    """Make relative file url from filepath."""
+    if platform == 'win32':
+        path = slashify(path)
+        comp = path.split(':')
+        if len(comp) > 1:
+            if (len(comp) > 2
+                    or comp[0] not in string.ascii_letters.split()):
+                raise OSError('Invalid filepath: %r' % path)
+            path = '///%s:%s' % (comp[0], comp[1])
+    return urllib.parse.quote(path)
+
+
+def _url_quote(url):
+    """Quote only path part of url.
+
+    Only for characters not defined in RFC 3986.
+    """
+    scheme, netloc, path, query, fragment = urllib.parse.urlsplit(url)
+    path = urllib.parse.quote(path, safe='/%' + RESERVED)
+    return urllib.parse.urlunsplit((scheme, netloc, path, query, fragment))
 
 
 def slashify(name):
@@ -222,14 +249,14 @@ class _Location(object):
             raise ValueError('Not local file url: %r' % url)
         return url
 
-    def _make_fname(self, url):
+    def _make_fname(self, url, unquote=True):
         if self.is_local:
             return url
 
         fname = SCHEMES.sub('', url)
         fname = fname.split('#', 1)[0]
         fname = self._add_index(fname)
-        fname = _url2path(fname, platform=self.platform)
+        fname = _url2path(fname, platform=self.platform, unquote=unquote)
         fname = os.path.join(DOWNLOAD_DIR, fname)
         return fname
 
@@ -306,12 +333,6 @@ class Location(_Location):
         return self.url
 
     @property
-    def slash_fname(self):
-        if self.platform == 'win32':
-            return slashify(self.fname)
-        return self.fname
-
-    @property
     def idna_url(self):
         # This is only used by `download` module internally.
         # So every other resource name representations are kept unicode.
@@ -340,6 +361,12 @@ class Location(_Location):
             return urllib.parse.urlunsplit(parts)
         else:
             return url
+
+    def slash_fname(self, unquote=True):
+        fname = self._make_fname(self.url, unquote=unquote)
+        if self.platform == 'win32':
+            return slashify(fname)
+        return fname
 
     def check_url(self):
         if self.is_local:
@@ -390,7 +417,9 @@ class _Component(Location):
             url = urllib.parse.urlsplit(base)[0] + ':' + url
         elif url.startswith('/'):
             url = '://'.join(urllib.parse.urlsplit(base)[0:2]) + url
-        return url
+
+        # quote needed, since some websites provide unquoted urls.
+        return _url_quote(url)
 
     def _escape_fname_reference(self, url):
         parts = urllib.parse.urlsplit(url)
@@ -430,7 +459,9 @@ class Component(_Component):
     @property
     def fname_reference(self):
         src = posixpath.relpath(
-            self.slash_fname, posixpath.dirname(self.base.slash_fname))
+            self.slash_fname(unquote=False),
+            posixpath.dirname(self.base.slash_fname(unquote=False))
+        )
         src = self._escape_colon_in_first_path(src)
         return self._escape_fname_reference(src)
 
