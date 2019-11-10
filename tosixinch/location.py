@@ -333,6 +333,13 @@ class Location(_Location):
         return self.url
 
     @property
+    def slash_fname(self):
+        fname = self._make_fname(self.url, unquote=False)
+        if self.platform == 'win32':
+            return slashify(fname)
+        return fname
+
+    @property
     def idna_url(self):
         # This is only used by `download` module internally.
         # So every other resource name representations are kept unicode.
@@ -361,12 +368,6 @@ class Location(_Location):
             return urllib.parse.urlunsplit(parts)
         else:
             return url
-
-    def slash_fname(self, unquote=True):
-        fname = self._make_fname(self.url, unquote=unquote)
-        if self.platform == 'win32':
-            return slashify(fname)
-        return fname
 
     def check_url(self):
         if self.is_local:
@@ -459,9 +460,7 @@ class Component(_Component):
     @property
     def fname_reference(self):
         src = posixpath.relpath(
-            self.slash_fname(unquote=False),
-            posixpath.dirname(self.base.slash_fname(unquote=False))
-        )
+            self.slash_fname, posixpath.dirname(self.base.slash_fname))
         src = self._escape_colon_in_first_path(src)
         return self._escape_fname_reference(src)
 
