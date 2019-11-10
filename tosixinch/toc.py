@@ -5,13 +5,15 @@ Use comment structure in 'urls.txt' as directive.
 """
 
 import logging
+import os
 import re
 import sys
 
 from tosixinch import location
 from tosixinch.process import gen
 from tosixinch import system
-from tosixinch.content import build_new_html, slugify, _relink_component
+from tosixinch.content import (
+    build_new_html, slugify, _relink_component, _relink)
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +32,7 @@ class Node(location.Location):
         self.root = root or self
         self.last = False
         self._doc = None
+        self.sitecss = []
 
     def _is_local(self, url):
         if url.strip().startswith(DIRECTIVE_PREFIX):
@@ -52,6 +55,18 @@ class Node(location.Location):
         else:
             self._doc = system.HtmlReader(self.fnew).read()
 
+    def _append_auto_css(self):
+        for el in self.doc.xpath('//head/link[@class="tsi-auto-css"]'):
+            href = el.get('href') or ''
+            if href:
+                site = os.path.basename(href)[:-4]
+                if site and site in self.root.sitecss:
+                    continue
+                href = _relink(href, self.slash_fnew, self.root.slash_fnew)
+                el.set('href', href)
+                self.root.doc.head.append(el)
+                self.root.sitecss.append(site)
+
     # TODO: consider using content.merge_htmls().
     def _append_body(self):
         for t in self.doc.xpath('//body'):
@@ -63,6 +78,7 @@ class Node(location.Location):
 
     def write(self):
         if self.root is not self:
+            self._append_auto_css()
             self._append_body()
 
         if self.last:

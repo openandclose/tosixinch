@@ -384,6 +384,10 @@ Config Files
 
         <link href="[...]/css/auto/developer.mozilla.org.css" rel="stylesheet">
 
+    Note when running ``toc``, a parent html collects
+    all children htmls' auto_css stylesheets in order.
+    So when creating a mixed-sites-pdf, you should control the effects carefully.
+
 .. dword:: process directory
 
     ``userdir`` can also have 'process' sub directory. For example ::

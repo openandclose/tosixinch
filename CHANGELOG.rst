@@ -5,6 +5,14 @@ Changelog
 Important changes (that users especially need to know) are marked by '**[!]**.'
 
 
+**Unreleased:**
+---------------
+
+**Fix:**
+
+Fix auto_css (when toc, stylesheets were lost)
+
+
 v0.2.0 (2019-11-10)
 -------------------
 

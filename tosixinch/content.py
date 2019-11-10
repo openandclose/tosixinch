@@ -53,7 +53,7 @@ BLANK_HTML = '%s<html><body></body></html>'
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
-EXTERNAL_CSS = '<link href="%s" rel="stylesheet">'
+EXTERNAL_CSS = '<link class="tsi-auto-css" href="%s" rel="stylesheet">'
 
 
 def is_html(fname, text, min_chars=4096):
@@ -181,13 +181,15 @@ def _append_bodies(root, rootname, fnames, codings, errors):
 
 def _relink_component(doc, rootname, fname):
     for el, url in iter_component(doc):
-        # print(url)
-        url = posixpath.join(posixpath.dirname(fname), url)
-        # print(url, 'joined')
-        url = posixpath.relpath(url, start=posixpath.dirname(rootname))
-        url = posixpath.normpath(url)
-        # print(url, 'relpathed')
+        url = _relink(url, fname, rootname)
         el.attrib['src'] = url
+
+
+def _relink(url, prev_base, new_base):
+    url = posixpath.join(posixpath.dirname(prev_base), url)
+    url = posixpath.relpath(url, start=posixpath.dirname(new_base))
+    url = posixpath.normpath(url)
+    return url
 
 
 class Content(object):
