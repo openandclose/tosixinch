@@ -69,9 +69,6 @@ If `javascript <options.html#javascript>`__ option is ``True``,
 The script uses `pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
 instead of ``urllib``.
 
-(Note this Qt downloading is very basic.
-Just think of it like *I'm feeling lucky* button).
-
 extract
 ^^^^^^^
 
@@ -149,11 +146,11 @@ But disposing of the files (deleting or moving) is users' job.
         * Each line is parsed as ``url`` (or filepath).
 
         * When action is not ``toc``,
-          the lines start with ``'#'`` or ``';'`` are ignored.
+          the lines starting with ``'#'`` or ``';'`` are ignored.
 
         * When action is ``toc``,
-          the lines start with ``'#'`` are interpreted as chapters.
-          the lines start with ``';'`` are ignored.
+          the lines starting with ``'#'`` are interpreted as chapters.
+          the lines starting with ``';'`` are ignored.
 
         * When there are multiple ``urls``,
           if ``url`` has an extension that looks like binary,
@@ -299,18 +296,24 @@ Config Files
     a basic search is done for the most common configuration directories
     (in the same order below for each OS).
 
-    Windows::
+    Windows:
+
+    .. code-block:: none
 
         C:\Users\<username>\AppData\Roaming\tosixinch
         C:\Users\<username>\AppData\Local\tosixinch
         C:\Documents and Settings\<username>\Local Settings\Application Data\tosixinch
         C:\Documents and Settings\<username>\Application Data\tosixinch
 
-    Mac::
+    Mac:
+
+    .. code-block:: none
 
         ~/Library/Application Support/tosixinch
 
-    Others::
+    Others:
+
+    .. code-block:: none
 
         $XDG_CONFIG_HOME/tosixinch
         ~/.config/tosixinch
@@ -412,7 +415,9 @@ Config Files
 
 .. dword:: script directory
 
-    ``userdir`` can also have 'script' sub directory. For example::
+    ``userdir`` can also have 'script' sub directory
+    (It can be used for hooks commands).
+    For example::
 
         ~/.config/tosixinch/script
 
@@ -575,8 +580,8 @@ Users have to fill the value accordingly, if setting.
 
 .. dword:: CMDS
 
-    Like CMD, but accept a list as input.
-    The Value is a list of commandline ready strings.
+    Like CMD, but accept a list as input (newline separated as ``LINE``).
+    The value is one or more lines of commandline ready strings.
 
 .. dword:: PLUS
 
@@ -707,7 +712,7 @@ according to the value of
 
 ``width`` and ``height`` variables are made from ``size``.
 
-``font_scale`` option is made ``scale`` function.
+``font_scale`` option is made into ``scale`` function.
 Use it like ``{{ font_serif|scale }}``.
 
 ``percent80``, ``percent81`` ... ``percent99`` functions are added.

@@ -620,7 +620,7 @@ and only the options of that converter's section are used.
 
     For ``Default Value``, only ones of ``prince`` section are provided here.
 
-    You can see defaults of other converters e.g.::
+    You can see defaults of other converters e.g. ::
 
         $ tosixinch -a --weasyprint
         $ tosixinch -a --wkhtmltopdf
@@ -773,6 +773,10 @@ So the names below are taken
     It is searched in user process directory
     and application ``tosixinch.process`` directory, in order.
 
+    (You can use any module names and function names,
+    except module names ``util``, ``gen``, and ``site``,
+    which are already take by the script.)
+
     The first matched one is called with the argument ``'doc'`` auto-filled.
     It is ``lxml.html`` DOM object (``HtmlElement``),
     corresponding to the resultant ``Extracted_File``
@@ -797,9 +801,36 @@ So the names below are taken
 
     For 'built-in' functions and examples, see modules in `process <api.html#process>`__.
 
+    ---
+
+    An Example:
+
+    Let's say you want to change ``h3`` tag to ``div`` for http://somesite.com.
+
+    First, create a file in `process directory <overview.html#dword-process_directory>`__
+    e.g. ``~/.config/tosixinch/process/myprocess.py``.
+
+    Second, create a top level function e.g.
+
+    .. code-block:: python
+
+        def heading_to_div(doc, heading):
+            """Change some heading to div from argument e.g. 'h3'."""
+            for el in doc.xpath('//' + heading):
+                el.tag = 'div'
+
+    Third, write configuration accordingly.
+
+    .. code-block:: ini
+
+        [somesite]
+        match=      http://somesite.com/*
+        select=     ...
+        process=    myprocess.heading_to_div?h3
+
 .. confopt:: clean
 
-    | (Not implemented. Now this paragraph is only for documentation purpose.)
+    | (Note there is no option named ``clean``. This section is here only for documentation purpose.)
 
     After ``select``, ``exclude`` and ``process`` in ``extract``,
     the script ``clean`` s the resultant html.
@@ -821,14 +852,13 @@ So the names below are taken
 
     **css**:
         All ``style`` attributes and css source references
-        are stripped.
+        are stripped, with one exception.
 
-        With one exception.
         If a tag has ``'tsi-keep-style'`` in class attributes,
         ``style`` attributes are kept intact.
         It can be used in process functions.
         If you want to keep or create some inline ``style``,
-        inject this class attribute.::
+        inject this class attribute. ::
 
            # removed (becomes just '<div>')
            <div style="font-weight:bold;">
@@ -861,13 +891,6 @@ So the names below are taken
     Note it is not secure and not right.
     Do not provide sensitive data.
 
-    The author doesn't recommend using it altogether.
-    But, like the above,
-    if the site only wants anonymous users
-    to press 'OK' just the first time to make temporary sessions,
-    bad things shouldn't happen to the client,
-    and that's the rational.
-
 
 .. confopt:: link
 
@@ -877,5 +900,5 @@ So the names below are taken
     (Experimental)
 
     When action is ``link``,
-    the script prints some xpath content (must be URL strings) for each url,
+    the script prints some xpath content (must be strings) for each url,
     reading from this option.

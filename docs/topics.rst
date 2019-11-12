@@ -152,39 +152,72 @@ and give up and doesn't do anything for duplicate names
 TOC
 ---
 
-``TOC`` means Table of Contents, ``bookmarks`` in pdf.
+``TOC`` means Table of Contents, or pdf bookmarks.
 
-Action ``toc`` can be called if ``ufile`` is provided.
-(``--file`` or implicit ``urls.txt``. No ``--input``.)
-And it can be called only after ``extract`` has been done.
 
-The action bundles ``Extracted_Files``,
-writes to a single html, and creates a new ``url`` list
-(`tocfile <overview.html#dword-tocfile>`__).
+Concept
+^^^^^^^
 
-When ``--file`` is ``urls.txt`` (default),
-the toc ``url`` list is ``urls-toc.txt``.
-They can be other names,
-but here, we only use them for explanation.
+Given the following ``urls.txt``:
 
-Table of Contents adjustments are done
-simply by decreasing ``heading`` numbers.
-PDF converters will do the rest.
-(So, some PDF converters can choose
-other elements than ``heading`` tags for Table of Contents nodes,
-the script only concerns ``headings``).
+.. code-block:: none
 
-When ``convert``, ``url-toc.txt`` is automatically discovered,
-and if it is newer than corresponding ``urls.txt``,
-``convert`` reads the former instead of the latter.
-So, the following commands will create the toc version of pdf::
+    https://somesite.com/index.html                 (1)
+    # Alice's articles                              (2)
+    https://somesite.com/alice/article/aaa.html     (3)
+    https://somesite.com/alice/article/bbb.html     (4)
+    https://somesite.com/alice/article/ccc.html     (5)
+    # Bob's articles                                (6)
+    https://somesite.com/bob/article/xxx.html       (7)
+    https://somesite.com/bob/article/yyy.html       (8)
+
+The script ordinarily creates top level pdf bookmarks like this:
+
+.. code-block:: none
+
+    -- index
+    -- aaa
+    -- bbb
+    -- ccc
+    -- xxx
+    -- yyy
+
+``TOC`` feature helps create one level more structured pdf bookmarks like this:
+
+.. code-block:: none
+
+    -- index
+    -- Alice's articles
+       -- aaa
+       -- bbb
+       -- ccc
+    -- Bob's articles
+       -- xxx
+       -- yyy
+
+To do that, ``--toc`` action creates
+
+* new htmls
+
+  * ``h1`` strings are made from hash comment lines (2 and 6).
+  * contents are made from children htmls (3, 4 and 5. And 7 and 8).
+
+* new ``ufile`` (``tocfile``)
+
+  * made to refer to newly created htmls instead of now duplicate children htmls.
+
+``--convert`` action in turn read ``tocfile`` instead of the original ``ufile``,
+if ``tocfile`` exists, and it's mtime is newer.
+
+So that if you run
+
+.. code-block:: bash
 
     $ tosixinch -12
     $ tosixinch --toc
     $ tosixinch -3
 
-On the other hand, if this 'newer file' heuristic may interfere,
-you have to manually touch or delete files.
+The script creates a more structured version of pdf file.
 
 .. Note::
 
@@ -201,6 +234,26 @@ you have to manually touch or delete files.
 rules
 ^^^^^
 
+Action ``toc`` can be called if ``ufile`` is provided
+(``--file`` or implicit ``urls.txt``. No ``--input``).
+And it can be called only after ``extract`` has been done.
+
+The action bundles ``Extracted_Files``,
+writes to a single html, and creates a new ``url`` list
+(`tocfile <overview.html#dword-tocfile>`__).
+
+When ``--file`` is ``'urls.txt'`` (default),
+the name of ``tocfile`` is ``'urls-toc.txt'``.
+They can be other names,
+but here, we only use them for explanation purpose.
+
+Table of Contents adjustments are done
+simply by decreasing ``heading`` numbers.
+PDF converters will do the rest.
+(So, some PDF converters can choose
+other elements than ``heading`` tags for Table of Contents nodes,
+the script only concerns ``headings``).
+
 It first reads ``urls.txt``.
 If there is a line starting with ``'#'``,
 it is interpreted as a new chapter (new ``'<h1>'`` text).
@@ -208,48 +261,46 @@ Following lines are sections of the chapter,
 until next ``'#'`` line begins.
 (In other ``actions``, ``'#'`` lines are comments).
 
-For example, from this ``urls.txt``
+To use the same example:
 
 .. code-block:: none
 
     https://somesite.com/index.html                 (1)
-    # Alice's articles
-    https://somesite.com/alice/article/aaa.html     (2)
-    https://somesite.com/alice/article/bbb.html     (3)
-    https://somesite.com/alice/article/ccc.html     (4)
-    # Bob's articles
-    https://somesite.com/bob/article/xxx.html       (5)
-    https://somesite.com/bob/article/yyy.html       (6)
+    # Alice's articles                              (2)
+    https://somesite.com/alice/article/aaa.html     (3)
+    https://somesite.com/alice/article/bbb.html     (4)
+    https://somesite.com/alice/article/ccc.html     (5)
+    # Bob's articles                                (6)
+    https://somesite.com/bob/article/xxx.html       (7)
+    https://somesite.com/bob/article/yyy.html       (8)
 
 ``toc`` tracks or creates these files.
 
 .. code-block:: none
 
     (in './_htmls/somesite.com/')
-        index--extracted.html                            (7)
+        index--extracted.html                            (11)
     (in './_htmls/tosixinch.example.com/')
-        alices-articles--extracted.html                  (8)
-        bobs-articles--extracted.html                    (9)
+        alices-articles/index--tosixinch--extracted.html (12)
+        bobs-articles/index--tosixinch--extracted.html   (13)
 
-Directory paths are implement details.
-``tosixinch.example.com`` is an arbitrary placeholder host,
-verbose path names are
-to keep ``url`` transformation rules consistent
-(``url`` to ``Downloaded_File`` to ``Extracted_File``).
+``tosixinch.example.com`` is an imaginary placeholder host.
+Verbose path names are ``Extracted_Files`` names
+corresponding to ``urls``.
 
-``(7)``
+``(11)``
     (1) is outside of new chapters structure,
     so it doesn't create a file,
     just keeps track of (1)'s ``Extracted_File``.
 
-``(8)``
+``(12)``
     it creates this new html,
-    whose ``<h1>`` is ``#`` line,
-    ``<body>`` consists of (2)(3)(4)'s (previous) ``<body>``,
+    whose ``<h1>`` is ``#`` line (2),
+    ``<body>`` consists of (3)(4)(5)'s (previous) ``<body>``,
     their ``<h1>`` changed to ``<h2>``,
     ``<h2>`` to ``<h3>`` etc.. ``<h6>`` is kept as is.
 
-    So for example, two html files below become the third file.
+    So three html files below would become the 4th file.
 
     .. code-block:: html
 
@@ -260,12 +311,17 @@ to keep ``url`` transformation rules consistent
           </body>
         </html>
 
-    .. code-block:: html
-
         <html>
           <body>
             <h1>bbb</h1>
             <p>this is bbb.</p>
+          </body>
+        </html>
+
+        <html>
+          <body>
+            <h1>ccc</h1>
+            <p>this is ccc.</p>
           </body>
         </html>
 
@@ -282,24 +338,28 @@ to keep ``url`` transformation rules consistent
                <h2>bbb</h2>
                <p>this is bbb.</p>
             </div>
+            <div class='tsi-body-merged'>
+               <h2>ccc</h2>
+               <p>this is ccc.</p>
+            </div>
           </body>
         </html>
 
-``(9)``
-    the same as (8)
+``(13)``
+    the same as (12).
 
 and it creates ``urls-toc.txt``, which contains::
 
-    https://somesite.com/index.html                 (10)
-    http://tosixinch.example.com/alices-articles    (11)
-    http://tosixinch.example.com/bobs-articles      (12)
+    https://somesite.com/index.html                 (21)
+    http://tosixinch.example.com/alices-articles    (22)
+    http://tosixinch.example.com/bobs-articles      (23)
 
 
-(10)(11)(12) are the names of ``urls``,
-corresponding to (7)(8)(9) (``Extracted_Files``).
+(21)(22)(23) are the names of ``urls``,
+corresponding to (11)(12)(13) (``Extracted_Files``).
 
 So, ``convert`` doesn't do anything special for ``urls-toc.txt``,
-just processes pre-built htmls and produces a more structured pdf.
+just processes pre-built htmls.
 
 
 URLReplace

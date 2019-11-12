@@ -5,7 +5,7 @@ Development
 Test
 ----
 
-Tests are done on linux. Other platforms are not considered.
+Tests are done on linux. You can not run test programs on other platforms.
 
 
 URL quoting memo

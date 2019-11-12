@@ -2,54 +2,40 @@
 Introduction
 ============
 
-| Somehow, I don't like reading on the computer screen.
-| In the olden days, I may have printed them in frustration.
-| These days I can convert them to ebooks, of course,
-| but it should be as easy as possible.
+Somehow, I don't like reading on the computer screen.
 
-The script is for this purpose.
-It is a helper to convert relatively simple html, text or source code,
-to relatively terrible pdf file
-as passable as temporarily printed out paper in a hurry.
+So I frequently convert web pages or other texts to pdf, to read in e-readers.
+And this script helps me to do that.
 
 ---
 
-The work is serialized in three, very uncontroversial, stages:
+It divides the job in three, very uncontroversial, stages:
 
-1. Download html
-2. Extract and format the contents to suit for small paged media
-3. Convert to pdf
+1. ``Download`` html
+2. ``Extract`` and format the contents to suit for small paged media
+3. ``Convert`` to pdf
 
-Admittedly, there are many applications doing similar things.
-But I find, they are on the one hand too generic,
-just providing functionalities for users to go a long way to build up with,
-or, on the other hand too specific,
-making it hard to promptly adjust or intervene.
+And it basically does what people expect it to do,
+using the most general technologies.
 
-The legend of this script says '*Browser to e-reader in a few minutes*'.
-Here, I mean the 'in a few minutes' part seriously.
-Too many programs are either 'in a few hours' or 'in a few seconds' kind.
+But it tries a bit harder to get the job done faster.
+The legend of the script says, 'Browser to e-reader in a few minutes'.
+This constraint ('in a few minutes') generally defines
+the domain and methods of the script.
 
 ---
 
 Some points to consider:
 
+* The objective is *not* to produce a beautiful pdf.
+  it is to manage to make a marginally readable terrible pdf just for personal reading,
+  from the least work as possible.
+
 * Many related applications seem to concentrate on major new sites,
-  parsing RSS or home pages for the target articles,
-  sometimes using clever content extraction heuristics on top.
-  This script may not be suitable for these sites.
+  parsing specific article pages or RSS for the target htmls.
+  This script doesn't have special functionalities for these sites.
   It is rather for more static reading contents,
   like personal blogs or technical documents.
-
-* The objective is *not* producing a great pdf,
-  adjusting closely to specific intricacies of each site format.
-  Rather, avoiding as far as possible the trouble of having to
-  analyze arbitrary document markup structure,
-  which you couldn't care less about, is the point.
-
-* Users select articles (urls) themselves.
-  And users write configurations for each site themselves.
-  So it always requires some work, hopefully done in a few minutes.
 
 * Extraction is the most important part of the script.
   But it is done by very simple and predetermined method.
@@ -58,14 +44,13 @@ Some points to consider:
   2. ``select`` the elements you want, discarding others.
   3. ``exclude`` undesirable sub-elements from the selected elements.
   4. ``process`` the resultant tree
-     (apply arbitrary functions against the tree
-     in a very limited way).
+     (apply arbitrary functions against the tree).
   5. ``clean`` the resultant tree.
      (strip some tags, attributes, javascript and css).
 
   So the script is only suitable for htmls
   as complex as this simple method can take.
-  For example, perhaps the script can't handle
+  For example, perhaps the script is not suitable for
   academic papers in multiple columns with many figures.
 
 
@@ -86,10 +71,6 @@ The command will only install ``tosixinch`` package.
 **Python 3.5 and above** are supported.
 
 .. note::
-
-    * The author is an amateur holiday programmer.
-
-    * It is under construction, to get to the state of the alpha.
 
     * Mac and Windows environments are considered,
       but it is likely to be more imperfect.
@@ -144,12 +125,41 @@ some things are done better.
     For example, it can not receive multiple htmls,
     and it can not build pdf bookmarks.
 
-    The patched one is generally preferred.
+    The patched one is generally preferred, and the script presupposes it.
 
 Anyway, the script just helps to build conversion commandline.
 It only adds some useful shortcuts.
 Abstraction, consistency or support for multiple converters
 are not intended.
+
+
+Basic Usage
+-----------
+
+The main comandline options of the script are:
+
+    * ``-i`` ``INPUT``, ``--input`` ``INPUT`` (input url or file path)
+    * ``-f`` ``FILE``, ``--file`` ``FILE`` (file to read inputs)
+    * ``-1``, ``--download``
+    * ``-2``, ``--extract``
+    * ``-3``, ``--convert``
+
+``-1`` downloads htmls to ``_htmls`` sub directory in current directory.
+
+``-2`` extracts these local ``Downloaded_Files``, and creates new files.
+
+``-3`` converts these local ``Extracted_Files``, and creates a pdf file.
+
+Note ``-1``, ``-2`` and ``-3`` take the same url as input.
+You don't need to change that part of the commandline
+(see `Example <#example>`__ below).
+
+Site specific options are either on commandline or in a configuration file.
+You use frequently the latter,
+because options are sometimes long and include special characters.
+
+For each site, users will create a new section,
+adding a few lines of options.
 
 
 Samples
@@ -182,25 +192,24 @@ An example::
 
     $ tosixinch -i https://en.wikipedia.org/wiki/Xpath -123
 
-(For basic commandline options, see `next section <#usage>`__.)
-
 Or if even this is a trouble::
 
     $ tosixinch --sample-urls -123
 
 This command creates 'sample.pdf'
-from some arbitrary urls in most of the domains above.
+from some arbitrary urls in most of the domains above
+(So, it takes a bit of time.)
 
 .. note::
 
-    You need to set the converter if not default (prince).
+    You need to set the converter if not the default (prince).
 
     And if you installed the converter in unusual places (not in PATH),
     you need to set the fullpath.
 
     .. code-block:: none
 
-            $ [...] --wkhtmltopdf --cnvpath /home/john/build/bin/wkhtmltopdf
+        $ [...] --wkhtmltopdf --cnvpath /home/john/build/bin/wkhtmltopdf
 
     (See `Programs <commandline.html#programs>`__
     and `cnvpath <commandline.html#cmdoption-cnvpath>`__.)
@@ -208,51 +217,35 @@ from some arbitrary urls in most of the domains above.
 
 .. note::
 
+    The sample script uses ``DejaVu Sans`` and ``Dejavu Sans Mono`` if installed,
+    and is optimized for them.
+
+    Otherwise generic ``sans-serif`` and ``monospace`` is used for css.
+    You may need to adjust fonts and layout configuration.
+
+
+.. note::
+
     These commands create temporary files other than a pdf file
     in current directory.
 
-    * '_html' directory, with many html files in it.
-    * 'sample.css'
+    * ``_html`` directory, with many html files in it.
+    * file ``sample.css``
 
     You can delete them as you like.
 
 
-Usage
------
+.. note::
 
-The main comandline options of the script are:
+    You can also test the results for Python source codes, local or remote.
 
-    * ``-i`` ``INPUT``, ``--input`` ``INPUT`` (input url or file path)
-    * ``-f`` ``FILE``, ``--file`` ``FILE`` (file to read inputs)
-    * ``-1``, ``--download``
-    * ``-2``, ``--extract``
-    * ``-3``, ``--convert``
+    .. code-block:: none
 
-Usually you check the site by selecting an example url (``-i``),
-and see how it goes.
-If it is good enough,
-you build an url list, put it in a file, and run ``-f``.
-
-``-1`` downloads htmls to ``_htmls`` sub directory in current directory.
-
-``-2`` extracts these local ``Downloaded_Files``, and creates new files.
-
-``-3`` converts these local ``Extracted_Files``, and creates a pdf file.
-
-Note ``-1``, ``-2`` and ``-3`` take the same url as input.
-You don't need to change that part of the commandline
-(see `Example <#example>`__ below).
-
-Site specific options are either on commandline or in a configuration file.
-You use frequently the latter,
-because options are sometimes long and include special characters.
-
-For each site, users will create a new section,
-adding a few lines of options.
+        $ tosixinch -i https://raw.githubusercontent.com/python/cpython/master/Lib/textwrap.py -123
 
 
 Example
-^^^^^^^
+-------
 
 You are browsing some website, and you want to bundle some articles in a
 pdf file.
@@ -272,8 +265,8 @@ and write extraction settings for the site. ::
     [somesite]
     match=    https://somesite.com/article/*
     selecet=  //div[@id="main"]
-    exclude=  //div[@id="sidemenu"]
-              //div[@id="comment"]
+    exclude=  //div[@class="sidemenu"]
+              //div[@class="comment"]
 
 .. note ::
 
@@ -291,8 +284,8 @@ and write extraction settings for the site. ::
     Multiple lines are interpreted
     as connected with ``'|'`` (equivalent to *'or'*).
 
-And applies the site config to the local html,
-creating a new (extracted) html. ::
+And you create a new (extracted) html,
+applying the site config to the local html.  ::
 
     $ tosixinch -i https://somesite.com/article/aaa.html -2
 
@@ -310,7 +303,7 @@ And ::
 
     $ tosixinch -i https://somesite.com/article/aaa.html -3
 
-* It generates ``./aaa.pdf``.
+* It generates ``./somesite-aaa.pdf``.
 
 Next, you build an url list, by some means. ::
 
@@ -335,133 +328,76 @@ Additionally, if you configured so::
 * it opens the pdf with a pdf viewer.
 
 
-Example 2
-^^^^^^^^^
+Features
+--------
 
-Now, more concrete example.
+URL strings can be pre-processed by regular expressions
+before mainline processing. `URL replace <topics.html#urlreplace>`__.
 
-You want to create a pdf file from some of the Python PEP pages.
+You can specify multiple encodings for documents,
+including ``chardet`` auto detection and ``ftfy`` UTF-8 encoding fix.
+`option: encoding <options.html#confopt-encoding>`__.
 
-* PEP 8 -- Style Guide for Python Code
-* PEP 20 -- The Zen of Python
-* PEP 257 -- Docstring Conventions
+The script has very basic Qt web rendering functions (``webkit`` or ``webengine``).
+So if you are lucky, by installing
+`pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
+and `Qt5 <https://www.qt.io>`__,
+you may get javascript generated html contents.
+(In most cases, we can safely ignore javascript.
+In content sites, the content itself is most likely static.
+In that case, you don't need Qt libraries.)
+`option: javascript <options.html#confopt-javascript>`__.
 
-(The configuration is actually included in the `Samples <#samples>`__ above.
-But let's suppose it is not).
+Sometimes writing configurations for each site is too cumbersome.
+You can fallback to automatic article extraction by installing
+`readability <https://github.com/buriy/python-readability>`__.
+But the results may vary.
+`commandline: readability <commandline.html#cmdoption-readability>`__
+and `commandline: readability-only <commandline.html#cmdoption-readability-only>`__
 
-You have to prepare the configuration,
-like the previous example.::
+As already mentioned, you can manipulate html elements,
+by adding arbitrary functions.
+`option: process <options.html#confopt-process>`__.
 
-    # in urls.txt
-    https://www.python.org/dev/peps/pep-0008
-    https://www.python.org/dev/peps/pep-0020
-    https://www.python.org/dev/peps/pep-0257
+One custom xpath syntax is added, to select class attributes easier.
+`double equals <overview.html#dword-XPATH>`__.
 
-    # in ~/.config/tosixinch/site.ini
-    [python-pep]
-    match=      https://www.python.org/dev/peps/*
-    select=     //article[@class="text"]
+It can also convert text and source code to pdf (experimental).
+`Text Format <topics.html#text-format>`__.
+See also `option: ftype <options.html#confopt-ftype>`__.
 
-It seems there is nothing to remove.
-You can omit ``exclude`` option.
+For python source code, it can create simple pdf bookmarks for classes and functions.
+`code <topics.html#code>`__.
 
-But looking at the pdf, you find a problem.
-The pdf bookmarks (Table of Contents) are not good.
-The site invariably uses ``<h1>`` tags
-for all (sub) sections and (sub) headings!
-So the document structure doesn't correspond to
-the heading tags (h1, h2, h3...) structure,
-which, usually, pdf converters use to make pdf bookmarks.
+It also converts man pages. `option: add-extractors <options.html#confopt-add_extractors>`__.
 
-To solve this,
-you need to transform the htmls some way or other.
-The script only provides a relatively simple
-`process <options.html#confopt-process>`__ option,
-so you have to manage with that.
+It has simple TOC (table of contents) rebounding feature,
+adding one level of structure.
+So if you have downloaded e.g. the entire contents of some blog site
+(sorry for the guy),
+you might be able to get a pdf with annual chapters like 2011, 2012, 2013,
+and articles are inside them.
+`TOC <topics.html#toc>`__.
 
-Fortunately, there are no ``<h2>``, ``<h3>``... ``<h6>``
-in the content part of the pages.
-So, let's change other ``<h1>`` tags to ``<h2>``,
-keeping ``<h1>`` only for the main title heading.
+Users can create their own css files with simple templates,
+expanding configuration values.
+`CSS Template Values <overview.html#css-template-values>`__.
 
-You create a file
-(in `process directory <overview.html#dword-process_directory>`__),
-and write a function in it::
+Users can create site specific css files.
+`auto_css directory <overview.html#dword-auto_css_directory>`__.
 
-    # in ~/.config/tosixinch/process/myprocess.py
-    def decrease_heading(doc, to_keep_path):
-        """change h1 to h2, except one (to_keep_path argument)"""
-        for el in doc.xpath('//h1'):
-            if el.xpath(to_keep_path):
-                continue
-            el.tag = 'h2'
+As already mentioned, it can open the pdf with a pdf viewer.
+`Viewcmd <topics.html#viewcmd>`__.
 
-* first ``doc`` argument is required.
-  The script provides this
-  (html elements object after ``select`` and ``exclude``),
-  and you can manipulate it as you like.
-  The script uses the changed ``doc`` subsequently.
+It has pre and post hooks for each (sequential) actions.
+For each, users can call external commands or python modules,
+adding or bypassing some of the script's capabilities.
+`Hookcmds <topics.html#hookcmds>`__.
 
-To use this, you add ``process`` option to the site configuration. ::
+As a last resort, it can print out file names to be created.
+They are determined uniquely given url inputs.
+So that users can do some of the script's jobs outside of the script.
+`commandline: printout <commandline.html#cmdoption-printout>`__.
 
-    [python-pep]
-    ...
-    process=    myprocess.decrease_heading?@class="page-title"
-
-The meaning is::
-
-    myprocess           - module name
-                          (filename without '.py')
-    .                   - namespace separator
-    decrease_heading    - function name
-    ?                   - argument separator
-    @class="page-title" - argument
-
-Now you can do::
-
-    $ tosixinch -123
-
-
-Other Features
---------------
-
-* It can also convert text and source code to pdf (experimental).
-  Although it may not be common to read code in e-readers,
-  I find it rather useful.
-  Of course e-reader's functionalities are limited,
-  you cannot do many things.
-
-* The script has very basic Qt web rendering functions (``webkit`` or ``webengine``).
-  So if you are lucky, by installing
-  `pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
-  (and `Qt5 <https://www.qt.io>`__),
-  you may get javascript generated html contents.
-
-  (In most cases, we can safely ignore (remove) javascript.
-  In content sites, the content itself, which you want for *reading*,
-  is most likely static. In that case, you don't need Qt libraries.)
-
-* Sometimes writing configurations for each site is too cumbersome.
-  You can fallback to automatic article extraction by installing
-  `readability <https://github.com/buriy/python-readability>`__.
-  But the results may vary.
-
-  (I am writing this script
-  precisely because those heuristic extraction libraries are
-  unsatisfactory for me.)
-
-* Nowadays most htmls are encoded in UTF-8,
-  so use cases are rarer, but by installing
-  `ftfy <http://ftfy.readthedocs.io>`__
-  and `chardet <http://chardet.readthedocs.io>`__,
-  you can do smarter encode detection and configurations.
-
-* It has simple TOC (table of contents) rebounding feature,
-  adding one level of structure.
-  So if you have downloaded e.g. the entire contents of some blog site
-  (sorry for the guy),
-  you might be able to get a pdf with annual chapters like 2011, 2012, 2013,
-  and articles are inside them.
-
-* A basic bash completion script is included.
-  See `tosixinch-complete.bash <topics.html#script-tosixinch-complete.bash>`__.
+A basic bash completion script is included.
+`tosixinch-complete.bash <topics.html#script-tosixinch-complete.bash>`__.
