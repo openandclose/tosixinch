@@ -388,6 +388,8 @@ Config Files
     all children htmls' auto_css stylesheets in order.
     So when creating a mixed-sites-pdf, you should control the effects carefully.
 
+    Note you can not use ``css template files`` here.
+
 .. dword:: process directory
 
     ``userdir`` can also have 'process' sub directory. For example ::
