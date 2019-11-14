@@ -599,10 +599,6 @@ In the following, the roles in the sample file
 
     It is to make easier to test font sizes.
 
-    (To use it for other font sizes in your template,
-    add ``'scale_font'`` function,
-    e.g. ``'{{ font_serif|scale_font }}'`` instead of just ``'{{ font_serif }}'``.)
-
 .. confopt:: line_height
 
     (``1.3``)

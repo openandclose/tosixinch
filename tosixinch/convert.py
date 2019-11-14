@@ -106,7 +106,7 @@ class Convert(object):
         context = {key: self.style.get(key) for key in self.style}
 
         context['size'] = self._conf.pdfsize
-        context['scale_font'] = _get_scale_func(self.style.font_scale)
+        context['scale'] = _get_scale_func(self.style.font_scale)
 
         using = lambda x: self._conf.converter._section == x
         conv_dict = {

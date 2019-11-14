@@ -703,6 +703,9 @@ or `landscape_size <options.html#confopt-landscape_size>`__,
 according to the value of
 `orientation <options.html#confopt-orientation>`__.
 
+``font_scale`` option is made ``scale`` function.
+Use it like ``{{ font_serif|scale }}``.
+
 Bool variables ``prince``, ``weasyprint`` and ``wkhtmltopdf``
 are added.
 They are ``True`` or ``False``
