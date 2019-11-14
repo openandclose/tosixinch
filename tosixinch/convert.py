@@ -40,9 +40,9 @@ def _is_newer(oldfile, newfile):
     return False
 
 
-def _get_scale_func(scale):
+def _get_scale_func(scale):  # length and percentage
     def func(css_size):
-        m = re.match(r'([0-9]+)([A-Za-z]*)', css_size)
+        m = re.match(r'(?:\+?)([0-9]+)([A-Za-z]*)', css_size)
         num, unit = m.group(1), m.group(2)
         num = int(num) * float(scale)
         return str(num) + unit
