@@ -43,10 +43,6 @@ def conditioned_iter(el, test):
     It is like ``element.iter(condition)``,
     but this one skips unmatched element as a tree,
     with its subelements all together.
-    It seems lxml doesn't have this functionality, ``iter`` or otherwise.
-
-    cf. ``.xpath()`` could do this kind of things,
-    but not suited for more than simplest condition tests.
 
     Argument ``el`` is presupposed to be an single ``lxml.etree.element``.
     No checks are done.
