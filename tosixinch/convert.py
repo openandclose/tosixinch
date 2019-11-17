@@ -45,7 +45,7 @@ def _get_scale_func(scale):  # length and percentage
         m = re.match(r'(?:\+?)([0-9]+)([A-Za-z]*)', css_size)
         num, unit = m.group(1), m.group(2)
         num = int(num) * float(scale)
-        return str(num) + unit
+        return str(round(num, 4)) + unit
     return func
 
 
