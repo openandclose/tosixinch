@@ -108,6 +108,10 @@ class Convert(object):
         context['size'] = self._conf.pdfsize
         context['scale'] = _get_scale_func(self.style.font_scale)
 
+        sizes = self._conf.pdfsize.split()
+        if len(sizes) == 2:
+            context['width'], context['height'] = sizes
+
         using = lambda x: self._conf.converter._section == x
         conv_dict = {
             'prince': using('prince'),

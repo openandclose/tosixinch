@@ -703,6 +703,8 @@ or `landscape_size <options.html#confopt-landscape_size>`__,
 according to the value of
 `orientation <options.html#confopt-orientation>`__.
 
+``width`` and ``height`` variables are made from ``size``.
+
 ``font_scale`` option is made ``scale`` function.
 Use it like ``{{ font_serif|scale }}``.
 
