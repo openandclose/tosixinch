@@ -708,6 +708,10 @@ according to the value of
 ``font_scale`` option is made ``scale`` function.
 Use it like ``{{ font_serif|scale }}``.
 
+``percent80``, ``percent81`` ... ``percent99`` functions are added.
+Use it like ``{{ height|percent98 }}`` (98 % of the height length).
+It is OK if the previous value, here ``height``, includes units like ``px`` or ``mm``.
+
 Bool variables ``prince``, ``weasyprint`` and ``wkhtmltopdf``
 are added.
 They are ``True`` or ``False``

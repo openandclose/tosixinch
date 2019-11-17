@@ -112,6 +112,12 @@ class Convert(object):
         if len(sizes) == 2:
             context['width'], context['height'] = sizes
 
+        # https://stackoverflow.com/a/3693090
+        FUNC_TEMPLATE = """context['percent%s'] = _get_scale_func(%s/100)"""
+        for i in range(80, 100):
+            s = str(i)
+            exec(FUNC_TEMPLATE % (s, s))
+
         using = lambda x: self._conf.converter._section == x
         conv_dict = {
             'prince': using('prince'),
