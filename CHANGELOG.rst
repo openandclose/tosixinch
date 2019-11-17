@@ -10,7 +10,9 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 **Fix:**
 
-Fix auto_css (when toc, stylesheets were lost)
+* Fix auto_css (when toc, stylesheets were lost)
+
+* Fix clipped large tall images (using actual length and percent)
 
 
 v0.2.0 (2019-11-10)

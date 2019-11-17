@@ -82,7 +82,7 @@ img.tsi-wide {
 }
 
 img.tsi-tall {
-    height: 90%;
+    height: {{ height|percent98 }};
 }
 
 /* img.tsi-small { */
