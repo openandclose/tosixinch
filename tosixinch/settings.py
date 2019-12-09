@@ -130,10 +130,12 @@ def _getpdf(url, section, length=1):
         name = host or section
     else:
         name = section
+
     if length == 1:
         path = path or host
-        path = os.path.basename(path)
-        name = name + '-' + path
+        if name != path:
+            path = os.path.basename(path)
+            name = name + '-' + path
 
     return name + '.pdf'
 
