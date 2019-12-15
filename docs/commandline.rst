@@ -276,7 +276,7 @@ Styles
 
 .. option:: --toc-depth TOC_DEPTH
 
-    tree depth of table of contents (only for prince and weasyprint)
+    tree depth of table of contents
 
 .. option:: --font-family FONT_FAMILY
 

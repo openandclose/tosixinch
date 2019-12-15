@@ -257,7 +257,7 @@ def _build_conf_parser():
     help = "landscape size for the css, e.g. '118mm 90mm'"
     styles.add_argument('--landscape-size', help=help)
 
-    help = 'tree depth of table of contents (only for prince and weasyprint)'
+    help = 'tree depth of table of contents'
     styles.add_argument('--toc-depth', help=help)
 
     help = """main font for the css, e.g. '"DejaVu Sans", sans-serif'"""
