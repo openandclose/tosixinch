@@ -124,7 +124,7 @@ def _getpdf(url, section, length=1):
     query = parts.query[:20]
     if query:
         path = path + '-' + slugify(query)
-    section = section.split(' : ')[0]
+    section = section.split(' : ')[0].replace(os.sep, '_')
 
     if section == 'scriptdefault':
         name = host or section
