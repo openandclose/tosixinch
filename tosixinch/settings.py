@@ -413,7 +413,7 @@ class Conf(object):
             section = site.section
             general = site.general
             site = site._get_self()
-            print('[%s]' % section)
+            print('%-12s: %s' % ('section', section))
             for option in sorted(site):
                 print('%-12s: %s' % (option, general.get(option)))
         else:
