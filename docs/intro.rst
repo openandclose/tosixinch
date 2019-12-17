@@ -78,6 +78,11 @@ The command will only install ``tosixinch`` package.
     * In some places in code,
       Unicode encoding in system and files is presupposed.
 
+    * Until sometime later, I don't hesitate to change APIs.
+      But please feel free to email me if changes break your configuration,
+      and I haven't provided the clearest documentation.
+      I'll be happy to help.
+
 
 Requirements
 ------------
