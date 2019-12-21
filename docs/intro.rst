@@ -159,13 +159,6 @@ Note ``-1``, ``-2`` and ``-3`` take the same url as input.
 You don't need to change that part of the commandline
 (see `Example <#example>`__ below).
 
-Site specific options are either on commandline or in a configuration file.
-You use frequently the latter,
-because options are sometimes long and include special characters.
-
-For each site, users will create a new section,
-adding a few lines of options.
-
 
 Samples
 -------
@@ -207,42 +200,35 @@ from some arbitrary urls in most of the domains above
 
 .. note::
 
-    You need to set the converter if not the default (prince).
+    * You need to set the converter if not the default (prince).
+      See `Programs <commandline.html#programs>`__.
 
-    And if you installed the converter in unusual places (not in PATH),
-    you need to set the fullpath.
+    .. code-block:: none
+
+        $ [...] --wkhtmltopdf
+
+    * If you installed the converter in unusual places (not in PATH),
+      you need to set the fullpath.
+      See `cnvpath <commandline.html#cmdoption-cnvpath>`__.
 
     .. code-block:: none
 
         $ [...] --wkhtmltopdf --cnvpath /home/john/build/bin/wkhtmltopdf
 
-    (See `Programs <commandline.html#programs>`__
-    and `cnvpath <commandline.html#cmdoption-cnvpath>`__.)
+    * The sample css uses ``DejaVu Sans`` and ``Dejavu Sans Mono`` if installed,
+      and is optimized for them.
+      Otherwise generic ``sans-serif`` and ``monospace`` is used.
+      You may need to adjust fonts and layout configuration.
 
+    * These commands create temporary files other than the pdf file
+      in current directory.
+      You can delete them as you like.
 
-.. note::
+      * ``_html`` directory, with many html files in it.
+      * file ``sample.css``
 
-    The sample script uses ``DejaVu Sans`` and ``Dejavu Sans Mono`` if installed,
-    and is optimized for them.
-
-    Otherwise generic ``sans-serif`` and ``monospace`` is used for css.
-    You may need to adjust fonts and layout configuration.
-
-
-.. note::
-
-    These commands create temporary files other than a pdf file
-    in current directory.
-
-    * ``_html`` directory, with many html files in it.
-    * file ``sample.css``
-
-    You can delete them as you like.
-
-
-.. note::
-
-    You can also test the results for Python source codes, local or remote.
+    * Besides sample sites,
+      some non html texts may work fine with default configuration, local or remote.
 
     .. code-block:: none
 
