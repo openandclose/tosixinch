@@ -586,30 +586,26 @@ Also, the following environment variables are exposed
     TOSIXINCH_FNAME:   Downloaded_File
     TOSIXINCH_FNEW:    Extracted_File
 
-(The usage is a bit complex, though.
-Python runs subprocess without shell by default,
-so the commandline strings themselves are not evaluated. That is::
-
-    post_percmd1=   echo $TOSIXINCH_FNAME
-
-doesn't work;
-
-.. code-block:: none
-
-    # in foo.sh
-    echo $TOSIXINCH_FNAME
-
-    # in ~/.config/tosixinch/tosixinch.ini
-    post_percmd1=   foo.sh
-
-will work.)
-
 .. note::
 
-    You can implement your own ``--add-extractors``,
-    by using ``pre_percmd2``
-    (calling external program and creating ``Extracted_File`` yourself,
-    returning 101).
+    The usage is a bit complex, though.
+    Python runs subprocess without shell by default,
+    so the variables in the commandline itself are not expanded. That is:
+
+    .. code-block:: none
+
+        post_percmd1=   echo $TOSIXINCH_FNAME
+
+    doesn't work;
+
+    .. code-block:: none
+
+        post_percmd1=   foo.sh
+
+        # in foo.sh
+        echo $TOSIXINCH_FNAME
+
+    will work.
 
 
 Scripts
@@ -648,6 +644,40 @@ just copied in the tosixinch installation directory
 
     (This doesn't work if ``urls`` is not supplied,
     so you have to supply something, like the above ``-i aaa``.)
+
+
+.. script:: _man
+
+    A sample hook extractor for man pages.
+    If you want to use it, add this command to ``pre_percmd2`` in user configuration.
+
+    .. code-block:: ini
+
+        pre_percmd2=    _man
+
+    When ``extract``,
+    if the filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
+    (e.g. grep.1, grep.1.gz, grep.1p.gz),
+    run man program with ``'man -Thtml'``,
+    skipping the main extraction.
+
+    Normally, windows users can't use it
+    (as long as there is no ``man`` command).
+
+.. note ::
+
+    If you supply multiple ``*.gz`` files for ``urls``,
+    it triggers the binary-extension filter.
+    In this case, you have to subtract ``gz`` from the list.
+    (see `add_binary_extensions <#confopt-add_binary_extensions>`__).
+
+    .. code-block:: bash
+
+        # in urls.txt
+        /usr/share/man/man1/cp.1.gz
+        /usr/share/man/man1/grep.1.gz
+
+        $ tosixinch -123 --add-binary-extensions -gz
 
 
 .. script:: tosixinch-complete.bash

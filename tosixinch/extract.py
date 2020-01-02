@@ -135,19 +135,8 @@ def dispatch(conf):
     pre_percmd = conf.general.pre_percmd2
     post_percmd = conf.general.post_percmd2
 
-    # subprocess version
-    # extractors = conf.general.add_extractors
-    # e_cmd = ['sample_extractor.py', '--prog']
-    # e_cmd.append(','.join(extractors))
-    # e_cmd = [e_cmd]
-    # import version
-    e_cmd = [['sample_extractor']]
-
     for site in conf.sites:
         returncode = system.run_cmds(pre_percmd, conf, site)
-
-        if returncode not in (101, 102):
-            returncode = system.run_cmds(e_cmd, conf, site)
 
         if returncode not in (101, 102):
             fname = site.fname

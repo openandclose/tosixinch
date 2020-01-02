@@ -146,39 +146,6 @@ General Section
     But in one invocation, this re-downloading is always once for one ``url``.
     (The script doesn't download the same icon files again and again.)
 
-.. confopt:: add_extractors
-
-    | (None)
-    | ``[PLUS]``
-
-    Before ``extract``, if some conditions match,
-    it runs external programs and creates the ``Extracted_File``,
-    skipping the builtin ``extract``.
-
-    Valid values are now only ``man``:
-
-    ``man``:
-
-    if the filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
-    (e.g. grep.1, grep.1.gz, grep.1p.gz),
-    run man program with ``'man -Thtml'``.
-    So only unixes users can uses it.
-
-.. note ::
-
-    If you supply multiple ``*.gz`` files for ``urls``,
-    it actually triggers the binary-extension filter.
-    In this case, you have to subtract ``gz`` from the list.
-    (see `add_binary_extensions <#confopt-add_binary_extensions>`__).
-
-    .. code-block:: bash
-
-        # in urls.txt
-        /usr/share/man/man1/cp.1.gz
-        /usr/share/man/man1/grep.1.gz
-
-        $ tosixinch -123 --add-binary-extensions -gz
-
 .. confopt:: guess
 
     | (``//div[@itemprop="articleBody"]``
@@ -467,6 +434,8 @@ General Section
     | ``[LINE][CMDS]``
 
     Run arbitrary command before each ``extract``.
+
+    There is a sample hook extractor for man pages. See `_man <topics.html#script-_man>`__.
 
 .. confopt:: post_percmd2
 

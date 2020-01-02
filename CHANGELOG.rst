@@ -8,11 +8,24 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 **Unreleased:**
 ---------------
 
+**Change:**
+
+* **[!]** Cut add_extractors and move man hook to pre_percmd2
+
+  Change you config (If you are using) from:
+
+      add_extractors=   _man
+
+  To:
+
+      pre_percmd2=      _man
+
 **Fix:**
 
 * Fix auto_css (when toc, stylesheets were lost)
 
 * Fix clipped large tall images (using actual length and percent)
+
 
 
 v0.2.0 (2019-11-10)

@@ -360,7 +360,7 @@ See also `option: ftype <options.html#confopt-ftype>`__.
 For python source code, it can create simple pdf bookmarks for classes and functions.
 `code <topics.html#code>`__.
 
-It also converts man pages. `option: add-extractors <options.html#confopt-add_extractors>`__.
+It can convert man pages. `script: _man <topics.html#script-_man>`__.
 
 It has simple TOC (table of contents) rebounding feature,
 adding one level of structure.
