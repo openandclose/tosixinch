@@ -7,24 +7,11 @@ import re
 import textwrap
 
 from tosixinch import system
+from tosixinch.content import HTML_TEXT_TEMPLATE
 
 logger = logging.getLogger(__name__)
 
 TEXTCLASS_PREFIX = 'tsi-text tsi-'
-
-HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>{fname}</title>
-</head>
-  <body>
-    <h1 class="{textclass}">{fname}</h1>
-    <pre class="{textclass}">
-{content}
-    </pre>
-  </body>
-</html>"""
 
 PYTHONEXT = ('py',)
 PYTHONFILE = re.compile((
@@ -101,12 +88,10 @@ class Prose(object):
         self.wrapped = self.text
 
     def _build(self):
-        fname = self.shortname
-        content = html.escape(self.wrapped)
         fdict = {
-            'fname': fname,
+            'title': self.shortname,
             'textclass': self.textclass,
-            'content': content,
+            'content': html.escape(self.wrapped),
         }
         self.built = HTML_TEXT_TEMPLATE.format(**fdict)
 

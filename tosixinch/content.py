@@ -40,13 +40,27 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>%s</title>
+    <title>{title}</title>
   </head>
   <body>
-    %s
+{content}
   </body>
 </html>
 """
+
+HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{title}</title>
+</head>
+  <body>
+    <h1 class="{textclass}">{title}</h1>
+    <pre class="{textclass}">
+{content}
+    </pre>
+  </body>
+</html>"""
 
 BLANK_HTML = '%s<html><body></body></html>'
 
@@ -66,8 +80,11 @@ def is_html(fname, text, min_chars=4096):
 
 def build_new_html(title=None, content=''):
     """Build minimal html to further edit."""
-    title = title or DEFAULT_TITLE
-    html = HTML_TEMPLATE % (title, content)
+    fdict = {
+        'title': title or DEFAULT_TITLE,
+        'content': content,
+    }
+    html = HTML_TEMPLATE.format(**fdict)
     root = lxml.html.document_fromstring(html)
     return root
 
