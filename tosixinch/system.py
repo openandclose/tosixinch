@@ -298,11 +298,11 @@ def _get_modules(userdir, package_name, modname):
     return mod, mod2
 
 
-def _get_function(userdir, package_name, modname, funcname):
+def _get_object(userdir, package_name, modname, objname):
     mod, mod2 = _get_modules(userdir, package_name, modname)
-    func = getattr(mod, funcname, None)  # note: it is OK when mod == None.
-    func2 = getattr(mod2, funcname, None)
-    return func or func2
+    obj = getattr(mod, objname, None)  # note: it is OK when mod == None.
+    obj2 = getattr(mod2, objname, None)
+    return obj or obj2
 
 
 def _parse_func_string(func_string):
@@ -331,7 +331,7 @@ def run_function(userdir, package_name, element, func_string):
     '[tosixinch.]process.aaa.bbb(element, cc, dd)'.
     """
     modname, funcname, args = _parse_func_string(func_string)
-    func = _get_function(userdir, package_name, modname, funcname)
+    func = _get_object(userdir, package_name, modname, funcname)
     if func is None:
         fmt = "function ('%s.%s') is not found"
         raise AttributeError(fmt % (modname, funcname))
