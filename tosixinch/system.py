@@ -294,12 +294,7 @@ def _get_module(userdir, package_name, modname, on_error_exit=False):
 
 def _get_modules(userdir, package_name, modname):
     mod = _get_module(userdir, package_name, modname)
-    if mod:
-        exit = False
-    else:
-        exit = True
-    mod2 = _get_module(None, package_name, modname, on_error_exit=exit)
-
+    mod2 = _get_module(None, package_name, modname)
     return mod, mod2
 
 
@@ -307,11 +302,6 @@ def _get_function(userdir, package_name, modname, funcname):
     mod, mod2 = _get_modules(userdir, package_name, modname)
     func = getattr(mod, funcname, None)  # note: it is OK when mod == None.
     func2 = getattr(mod2, funcname, None)
-
-    if func is None and func2 is None:
-        fmt = "function ('%s.%s') is not found"
-        raise AttributeError(fmt % (modname, funcname))
-
     return func or func2
 
 
@@ -342,4 +332,7 @@ def run_function(userdir, package_name, element, func_string):
     """
     modname, funcname, args = _parse_func_string(func_string)
     func = _get_function(userdir, package_name, modname, funcname)
+    if func is None:
+        fmt = "function ('%s.%s') is not found"
+        raise AttributeError(fmt % (modname, funcname))
     return func(element, *args)
