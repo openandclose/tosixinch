@@ -26,6 +26,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add add_noscript_img (process/gen)
 
+* Add script _pcode.py (Pygments code extraction)
+
 **Fix:**
 
 * Fix auto_css (when toc, stylesheets were lost)

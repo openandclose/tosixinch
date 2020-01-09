@@ -353,14 +353,24 @@ by adding arbitrary functions.
 One custom xpath syntax is added, to select class attributes easier.
 `double equals <overview.html#dword-XPATH>`__.
 
-It can also convert text and source code to pdf (experimental).
+If you install
+`Pygments <https://pygments.org/>`__,
+and ``ctags``
+(`Universal Ctags <https://ctags.io/>`__
+or `Exuberant Ctags <http://ctags.sourceforge.net/>`__),
+you can add pdf bookmarks and links
+for source codes definitions.
+`_pcode <topics.html#pcode>`__.
+
+As builtin, it has similar but simpler capabilities, only for python source code.
+`code <topics.html#code>`__.
+
+For other texts,
+It can also convert them with some formatting (experimental).
 `Text Format <topics.html#text-format>`__.
 See also `option: ftype <options.html#confopt-ftype>`__.
 
-For python source code, it can create simple pdf bookmarks for classes and functions.
-`code <topics.html#code>`__.
-
-It can convert man pages. `script: _man <topics.html#script-_man>`__.
+It can convert man pages. `_man <topics.html#man>`__.
 
 It has simple TOC (table of contents) rebounding feature,
 adding one level of structure.

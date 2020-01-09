@@ -281,7 +281,7 @@ def change_tagname(doc, path, tag='div'):
 
 
 def add_noscript_img(doc):
-    """Move <img src...> element inside <noscript> to outside.
+    """Move element inside <noscript> to outside.
 
     >>> doc = fromstring('<h3><noscript><div><img src="a.jpg"></div></noscript></h3>')  # noqa: E501
     >>> add_noscript_img(doc)

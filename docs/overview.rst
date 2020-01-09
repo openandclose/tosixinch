@@ -532,6 +532,22 @@ Value Functions
 Each option value field has predetermined transformation rules.
 Users have to fill the value accordingly, if setting.
 
+.. note::
+
+    Application's config files
+    (``data/tosixinch.default.ini`` and ``data/site.default.ini``)
+    are special, defining the rule and the value at the same time, e.g.
+
+    .. code-block:: ini
+
+        force_download=     [=BOOL] no
+
+    Users should write options without ``[=...]`` part.
+
+    .. code-block:: ini
+
+        force_download=     no
+
 .. dword:: None
 
     If nothing is specified, it is an ordinary ``ConfigParser`` value.

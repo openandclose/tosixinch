@@ -435,7 +435,7 @@ General Section
 
     Run arbitrary command before each ``extract``.
 
-    There is a sample hook extractor for man pages. See `_man <topics.html#script-_man>`__.
+    There is a sample hook extractor for man pages. See `_man <topics.html#man>`__.
 
 .. confopt:: post_percmd2
 

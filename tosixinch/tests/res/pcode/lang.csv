@@ -1,0 +1,529 @@
+# Compare Pygments and Ctags languages.
+# If both names are common, the third colum is added.
+# If Pygments' 'aliase' is common, the fourth columns is added.
+
+Pygments(463)	Ctags(110)	Common names(62)	Alternative Pygments name	Common filenames	Pygments only filenames	Ctags only filenames
+ABAP					*.ABAP *.abap	
+ABNF					*.abnf	
+ActionScript					*.as	
+ActionScript 3					*.as	
+Ada	Ada	ada		*.ada *.adb *.ads		*.Ada
+ADL					*.adl *.adlf *.adls *.adlx	
+Agda					*.agda	
+Aheui					*.aheui	
+Alloy					*.als	
+AmbientTalk					*.at	
+Ampl					*.run	
+Angular2						
+	AnsiblePlaybook					
+	Ant					*.ant *.build.xml *.xml build.xml
+ANTLR						
+ANTLR With ActionScript Target					*.G *.g	
+ANTLR With C# Target					*.G *.g	
+ANTLR With CPP Target					*.G *.g	
+ANTLR With Java Target					*.G *.g	
+ANTLR With ObjectiveC Target					*.G *.g	
+ANTLR With Perl Target					*.G *.g	
+ANTLR With Python Target					*.G *.g	
+ANTLR With Ruby Target					*.G *.g	
+ApacheConf					.htaccess apache.conf apache2.conf	
+APL					*.apl	
+AppleScript					*.applescript	
+Arduino					*.ino	
+	Asciidoc					*.adoc *.asc *.asciidoc
+	Asm	(asm)	(GAS)	*.S *.s		*.29[kK] *.A51 *.ASM *.[68][68][kKsSxX] *.[xX][68][68] *.asm
+	Asp					*.asa *.asp
+AspectJ					*.aj	
+aspx-cs					*.asax *.ascx *.ashx *.asmx *.aspx *.axd	
+aspx-vb					*.asax *.ascx *.ashx *.asmx *.aspx *.axd	
+Asymptote					*.asy	
+Augeas					*.aug	
+	Autoconf					*.ac configure.in
+autohotkey					*.ahk *.ahkl	
+AutoIt	AutoIt	autoit		*.au3		*.AU3 *.Au3 *.aU3
+	Automake					*.am Makefile.am
+Awk	Awk	awk		*.awk		*.gawk *.mawk
+Base Makefile						
+Bash					*.bash *.ebuild *.eclass *.exheres-0 *.exlib *.ksh *.sh *.zsh .bash_* .bashrc .zshrc PKGBUILD bash_* bashrc zshrc	
+Bash Session					*.sh-session *.shell-session	
+	Basic	(basic)	(QBasic)	*.bas	*.BAS	*.bb *.bi *.pb
+Batchfile					*.bat *.cmd	
+BBC Basic					*.bbc	
+BBCode						
+BC					*.bc	
+Befunge					*.befunge	
+	BETA					*.bet
+BibTeX					*.bib	
+BlitzBasic					*.bb *.decls	
+BlitzMax					*.bmx	
+BNF					*.bnf	
+Boa					*.boa	
+Boo					*.boo	
+Boogie					*.bpl	
+Brainfuck					*.b *.bf	
+BST					*.bst	
+BUGS					*.bug	
+C	C	c		*.c	*.h *.idc	
+C#	C#	c#		*.cs		
+C++	C++	c++		*.C *.CPP *.H *.c++ *.cc *.cp *.cpp *.cxx *.h++ *.hh *.hpp *.hxx		*.CXX *.h *.hp *.inl
+c-objdump					*.c-objdump	
+ca65 assembler					*.s	
+cADL					*.cadl	
+CAmkES					*.camkes *.idl4	
+Cap'n Proto					*.capnp	
+CapDL					*.cdl	
+CBM BASIC V2					*.bas	
+Ceylon					*.ceylon	
+CFEngine3					*.cf	
+cfstatement						
+ChaiScript					*.chai	
+Chapel					*.chpl	
+Charmci					*.ci	
+Cheetah					*.spt *.tmpl	
+Cirru					*.cirru	
+Clay					*.clay	
+Clean					*.dcl *.icl	
+Clojure	Clojure	clojure		*.clj		*.cljc *.cljs
+ClojureScript					*.cljs	
+CMake	CMake	cmake		*.cmake CMakeLists.txt		
+COBOL	Cobol	cobol		*.COB *.cob	*.CPY *.cpy	*.CBL *.cbl
+COBOLFree					*.CBL *.cbl	
+CoffeeScript					*.coffee	
+Coldfusion CFC					*.cfc	
+Coldfusion HTML					*.cfm *.cfml	
+Common Lisp					*.cl *.lisp	
+Component Pascal					*.cp *.cps	
+Coq					*.v	
+cpp-objdump					*.c++-objdump *.cpp-objdump *.cxx-objdump	
+	CPreProcessor					
+CPSA					*.cpsa	
+Crmsh					*.crmsh *.pcmk	
+Croc					*.croc	
+Cryptol					*.cry	
+Crystal					*.cr	
+Csound Document					*.csd	
+Csound Orchestra					*.orc *.udo	
+Csound Score					*.sco	
+CSS	CSS	css		*.css		
+CSS+Django/Jinja						
+CSS+Genshi Text						
+CSS+Lasso						
+CSS+Mako						
+CSS+mozpreproc					*.css.in	
+CSS+Myghty						
+CSS+PHP						
+CSS+Ruby						
+CSS+Smarty						
+	Ctags					*.ctags
+CUDA	CUDA	cuda		*.cu *.cuh		
+Cypher					*.cyp *.cypher	
+Cython					*.pxd *.pxi *.pyx	
+D	D	d		*.d *.di		
+d-objdump					*.d-objdump	
+Darcs Patch					*.darcspatch *.dpatch	
+Dart					*.dart	
+DASM16					*.dasm *.dasm16	
+	DBusIntrospect					*.xml
+Debian Control file					control	
+Debian Sourcelist					sources.list	
+Delphi					*.dpr *.pas	
+dg					*.dg	
+Diff	Diff	diff		*.diff *.patch		
+Django/Jinja						
+Docker					*.docker Dockerfile	
+	DosBatch	(dosbatch)	(Batchfile)	*.bat *.cmd		
+DTD	DTD	dtd		*.dtd		*.mod
+	DTS					*.dts *.dtsi
+Duel					*.duel *.jbst	
+Dylan					*.dyl *.dylan *.intr	
+Dylan session					*.dylan-console	
+DylanLID					*.hdp *.lid	
+E-mail					*.eml	
+Earl Grey					*.eg	
+Easytrieve					*.ezt *.mac	
+EBNF					*.ebnf	
+eC					*.ec *.eh	
+ECL					*.ecl	
+Eiffel	Eiffel	eiffel		*.e		
+Elixir	Elixir	elixir		*.ex *.exs		
+Elixir iex session						
+Elm	Elm	elm		*.elm		
+EmacsLisp					*.el	
+Embedded Ragel					*.rl	
+ERB						
+Erlang	Erlang	erlang		*.erl *.hrl	*.es *.escript	*.ERL *.HRL
+Erlang erl session					*.erl-sh	
+Evoque					*.evoque	
+Ezhil					*.n	
+F#					*.fs *.fsi	
+Factor					*.factor	
+	Falcon					*.fal *.ftd
+Fancy					*.fancypack *.fy	
+Fantom					*.fan	
+Felix					*.flx *.flxh	
+Fennel					*.fnl	
+Fish					*.fish *.load	
+Flatline						
+	Flex					*.as *.mxml
+FloScript					*.flo	
+Forth					*.frt *.fs	
+Fortran	Fortran	fortran		*.F03 *.F90 *.f03 *.f90		*.F *.F08 *.F15 *.F77 *.F95 *.FOR *.FTN *.f *.f08 *.f15 *.f77 *.f95 *.for *.ftn
+FortranFixed					*.F *.f	
+FoxPro					*.PRG *.prg	
+Freefem					*.edp	
+	Fypp					*.fy
+GAP					*.g *.gap *.gd *.gi	
+GAS					*.S *.s	
+	Gdbinit					*.gdb .gdbinit
+Genshi					*.kid	
+Genshi Text						
+Gettext Catalog					*.po *.pot	
+Gherkin					*.feature	
+	Glade					*.glade
+GLSL					*.frag *.geo *.vert	
+Gnuplot					*.plot *.plt	
+Go	Go	go		*.go		
+Golo					*.golo	
+GoodData-CL					*.gdc	
+Gosu					*.gs *.gsp *.gsx *.vark	
+Gosu Template					*.gst	
+Groff					*.[1234567] *.man	
+Groovy					*.gradle *.groovy	
+Haml					*.haml	
+Handlebars						
+Haskell					*.hs	
+Haxe					*.hx *.hxsl	
+Hexdump						
+HLSL					*.hlsl *.hlsli	
+HSAIL					*.hsail	
+Hspec						
+HTML	HTML	html		*.htm *.html	*.xhtml *.xslt	
+HTML + Angular2					*.ng2	
+HTML+Cheetah						
+HTML+Django/Jinja						
+HTML+Evoque					*.html	
+HTML+Genshi						
+HTML+Handlebars					*.handlebars *.hbs	
+HTML+Lasso						
+HTML+Mako						
+HTML+Myghty						
+HTML+PHP					*.phtml	
+HTML+Smarty						
+HTML+Twig					*.twig	
+HTML+Velocity						
+HTTP						
+Hxml					*.hxml	
+Hy					*.hy	
+Hybris					*.hy *.hyb	
+Icon					*.ICON *.icon	
+IDL					*.pro	
+Idris					*.idr	
+Igor					*.ipf	
+Inform 6					*.inf	
+Inform 6 template					*.i6t	
+Inform 7					*.i7x *.ni	
+INI					*.cfg *.inf *.ini	
+	Iniconf					*.conf *.ini
+	Inko					*.inko
+Io					*.io	
+Ioke					*.ik	
+IRC logs					*.weechatlog	
+Isabelle					*.thy	
+	ITcl					*.itcl
+J					*.ijs	
+JAGS					*.bug *.jag	
+Jasmin					*.j	
+Java	Java	java		*.java		
+Java Server Page					*.jsp	
+	JavaProperties					*.properties
+JavaScript	JavaScript	javascript		*.js	*.jsm	*.jsx
+JavaScript+Cheetah						
+JavaScript+Django/Jinja						
+JavaScript+Genshi Text						
+JavaScript+Lasso						
+JavaScript+Mako						
+Javascript+mozpreproc					*.js.in	
+JavaScript+Myghty						
+JavaScript+PHP						
+JavaScript+Ruby						
+JavaScript+Smarty						
+JCL					*.jcl	
+JSGF					*.jsgf	
+JSON	JSON	json		*.json		
+JSON-LD					*.jsonld	
+JSONBareObject						
+Julia					*.jl	
+Julia console						
+Juttle					*.juttle	
+Kal					*.kal	
+Kconfig					*Config.in* Kconfig external.in* standard-modules.in	
+Koka					*.kk *.kki	
+Kotlin					*.kt	
+Lasso					*.lasso *.lasso[89]	
+	LdScript					*.ld *.ldi *.lds *.lds.S *.scr ld.*
+Lean					*.lean	
+LessCss					*.less	
+Lighttpd configuration file						
+Limbo					*.b	
+liquid					*.liquid	
+	Lisp	(lisp)	(Common Lisp)	*.cl *.lisp		*.clisp *.el *.l *.lsp
+Literate Agda					*.lagda	
+Literate Cryptol					*.lcry	
+Literate Haskell					*.lhs	
+Literate Idris					*.lidr	
+LiveScript					*.ls	
+LLVM					*.ll	
+Logos					*.x *.xi *.xm *.xmi	
+Logtalk					*.lgt *.logtalk	
+LSL					*.lsl	
+Lua	Lua	lua		*.lua	*.wlua	
+	M4					*.m4 *.spt
+	Make	(make)	(Makefile)	*.mak *.mk GNUmakefile	Makefile Makefile.* makefile	[Mm]akefile
+Makefile					*.mak *.mk GNUmakefile Makefile Makefile.* makefile	
+Mako					*.mao	
+	Man	(man)	(Groff)		*.[1234567] *.man	*.1 *.2 *.3 *.3pm *.3stap *.4 *.5 *.6 *.7 *.7stap *.8 *.9
+MAQL					*.maql	
+markdown	Markdown	markdown		*.md		*.markdown
+Mask					*.mask	
+Mason					*.m *.mc *.mhtml *.mi autohandler dhandler	
+Mathematica					*.cdf *.ma *.nb *.nbp	
+Matlab	MatLab	matlab		*.m		
+Matlab session						
+	Maven2					*.pom *.xml pom.xml
+MIME						
+MiniD						
+Modelica					*.mo	
+Modula-2					*.def *.mod	
+MoinMoin/Trac Wiki markup						
+Monkey					*.monkey	
+Monte					*.mt	
+MOOCode					*.moo	
+MoonScript					*.moon	
+	Moose					
+mozhashpreproc						
+mozpercentpreproc						
+MQL					*.mq4 *.mq5 *.mqh	
+Mscgen					*.msc	
+MSDOS Session						
+MuPAD					*.mu	
+MXML					*.mxml	
+Myghty					*.myt autodelegate	
+	Myrddin					*.myr
+MySQL						
+NASM					*.ASM *.asm	
+NCL					*.ncl	
+Nemerle					*.n	
+nesC					*.nc	
+NewLisp					*.kif *.lsp *.nl	
+Newspeak					*.ns2	
+Nginx configuration file					nginx.conf	
+Nimrod					*.nim *.nimrod	
+Nit					*.nit	
+Nix					*.nix	
+Notmuch						
+NSIS					*.nsh *.nsi	
+NumPy						
+NuSMV					*.smv	
+objdump					*.objdump	
+objdump-nasm					*.objdump-intel	
+Objective-C					*.h *.m	
+Objective-C++					*.hh *.mm	
+Objective-J					*.j	
+	ObjectiveC	(objectivec)	(Objective-C)	*.h *.m		*.mm
+OCaml	OCaml	ocaml		*.ml *.mli	*.mll *.mly	*.aug
+Octave					*.m	
+ODIN					*.odin	
+	OldC					*.c
+	OldC++					*.C *.H *.c++ *.cc *.cp *.cpp *.cxx *.h *.h++ *.hh *.hp *.hpp *.hxx *.inl
+Ooc					*.ooc	
+Opa					*.opa	
+OpenEdge ABL					*.cls *.p	
+PacmanConf					pacman.conf	
+Pan					*.pan	
+ParaSail					*.psi *.psl	
+	Pascal	(pascal)	(Delphi)	*.pas	*.dpr	*.p
+	Passwd					passwd
+Pawn					*.inc *.p *.pwn	
+Perl	Perl	perl		*.pl *.pm	*.t	*.perl *.ph *.plx
+Perl6	Perl6	perl6		*.p6 *.pl6 *.pm *.pm6	*.6pl *.6pm *.nqp *.p6l *.p6m *.pl *.t	
+PHP	PHP	php		*.php	*.inc *.php[345]	*.php3 *.php4 *.php5 *.php7 *.phtml
+Pig					*.pig	
+Pike					*.pike *.pmod	
+PkgConfig					*.pc	
+PL/pgSQL						
+	PlistXML					*.plist
+	Pod					*.pod
+Pony					*.pony	
+PostgreSQL console (psql)						
+PostgreSQL SQL dialect						
+PostScript					*.eps *.ps	
+POVRay					*.inc *.pov	
+PowerShell					*.ps1 *.psm1	
+PowerShell Session						
+Praat					*.praat *.proc *.psc	
+Prolog					*.ecl *.pl *.pro *.prolog	
+Properties					*.properties	
+	Protobuf	(protobuf)	(Protocol Buffer)	*.proto		
+Protocol Buffer					*.proto	
+Pug					*.jade *.pug	
+Puppet					*.pp	
+	PuppetManifest					*.pp
+PyPy Log					*.pypylog	
+Python	Python	python		*.py	*.bzl *.jy *.pyw *.sage *.sc *.tac BUCK BUILD BUILD.bazel SConscript SConstruct WORKSPACE	*.pxd *.pxi *.pyx *.scons *.wsgi
+Python 2.x						
+Python 2.x Traceback					*.py2tb	
+Python console session						
+Python Traceback					*.py3tb *.pytb	
+	PythonLoggingConfig					
+QBasic					*.BAS *.bas	
+	QemuHX					*.hx
+QML					*.qbs *.qml	
+	QtMoc					
+QVTO					*.qvto	
+	R	(r)	(S)	*.R	*.S .Renviron .Rhistory .Rprofile	*.q *.r *.s
+Racket					*.rkt *.rktd *.rktl	
+Ragel						
+Ragel in C Host					*.rl	
+Ragel in CPP Host					*.rl	
+Ragel in D Host					*.rl	
+Ragel in Java Host					*.rl	
+Ragel in Objective C Host					*.rl	
+Ragel in Ruby Host					*.rl	
+Raw token data						
+RConsole					*.Rout	
+Rd					*.Rd	
+REBOL					*.r *.r3 *.reb	
+Red					*.red *.reds	
+Redcode					*.cw	
+reg					*.reg	
+Relax-NG Compact					*.rnc	
+	RelaxNG					*.rng
+ResourceBundle						
+reStructuredText	ReStructuredText	restructuredtext		*.rest *.rst		*.reST
+Rexx	REXX	rexx		*.rexx *.rx	*.arexx *.rex	*.cmd
+RHTML					*.rhtml	
+Roboconf Graph					*.graph	
+Roboconf Instances					*.instances	
+	Robot					*.robot
+RobotFramework					*.robot	
+RPMSpec	RpmSpec	rpmspec		*.spec		
+RQL					*.rql	
+RSL					*.rsl	
+	RSpec					
+Ruby	Ruby	ruby		*.rb	*.duby *.gemspec *.rake *.rbw *.rbx Gemfile Rakefile	*.ruby
+Ruby irb session						
+Rust	Rust	rust		*.rs	*.rs.in	
+S					*.R *.S .Renviron .Rhistory .Rprofile	
+SARL					*.sarl	
+SAS					*.SAS *.sas	
+Sass					*.sass	
+Scala					*.scala	
+Scalate Server Page					*.ssp	
+Scaml					*.scaml	
+scdoc					*.scd *.scdoc	
+Scheme	Scheme	scheme		*.scm	*.ss	*.SCM *.SM *.sch *.scheme *.sm
+Scilab					*.sce *.sci *.tst	
+SCSS					*.scss	
+	Sh	(sh)	(Bash)	*.bash *.ksh *.sh *.zsh	*.ebuild *.eclass *.exheres-0 *.exlib .bash_* .bashrc .zshrc PKGBUILD bash_* bashrc zshrc	*.SH *.ash *.bsh
+Shen					*.shen	
+ShExC					*.shex	
+Silver					*.sil *.vpr	
+	SLang					*.sl
+Slash					*.sl	
+Slim					*.slim	
+Slurm					*.sl	
+Smali					*.smali	
+Smalltalk					*.st	
+SmartGameFormat					*.sgf	
+Smarty					*.tpl	
+	SML	(sml)	(Standard ML)	*.sig *.sml	*.fun	
+Snobol					*.snobol	
+Snowball					*.sbl	
+Solidity					*.sol	
+SourcePawn					*.sp	
+SPARQL					*.rq *.sparql	
+SQL	SQL	sql		*.sql		
+sqlite3con					*.sqlite3-console	
+SquidConf					squid.conf	
+Stan					*.stan	
+Standard ML					*.fun *.sig *.sml	
+Stata					*.ado *.do	
+SuperCollider					*.sc *.scd	
+	SVG					*.svg
+Swift					*.swift	
+SWIG					*.i *.swg	
+	SystemdUnit					*.automount *.device *.mount *.path *.scope *.service *.slice *.snapshot *.socket *.swap *.target *.time *.timer *.unit
+	SystemTap					*.stp *.stpm
+systemverilog	SystemVerilog	systemverilog		*.sv *.svh		*.svi
+TADS 3					*.t	
+TAP					*.tap	
+TASM					*.ASM *.asm *.tasm	
+Tcl	Tcl	tcl		*.tcl	*.rvt	*.exp *.tk *.wish
+	TclOO					
+Tcsh					*.csh *.tcsh	
+Tcsh Session						
+Tea					*.tea	
+Tera Term macro					*.ttl	
+Termcap					termcap termcap.src	
+Terminfo					terminfo terminfo.src	
+Terraform					*.tf	
+TeX	Tex	tex		*.tex	*.aux *.toc	
+Text only					*.txt	
+Thrift					*.thrift	
+Todotxt					*.todotxt todo.txt	
+TOML					*.toml	
+TrafficScript					*.rts	
+Transact-SQL					*.sql	
+Treetop					*.treetop *.tt	
+	TTCN					*.ttcn *.ttcn3
+Turtle					*.ttl	
+Twig						
+TypeScript	TypeScript	typescript		*.ts	*.tsx	
+TypoScript					*.typoscript	
+TypoScriptCssData						
+TypoScriptHtmlData						
+ucode					*.u *.u1 *.u2	
+Unicon					*.icn	
+UrbiScript					*.u	
+Vala					*.vala *.vapi	
+	Varlink					*.varlink
+VB.net					*.bas *.vb	
+VBScript					*.VBS *.vbs	
+VCL					*.vcl	
+VCLSnippets						
+VCTreeStatus						
+Velocity					*.fhtml *.vm	
+	Vera					*.vr *.vrh *.vri
+verilog	Verilog	verilog		*.v		
+VGL					*.rpf	
+vhdl	VHDL	vhdl		*.vhd *.vhdl		
+	Vim	(vim)	(VimL)	*.vim gvimrc vimrc	.exrc .gvimrc .vimrc _exrc _gvimrc _vimrc	*.vba [._]gvimrc [._]vimrc
+VimL					*.vim .exrc .gvimrc .vimrc _exrc _gvimrc _vimrc gvimrc vimrc	
+WDiff					*.wdiff	
+Whiley					*.whiley	
+	WindRes					*.rc
+X10					*.x10	
+XML	XML	xml		*.xml	*.rss *.wsdl *.wsf *.xsd *.xsl *.xslt	
+XML+Cheetah						
+XML+Django/Jinja						
+XML+Evoque					*.xml	
+XML+Lasso						
+XML+Mako						
+XML+Myghty						
+XML+PHP						
+XML+Ruby						
+XML+Smarty						
+XML+Velocity						
+Xorg					xorg.conf	
+XQuery					*.xq *.xql *.xqm *.xquery *.xqy	
+XSLT	XSLT	xslt		*.xsl *.xslt	*.xpl	
+Xtend					*.xtend	
+xtlang					*.xtm	
+XUL+mozpreproc					*.xul.in	
+	YACC					*.y
+YAML	Yaml	yaml		*.yml	*.yaml	
+YAML+Jinja					*.sls	
+	YumRepo					*.repo
+Zeek					*.bro *.zeek	
+Zephir	Zephir	zephir		*.zep		
+Zig					*.zig	

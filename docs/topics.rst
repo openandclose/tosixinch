@@ -538,7 +538,7 @@ as pdf viewer, ::
 
 will open the viewer with the generated pdf file.
 
-Also, the script includes a sample file `open_viewer.py <topics.html#script-open_viewer>`__.
+Also, the script includes a sample file `open_viewer.py <topics.html#open-viewer>`__.
 (It does basically the same thing as above,
 but cancels duplicate openings.)
 
@@ -616,77 +616,192 @@ They are not 'installed',
 just copied in the tosixinch installation directory
 (in ``script`` folder).
 
-.. script:: open_viewer
+open_viewer
+^^^^^^^^^^^
 
-    Intended to be used in ``viewcmd`` option in ``tosixinch.ini``.
+Intended to be used in ``viewcmd`` option in ``tosixinch.ini``.
 
-    It opens a pdf viewer.
-    But if there is a same pdf application opened with the same pdf file,
-    if does nothing (cancels duplicate openings).
+It opens a pdf viewer.
+But if there is a same pdf application opened with the same pdf file,
+if does nothing (cancels duplicate openings).
 
-    It uses unix command ``ps`` to get active processes,
-    and search the app and the file names in invocation commandline strings.
-    So, only unixes users can use it.
+It uses unix command ``ps`` to get active processes,
+and search the app and the file names in invocation commandline strings.
+So, only unixes users can use it.
 
-    It can be used without full path.::
+It can be used without full path.::
 
-        viewcmd=    open_viewer.py --command okular --check --null conf.pdfname
+    viewcmd=    open_viewer.py --command okular --check --null conf.pdfname
 
-    * ``--command`` accepts arbitrary commands with some options,
-      but you need to quote.
-      (e.g. ``--command 'okular --page 5'``).
-    * ``--check`` is the option flag to do above duplicate checks.
-    * ``--null`` is to suppress *this* command's stdout and stderr.
+* ``--command`` accepts arbitrary commands with some options,
+  but you need to quote.
+  (e.g. ``--command 'okular --page 5'``).
+* ``--check`` is the option flag to do above duplicate checks.
+* ``--null`` is to suppress *this* command's stdout and stderr.
 
-    And one way to see the help is::
+And one way to see the help is::
 
-        $ tosixinch -4 --viewcmd 'open_viewer.py --help' -i aaa
+    $ tosixinch -4 --viewcmd 'open_viewer.py --help' -i aaa
 
-    (This doesn't work if ``urls`` is not supplied,
-    so you have to supply something, like the above ``-i aaa``.)
+(This doesn't work if ``urls`` is not supplied,
+so you have to supply something, like the above ``-i aaa``.)
 
 
-.. script:: _man
+_man
+^^^^
 
-    A sample hook extractor for man pages.
-    If you want to use it, add this command to ``pre_percmd2`` in user configuration.
+A sample hook extractor for man pages.
+If you want to use it, add this command to ``pre_percmd2`` in user configuration.
 
-    .. code-block:: ini
+When ``extract``,
+if the filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
+(e.g. grep.1, grep.1.gz, grep.1p.gz),
+run man program with ``'man -Thtml'``,
+skipping the main extraction.
 
-        pre_percmd2=    _man
-
-    When ``extract``,
-    if the filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
-    (e.g. grep.1, grep.1.gz, grep.1p.gz),
-    run man program with ``'man -Thtml'``,
-    skipping the main extraction.
-
-    Normally, windows users can't use it
-    (as long as there is no ``man`` command).
+Normally, windows users can't use it
+(as long as there is no ``man`` command).
 
 .. note ::
 
-    If you supply multiple ``*.gz`` files for ``urls``,
-    it triggers the binary-extension filter.
-    In this case, you have to subtract ``gz`` from the list.
-    (see `add_binary_extensions <#confopt-add_binary_extensions>`__).
+    * ``pre_percmd2`` is a ``LINE`` option,
+      so multiple commands must be separated with newline and indent e.g.:
 
-    .. code-block:: bash
+      .. code-block:: ini
 
-        # in urls.txt
-        /usr/share/man/man1/cp.1.gz
-        /usr/share/man/man1/grep.1.gz
+          pre_percmd2=    echo foo
+                          _man
 
-        $ tosixinch -123 --add-binary-extensions -gz
+    * If you supply multiple ``urls``,
+      it triggers the binary-extension filter,
+      and the default includes ``gz``.
+      In this case, you have to subtract ``gz`` from the list.
+      (see `add_binary_extensions <#confopt-add_binary_extensions>`__).
+
+      .. code-block:: bash
+
+          # in urls.txt
+          /usr/share/man/man1/cp.1.gz
+          /usr/share/man/man1/grep.1.gz
+
+          $ tosixinch -123 --add-binary-extensions -gz
 
 
-.. script:: tosixinch-complete.bash
+_pcode
+^^^^^^
 
-    A basic bash completion script.
-    If you are using bash, it should be useful.
-    Source it in your ``.bashrc``. For example::
+A sample hook extractor for source codes (means 'Pygments code extraction').
+It adds some tokens (e.g. functions and classes) to pdf bookmarks
+and links to them.
+If you want to use it, add this command to ``pre_percmd2`` in user configuration.
 
-        source [...]/site-packages/tosixinch/script/tosixinch-complete.bash
+Note ``pre_percmd2`` is a ``LINE`` option, see the above note for ``_man``.
+
+You need to install
+`Pygments <https://pygments.org/>`__,
+and ``ctags``
+(`Universal Ctags <https://ctags.io/>`__
+or `Exuberant Ctags <http://ctags.sourceforge.net/>`__).
+
+Pygments and Ctags parse ``Downloaded_File``,
+and if they agree about the language,
+
+(1) Add some definitions to pdf bookmarks
+    (by wrapping with heading tags like <h2>).
+(2) Add the links to the definitions for the same identifiers.
+    (by wrapping with <a href...> tags).
+
+It creates working files ``tsi.tags`` and ``tsi.tags.checksum``
+in current directory.
+
+**Customization Points**:
+
+* If there is ``pcode.ini`` in `userdir <overview.html#dword-userdir>`__,
+  you can define ctags binary path, tagfile name and arguments
+  in ``[ctags]`` section.
+  Arguments are rather important.
+
+  (See application's ``data/pcode.ini`` for the example).
+
+* If there is ``pcode/_ftype.py`` in  `script directory <overview.html#dword-script_directory>`__,
+  you can override maps for Pygments and Ctags language names.
+  (create class ``FType``, and edit ``__call__``).
+
+  Now simply the common names between Pygments lexer name and aliases,
+  and Ctags language names are mapped, with a few additions.
+
+  (See application's ``script/pcode/_ftype.py`` for the example).
+
+* You can define how to wrap tokens for a specific languages, say, perl.
+
+  First, you need ``[perl]`` section and module option (say, perl.py)
+  in ``pcode.ini``.
+  class option is optional (the default class name is ``CustomCode``).
+
+  .. code-block:: ini
+
+      [perl]
+      module=   perl
+
+  Second, you need to create you own ``CustomCode`` class in ``pcode/perl.py``
+  (in `script directory <overview.html#dword-script_directory>`__).
+  
+  .. code-block:: python
+
+      class CustomCode(_pygments.PygmentsCode):
+
+  and define how to select or wrap definitions or references
+  (``check_def``, ``check_ref``, ``wrap_def`` and ``wrap_ref``).
+
+  Or do any other things as suitable.
+
+  (See application's ``script/pcode/python.py`` for an example,
+  and also ``script/pcode/_pygments.py``).
+
+**Code Structure**:
+
+.. code-block:: none
+
+    tosixinch/data/pcode.ini:
+        config file
+
+    tosixinch/script/_pcode.py:
+        main module, calling others
+
+    tosixinch/script/pcode/_ftype.py:
+        create actual language mapping, customizing _ftype_base
+
+    tosixinch/script/pcode/_ftype_base.py:
+        create base language mapping
+
+    tosixinch/script/pcode/_ctags.py:
+        create definition database using Ctags
+
+    tosixinch/script/pcode/_pygments.py:
+        create tokens using Pygments
+        (Pygments is used only for it's lexers).
+        tokens are compared to ctags database
+        in 'PygmentsCode.format_entry'
+
+    tosixinch/script/pcode/python.py:
+        sample python module to customize 'PygmentsCode'.
+
+
+    For users (an example):
+
+    ~/.config/tosixinch/pcode.ini
+    ~/.config/tosixinch/script/pcode/_ftype.py
+    ~/.config/tosixinch/script/pcode/perl.py
+
+
+tosixinch-complete.bash
+^^^^^^^^^^^^^^^^^^^^^^^
+
+A basic bash completion script.
+If you are using bash, it should be useful.
+Source it in your ``.bashrc``. For example::
+
+    source [...]/site-packages/tosixinch/script/tosixinch-complete.bash
 
 
 Vendored Libraries

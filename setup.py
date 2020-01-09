@@ -34,7 +34,8 @@ setup(
     ],
     keywords='html pdf lxml extraction conversion e-reader kindle kobo',
     # packages=find_packages(exclude=['tests']),
-    packages=['tosixinch', 'tosixinch.process'],
+    packages=['tosixinch', 'tosixinch.process',
+        'tosixinch.script', 'tosixinch.script.pcode'],
     package_data={
         'tosixinch': ['data/*', 'data/css/*', 'script/*', ],
     },

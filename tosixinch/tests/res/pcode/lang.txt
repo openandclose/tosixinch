@@ -1,0 +1,250 @@
+FTYPE = {
+    'ada': {
+        'pygments': ['Ada'],
+        'ctags': ['Ada'],
+    },
+    'asm': {
+        'pygments': ['GAS'],
+        'ctags': ['Asm'],
+    },
+    'autoit': {
+        'pygments': ['AutoIt'],
+        'ctags': ['AutoIt'],
+    },
+    'awk': {
+        'pygments': ['Awk'],
+        'ctags': ['Awk'],
+    },
+    'basic': {
+        'pygments': ['QBasic'],
+        'ctags': ['Basic'],
+    },
+    'c': {
+        'pygments': ['C'],
+        'ctags': ['C'],
+    },
+    'c#': {
+        'pygments': ['C#'],
+        'ctags': ['C#'],
+    },
+    'c++': {
+        'pygments': ['C++'],
+        'ctags': ['C++'],
+    },
+    'clojure': {
+        'pygments': ['Clojure'],
+        'ctags': ['Clojure'],
+    },
+    'cmake': {
+        'pygments': ['CMake'],
+        'ctags': ['CMake'],
+    },
+    'cobol': {
+        'pygments': ['COBOL'],
+        'ctags': ['Cobol'],
+    },
+    'css': {
+        'pygments': ['CSS'],
+        'ctags': ['CSS'],
+    },
+    'cuda': {
+        'pygments': ['CUDA'],
+        'ctags': ['CUDA'],
+    },
+    'd': {
+        'pygments': ['D'],
+        'ctags': ['D'],
+    },
+    'diff': {
+        'pygments': ['Diff'],
+        'ctags': ['Diff'],
+    },
+    'dosbatch': {
+        'pygments': ['Batchfile'],
+        'ctags': ['DosBatch'],
+    },
+    'dtd': {
+        'pygments': ['DTD'],
+        'ctags': ['DTD'],
+    },
+    'eiffel': {
+        'pygments': ['Eiffel'],
+        'ctags': ['Eiffel'],
+    },
+    'elixir': {
+        'pygments': ['Elixir'],
+        'ctags': ['Elixir'],
+    },
+    'elm': {
+        'pygments': ['Elm'],
+        'ctags': ['Elm'],
+    },
+    'erlang': {
+        'pygments': ['Erlang'],
+        'ctags': ['Erlang'],
+    },
+    'fortran': {
+        'pygments': ['Fortran'],
+        'ctags': ['Fortran'],
+    },
+    'go': {
+        'pygments': ['Go'],
+        'ctags': ['Go'],
+    },
+    'html': {
+        'pygments': ['HTML'],
+        'ctags': ['HTML'],
+    },
+    'java': {
+        'pygments': ['Java'],
+        'ctags': ['Java'],
+    },
+    'javascript': {
+        'pygments': ['JavaScript'],
+        'ctags': ['JavaScript'],
+    },
+    'json': {
+        'pygments': ['JSON'],
+        'ctags': ['JSON'],
+    },
+    'lisp': {
+        'pygments': ['Common Lisp'],
+        'ctags': ['Lisp'],
+    },
+    'lua': {
+        'pygments': ['Lua'],
+        'ctags': ['Lua'],
+    },
+    'make': {
+        'pygments': ['Makefile'],
+        'ctags': ['Make'],
+    },
+    'man': {
+        'pygments': ['Groff'],
+        'ctags': ['Man'],
+    },
+    'markdown': {
+        'pygments': ['markdown'],
+        'ctags': ['Markdown'],
+    },
+    'matlab': {
+        'pygments': ['Matlab'],
+        'ctags': ['MatLab'],
+    },
+    'objectivec': {
+        'pygments': ['Objective-C'],
+        'ctags': ['ObjectiveC'],
+    },
+    'ocaml': {
+        'pygments': ['OCaml'],
+        'ctags': ['OCaml'],
+    },
+    'pascal': {
+        'pygments': ['Delphi'],
+        'ctags': ['Pascal'],
+    },
+    'perl': {
+        'pygments': ['Perl'],
+        'ctags': ['Perl'],
+    },
+    'perl6': {
+        'pygments': ['Perl6'],
+        'ctags': ['Perl6'],
+    },
+    'php': {
+        'pygments': ['PHP'],
+        'ctags': ['PHP'],
+    },
+    'protobuf': {
+        'pygments': ['Protocol Buffer'],
+        'ctags': ['Protobuf'],
+    },
+    'python': {
+        'pygments': ['Python'],
+        'ctags': ['Python'],
+    },
+    'r': {
+        'pygments': ['S'],
+        'ctags': ['R'],
+    },
+    'restructuredtext': {
+        'pygments': ['reStructuredText'],
+        'ctags': ['ReStructuredText'],
+    },
+    'rexx': {
+        'pygments': ['Rexx'],
+        'ctags': ['REXX'],
+    },
+    'rpmspec': {
+        'pygments': ['RPMSpec'],
+        'ctags': ['RpmSpec'],
+    },
+    'ruby': {
+        'pygments': ['Ruby'],
+        'ctags': ['Ruby'],
+    },
+    'rust': {
+        'pygments': ['Rust'],
+        'ctags': ['Rust'],
+    },
+    'scheme': {
+        'pygments': ['Scheme'],
+        'ctags': ['Scheme'],
+    },
+    'sh': {
+        'pygments': ['Bash'],
+        'ctags': ['Sh'],
+    },
+    'sml': {
+        'pygments': ['Standard ML'],
+        'ctags': ['SML'],
+    },
+    'sql': {
+        'pygments': ['SQL'],
+        'ctags': ['SQL'],
+    },
+    'systemverilog': {
+        'pygments': ['systemverilog'],
+        'ctags': ['SystemVerilog'],
+    },
+    'tcl': {
+        'pygments': ['Tcl'],
+        'ctags': ['Tcl'],
+    },
+    'tex': {
+        'pygments': ['TeX'],
+        'ctags': ['Tex'],
+    },
+    'typescript': {
+        'pygments': ['TypeScript'],
+        'ctags': ['TypeScript'],
+    },
+    'verilog': {
+        'pygments': ['verilog'],
+        'ctags': ['Verilog'],
+    },
+    'vhdl': {
+        'pygments': ['vhdl'],
+        'ctags': ['VHDL'],
+    },
+    'vim': {
+        'pygments': ['VimL'],
+        'ctags': ['Vim'],
+    },
+    'xml': {
+        'pygments': ['XML'],
+        'ctags': ['XML'],
+    },
+    'xslt': {
+        'pygments': ['XSLT'],
+        'ctags': ['XSLT'],
+    },
+    'yaml': {
+        'pygments': ['YAML'],
+        'ctags': ['Yaml'],
+    },
+    'zephir': {
+        'pygments': ['Zephir'],
+        'ctags': ['Zephir'],
+    },
+}
