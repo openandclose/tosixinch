@@ -275,7 +275,7 @@ def run(conf, site):
     js = site.javascript
     cookies = site.cookie
     force = site.general.force_download
-    cache = conf._dlcache
+    cache = conf._cache.download
 
     if site.check_fname(force=force, cache=cache):
         return

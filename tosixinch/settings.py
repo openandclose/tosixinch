@@ -50,6 +50,10 @@ BINARY_EXTENSIONS = """
 """.split()
 
 
+class Cache(object):
+    """A namespace for caches."""
+
+
 class URLLoader(object):
     """Supply urls to ``Conf`` object."""
 
@@ -363,7 +367,8 @@ class Conf(object):
         else:
             self._user_scriptdir = None
 
-        self._dlcache = {}  # download cache
+        self._cache = Cache()
+        self._cache.download = {}  # cache for already downloaded files
 
         # shortcuts
         self.general = self._appconf.general

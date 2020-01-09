@@ -92,7 +92,7 @@ class Extract(content.HtmlContent):
 
     def _download_component(self, comp, url, fname):
         force = self._site.general.force_download
-        cache = self._conf._dlcache
+        cache = self._conf._cache.download
         if comp.check_fname(force=force, cache=cache):
             return
         logger.info('[img] %s', url)
