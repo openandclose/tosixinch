@@ -24,11 +24,10 @@ logger = logging.getLogger(__name__)
 class Extract(content.HtmlContent):
     """Inject config data into HtmlContent."""
 
-    def __init__(self, conf, site, text):
+    def __init__(self, conf, site):
         self._conf = conf
         self._appconf = conf._appconf
         self._site = site
-        self.text = text
 
         self.url = site.url
         self.fname = site.fname
@@ -44,6 +43,8 @@ class Extract(content.HtmlContent):
         self._parts_download = site.general.parts_download
         self._force_download = site.general.force_download
         self._full_image = site.general.full_image
+
+        self.text = site.text
 
     def select(self):
         if self.sel == '':
@@ -140,13 +141,10 @@ def dispatch(conf):
 
         if returncode not in (101, 102):
             fname = site.fname
-            codings = site.general.encoding
-            errors = site.general.encoding_errors
-            text = system.Reader(fname, codings=codings, errors=errors).read()
-
+            text = site.text
             if (site.ftype == 'html'
                     or not site.ftype and content.is_html(fname, text)):
-                run(conf, site, text)
+                run(conf, site)
             else:
                 textformat.dispatch(conf, site, fname, text)
 
@@ -154,7 +152,7 @@ def dispatch(conf):
             returncode = system.run_cmds(post_percmd, conf, site)
 
 
-def run(conf, site, text):
+def run(conf, site):
     extractor = site.general.extractor
     if extractor == 'lxml':
         runner = Extract
@@ -166,4 +164,4 @@ def run(conf, site, text):
     elif extractor == 'readability_only':
         runner = ReadabilityExtract
 
-    runner(conf, site, text).run()
+    runner(conf, site).run()

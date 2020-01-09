@@ -22,8 +22,10 @@ import urllib.parse
 from pkg_resources import resource_filename
 
 from tosixinch import configfetch
-from tosixinch.content import slugify
 from tosixinch import location
+from tosixinch import system
+
+from tosixinch.content import slugify
 from tosixinch.process.util import transform_xpath
 from tosixinch.zconfigparser import ZConfigParser
 
@@ -345,6 +347,13 @@ class Site(location.Location):
         parts = self.url.split(sep)
         num = min(num, len(parts) - 1)
         return sep.join(parts[num:])
+
+    @location.cached_property
+    def text(self):
+        fname = self.fname
+        codings = self.general.encoding
+        errors = self.general.encoding_errors
+        return system.Reader(fname, codings=codings, errors=errors).read()
 
 
 class Conf(object):

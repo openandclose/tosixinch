@@ -70,10 +70,10 @@ class Prose(object):
 
     ftype = 'prose'
 
-    def __init__(self, conf, site, text):
+    def __init__(self, conf, site):
         self._conf = conf
         self._site = site
-        self.text = text
+        self.text = site.text
 
         self.fname = site.fname
         self.shortname = site.shortname
@@ -225,4 +225,4 @@ def dispatch(conf, site, fname, text):
         runner = NonProse
 
     logger.info('[ftype] %s: %r', runner.ftype, fname)
-    runner(conf, site, text).run()
+    runner(conf, site).run()
