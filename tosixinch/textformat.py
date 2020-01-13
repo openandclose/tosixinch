@@ -83,15 +83,18 @@ class Prose(object):
 
         self._name = self.__class__.__name__.lower()
         self.textclass = TEXTCLASS_PREFIX + self._name
+        self.done_escape = False
 
     def _wrap(self):
         self.wrapped = self.text
 
     def _build(self):
+        text = self.wrapped
+        content = text if self.done_escape else html.escape(text)
         fdict = {
             'title': self.shortname,
             'textclass': self.textclass,
-            'content': html.escape(self.wrapped),
+            'content': content,
         }
         self.built = HTML_TEXT_TEMPLATE.format(**fdict)
 
