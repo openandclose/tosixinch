@@ -147,7 +147,10 @@ class PythonCode(Code):
     KW = 'def +|class +'
     VAR = '[a-zA-Z0-9_]+'
     DEF = r'^(%s)(%s)(%s)\b'
-    REF = r'(?<!%s)\b(%s)\b'
+    # Removing ``!"#$%&'-/;<>?^_`~`` from string.punctuation.
+    # ';' and '<>' might match html entity references and html tags.
+    # and '>' is actually the one which keeps REF from wrapping definitions.
+    REF = r'(?<!def )(?<!class )(?<![^ ()*+,.:=@[\]{|}])(%s)\b'
     ALLDEF = re.compile(DEF % (LEAD, KW, VAR), flags=re.MULTILINE)
 
     def _highlight(self):
@@ -187,7 +190,7 @@ class PythonCode(Code):
                 repl = '{lead}{kw}<span class="{textclass}" id="tsi{i}">{var}</span>'.format(**fdict)  # noqa: E501
             text = re.sub(pat, repl, text, flags=re.MULTILINE)
 
-            pat = self.REF % (kw, var)
+            pat = self.REF % var
             repl = '<a href="#tsi{i}">{var}</a>'.format(**fdict)
             text = re.sub(pat, repl, text)
 
