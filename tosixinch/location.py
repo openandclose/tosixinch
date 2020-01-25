@@ -390,7 +390,8 @@ class Location(_Location):
                 if cache and cache.get(fname):
                     return True
 
-        cache[fname] = 1
+        if cache:
+            cache[fname] = 1
         return False
 
 
