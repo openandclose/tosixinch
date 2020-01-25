@@ -17,6 +17,13 @@ docs/_build/
 # tox
 .tox/
 
+# tags
+tags
+TAGS
+GTAGS
+GRTAGS
+GPATH
+
 # me
 .nonpubfiles/
 pdf/
