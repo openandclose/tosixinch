@@ -255,6 +255,10 @@ def _add_files_env(site):
 
 # python import ----------------------------------
 
+_mod_cache = {}
+_obj_cache = {}
+
+
 def _load_user_package(userdir, package_name):
     if package_name in sys.modules:
         return
@@ -276,6 +280,10 @@ def _load_user_package(userdir, package_name):
 
 
 def _get_module(userdir, package_name, modname, on_error_exit=False):
+    key = (userdir, package_name, modname)
+    if key in _mod_cache:
+        return _mod_cache[key]
+
     if userdir:
         _load_user_package(userdir, package_name)
 
@@ -284,12 +292,16 @@ def _get_module(userdir, package_name, modname, on_error_exit=False):
     else:
         name = 'tosixinch.%s.%s' % (package_name, modname)
 
+    mod = None
     try:
-        return importlib.import_module(name)
+        mod = importlib.import_module(name)
     except ModuleNotFoundError:
         if on_error_exit:
             fmt = "module ('%s.%s') is not found"
             raise ModuleNotFoundError(fmt % (package_name, modname))
+
+    _mod_cache[key] = mod
+    return mod
 
 
 def _get_modules(userdir, package_name, modname):
@@ -299,10 +311,16 @@ def _get_modules(userdir, package_name, modname):
 
 
 def _get_object(userdir, package_name, modname, objname):
+    key = (modname, objname)
+    if key in _obj_cache:
+        return _obj_cache[key]
+
     mod, mod2 = _get_modules(userdir, package_name, modname)
     obj = getattr(mod, objname, None)  # note: it is OK when mod == None.
     obj2 = getattr(mod2, objname, None)
-    return obj or obj2
+    obj = obj or obj2
+    _obj_cache[key] = obj
+    return obj
 
 
 def _parse_func_string(func_string):
