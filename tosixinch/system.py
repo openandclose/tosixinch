@@ -272,7 +272,7 @@ def _load_user_package(userdir, package_name):
     else:
         fmt = "user %r directory is registered. (%r)"
         logger.debug(fmt, package_name, package_dir)
-    del sys.path[0]
+    sys.path.remove(userdir)
 
 
 def _get_module(userdir, package_name, modname, on_error_exit=False):
