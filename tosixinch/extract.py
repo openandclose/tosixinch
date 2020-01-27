@@ -132,7 +132,21 @@ class ReadabilityExtract(content.ReadabilityHtmlContent):
         self.write()
 
 
+def _get_ftypes(conf):
+    for site in conf.sites:
+        ftype = site.ftype = site.general.ftype.lower()
+        if ftype:
+            continue
+
+        fname = site.fname
+        text = site.text
+        if content.is_html(fname, text):
+            site.ftype = 'html'
+
+
 def dispatch(conf):
+    _get_ftypes(conf)
+
     pre_percmd = conf.general.pre_percmd2
     post_percmd = conf.general.post_percmd2
 
@@ -140,14 +154,10 @@ def dispatch(conf):
         returncode = system.run_cmds(pre_percmd, conf, site)
 
         if returncode not in (101, 102):
-            fname = site.fname
-            text = site.text
-            ftype = site.general.ftype
-            if (ftype == 'html'
-                    or not ftype and content.is_html(fname, text)):
+            if site.ftype == 'html':
                 run(conf, site)
             else:
-                textformat.dispatch(conf, site, fname, text)
+                textformat.dispatch(conf, site)
 
         if returncode not in (102,):
             returncode = system.run_cmds(post_percmd, conf, site)

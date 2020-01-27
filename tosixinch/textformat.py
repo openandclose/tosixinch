@@ -197,38 +197,31 @@ class PythonCode(Code):
         self.highlighted = text
 
 
-def _get_ftype(name):
-    if not name:
-        return
+def _get_ftypes(conf):
+    for site in conf.sites:
+        if site.ftype:
+            continue
 
-    name = name.lower()
-    if name == 'nonprose':
-        return NonProse
-    elif name == 'prose':
-        return Prose
-
-    classname = name[0].upper() + name[1:].lower() + 'Code'
-    try:
-        obj = globals()[classname]
-    except LookupError:
-        pass
-    else:
-        if issubclass(obj, Prose):
-            return obj
-
-    raise ValueError('Got unknown ftype: %r' % name)
+        fname = site.fname
+        text = site.text
+        if is_prose(fname, text):
+            site.ftype = 'prose'
+        elif is_python(fname, text):
+            site.ftype = 'python'
+        else:
+            site.ftype = 'nonprose'  # default
 
 
-def dispatch(conf, site, fname, text):
-    runner = _get_ftype(site.general.ftype)
-    if runner:
-        pass
-    elif is_prose(fname, text):
+def dispatch(conf, site):
+    _get_ftypes(conf)
+
+    ftype = site.ftype
+    if ftype == 'prose':
         runner = Prose
-    elif is_python(fname, text):
+    elif ftype == 'python':
         runner = PythonCode
     else:
         runner = NonProse
 
-    logger.info('[ftype] %s: %r', runner.ftype, fname)
+    logger.info('[ftype] %s: %r', ftype, site.fname)
     runner(conf, site).run()
