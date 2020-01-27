@@ -142,8 +142,9 @@ def dispatch(conf):
         if returncode not in (101, 102):
             fname = site.fname
             text = site.text
-            if (site.ftype == 'html'
-                    or not site.ftype and content.is_html(fname, text)):
+            ftype = site.general.ftype
+            if (ftype == 'html'
+                    or not ftype and content.is_html(fname, text)):
                 run(conf, site)
             else:
                 textformat.dispatch(conf, site, fname, text)

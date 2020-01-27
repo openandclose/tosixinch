@@ -220,7 +220,7 @@ def _get_ftype(name):
 
 
 def dispatch(conf, site, fname, text):
-    runner = _get_ftype(site.ftype)
+    runner = _get_ftype(site.general.ftype)
     if runner:
         pass
     elif is_prose(fname, text):
