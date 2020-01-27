@@ -294,7 +294,7 @@ General Section
 
         # in ~/.config/tosixinch/site.ini
         [test]
-        match=  *py
+        match=  *.pyw
         ftype=  python
 
 .. confopt:: textwidth

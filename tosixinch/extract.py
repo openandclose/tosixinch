@@ -113,7 +113,7 @@ class Extract(content.HtmlContent):
 
 
 class ReadabilityExtract(content.ReadabilityHtmlContent):
-    """Collect methods only for readability."""
+    """Methods for readability."""
 
     def __init__(self, conf, site, text):
         super().__init__(site.url, site.fname, site.fnew, text)
