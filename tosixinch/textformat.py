@@ -68,8 +68,6 @@ def is_python(fname, text=None):
 class Prose(object):
     """General text type, paragraph oriented."""
 
-    ftype = 'prose'
-
     def __init__(self, conf, site):
         self._conf = conf
         self._site = site
@@ -114,8 +112,6 @@ class Prose(object):
 class NonProse(Prose):
     """Text type with significant line breaks. Require special text-wrap."""
 
-    ftype = 'nonprose'
-
     def _wrap(self):
         wrapper = textwrap.TextWrapper()
         wrapper.width = self.width
@@ -131,8 +127,6 @@ class NonProse(Prose):
 class Code(NonProse):
     """Source code, a subclass of `NonProse`."""
 
-    ftype = 'code'
-
 
 class PythonCode(Code):
     """Python code, a subclass of ``Code``.
@@ -140,8 +134,6 @@ class PythonCode(Code):
     Implement a few text highlights
     (as far as fit for black-and-white e-readers).
     """
-
-    ftype = 'python'
 
     LEAD = '|(?:    )+'
     KW = 'def +|class +'
