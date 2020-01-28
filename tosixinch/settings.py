@@ -355,6 +355,17 @@ class Site(location.Location):
         errors = self.general.encoding_errors
         return system.Reader(fname, codings=codings, errors=errors).read()
 
+    @location.cached_property
+    def sibling_urls(self):
+        """Use after ftype is determined."""
+        urls = []
+        for site in self._conf.sites:
+            if site.url == self.url:
+                continue
+            if site.ftype == self.ftype:
+                urls.append(site.url)
+        return urls
+
 
 class Conf(object):
     """It possesses all configuration data."""
