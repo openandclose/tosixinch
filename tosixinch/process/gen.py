@@ -278,3 +278,17 @@ def change_tagname(doc, path, tag='div'):
     """
     for el in doc.xpath(path):
         el.tag = tag
+
+
+def add_noscript_img(doc):
+    """Move <img src...> element inside <noscript> to outside.
+
+    >>> doc = fromstring('<h3><noscript><div><img src="a.jpg"></div></noscript></h3>')  # noqa: E501
+    >>> add_noscript_img(doc)
+    >>> tostring(doc)
+    '<h3><noscript><div></div></noscript><img src="a.jpg"></h3>'
+    """
+    for el in doc.xpath('//noscript'):
+        for element in el.iter(tag='img'):
+            if 'src' in element.attrib:
+                el.addnext(element)

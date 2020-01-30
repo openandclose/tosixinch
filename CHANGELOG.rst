@@ -24,6 +24,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add GNU global to site.sample.ini
 
+* Add add_noscript_img (process/gen)
+
 **Fix:**
 
 * Fix auto_css (when toc, stylesheets were lost)
