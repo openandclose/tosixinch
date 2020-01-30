@@ -19,6 +19,7 @@ body {
 
 /* http://pythonhosted.org/feedparser uses 'div.pre'. */
 pre, code, kbd, samp, tt, div.pre,
+figcaption,
 /* some ebook publisher and calibre seem to create pre1 etc. in div and p */
 div.pre1, div.pre2, div.pre3, div.pre4, div.pre5
 {

@@ -30,6 +30,7 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Fix clipped large tall images (using actual length and percent)
 
+* Fix use monospace font for figcaption
 
 
 v0.2.0 (2019-11-10)
