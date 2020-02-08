@@ -432,7 +432,7 @@ when ``download`` is complete.
 
 **Variables:**
 
-`script directory <#dword-script_directory>`__ is inserted in the head of ``$PATH``.
+`script directory <overview.html#dword-script_directory>`__ is inserted in the head of ``$PATH``.
 So you can call your custom scripts only by filenames (not fullpath),
 if they are in there.
 
@@ -450,7 +450,7 @@ It uses ``eval``, so be careful.)
 **Running Module:**
 
 If a command consists of one word, without 'dot',
-and the module actually exists in `script directory <#dword-script_directory>`__,
+and the module actually exists in `script directory <overview.html#dword-script_directory>`__,
 the script runs the command as module internally
 (as opposed to running it as a system subprocess).
 
