@@ -13,14 +13,9 @@ body {
     color: black;
 }
 
-/* html, body { */
-/*     height: 100%; */
-/* } */
-
 /* http://pythonhosted.org/feedparser uses 'div.pre'. */
-pre, code, kbd, samp, tt, div.pre,
-figcaption,
 /* some ebook publisher and calibre seem to create pre1 etc. in div and p */
+pre, code, kbd, samp, tt, div.pre, figcaption,
 div.pre1, div.pre2, div.pre3, div.pre4, div.pre5
 {
     font-family: {{ font_mono }};
@@ -42,7 +37,7 @@ table { font-size: .889em; }
 pre, div.pre {
     white-space: pre-wrap;
     border: 1px solid;
-    border-color: LightGrey;
+    border-color: lightgray;
 }
 
 table {
@@ -50,7 +45,7 @@ table {
 }
 
 table, th, td {
-    border: 1px solid LightGrey;
+    border: 1px solid lightgray;
     page-break-inside: avoid;
     /* NG: cells are too bloat */
     /* white-space: pre-wrap; */
@@ -93,6 +88,7 @@ img.tsi-tall {
 
 /* Reduce margins as much as reasonable.*/
 /* cf. prince has 'li::marker' */
+
 blockquote {
     margin-left: 2%;
     margin-right: 2%;
@@ -110,13 +106,14 @@ ul, menu, dir, ol {
 }
 
 ul ul, ul ol, ol ul, ol ol {
-  padding-left: 1em;
+    padding-left: 1em;
 }
 
 /* li { */
 /*     margin: 0%; */
 /*     padding: 0%; */
 /* } */
+
 
 /* https://stackoverflow.com/a/4151770 */
 hr {
@@ -126,7 +123,6 @@ hr {
 }
 
 /* Default underlines (color or gray) are actually more unpleasant in B&W screen. */
-/* a:link { color: black; } */
 a:link { color: inherit; }
 
 
@@ -142,13 +138,35 @@ span.tsi-href-visible {
 }
 
 
-{% if prince %}
 /* prince --------------------------------------------------------- */
+{% if prince %}
 
 /* Make space for prince logo. */
 @page :first {
-  margin-top: 60px;
+    margin-top: 60px;
 }
+
+h1 { prince-bookmark-level: {{ bm1 }} }
+h2 { prince-bookmark-level: {{ bm2 }} }
+h3 { prince-bookmark-level: {{ bm3 }} }
+h4 { prince-bookmark-level: {{ bm4 }} }
+h5 { prince-bookmark-level: {{ bm5 }} }
+h6 { prince-bookmark-level: {{ bm6 }} }
+
+/* NG: Prince displays permalinks in pdf bookmarks. */
+/* h1, h2, h3 { prince-bookmark-label: text() } */
+
+
+/* NG: for long left margins (mako doc)  */
+/* ul, menu, dir, ol { */
+/*     padding-inline-start: 1%; */
+/* } */
+
+
+/* prince exposes raw strings in noscript tags. */
+/* https://www.princexml.com/forum/topic/2562/junk-between-noscript-tags-getting-put-into-html */
+noscript { display: none }
+
 
 /* When using '--no-default-style' in commandline, */
 /* we need to copy some basic content rendering css from 'prince_html.css' */
@@ -196,7 +214,6 @@ span.tsi-href-visible {
 
 
 /* TODO: I don't understand how to set fonts in prince */
-
 /* http://www.princexml.com/forum/topic/3066/font-family-font-face-issues */
 /* 'In Prince, once you have one @font-face rule for Verdana it won't check the system font.' */
 /* @font-face { */
@@ -210,43 +227,20 @@ span.tsi-href-visible {
     /* src: prince-lookup("Source Han Sans JP") */
 /* } */
 
-
-h1 { prince-bookmark-level: {{ bm1 }} }
-h2 { prince-bookmark-level: {{ bm2 }} }
-h3 { prince-bookmark-level: {{ bm3 }} }
-h4 { prince-bookmark-level: {{ bm4 }} }
-h5 { prince-bookmark-level: {{ bm5 }} }
-h6 { prince-bookmark-level: {{ bm6 }} }
-
-/* NG: Prince displays permalinks in pdf bookmarks. */
-/* h1, h2, h3 { prince-bookmark-label: text() } */
-
-
-/* NG: for long left margins (mako doc)  */
-/* ul, menu, dir, ol { */
-/*     padding-inline-start: 1%; */
-/* } */
-
-
-/* prince exposes raw strings in noscript tags. */
-/* https://www.princexml.com/forum/topic/2562/junk-between-noscript-tags-getting-put-into-html */
-noscript { display: none }
-
 {% endif %}
 
 
-
-{% if weasyprint %}
 /* weasyprint ----------------------------------------------------- */
+{% if weasyprint %}
 
 div.tsi-body-merged { page-break-before: always; }
 
-h1 { -weasy-bookmark-level: {{ bm1 }} }
-h2 { -weasy-bookmark-level: {{ bm2 }} }
-h3 { -weasy-bookmark-level: {{ bm3 }} }
-h4 { -weasy-bookmark-level: {{ bm4 }} }
-h5 { -weasy-bookmark-level: {{ bm5 }} }
-h6 { -weasy-bookmark-level: {{ bm6 }} }
+h1 { bookmark-level: {{ bm1 }} }
+h2 { bookmark-level: {{ bm2 }} }
+h3 { bookmark-level: {{ bm3 }} }
+h4 { bookmark-level: {{ bm4 }} }
+h5 { bookmark-level: {{ bm5 }} }
+h6 { bookmark-level: {{ bm6 }} }
 
 
 /* NG: Tables are cripped */
@@ -254,12 +248,12 @@ h6 { -weasy-bookmark-level: {{ bm6 }} }
 /* https://github.com/Kozea/WeasyPrint/issues/198 */
 /* table, thead, tbody, tfoot, tr, th, td { display: block; } */
 /* * { float: none !important; } */
+
 {% endif %}
 
 
-
-{% if wkhtmltopdf %}
 /* wkhtmltopdf ---------------------------------------------------- */
+{% if wkhtmltopdf %}
 
 /* Stable wkhtmltopdf(0.12.4) uses Qt4.8, which uses QtWebKit 2.1 */
 /* https://github.com/wkhtmltopdf/qt */
@@ -307,9 +301,7 @@ tr { page-break-inside: avoid }
 {% endif %}
 
 
-
 /* css for text --------------------------------------------------- */
-
 pre.tsi-text {
     border: none;
 }
@@ -323,14 +315,6 @@ h2.tsi-text, h3.tsi-text, h4.tsi-text {
     display: inline;
 }
 
-h2.tsi-text > a, h3.tsi-text > a, h4.tsi-text > a {
-    text-decoration: none;
-}
-
 span.tsi-text {
     font-weight: bold;
-}
-
-span.tsi-text > a {
-    text-decoration: none;
 }
