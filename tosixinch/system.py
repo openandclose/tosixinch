@@ -264,7 +264,7 @@ def _load_user_package(userdir, package_name):
         return
     if userdir is None:
         return
-    package_dir = os.path.join(userdir, package_name)
+    package_dir = os.path.join(userdir, *package_name.split('.'))
     if not os.path.isdir(package_dir):
         return
 
