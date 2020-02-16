@@ -22,11 +22,6 @@ class FType(object):
         'html',
     ]
 
-    PROSES = [
-        'reStructuredText',
-        'markdown'
-    ]
-
     def __init__(self, path='ctags'):
         self.path = path
         self.p2ftype, self.c2ftype = _ftype_base.get_maps(path)
@@ -38,6 +33,9 @@ class FType(object):
     def __call__(self):
         p2f, c2f = self.p2ftype, self.c2ftype
 
+        p2f['reStructuredText'] = 'prose'
+        p2f['markdown'] = 'prose'
+
         # p2f['Fish'] = 'sh'
         # p2f['Tcsh'] = 'sh'
 
@@ -45,7 +43,7 @@ class FType(object):
         p2f['Numpy'] = 'python'
         p2f['Python 2.x'] = 'python'
 
-        return p2f, c2f, self.PROSES
+        return p2f, c2f
 
 
 if __name__ == '__main__':

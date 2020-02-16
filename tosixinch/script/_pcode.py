@@ -27,7 +27,7 @@ class PCode(object):
         self.pconfig = self._get_config()
         self.ctags_path = os.path.expanduser(
             self.pconfig['ctags'].get('ctags', 'ctags'))
-        self.p2ftype, self.c2ftype, self.proses = self._get_fdicts()
+        self.p2ftype, self.c2ftype = self._get_fdicts()
 
         self._lexer_cache = {}
         self._class_cache = {}
@@ -62,14 +62,19 @@ class PCode(object):
                 logger.debug(fmt % (name, fname))
                 ftype = self.p2ftype.get(name)
                 if ftype:
+                    if ftype == 'prose':
+                        site.ftype = 'prose'
+                        continue
+                    if ftype == 'nonprose':
+                        site.ftype = 'nonprose'
+                        continue
+
                     self._lexer_cache[fname] = lexer
                     self._class_cache[fname] = self._get_module(ftype)
                     site.ftype = ftype
+                    continue
                 else:
-                    if name in self.proses:
-                        site.ftype = 'prose'
-                    else:
-                        site.ftype = 'nonprose'
+                    site.ftype = 'nonprose'
 
     def _get_module(self, ftype):
         class_ = None
