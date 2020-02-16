@@ -33,15 +33,12 @@ class FType(object):
     def __call__(self):
         p2f, c2f = self.p2ftype, self.c2ftype
 
-        p2f['reStructuredText'] = 'prose'
-        p2f['markdown'] = 'prose'
+        # p2f['reStructuredText'] = 'prose'
+        # p2f['markdown'] = 'prose'
 
-        # p2f['Fish'] = 'sh'
-        # p2f['Tcsh'] = 'sh'
-
-        p2f['Cython'] = 'python'
-        p2f['Numpy'] = 'python'
-        p2f['Python 2.x'] = 'python'
+        # p2f['Cython'] = 'python'
+        # p2f['Numpy'] = 'python'
+        # p2f['Python 2.x'] = 'python'
 
         return p2f, c2f
 

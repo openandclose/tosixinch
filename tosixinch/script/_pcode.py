@@ -41,13 +41,27 @@ class PCode(object):
             os.path.join(self.conf._userdir, inifile),
         )
         config = configparser.ConfigParser()
+        config.optionxform = str
         config.read(files)
         return config
 
     def _get_fdicts(self):
         class_ = system._get_object(self.conf._userdir,
             self.PACKAGE_NAME, self.FTYPE_MOD, self.FTYPE_CLASS)
-        return class_(self.ctags_path)()
+        p2ftype, c2ftype = class_(self.ctags_path)()
+
+        pconfig = self.pconfig
+        if pconfig.has_section('p2ftype'):
+            for k, v in pconfig.items('p2ftype'):
+                if pconfig['DEFAULT'].get(k):
+                    continue
+                p2ftype[k] = v
+        if pconfig.has_section('c2ftype'):
+            for k, v in pconfig.items('c2ftype'):
+                if pconfig['DEFAULT'].get(k):
+                    continue
+                c2ftype[k] = v
+        return p2ftype, c2ftype
 
     def _get_ftypes(self):
         for site in self.conf.sites:
@@ -79,7 +93,7 @@ class PCode(object):
     def _get_module(self, ftype):
         class_ = None
         section = ftype if self.pconfig.has_section(ftype) else 'DEFAULT'
-        modname = self.pconfig[section]['module']
+        modname = self.pconfig[section].get('module')
         if modname:
             classname = self.pconfig[section]['class']
             if classname:
