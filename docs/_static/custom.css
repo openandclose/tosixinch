@@ -14,3 +14,7 @@ div.admonition p.admonition-title {
 dl.script code.descname {
   font-family: inherit;
 }
+
+li > p:last-child {
+  margin-bottom: 1em;
+}
