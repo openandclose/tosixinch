@@ -27,13 +27,14 @@ class _PygmentsCode(textformat.Prose):
     TEXTCLASS_PREFIX = 'tsi-text tsi-pcode tsi-'
 
     def __init__(self, conf, site,
-            lexer, tagdb=None, start_token=None,
+            lexer, tagdb=None, start_token=None, kindmap=None,
             escape=None, debug=False):
         super().__init__(conf, site)
         self.lexer = lexer
         self.tagdb = tagdb
         start_token = start_token if start_token else 'Token.Name'
         self.start_token = pygments.token.string_to_tokentype(start_token)
+        self.kindmap = kindmap if kindmap else {}
         self.escape = escape or html.escape
         self.debug = debug
         self.ftype = self._site.ftype
@@ -203,10 +204,7 @@ class PygmentsCode(_PygmentsCode):
         rows1, rows2 = rows
         for row in rows1:
             if row[3] == lnum:
-                if row[5] in ('c', 'f'):
-                    tagname = 'h2'
-                else:
-                    tagname = 'h3'  # m: methods
+                tagname = self.get_tagname(row[5])
                 return self.wrap_def(value, row[0], tagname)
 
     def check_ref(self, lnum, line, token, value, rows):
@@ -242,6 +240,14 @@ class PygmentsCode(_PygmentsCode):
         refname = location.Location(url=refname).fnew
         path = os.path.relpath(refname, start=start)
         return location._path2url(path, platform=PLATFORM)
+
+    def get_tagname(self, kind):
+        d = self.kindmap
+        if d.get(kind):
+            return d[kind]
+        if d.get('*'):
+            return d['*']
+        return self.TAGNAME
 
 
 def _get_lexer(fname, text):

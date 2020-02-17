@@ -114,6 +114,19 @@ class PCode(object):
         _ctags._create_ctags(tagfile, cmd, files)
         self._db = _ctags.Tags(tagfile=tagfile, c2ftype=self.c2ftype)
 
+    def _parse_kindmap(self, kindmap):
+        """Create kind-to-elem dict from elem-to-kind text.
+
+        'h2=cf, h3=m' -> {'c': 'h2', 'f': 'h2', 'm': 'h3'}
+        """
+        d = {}
+        for item in kindmap.split(','):
+            elem, kinds = item.split('=')
+            elem = elem.strip()
+            for kind in kinds.strip():
+                d[kind] = elem
+        return d
+
     def run(self, site):
         fname = site.fname
         runner = self._class_cache.get(fname)
@@ -124,7 +137,9 @@ class PCode(object):
 
             section = self._get_section(site.ftype)
             start_token = section.get('start_token')
-            return runner(self.conf, site, lexer, self._db, start_token).run()
+            kindmap = self._parse_kindmap(section.get('kindmap'))
+            return runner(
+                self.conf, site, lexer, self._db, start_token, kindmap).run()
         return 0
 
 
