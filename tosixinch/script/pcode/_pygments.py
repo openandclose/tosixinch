@@ -12,7 +12,7 @@ import sys
 import pygments
 import pygments.lexers
 import pygments.util
-from pygments.token import Name
+import pygments.token
 
 from tosixinch import location
 from tosixinch import textformat
@@ -27,10 +27,13 @@ class _PygmentsCode(textformat.Prose):
     TEXTCLASS_PREFIX = 'tsi-text tsi-pcode tsi-'
 
     def __init__(self, conf, site,
-            lexer, tagdb=None, escape=None, debug=False):
+            lexer, tagdb=None, start_token=None,
+            escape=None, debug=False):
         super().__init__(conf, site)
         self.lexer = lexer
         self.tagdb = tagdb
+        start_token = start_token if start_token else 'Token.Name'
+        self.start_token = pygments.token.string_to_tokentype(start_token)
         self.escape = escape or html.escape
         self.debug = debug
         self.ftype = self._site.ftype
@@ -178,7 +181,7 @@ class PygmentsCode(_PygmentsCode):
     REFFMT = '<a href="{path}#{id}">{value}</a>'
 
     def format_entry(self, lnum, line, token, value):
-        if token not in Name:
+        if token not in self.start_token:
             return value
 
         if not self.tagdb:

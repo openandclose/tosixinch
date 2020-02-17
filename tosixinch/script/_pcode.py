@@ -116,7 +116,13 @@ class PCode(object):
             lexer = self._lexer_cache[fname]
             fmt = '[pcode: %s (%s)] %r'
             logger.info(fmt % (site.ftype, runner.__name__, fname))
-            return runner(self.conf, site, lexer, self._db).run()
+
+            if self.pconfig.has_section(site.ftype):
+                section = site.ftype
+            else:
+                section = 'DEFAULT'
+            start_token = self.pconfig[section].get('start_token')
+            return runner(self.conf, site, lexer, self._db, start_token).run()
         return 0
 
 
