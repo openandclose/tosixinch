@@ -92,14 +92,19 @@ class PCode(object):
 
     def _get_module(self, ftype):
         class_ = None
-        section = ftype if self.pconfig.has_section(ftype) else 'DEFAULT'
-        modname = self.pconfig[section].get('module')
+        section = self._get_section(ftype)
+        modname = section.get('module')
         if modname:
-            classname = self.pconfig[section]['class']
+            classname = section.get('class')
             if classname:
                 class_ = system._get_object(
                     self.conf._userdir, self.PACKAGE_NAME, modname, classname)
         return class_ or _pygments.PygmentsCode
+
+    def _get_section(self, section_name):
+        if not self.pconfig.has_section(section_name):
+            section_name = 'DEFAULT'
+        return self.pconfig[section_name]
 
     def _create_ctags(self):
         tagfile = self.pconfig['ctags']['tagfile']
@@ -117,11 +122,8 @@ class PCode(object):
             fmt = '[pcode: %s (%s)] %r'
             logger.info(fmt % (site.ftype, runner.__name__, fname))
 
-            if self.pconfig.has_section(site.ftype):
-                section = site.ftype
-            else:
-                section = 'DEFAULT'
-            start_token = self.pconfig[section].get('start_token')
+            section = self._get_section(site.ftype)
+            start_token = section.get('start_token')
             return runner(self.conf, site, lexer, self._db, start_token).run()
         return 0
 
