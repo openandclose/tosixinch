@@ -32,7 +32,11 @@ class PCode(object):
         self._lexer_cache = {}
         self._class_cache = {}
         self._get_ftypes()
-        self._create_ctags()
+
+        if self._lexer_cache:
+            logger.debug('[p2ftype]\n%s' % self.p2ftype)
+            logger.debug('[c2ftype]\n%s' % self.c2ftype)
+            self._create_ctags()
 
     def _get_config(self):
         inifile = self.INIFILE
