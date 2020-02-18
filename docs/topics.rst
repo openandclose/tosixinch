@@ -109,6 +109,11 @@ or, just puts the rest of the text outside of the display (invisible).
 code
 ^^^^
 
+.. note::
+
+    Now ``_pcode`` is the recommended method to extract source codes.
+    See `_pcode <#pcode>`__.
+
 ``code`` is a special case of ``non-prose``,
 and currently only for python source code.
 It adds small html decorations.
@@ -691,8 +696,10 @@ _pcode
 ^^^^^^
 
 A sample hook extractor for source codes (means 'Pygments code extraction').
-It adds some tokens (e.g. functions and classes) to pdf bookmarks
-and links to them.
+
+It formats (html-wraps) some Pygments tokens.
+The purpose is to make them pdf bookmarks items,
+and create references to them.
 If you want to use it, add this command to ``pre_percmd2`` in user configuration.
 
 Note ``pre_percmd2`` is a ``LINE`` option, see the above note for ``_man``.
@@ -703,95 +710,121 @@ and ``ctags``
 (`Universal Ctags <https://ctags.io/>`__
 or `Exuberant Ctags <http://ctags.sourceforge.net/>`__).
 
-Pygments and Ctags parse ``Downloaded_File``,
-and if they agree about the language,
-
-(1) Add some definitions to pdf bookmarks
-    (by wrapping with heading tags like <h2>).
-(2) Add the links to the definitions for the same identifiers.
-    (by wrapping with <a href...> tags).
+By default, for some common languages,
+it wraps Ctags kinds ``cf`` to ``<h2>``, ``m`` to ``<h3>>``.
+(But since Ctags kinds are greatly differ for each languages,
+you have to customize them for each of your languages).
 
 It creates working files ``tsi.tags`` and ``tsi.tags.checksum``
 in current directory.
 
-**Customization Points**:
+**Language Names:**
 
-* If there is ``pcode.ini`` in `userdir <overview.html#dword-userdir>`__,
-  you can define ctags binary path, tagfile name and arguments
-  in ``[ctags]`` section.
-  Arguments are rather important.
+It maps Pygments' lexer.names and Ctags language names to internal names.
+The common names (lower cased) are provided as base,
+But you must explicitly define other names.
 
-  (See application's ``data/pcode.ini`` for the example).
+If Pygments finds a language but the language is not mapped,
+It does not do formatting (skips to other ``pre_percmd2`` or the builtin text extraction).
+But it registers the ``url``'s ``ftype`` as ``nonprose``.
 
-* If there is ``pcode/_ftype.py`` in  `script directory <overview.html#dword-script_directory>`__,
-  you can override maps for Pygments and Ctags language names.
-  (create class ``FType``, and edit ``__call__``).
+(It is an heuristic.
+If Pygments finds a language, it is better to treat the text as code-like,
+disallowing natural html line-wrapping.)
 
-  Now simply the common names between Pygments lexer name and aliases,
-  and Ctags language names are mapped, with a few additions.
+If Pygments' name is mapped,
+but Ctags doesn't find a language, the language is not mapped, or not mapped to the same name,
+It does formatting only with Pygments tokens.
 
-  (See application's ``script/pcode/_ftype.py`` for the example).
+As a special case, if Pygments name is mapped to the name ``'prose'``,
+It does not do formatting, but registers the ``url``'s ``ftype`` as ``prose``
+(The default is: ``reStructuredText`` and ``markdown``).
 
-* You can define how to wrap tokens for a specific languages, say, perl.
+**Configuration:**
 
-  First, you need ``[perl]`` section and module option (say, perl.py)
-  in ``pcode.ini``.
-  class option is optional (the default class name is ``CustomCode``).
+You can specify some configuration
+if you create ``pcode.ini`` in `userdir <overview.html#dword-userdir>`__,
+
+(See application's ``tosixinch/data/pcode.ini`` for the example).
+
+In ``[ctags]`` section, you can customize
+ctags binary path, tagfile name or arguments.
+
+Note ``--format=2``, ``--excmd=number``, ``--file-scope=yes``, and ``fkl`` in ``--fields``
+in arguments are normally required.
+The script needs excmd to be number (not pattern).
+It needs filename, language name, and kind.
+
+You have to add ``--kinds-<lang>`` for you languages
+(``--<lang>-kinds`` in Exuberant Ctags).
+
+In ``[p2ftype]`` and ``[c2ftype]`` sections,
+you can add maps for Pygments and Ctags language names.
+
+    * p2ftype: Pygments lexer.name to internal name
+    * c2ftype: Ctags language name to internal name
+
+(Run tosixinch with some text input and with ``-v``, to see actual mappings).
+
+If you want to customize formatting for a specific language,
+you can create a section with an internal name.
+(So it must first be mapped, if not already).
+Options are:
+
+    * start_token:
+        Pygments token type name.
+        All other tokens than it and it's subclasses are not touched by formatting.
+        Normally ``Token.Name`` is suffice (default).
+    * kindmap:
+        Comma separated html element and kind pairs.
+        Optionally only one '*' is possible for kind.
+        It means all other kinds not defined.
+    * module:
+        module name for your custom module.
+        you have to create this module
+        in ``pcode`` directory in `script directory <overview.html#dword-script_directory>`__.
+    * class:
+        class name for you custom class in the module above.
+        the default is ``CustomCode``.
+
+        The class is supposed to subclass ``tosixinch.script.pcode._pygments.PygmentsCode``,
+        and normally customize methods called from ``format_entry``.
+        See ``tosixinch/script/pcode/python.py`` for the example.
+
+**Basic Usage:**
+
+If you want to use the default formatter, but customize for a language,
+
+* Define some internal name if not already defined
+  (in ``p2ftype`` and ``c2ftype`` section).
+
+* Select which Ctags kinds to use (in ``arguments`` option).
+
+* Select which kinds maps to which html elements (in ``kindmap`` option).
+
+If you want to customize the formatter,
+
+* Create a section, say, perl:
 
   .. code-block:: ini
 
       [perl]
       module=   perl
 
-  Second, you need to create you own ``CustomCode`` class in ``pcode/perl.py``
+* Create ``pcode/perl.py``
   (in `script directory <overview.html#dword-script_directory>`__).
-  
+
   .. code-block:: python
+
+      # ~/.config/tosixinch/script/pcode/perl.py
+
+      from tosixinch.script.pcode import _pygments
 
       class CustomCode(_pygments.PygmentsCode):
 
-  and define how to select or wrap definitions or references
-  (``check_def``, ``check_ref``, ``wrap_def`` and ``wrap_ref``).
+* Customize ``check_def``, ``check_ref``, ``wrap_def`` or ``wrap_ref``.
 
-  Or do any other things as suitable.
-
-  (See application's ``script/pcode/python.py`` for an example,
-  and also ``script/pcode/_pygments.py``).
-
-**Code Structure**:
-
-.. code-block:: none
-
-    tosixinch/data/pcode.ini:
-        config file
-
-    tosixinch/script/_pcode.py:
-        main module, calling others
-
-    tosixinch/script/pcode/_ftype.py:
-        create actual language mapping, customizing _ftype_base
-
-    tosixinch/script/pcode/_ftype_base.py:
-        create base language mapping
-
-    tosixinch/script/pcode/_ctags.py:
-        create definition database using Ctags
-
-    tosixinch/script/pcode/_pygments.py:
-        create tokens using Pygments
-        (Pygments is used only for it's lexers).
-        tokens are compared to ctags database
-        in 'PygmentsCode.format_entry'
-
-    tosixinch/script/pcode/python.py:
-        sample python module to customize 'PygmentsCode'.
-
-
-    For users (an example):
-
-    ~/.config/tosixinch/pcode.ini
-    ~/.config/tosixinch/script/pcode/_ftype.py
-    ~/.config/tosixinch/script/pcode/perl.py
+  Application automatically finds and uses this class.
 
 
 tosixinch-complete.bash
