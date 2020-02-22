@@ -107,8 +107,9 @@ class HtmlReader(Reader):
     """
 
     def _parse(self):
-        parser = lxml.html.HTMLParser(encoding=self.encoding)
-        self.doc = lxml.html.document_fromstring(self.text, parser=parser)
+        parser = lxml.html.HTMLParser(encoding='utf-8')
+        self.doc = lxml.html.document_fromstring(
+            self.text.encode('utf-8'), parser=parser)
 
     def read(self):
         self._prepare()
