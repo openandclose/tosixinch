@@ -80,18 +80,11 @@ class Reader(_File):
 class Writer(_File):
     """Text writer object."""
 
-    def __init__(self, fname, doc=None, text=None, platform=sys.platform):
+    def __init__(self, fname, text, platform=sys.platform):
         super().__init__(fname, platform)
-        self.doc = doc
         self.text = text
 
-    def _serialize(self):
-        if self.text:
-            return
-        self.text = '\n'.join(self.doc)
-
     def _prepare(self):
-        self._serialize()
         make_directories(self.fname)
 
     def write(self):
@@ -125,7 +118,8 @@ class HtmlWriter(Writer):
 
     def __init__(self, fname, doc=None, text=None,
             platform=sys.platform, doctype=DEFAULT_DOCTYPE):
-        super().__init__(fname, doc, text, platform)
+        super().__init__(fname, text, platform)
+        self.doc = doc
         self.doctype = doctype
 
     def _serialize(self):
@@ -133,6 +127,10 @@ class HtmlWriter(Writer):
             return
         tree = self.doc.getroottree()
         self.text = lxml.html.tostring(tree, encoding='unicode')
+
+    def _prepare(self):
+        self._serialize()
+        make_directories(self.fname)
 
 
 # shell invocation ------------------------------
