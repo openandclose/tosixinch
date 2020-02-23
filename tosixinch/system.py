@@ -22,9 +22,6 @@ logger = logging.getLogger(__name__)
 
 # file read and write ---------------------------
 
-DEFAULT_DOCTYPE = '<!DOCTYPE html>'
-
-
 def make_directories(fname, on_error_exit=True):
     if not _in_current_dir(fname):
         if on_error_exit:
@@ -116,11 +113,9 @@ class HtmlWriter(Writer):
     From document object, write serialized text to fname.
     """
 
-    def __init__(self, fname, doc=None, text=None,
-            platform=sys.platform, doctype=DEFAULT_DOCTYPE):
+    def __init__(self, fname, doc=None, text=None, platform=sys.platform):
         super().__init__(fname, text, platform)
         self.doc = doc
-        self.doctype = doctype
 
     def _serialize(self):
         if self.text:
