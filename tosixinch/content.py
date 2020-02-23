@@ -90,7 +90,7 @@ def build_new_html(title=None, content=''):
 
 
 def build_blank_html(doctype=None):
-    """Build 'more' minimal html, used in `extract.Extract._prepare`."""
+    """Build 'more' minimal html."""
     html = BLANK_HTML % (doctype or DEFAULT_DOCTYPE)
     root = lxml.html.document_fromstring(html)
     return root
