@@ -8,6 +8,14 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 **Unreleased:**
 ---------------
 
+**Change:**
+
+* Cut head data inclusion
+
+  Previously, the script kept the original <head> content in the extracted file.
+  Now it just includes a minimal <head> content.
+  (Shouldn't affect the end user usage).
+
 
 v0.3.0 (2020-02-24)
 -------------------

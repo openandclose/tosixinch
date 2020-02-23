@@ -47,7 +47,7 @@ class Node(location.Location):
 
     def _make_toc_html(self):
         content = '<h1>%s</h1>' % self.title
-        return build_new_html(self.title, content)
+        return build_new_html(title=self.title, content=content)
 
     def _create_doc(self):
         if self.title:

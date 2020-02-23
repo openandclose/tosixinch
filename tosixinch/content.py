@@ -1,7 +1,6 @@
 
 """Module for html content nmanipulations."""
 
-import copy
 import logging
 import os
 import posixpath
@@ -36,7 +35,7 @@ HTMLFILE = re.compile(
     '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + r'<html(|\s.+?)>',
     flags=re.IGNORECASE | re.DOTALL)
 
-HTML_TEMPLATE = """<!DOCTYPE html>
+HTML_TEMPLATE = """{doctype}
 <html>
   <head>
     <meta charset="utf-8">
@@ -78,11 +77,12 @@ def is_html(fname, text, min_chars=4096):
     return False
 
 
-def build_new_html(title=None, content=''):
+def build_new_html(doctype=None, title=None, content=None):
     """Build minimal html to further edit."""
     fdict = {
+        'doctype': doctype or DEFAULT_DOCTYPE,
         'title': title or DEFAULT_TITLE,
-        'content': content,
+        'content': content or ''
     }
     html = HTML_TEMPLATE.format(**fdict)
     root = lxml.html.document_fromstring(html)
@@ -239,10 +239,7 @@ class HtmlContent(Content):
         baseurl = self.root.base or self.url
         logger.debug('[base url] %s', baseurl)
 
-        doc = build_blank_html(self.doctype)
-        head = self.root.head
-        if head is not None:
-            doc.insert(0, copy.deepcopy(head))
+        doc = build_new_html(doctype=self.doctype, title=title)
 
         self.title = title
         self.baseurl = baseurl
@@ -308,7 +305,7 @@ class ReadabilityHtmlContent(HtmlContent):
 
         # ``Readability`` generally does not care about main headings.
         # So we manually insert a probable ``title``.
-        doc = build_new_html(title, content)
+        doc = build_new_html(title=title, content=content)
         heading = doc.xpath('//h1')
         if len(heading) == 0:
             gen.add_title(doc)
