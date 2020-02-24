@@ -8,6 +8,10 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 **Unreleased:**
 ---------------
 
+
+v0.3.0 (2020-02-24)
+-------------------
+
 **Change:**
 
 * **[!]** Cut add_extractors and move man hook to pre_percmd2
