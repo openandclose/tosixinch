@@ -84,7 +84,7 @@ e.g. filename ``'aaa?bbb'`` might have been url ``'aaa?bbb'`` or ``'aaa%3Fbbb'``
     So in this particular example, They are discernible.::
 
         aaa?bbb     -> aaa?bbb
-        aaa%3Fbbb   -> aaa?bbb/index--tosixinch
+        aaa%3Fbbb   -> aaa?bbb/_
 
 Link urls are made using original urls as much as possible.
 Only delimiters for the relevant url components are newly quoted

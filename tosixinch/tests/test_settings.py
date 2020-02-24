@@ -37,8 +37,8 @@ class TestParse:
         assert conf.pdfname == 'bbb-xxx.pdf'
 
     def test_parse_fnew(self, site):
-        # fnew_value = '_htmls/bbb.com/ttt/xxx#yyy--extracted.html'
-        fnew_value = '_htmls/bbb.com/ttt/xxx/index--tosixinch--extracted.html'
+        # fnew_value = '_htmls/bbb.com/ttt/xxx#yyy~.html'
+        fnew_value = '_htmls/bbb.com/ttt/xxx/_~.html'
         assert site.fnew == fnew_value
 
     def test_parse_select(self, site):

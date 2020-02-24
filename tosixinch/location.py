@@ -201,8 +201,8 @@ class Locations(object):
 class _Location(object):
     """Calculate filepaths."""
 
-    INDEX = 'index--tosixinch'
-    APPENDIX = '--extracted'
+    INDEX = '_'
+    APPENDIX = '~'
     EXTENSION = '.html'
 
     def __init__(self, url, platform=sys.platform):

@@ -284,10 +284,10 @@ To use the same example:
 .. code-block:: none
 
     (in './_htmls/somesite.com/')
-        index--extracted.html                            (11)
+        index~.html                                 (11)
     (in './_htmls/tosixinch.example.com/')
-        alices-articles/index--tosixinch--extracted.html (12)
-        bobs-articles/index--tosixinch--extracted.html   (13)
+        alices-articles/_~.html                     (12)
+        bobs-articles/_~.html                       (13)
 
 ``tosixinch.example.com`` is an imaginary placeholder host.
 Verbose path names are ``Extracted_Files`` names

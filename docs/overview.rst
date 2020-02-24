@@ -169,8 +169,8 @@ But disposing of the files (deleting or moving) is users' job.
     with URL ``domain`` and ``paths`` as subdirectories.
 
     If ``url``'s last ``path`` doesn't have file extension or ``'?'``,
-    string ``'/index--tosixinch'`` is added.
-    If it ends with ``'/'``, ``'index--tosixinch'`` is added.
+    string ``'/_'`` is added.
+    If it ends with ``'/'``, ``'_'`` is added.
 
     .. note::
 
@@ -209,11 +209,11 @@ But disposing of the files (deleting or moving) is users' job.
 
     Example::
 
-        ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/index--tosixinch
+        ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/_
 
 .. dword:: Extracted_File
 
-    String ``'--extracted'`` and ``'.html'`` (If not already have one)
+    String ``'~'`` and ``'.html'`` (If not already have one)
     is added to ``Downloaded_File``.
 
     If ``url`` is a local filepath,
@@ -222,7 +222,7 @@ But disposing of the files (deleting or moving) is users' job.
 
     Example::
 
-        ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/index--tosixinch--extracted.html
+        ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/_~.html
 
 .. dword:: PDF_File
 

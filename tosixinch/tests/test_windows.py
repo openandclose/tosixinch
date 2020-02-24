@@ -23,18 +23,18 @@ class TestWindowsMakePath:
         url, fname, fnew = (
             'https://aaa.org/bbb.html',
             r'_htmls\aaa.org\bbb.html',
-            r'_htmls\aaa.org\bbb--extracted.html')
+            r'_htmls\aaa.org\bbb~.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
             r'C:\aaa.org\bbb.html',
             r'C:\aaa.org\bbb.html',
-            r'_htmls\C\aaa.org\bbb--extracted.html')
+            r'_htmls\C\aaa.org\bbb~.html')
         self.compare(url, fname, fnew)
 
     def test_filescheme(self):
         fname = r'c:\aaa\bbb.html'
-        fnew = r'_htmls\c\aaa\bbb--extracted.html'
+        fnew = r'_htmls\c\aaa\bbb~.html'
 
         url = 'file:/c:/aaa/bbb.html'
         self.compare(url, fname, fnew)
@@ -51,7 +51,7 @@ class TestWindowsMakePath:
 
     def test_rootpath(self):
         fname = r'c:\aaa\bbb.html'
-        fnew = r'_htmls\c\aaa\bbb--extracted.html'
+        fnew = r'_htmls\c\aaa\bbb~.html'
 
         url = r'c:\aaa\bbb.html'
         self.compare(url, fname, fnew)
@@ -59,7 +59,7 @@ class TestWindowsMakePath:
         with pytest.raises(ValueError):
             self.compare(url, url, fnew)  # note arguments: url, url, fnew
 
-        fnew = r'_htmls\aaa\bbb--extracted.html'
+        fnew = r'_htmls\aaa\bbb~.html'
 
         url = r'\\aaa\bbb.html'
         self.compare(url, url, fnew)  # note arguments: url, url, fnew
@@ -99,6 +99,6 @@ class TestWindowsLocalReference:
     def test(self):
         url, local_url, fname = (
             'https://aaa.org/bbb',
-            'bbb/index--tosixinch',
-            r'_htmls\aaa.org\bbb\index--tosixinch')
+            'bbb/_',
+            r'_htmls\aaa.org\bbb\_')
         self.compare(url, local_url, fname)

@@ -458,6 +458,24 @@ General Section
     Here, you have to use a magic word ``site.fnew``.
     It evaluates to the intended ``Extracted_File``.
 
+.. confopt:: loc_index
+
+    | (None)
+
+    Specifies the placeholder name when the last url path is changed to directory.
+    Application default is ``'_'``.
+
+    (See `Downloaded_File <overview.html#dword-Downloaded_File>`__ for details.
+
+.. confopt:: loc_appendix
+
+    | (None)
+
+    Specifies the suffix for the name of ``Extracted_File``.
+    Application default is ``'~'``.
+
+    (See `Extracted_File <overview.html#dword-Extracted_File>`__ for details.
+
 .. confopt:: use_urlreplace
 
     | (``True``)

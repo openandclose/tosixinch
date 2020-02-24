@@ -16,6 +16,25 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
   Now it just includes a minimal <head> content.
   (Shouldn't affect the end user usage).
 
+* **[!]** Change default intermediary filenames to '-' and '~'
+
+  Previously::
+
+      https://en.wikipedia.org/wiki/Xpath
+      _htmls/en.wikipedia.org/wiki/Xpath/index--tosixinch
+      _htmls/en.wikipedia.org/wiki/Xpath/index--tosixinch--extracted.html
+
+  Now::
+
+      https://en.wikipedia.org/wiki/Xpath
+      _htmls/en.wikipedia.org/wiki/Xpath/_
+      _htmls/en.wikipedia.org/wiki/Xpath/_~.html
+
+  To use old (or other) names, edit new config options.::
+
+      loc_index=     index--tosixinch
+      loc_appendix=  --extracted
+
 
 v0.3.0 (2020-02-24)
 -------------------
