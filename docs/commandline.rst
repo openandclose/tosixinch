@@ -247,12 +247,6 @@ Configs
 
     do not parse user configuration (intended for testing)
 
-.. option:: --use-urlreplace {yes,no}
-
-    use url replacement feature (default: yes)
-
-        choices=yes, no
-
 .. option:: --cnvpath CNVPATH
 
     override the converter executable path. you also need to set the converter itself

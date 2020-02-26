@@ -411,9 +411,6 @@ are optional.)
 The lines starting with '#' are ignored (comments).
 You can put them in any place in units.
 
-If this feature is not desirable,
-you can disable it in the config file or in commandline.
-
 
 Hookcmds
 --------

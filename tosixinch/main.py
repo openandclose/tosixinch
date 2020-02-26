@@ -238,10 +238,6 @@ def _build_conf_parser():
     help = 'do not parse user configuration (intended for testing)'
     configs.add_argument('--nouserdir', action='store_true', help=help)
 
-    choices = ['yes', 'no']
-    help = ('use url replacement feature (default: yes)')
-    configs.add_argument('--use-urlreplace', choices=choices, help=help)
-
     help = ('override the converter executable path. '
             'you also need to set the converter itself')
     configs.add_argument('--cnvpath', help=help)
@@ -356,10 +352,8 @@ def _main(args=sys.argv[1:], conf=None):
 
         if args.sample_urls:
             settings.SampleURLLoader(conf)()
-        elif conf.general.use_urlreplace:
-            settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
         else:
-            conf.sites_init(urls=urls, ufile=ufile)
+            settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
 
     # setv = conf.general.set_value
 

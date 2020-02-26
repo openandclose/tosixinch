@@ -476,14 +476,6 @@ General Section
 
     (See `Extracted_File <overview.html#dword-Extracted_File>`__ for details.
 
-.. confopt:: use_urlreplace
-
-    | (``True``)
-    | ``[BOOL]``
-
-    Specifies whether to use urlreplace feature or not.
-    See `URLReplace <topics.html#urlreplace>`__.
-
 
 Style Section
 ^^^^^^^^^^^^^
