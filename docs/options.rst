@@ -484,14 +484,6 @@ General Section
     Specifies whether to use urlreplace feature or not.
     See `URLReplace <topics.html#urlreplace>`__.
 
-.. confopt:: use_sample
-
-    | (``True``)
-    | ``[BOOL]``
-
-    The value specifies whether site config includes ``site.sample.ini``.
-    See `Samples <intro.html#samples>`__.
-
 
 Style Section
 ^^^^^^^^^^^^^

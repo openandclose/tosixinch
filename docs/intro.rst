@@ -164,7 +164,7 @@ Samples
 -------
 
 The script includes a sample ini file (``site.sample.ini``),
-and reads it into configuration if not disabled or overwritten.
+and reads it into configuration.
 
 .. code-block:: none
 

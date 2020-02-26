@@ -203,6 +203,8 @@ def _get_configs(paths, args, envs):
         paths=paths, args=args, envs=envs, Func=Func,
         empty_lines_in_values=False)
 
+    siteconf.read(sample_siteconfig)
+
     if appconf.general.nouserdir:
         userdir = None
     elif appconf.general.userdir:
@@ -224,15 +226,9 @@ def _get_configs(paths, args, envs):
             logger.debug('reading user application config: %r', appconfig)
             appconf.read(appconfig)
 
-        if appconf.general.use_sample:
-            siteconf.read(sample_siteconfig)
-
         for siteconfig in siteconfigs:
             logger.debug('reading user site config: %r', siteconfig)
             siteconf.read(siteconfig)
-    else:
-        if appconf.general.use_sample:
-            siteconf.read(sample_siteconfig)
 
     return configdir, userdir, appconf, siteconf
 

@@ -35,6 +35,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
       loc_index=     index--tosixinch
       loc_appendix=  --extracted
 
+* Cut 'use_sample' option
+
 
 v0.3.0 (2020-02-24)
 -------------------
