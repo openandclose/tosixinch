@@ -168,16 +168,17 @@ and reads it into configuration if not disabled or overwritten.
 
 .. code-block:: none
 
-    https://*.wikipedia.org/wiki/* (only tested with 'en.wikipedia.org')
-    https://www.gnu.org/software/*
+    https://*.wikipedia.org/wiki/*  (T)
+    https://*.wikibooks.org/wiki/*
+    https://wiki.mobileread.com/wiki/*
+    https://news.ycombinator.com/item*  (T)
+    https://news.ycombinator.com/threads?*
+    https://old.reddit.com/r/*
+    https://stackoverflow.com/questions/*  (T)
     https://docs.python.org/*
     https://www.python.org/dev/peps/*
     https://bugs.python.org/issue*
-    https://news.ycombinator.com/item*
-    https://old.reddit.com/r/*
-    https://stackoverflow.com/questions/*
-    http://www.stackprinter.com/*
-    https://github.com/* (for https://github.com/*/README*)
+    https://github.com/* (for https://github.com/*/README*)  (T)
     https://github.com/*/issues/*
     https://github.com/*/pull/*
     https://github.com/*/wiki/*
@@ -185,6 +186,8 @@ and reads it into configuration if not disabled or overwritten.
 
 For urls that match one of them,
 you can test the script without preparing the configuration.
+
+(``(T)`` just means used internally for tests).
 
 An example::
 
@@ -195,8 +198,8 @@ Or if even this is a trouble::
     $ tosixinch --sample-urls -123
 
 This command creates 'sample.pdf'
-from some arbitrary urls in most of the domains above
-(So, it takes a bit of time.)
+from some arbitrary urls
+(``(T)`` domains and a Python code).
 
 .. note::
 
@@ -225,7 +228,7 @@ from some arbitrary urls in most of the domains above
       You can delete them as you like.
 
       * ``_html`` directory, with many html files in it.
-      * file ``sample.css``
+      * file ``sample.css`` (If user config dir is not defined)
 
     * Besides sample sites,
       some non html texts may work fine with default configuration, local or remote.
