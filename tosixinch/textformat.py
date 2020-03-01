@@ -6,8 +6,9 @@ import logging
 import re
 import textwrap
 
+from tosixinch import stylesheet
 from tosixinch import system
-from tosixinch.content import HTML_TEXT_TEMPLATE
+from tosixinch.content import HTML_TEXT_TEMPLATE, build_external_css
 
 logger = logging.getLogger(__name__)
 
@@ -87,11 +88,13 @@ class Prose(object):
         self.wrapped = self.text
 
     def _build(self):
+        css = ''.join(self._get_css())
         text = self.wrapped
         content = text if self.done_escape else html.escape(text)
         fdict = {
             'title': self.shortname,
             'textclass': self.textclass,
+            'csslinks': css,
             'content': content,
         }
         self.built = HTML_TEXT_TEMPLATE.format(**fdict)
@@ -107,6 +110,11 @@ class Prose(object):
         self._build()
         self._highlight()
         self._write()
+
+    def _get_css(self):
+        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
+        for cssfile in cssfiles:
+            yield build_external_css(self.fnew, cssfile)
 
 
 class NonProse(Prose):

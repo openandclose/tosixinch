@@ -6,15 +6,11 @@ import logging
 import os
 import shlex
 import subprocess
-import re
 
 from tosixinch import location
-from tosixinch.system import render_template
 from tosixinch.content import merge_htmls
 
 logger = logging.getLogger(__name__)
-
-TEMPLATE_EXT = '.t.css'
 
 
 def _extend(obj, args):
@@ -38,15 +34,6 @@ def _is_newer(oldfile, newfile):
     if os.path.getmtime(oldfile) < os.path.getmtime(newfile):
         return True
     return False
-
-
-def _get_scale_func(scale):  # length and percentage
-    def func(css_size):
-        m = re.match(r'(?:\+?)([0-9]+)([A-Za-z]*)', css_size)
-        num, unit = m.group(1), m.group(2)
-        num = int(num) * float(scale)
-        return str(round(num, 4)) + unit
-    return func
 
 
 class Convert(object):
@@ -80,80 +67,8 @@ class Convert(object):
             if os.path.isfile(tocfile):
                 return tocfile
 
-    def _get_cssfile(self, css):
-        configdir = self._conf._configdir
-        userdir = self._conf._userdir
-        if css == 'sample':
-            css = 'sample.t.css'
-        if css == 'sample.t.css':
-            csspath = os.path.join(configdir, 'css', css)
-        else:
-            csspath = os.path.join(userdir, 'css', css)
-
-        if css.endswith(TEMPLATE_EXT):
-            new_css = css[:-len(TEMPLATE_EXT)] + '.css'
-            if userdir is None:
-                new_csspath = new_css  # current directory
-            else:
-                new_csspath = os.path.join(userdir, 'css', new_css)
-            context = self._build_context()
-            render_template(csspath, new_csspath, context)
-            return new_csspath
-        else:
-            return csspath
-
-    def _build_context(self):
-        context = {key: self.style.get(key) for key in self.style}
-
-        context['size'] = self._conf.pdfsize
-        context['scale'] = _get_scale_func(self.style.font_scale)
-
-        sizes = self._conf.pdfsize.split()
-        if len(sizes) == 2:
-            context['width'], context['height'] = sizes
-
-        # https://stackoverflow.com/a/3693090
-        FUNC_TEMPLATE = """context['percent%s'] = _get_scale_func(%s/100)"""
-        for i in range(80, 100):
-            s = str(i)
-            exec(FUNC_TEMPLATE % (s, s))
-
-        using = lambda x: self._conf.converter._section == x
-        conv_dict = {
-            'prince': using('prince'),
-            'weasyprint': using('weasyprint'),
-            'wkhtmltopdf': using('wkhtmltopdf'),
-        }
-        context.update(conv_dict)
-
-        bookmarks_levels = ['none'] * 6
-        for i in range(int(context['toc_depth'])):
-            bookmarks_levels[i] = str(i + 1)
-        bm_dict = {
-            'bm1': bookmarks_levels[0],
-            'bm2': bookmarks_levels[1],
-            'bm3': bookmarks_levels[2],
-            'bm4': bookmarks_levels[3],
-            'bm5': bookmarks_levels[4],
-            'bm6': bookmarks_levels[5],
-        }
-        context.update(bm_dict)
-
-        return context
-
-    def _add_css_arguments(self, optstr=None):
-        # Add css file arguments to commnad.
-        opts = []
-        for css in self.css:
-            if optstr:
-                opts.append(optstr)
-            css = self._get_cssfile(css)
-            opts.append(css)
-
-        _extend(self.cmd, opts)
-
     def _add_arguments(self):
-        # Add other arguments.
+        # Add arguments.
         _extend(self.cmd, self.arguments)
 
     def _add_args(self, args):
@@ -196,7 +111,6 @@ class PrinceConvert(Convert):
     """
 
     def run(self):
-        self._add_css_arguments('--style')
         self._add_arguments()
         self._add_files()
         self._add_pdfname('--output')
@@ -210,7 +124,6 @@ class WeasyPrintConvert(Convert):
     """
 
     def run(self):
-        self._add_css_arguments('--stylesheet')
         self._add_arguments()
         self._add_merged_files()
         self._add_pdfname()
@@ -224,7 +137,6 @@ class WkhtmltopdfConvert(Convert):
     """
 
     def run(self):
-        self._add_css_arguments('--user-style-sheet')
         self._add_arguments()
         self._add_args(['--outline-depth', self.style.toc_depth or '3'])
         self._add_files()

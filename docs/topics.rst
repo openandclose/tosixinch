@@ -366,6 +366,13 @@ corresponding to (11)(12)(13) (``Extracted_Files``).
 So, ``convert`` doesn't do anything special for ``urls-toc.txt``,
 just processes pre-built htmls.
 
+.. note::
+
+    The new html collects all the css files
+    referenced in children htmls in order.
+    So, if you are using different css files for sites,
+    you should control the effects carefully.
+
 
 URLReplace
 ----------

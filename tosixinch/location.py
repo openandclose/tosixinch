@@ -126,6 +126,17 @@ def slashify(name):
     return name.replace('\\', '/')
 
 
+def get_relative_ref(path, target_path):
+    """For local files, get relative url reference of target for path.
+
+    E.g. Get the href url in local html files.
+    """
+    base = os.path.dirname(path)
+    filename = os.path.relpath(target_path, start=base)
+    url = _path2url(filename)
+    return url
+
+
 class Locations(object):
     """Make ``Location`` object and implement iteration."""
 

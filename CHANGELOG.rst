@@ -41,6 +41,21 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Cut '--sample-urls' option
 
+* Move css from commandline to html link
+
+  Previously they are just passed to converter's commandline arguments.
+
+  Now they are referenced in each html files as external css.
+
+  So you can now specify css files for each site configuration like this::
+
+      [wikipedia]
+      ...
+      css=  sample, my_wikipedia.css
+
+  (Note: Unlike ``auto_css``,
+  All css files must be specified explicitly. Not additions to the default.)
+
 
 v0.3.0 (2020-02-24)
 -------------------

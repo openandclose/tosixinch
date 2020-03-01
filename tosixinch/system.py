@@ -9,7 +9,6 @@ import subprocess
 
 from tosixinch import _ImportError
 from tosixinch import manuopen
-from tosixinch import templite
 
 try:
     import lxml.etree
@@ -129,15 +128,6 @@ class HtmlWriter(Writer):
 
 
 # shell invocation ------------------------------
-
-def render_template(csspath, new_csspath, context):
-    with open(csspath) as f:
-        template = f.read()
-    template = templite.Templite(template)
-    text = template.render(context)
-    with open(new_csspath, 'w') as f:
-        f.write(text)
-
 
 def run_cmds(cmds, conf, site=None):
     returncode = 0

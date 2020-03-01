@@ -2,7 +2,6 @@
 """Module for html content nmanipulations."""
 
 import logging
-import os
 import posixpath
 import re
 
@@ -52,6 +51,7 @@ HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>{title}</title>
+    {csslinks}
 </head>
   <body>
     <h1 class="{textclass}">{title}</h1>
@@ -66,7 +66,8 @@ BLANK_HTML = '%s<html><body></body></html>'
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
-EXTERNAL_CSS = '<link class="tsi-auto-css" href="%s" rel="stylesheet">'
+# c.f. 'media="print"' does't work for wkhtmltopdf.
+EXTERNAL_CSS = '<link class="tsi-css" href="%s" rel="stylesheet">'
 
 
 def is_html(fname, text, min_chars=4096):
@@ -94,6 +95,12 @@ def build_blank_html(doctype=None):
     html = BLANK_HTML % (doctype or DEFAULT_DOCTYPE)
     root = lxml.html.document_fromstring(html)
     return root
+
+
+def build_external_css(html_path, cssfile_path):
+    """Build external css tag (link) string, resolving the paths."""
+    url = location.get_relative_ref(html_path, cssfile_path)
+    return EXTERNAL_CSS % url
 
 
 def iter_component(doc):
@@ -268,6 +275,12 @@ class HtmlContent(Content):
     def clean(self, tags, attrs):
         cleaner = clean.Clean(self.doc, tags, attrs)
         cleaner.run()
+
+    def add_css(self, cssfiles):
+        for cssfile in cssfiles:
+            url = build_external_css(self.fnew, cssfile)
+            el = lxml.html.fragment_fromstring(url)
+            self.doc.head.append(el)
 
     def add_auto_css(self, cssfiles):
         for cssfile in cssfiles:

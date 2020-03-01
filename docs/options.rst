@@ -605,26 +605,28 @@ and only the options of that converter's section are used.
 
     Currently ``'~'`` is not expanded.
 
-.. confopt:: css
-
-    | (``sample``)
-    | ``[COMMA]``
-
-    css file names to be used in order when ``convert``.
-    The names are just passed as commandline options to the converter.
-
-    The files must be in ``css directory``,
-    just the filenames (not full path).
-    Or bundled sample css ``sample.t.css``,
-    which can be abbreviated as ``sample``.
-    You can mix both.
-
 .. confopt:: cnvopts
 
     | (``--javascript``)
     | ``[CMD]``
 
-    Other options (than css file option) to pass to the command.
+    Options to pass to the command.
+
+.. confopt:: css \*
+
+    | (``sample``)
+    | ``[COMMA]``
+
+    CSS file names to be used in order.
+    The names are referenced, in order, in ``Extracted_Files``
+    (``'<link ... rel="stylesheet">'``).
+
+    The files must be in ``css directory``,
+    just the filenames (not full path).
+
+    The script includes sample css ``sample.t.css``,
+    and as a special case, it can be abbreviated as ``sample``
+    (default).
 
 
 site.ini

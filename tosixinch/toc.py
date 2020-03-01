@@ -5,7 +5,6 @@ Use comment structure in 'urls.txt' as directive.
 """
 
 import logging
-import posix
 import re
 import sys
 
@@ -32,7 +31,7 @@ class Node(location.Location):
         self.root = root or self
         self.last = False
         self._doc = None
-        self.sitecss = []
+        self.cssfiles = []
 
     def _is_local(self, url):
         if url.strip().startswith(DIRECTIVE_PREFIX):
@@ -55,17 +54,16 @@ class Node(location.Location):
         else:
             self._doc = system.HtmlReader(self.fnew).read()
 
-    def _append_auto_css(self):
-        for el in self.doc.xpath('//head/link[@class="tsi-auto-css"]'):
+    def _append_css(self):
+        for el in self.doc.xpath('//head/link[@class="tsi-css"]'):
             href = el.get('href') or ''
             if href:
-                site = posix.path.basename(href)[:-4]  # cut '.css'
-                if site and site in self.root.sitecss:
+                if href in self.root.cssfiles:
                     continue
                 href = _relink(href, self.slash_fnew, self.root.slash_fnew)
                 el.set('href', href)
                 self.root.doc.head.append(el)
-                self.root.sitecss.append(site)
+                self.root.cssfiles.append(href)
 
     # TODO: consider using content.merge_htmls().
     def _append_body(self):
@@ -78,7 +76,7 @@ class Node(location.Location):
 
     def write(self):
         if self.root is not self:
-            self._append_auto_css()
+            self._append_css()
             self._append_body()
 
         if self.last:

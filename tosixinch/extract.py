@@ -15,6 +15,7 @@ import logging
 import os
 
 from tosixinch import content
+from tosixinch import stylesheet
 from tosixinch import system
 from tosixinch import textformat
 
@@ -68,6 +69,10 @@ class Extract(content.HtmlContent):
         attrs = self._site.general.add_clean_attrs
         super().clean(tags, attrs)
 
+    def add_css(self):
+        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
+        super().add_css(cssfiles)
+
     def add_auto_css(self):
         fname = self._site.section + '.css'
         configdir = self._conf._configdir
@@ -84,6 +89,7 @@ class Extract(content.HtmlContent):
         self.process()
         self.components()
         self.cleanup()
+        self.add_css()
         self.add_auto_css()
         self.write()
 
