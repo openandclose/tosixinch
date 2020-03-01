@@ -383,8 +383,8 @@ class Conf(object):
         _confs = _get_configs(paths, args, envs)
         self._configdir, self._userdir, self._appconf, self._siteconf = _confs
 
-        self._scriptdir = os.path.join(
-            os.path.dirname(self._configdir), self.scriptd)
+        self._appdir = os.path.dirname(self._configdir)
+        self._scriptdir = os.path.join(self._appdir, self.scriptd)
         if self._userdir:
             self._user_scriptdir = os.path.join(self._userdir, self.scriptd)
         else:
