@@ -47,7 +47,7 @@ _tosixinch()
 
     $split && return
 
-    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --ftype --full-image --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --qt --quiet --raw --readability --readability-only --sample-urls --textindent --textwidth --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
+    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --check --cnvpath --convert --download --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --ftype --full-image --guess --help --input --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --qt --quiet --raw --readability --readability-only --textindent --textwidth --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
     return
 

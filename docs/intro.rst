@@ -193,14 +193,6 @@ An example::
 
     $ tosixinch -i https://en.wikipedia.org/wiki/Xpath -123
 
-Or if even this is a trouble::
-
-    $ tosixinch --sample-urls -123
-
-This command creates 'sample.pdf'
-from some arbitrary urls
-(``(T)`` domains and a Python code).
-
 .. note::
 
     * You need to set the converter if not the default (prince).
@@ -230,12 +222,12 @@ from some arbitrary urls
       * ``_html`` directory, with many html files in it.
       * file ``sample.css`` (If user config dir is not defined)
 
-    * Besides sample sites,
-      some non html texts may work fine with default configuration, local or remote.
+Besides sample sites,
+some non html texts may work fine with default configuration, local or remote.
 
-    .. code-block:: none
+.. code-block:: none
 
-        $ tosixinch -i https://raw.githubusercontent.com/python/cpython/master/Lib/textwrap.py -123
+    $ tosixinch -i https://raw.githubusercontent.com/python/cpython/master/Lib/textwrap.py -123
 
 
 Example

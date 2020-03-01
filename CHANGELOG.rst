@@ -39,6 +39,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Cut 'use_urlreplace' option
 
+* Cut '--sample-urls' option
+
 
 v0.3.0 (2020-02-24)
 -------------------

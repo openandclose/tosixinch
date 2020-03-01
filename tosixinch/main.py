@@ -103,9 +103,6 @@ def _build_cmd_parser():
             '3=pdfname, all=0<tab>1<tab>2)')
     actions.add_argument('--printout', choices=choices, help=help)
 
-    help = 'inject sample urls'
-    actions.add_argument('--sample-urls', action='store_true', help=help)
-
     return parser
 
 
@@ -349,11 +346,7 @@ def _main(args=sys.argv[1:], conf=None):
 
     if conf is None:
         conf = settings.Conf(args=confargs, envs=ENVS)
-
-        if args.sample_urls:
-            settings.SampleURLLoader(conf)()
-        else:
-            settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
+        settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
 
     # setv = conf.general.set_value
 

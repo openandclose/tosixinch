@@ -119,10 +119,6 @@ Actions
 
         choices=0, 1, 2, 3, all
 
-.. option:: --sample-urls
-
-    inject sample urls
-
 Programs
 --------
 
