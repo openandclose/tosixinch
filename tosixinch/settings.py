@@ -326,10 +326,12 @@ class Site(location.Location):
 
         self.section = _checkmacth(self.url, self._config)
 
-        self.general = configfetch.Double(
-            self._get_self(), self._conf.general)
-        self.style = configfetch.Double(
-            self._get_self(), self._conf.style)
+        _sec = self._get_self()
+        self.general = configfetch.Double(_sec, self._conf.general)
+        self.style = configfetch.Double(_sec, self._conf.style)
+
+        _conv = getattr(self._conf, self._conf.general.converter)
+        self.converter = configfetch.Double(_sec, _conv)
 
     def _get_self(self):
         return self._siteconf.get(self.section)
