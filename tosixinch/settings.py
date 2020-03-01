@@ -374,6 +374,7 @@ class Conf(object):
     """It possesses all configuration data."""
 
     SCRIPTDIR = 'script'
+    CSSDIR = 'css'
 
     def __init__(self, urls=None, ufile=None,
             paths=None, args=None, envs=None):
@@ -385,10 +386,13 @@ class Conf(object):
 
         self._appdir = os.path.dirname(self._configdir)
         self._scriptdir = os.path.join(self._appdir, self.SCRIPTDIR)
+        self._cssdir = os.path.join(self._configdir, self.CSSDIR)
         if self._userdir:
             self._user_scriptdir = os.path.join(self._userdir, self.SCRIPTDIR)
+            self._user_cssdir = os.path.join(self._userdir, self.CSSDIR)
         else:
             self._user_scriptdir = None
+            self._user_cssdir = None
 
         self._cache = Cache()
         self._cache.download = {}  # cache for already downloaded files
