@@ -53,9 +53,12 @@ class NoZSectionError(Error, configparser.NoSectionError):
 class NoZOptionError(Error, configparser.NoOptionError):
     """Raised when no option in a zsection is found."""
 
-    def __init__(self, option):
-        super().__init__('No zoption: %r' % (option,))
-
+    def __init__(self, option, section):
+        configparser.Error.__init__(self,
+            'No zoption: %r in zsection: %r' % (option, section))
+        self.option = option
+        self.section = section
+        self.args = (option, section)
 
 # not used
 # class DuplicateZSectionError(Error, configparser.DuplicateSectionError):
@@ -190,7 +193,7 @@ class ZConfigParser(configparser.ConfigParser):
         except configparser.NoSectionError:
             raise NoZSectionError(section)
         except configparser.NoOptionError:
-            raise NoZOptionError(option)
+            raise NoZOptionError(option, section)
 
     def _unify_values(self, section, vars):
         """Override `ConfigParser`'s method.
