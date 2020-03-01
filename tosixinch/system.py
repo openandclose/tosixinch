@@ -144,7 +144,7 @@ def run_cmds(cmds, conf, site=None):
     userdir = conf._userdir
     scriptdir = conf._scriptdir
     user_scriptdir = conf._user_scriptdir
-    scriptd = conf.scriptd
+    scriptd = conf.SCRIPTDIR
 
     for cmd in cmds:
         modname = _check_module(user_scriptdir, cmd)
