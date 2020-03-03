@@ -21,6 +21,7 @@ import urllib.parse
 
 from pkg_resources import resource_filename
 
+from tosixinch import cached_property
 from tosixinch import configfetch
 from tosixinch import location
 from tosixinch import system
@@ -302,7 +303,7 @@ class Sites(location.Locations):
                     continue
             yield url
 
-    @location.cached_property
+    @cached_property
     def urls(self):
         urls = super().urls
         # If urls consists of a single url, It doesn't apply filters.
@@ -351,14 +352,14 @@ class Site(location.Location):
         num = min(num, len(parts) - 1)
         return sep.join(parts[num:])
 
-    @location.cached_property
+    @cached_property
     def text(self):
         fname = self.fname
         codings = self.general.encoding
         errors = self.general.encoding_errors
         return system.Reader(fname, codings=codings, errors=errors).read()
 
-    @location.cached_property
+    @cached_property
     def sibling_urls(self):
         """Use after ftype is determined."""
         urls = []
