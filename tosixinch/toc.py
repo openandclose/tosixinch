@@ -5,7 +5,7 @@ Use comment structure in 'urls.txt' as directive.
 """
 
 import logging
-import os
+import posix
 import re
 import sys
 
@@ -59,7 +59,7 @@ class Node(location.Location):
         for el in self.doc.xpath('//head/link[@class="tsi-auto-css"]'):
             href = el.get('href') or ''
             if href:
-                site = os.path.basename(href)[:-4]
+                site = posix.path.basename(href)[:-4]  # cut '.css'
                 if site and site in self.root.sitecss:
                     continue
                 href = _relink(href, self.slash_fnew, self.root.slash_fnew)
