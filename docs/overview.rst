@@ -370,29 +370,6 @@ Config Files
     The css filenames are made by stripping ``'.t'`` from the template.
     (For example, ``sample.t.css`` generates ``sample.css``.)
 
-.. dword:: auto_css directory
-
-    If there is ``'auto'`` subdirectory in ``css directory``,
-    and there is a css file with the same name as the section name (plus ``'.css'``),
-    it is referenced in ``Extracted_File``.
-
-    E.g. if there is a section named ``developer.mozilla.org``
-    in your site config file (``[developer.mozilla.org]``),
-    and it is the present section in extraction,
-    and the file exists, ::
-
-        ~/.config/tosixinch/css/auto/developer.mozilla.org.css
-
-    then the stylesheet is added in the ``head`` element of the ``Extracted_File``. ::
-
-        <link href="[...]/css/auto/developer.mozilla.org.css" rel="stylesheet">
-
-    Note when running ``toc``, a parent html collects
-    all children htmls' auto_css stylesheets in order.
-    So when creating a mixed-sites-pdf, you should control the effects carefully.
-
-    Note you can not use ``css template files`` here.
-
 .. dword:: process directory
 
     ``userdir`` can also have 'process' sub directory. For example ::

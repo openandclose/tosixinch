@@ -282,15 +282,6 @@ class HtmlContent(Content):
             el = lxml.html.fragment_fromstring(url)
             self.doc.head.append(el)
 
-    def add_auto_css(self, cssfiles):
-        for cssfile in cssfiles:
-            if os.path.isfile(cssfile):
-                d = os.path.dirname(self.fnew)
-                cssfile = os.path.relpath(cssfile, start=d)
-                cssurl = location._path2url(cssfile)
-                style = lxml.html.fragment_fromstring(EXTERNAL_CSS % cssurl)
-                self.doc.head.append(style)
-
     def write(self):
         writer = system.HtmlWriter(self.fnew, doc=self.doc)
         writer.write()

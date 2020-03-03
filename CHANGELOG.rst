@@ -56,6 +56,10 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
   (Note: Unlike ``auto_css``,
   All css files must be specified explicitly. Not additions to the default.)
 
+* **[!]** Cut auto_css
+
+  It is now redundant. Just use 'css' option instead (see the above change).
+
 
 v0.3.0 (2020-02-24)
 -------------------

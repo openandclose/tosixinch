@@ -379,9 +379,6 @@ Users can create their own css files with simple templates,
 expanding configuration values.
 `CSS Template Values <overview.html#css-template-values>`__.
 
-Users can create site specific css files.
-`auto_css directory <overview.html#dword-auto_css_directory>`__.
-
 As already mentioned, it can open the pdf with a pdf viewer.
 `Viewcmd <topics.html#viewcmd>`__.
 

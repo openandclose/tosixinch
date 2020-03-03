@@ -12,7 +12,6 @@
 """
 
 import logging
-import os
 
 from tosixinch import content
 from tosixinch import stylesheet
@@ -73,14 +72,6 @@ class Extract(content.HtmlContent):
         cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
         super().add_css(cssfiles)
 
-    def add_auto_css(self):
-        fname = self._site.section + '.css'
-        configdir = self._conf._configdir
-        userdir = self._conf._userdir
-        dirs = (configdir, userdir) if userdir else (configdir,)
-        cssfiles = [os.path.join(d, 'css', 'auto', fname) for d in dirs]
-        super().add_auto_css(cssfiles)
-
     def run(self):
         self.load()
         self.build()
@@ -90,7 +81,6 @@ class Extract(content.HtmlContent):
         self.components()
         self.cleanup()
         self.add_css()
-        self.add_auto_css()
         self.write()
 
     def _get_component(self, el, url):
