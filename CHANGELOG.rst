@@ -60,6 +60,29 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
   It is now redundant. Just use 'css' option instead (see the above change).
 
+* **[!]** Cut auto glob feature (for 'match' option)
+
+  Sometimes we need exact match of the end. (like: '\*.html')
+
+  But since '\*' was automatically added to the end of the string,
+  is was impossible.
+
+  Now you have to add '\*' explicitly.
+
+  And you have to edit the past config files extensively,
+  like I did for 'site.sample.ini'.
+  Sorry.
+
+  From::
+
+      [wikipedia]
+      ...
+      match=      https://*.wikipedia.org/wiki/
+
+  To::
+
+      match=      https://*.wikipedia.org/wiki/*
+
 
 v0.3.0 (2020-02-24)
 -------------------

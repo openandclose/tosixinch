@@ -659,11 +659,6 @@ So section names themselves can be arbitrary.
     (Actually, it uses `fnmatch module <https://docs.python.org/3/library/fnmatch.html>`__,
     not `glob module <https://docs.python.org/3/library/glob.html>`__.).
 
-    Last asterisk can be omitted, so the following two lines make no deference. ::
-
-        match=      https://*.wikipedia.org/wiki/*
-        match=      https://*.wikipedia.org/wiki/
-
     The script tries the values of this option from all the sections.
     The section whose ``match`` option matches the ``url``
     is used for the settings.

@@ -153,9 +153,9 @@ def _getpdf(url, section, length=1):
 # build a reverse dictionary with match url keys, for faster lookup.
 def _checkmacth(url, siteconfig):
     def checkloc(url, matches):
+        url = url.lower()
         matches = [
-            match for match in matches
-            if fnmatch.fnmatch(matchstr(url), matchstr(match, True))]
+            m for m in matches if fnmatch.fnmatch(url, m.lower())]
 
         if len(matches) == 0:
             matched = 'http://tosixinch.example.com'  # [scriptdefault]
@@ -164,12 +164,6 @@ def _checkmacth(url, siteconfig):
         else:
             matched = sorted(matches, key=checkslash)[-1]
         return matched
-
-    def matchstr(url, star=False):
-        url = ''.join(urllib.parse.urlsplit(url)[1:3])
-        if star:
-            url = url if url.endswith('*') else url + '*'
-        return url.lower()
 
     def checkslash(url):
         upath = urllib.parse.urlsplit(url)[2]
