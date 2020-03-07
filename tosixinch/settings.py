@@ -124,7 +124,7 @@ def _getpdf(url, section, length=1):
     host = ''
     if parts.netloc:
         domainparts = parts.netloc.replace('www.', '').split('.')[:-1]
-        host = max(domainparts)
+        host = max(domainparts, key=len)
         # host = host.encode('ascii').decode('idna')
     path = parts.path.rstrip('/').split('/')[-1]
     query = parts.query[:20]
