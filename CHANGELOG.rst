@@ -83,6 +83,10 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
       match=      https://*.wikipedia.org/wiki/*
 
+**Add:**
+
+* Add Python3.8
+
 
 v0.3.0 (2020-02-24)
 -------------------
