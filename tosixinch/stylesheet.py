@@ -110,7 +110,7 @@ class StyleSheet(object):
         for i in range(80, 100):
             exec(FUNC_TEMPLATE % (i, i))
 
-        using = lambda x: self._conf.converter._section == x
+        using = lambda x: self._conf.converter.name == x
         conv_dict = {
             'prince': using('prince'),
             'weasyprint': using('weasyprint'),

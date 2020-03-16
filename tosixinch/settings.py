@@ -198,7 +198,8 @@ def _get_configs(paths, args, envs):
         paths=paths, args=args, envs=envs, Func=Func,
         empty_lines_in_values=False)
 
-    siteconf.read(sample_siteconfig)
+    with open(sample_siteconfig) as f:
+        siteconf.read_file(f)
 
     if appconf.general.nouserdir:
         userdir = None
@@ -219,11 +220,13 @@ def _get_configs(paths, args, envs):
         siteconfigs = sorted(glob.glob(userdir + os.sep + 'site*.ini'))
         for appconfig in appconfigs:
             logger.debug('reading user application config: %r', appconfig)
-            appconf.read(appconfig)
+            with open(appconfig) as f:
+                appconf.read_file(f)
 
         for siteconfig in siteconfigs:
             logger.debug('reading user site config: %r', siteconfig)
-            siteconf.read(siteconfig)
+            with open(siteconfig) as f:
+                siteconf.read_file(f)
 
     return configdir, userdir, appconf, siteconf
 
@@ -265,12 +268,12 @@ class Func(configfetch.Func):
     """Customize configfetch.Func for this application."""
 
     @configfetch.register
-    def _xpath(self, value):
+    def xpath(self, value):
         # Presuppose 'value' is already a list.
         return [transform_xpath(val) for val in value]
 
     @configfetch.register
-    def _plus_binaries(self, value):
+    def plus_binaries(self, value):
         values = self.values
         return configfetch._get_plusminus_values(
             reversed(values), BINARY_EXTENSIONS)

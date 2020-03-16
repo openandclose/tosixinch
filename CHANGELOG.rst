@@ -83,6 +83,12 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
       match=      https://*.wikipedia.org/wiki/*
 
+* Update configfetch (v0.1.0)
+
+  It is incompatible with the previous configfetch versions.
+  Codes and config files will be changed considerably.
+  It shouldn't affect tosixinch behavior.
+
 **Add:**
 
 * Add Python3.8
