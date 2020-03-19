@@ -398,7 +398,6 @@ class Conf(object):
         # shortcuts
         self.general = self._appconf.general
         self.style = self._appconf.style
-        self.converter = getattr(self._appconf, self.general.converter)
 
         if urls or ufile:
             self.sites_init(urls, ufile)
@@ -413,6 +412,10 @@ class Conf(object):
     @property
     def urls(self):
         return self.sites.urls
+
+    @property
+    def converter(self):
+        return getattr(self._appconf, self.general.converter)
 
     @property
     def pdfname(self):
