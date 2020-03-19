@@ -313,6 +313,7 @@ tr { page-break-inside: avoid }
 
 
 /* css for text --------------------------------------------------- */
+
 pre.tsi-text {
     border: none;
 }
@@ -328,4 +329,11 @@ h2.tsi-text, h3.tsi-text, h4.tsi-text {
 
 span.tsi-text {
     font-weight: bold;
+}
+
+/* When '--toc' */
+div.tsi-body-merged > h2.tsi-text {
+    display: block;
+    page-break-before: always;
+    font-size: larger;
 }
