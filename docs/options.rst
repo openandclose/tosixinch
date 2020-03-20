@@ -317,12 +317,6 @@ General Section
     So if you want actual whitespaces, quote them as the default does.
     Quotes are stripped by the script in turn.
 
-.. confopt:: textcss
-
-    (None)
-
-    Not used.
-
 .. confopt:: trimdirs \*
 
     | (``3``)
@@ -621,13 +615,6 @@ and only the options of that converter's section are used.
 
     Currently ``'~'`` is not expanded.
 
-.. confopt:: cnvopts
-
-    | (None)
-    | ``[CMD]``
-
-    Options to pass to the command.
-
 .. confopt:: css2
 
     | (None)
@@ -645,6 +632,13 @@ and only the options of that converter's section are used.
     The script includes sample css ``sample.t.css``,
     and as a special case, it can be abbreviated as ``sample``
     (default).
+
+.. confopt:: cnvopts
+
+    | (None)
+    | ``[CMD]``
+
+    Options to pass to the command.
 
 
 site.ini
