@@ -38,7 +38,7 @@ class StyleSheet(object):
     """Create stylesheet files from configuration."""
 
     def __init__(self, conf, site):
-        self.css = site.converter.css
+        self.css = site.general.css
         self.style = conf.style
         self.pdfsize = conf.pdfsize
         self._cssdir = conf._cssdir

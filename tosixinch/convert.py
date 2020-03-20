@@ -42,7 +42,7 @@ class Convert(object):
     def __init__(self, conf):
         self._conf = conf
         self.path = conf.converter.cnvpath
-        self.css = conf.converter.css
+        # self.css = conf.converter.css
         self.arguments = conf.converter.cnvopts
         self.pdfname = conf.pdfname
         self.style = conf.style

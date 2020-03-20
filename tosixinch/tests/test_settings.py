@@ -49,10 +49,6 @@ class TestParse:
         exclude_value = '//div[@class="side"]'
         assert site.exclude == exclude_value
 
-    def test_parse_css(self, conf):
-        css_value = ['base.css', 'pconv.css']
-        assert conf.converter.css == css_value
-
     def test_parse_cnvopts(self, conf):
         opts = ['--javascript', '--font', 'DejaVu Sans Mono', '-A', '1', '-B', '2']
         assert conf.converter.cnvopts == opts
