@@ -8,6 +8,8 @@ import shlex
 import subprocess
 
 from tosixinch import location
+from tosixinch import stylesheet
+
 from tosixinch.content import merge_htmls
 
 logger = logging.getLogger(__name__)
@@ -42,7 +44,7 @@ class Convert(object):
     def __init__(self, conf):
         self._conf = conf
         self.path = conf.converter.cnvpath
-        # self.css = conf.converter.css
+        self.css2 = conf.converter.css2
         self.arguments = conf.converter.cnvopts
         self.pdfname = conf.pdfname
         self.style = conf.style
@@ -67,12 +69,22 @@ class Convert(object):
             if os.path.isfile(tocfile):
                 return tocfile
 
+    def _add_css_arguments(self, optstr=None):
+        # Add css file arguments to commnad.
+        opts = []
+        for css in stylesheet.StyleSheet(self._conf).stylesheets:
+            if optstr:
+                opts.append(optstr)
+            opts.append(css)
+
+        _extend(self.cmd, opts)
+
     def _add_arguments(self):
-        # Add arguments.
+        # Add other arguments.
         _extend(self.cmd, self.arguments)
 
     def _add_args(self, args):
-        # Add additional arguments.
+        # Add additional arguments. (for converter idiosyncrasies)
         _extend(self.cmd, args)
 
     def _add_files(self):
@@ -111,6 +123,7 @@ class PrinceConvert(Convert):
     """
 
     def run(self):
+        self._add_css_arguments('--style')
         self._add_arguments()
         self._add_files()
         self._add_pdfname('--output')
@@ -124,6 +137,7 @@ class WeasyPrintConvert(Convert):
     """
 
     def run(self):
+        self._add_css_arguments('--stylesheet')
         self._add_arguments()
         self._add_merged_files()
         self._add_pdfname()
@@ -137,6 +151,7 @@ class WkhtmltopdfConvert(Convert):
     """
 
     def run(self):
+        self._add_css_arguments('--user-style-sheet')
         self._add_arguments()
         self._add_args(['--outline-depth', self.style.toc_depth or '3'])
         self._add_files()

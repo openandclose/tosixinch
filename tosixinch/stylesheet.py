@@ -37,8 +37,11 @@ def _render_template(path, new_path, context):
 class StyleSheet(object):
     """Create stylesheet files from configuration."""
 
-    def __init__(self, conf, site):
-        self.css = site.general.css
+    def __init__(self, conf, site=None):
+        if site:
+            self.css = site.general.css
+        else:
+            self.css = conf.converter.css2
         self.style = conf.style
         self.pdfsize = conf.pdfsize
         self._cssdir = conf._cssdir

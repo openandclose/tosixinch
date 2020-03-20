@@ -350,6 +350,22 @@ General Section
     ``url`` is used as input *as is* when ``convert``.
     In this case, ``url`` must be local filepath.
 
+.. confopt:: css \*
+
+    | (``sample``)
+    | ``[COMMA]``
+
+    CSS file names to be used in order.
+    The names are referenced, in order, in ``Extracted_Files``
+    (``'<link ... rel="stylesheet">'``).
+
+    The files must be in ``css directory``,
+    just the filenames (not full path).
+
+    The script includes sample css ``sample.t.css``,
+    and as a special case, it can be abbreviated as ``sample``
+    (default).
+
 .. confopt:: pdfname
 
     | (None)
@@ -612,14 +628,16 @@ and only the options of that converter's section are used.
 
     Options to pass to the command.
 
-.. confopt:: css \*
+.. confopt:: css2
 
-    | (``sample``)
+    | (None)
     | ``[COMMA]``
 
-    CSS file names to be used in order.
-    The names are referenced, in order, in ``Extracted_Files``
-    (``'<link ... rel="stylesheet">'``).
+    Extra css files just to pass to converter commandline options.
+
+    It may be useful for converter specific features or troubles.
+    Although, normally, you can do that better
+    with ``css`` option and the template.
 
     The files must be in ``css directory``,
     just the filenames (not full path).

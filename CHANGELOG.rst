@@ -93,6 +93,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add Python3.8
 
+* Add css2 option (and fix misplaced css option)
+
 
 v0.3.0 (2020-02-24)
 -------------------
