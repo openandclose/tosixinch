@@ -35,10 +35,21 @@ DEFAULT_UFILE = 'urls.txt'
 
 
 # For argument parser object:
+
 # To pass only config-related arguments on to `configfetch`,
 # the object is divided in commandline part and configuration part.
 # To display arguments in more meaningful grouping,
 # the parts are also divided in multiple argument groups.
+
+# With 'allow_abbrev=False',
+# it cannot parse concatenated short options. (e.g. '-123')
+# http://bugs.python.org/issue26967
+
+# And when 'allow_abbrev=True',
+# argparse tries to partial match arguments,
+# and registers them if they are 'unambiguous'.
+# It is inconvenient when you want to filter options
+# (using ``.parse_known_args``).
 
 def _build_cmd_parser(conf):
     parser = argparse.ArgumentParser(prog='tosixinch-cmd', add_help=False)
@@ -71,7 +82,7 @@ def _build_conf_parser(conf):
 
 
 def _build_parser(conf):
-    """Build `argparse.ArgumentParser` object."""
+    # Build `argparse.ArgumentParser` object.
     parsers = (_build_cmd_parser(conf), _build_conf_parser(conf))
     parser = argparse.ArgumentParser(
         prog='tosixinch', description=__doc__,
@@ -81,6 +92,7 @@ def _build_parser(conf):
 
 
 def _get_parser(conf=None):
+    # Build `argparse.ArgumentParser` arguments.
     if conf is None:
         conf = settings.Conf(envs=ENVS)
     parser = _build_parser(conf)
@@ -88,6 +100,7 @@ def _get_parser(conf=None):
 
 
 def _get_conf(args, conf=None):
+    # Parse commandline arguments.
     conf, parser = _get_parser(conf)
 
     if not args:
@@ -104,18 +117,6 @@ def _get_conf(args, conf=None):
 
 
 def _main(args=sys.argv[1:], conf=None):
-    """Parse commandline arguments and run accordingly.
-
-    note:
-        With 'allow_abbrev=False',
-        it cannot parse concatenated short options. (e.g. '-123')
-        http://bugs.python.org/issue26967
-
-        And when 'allow_abbrev=True',
-        you have to take care not to include similar named options
-        in partial parsing, in which
-        'unknown' options might be interpreted as 'unambiguous' options.
-    """
     conf, parser, args = _get_conf(args, conf)
 
     if args.version:
