@@ -52,7 +52,7 @@ OPTIONAL_CHOICES = {
 }
 
 
-parser = tosixinch.main._build_parser()
+_, parser = tosixinch.main._get_parser()
 
 _opt = lambda x: x.option_strings
 _cls = lambda x: repr(x.__class__).split('.')[1].split("'")[0]
@@ -93,6 +93,8 @@ def get_context():
     choices = []
     all_opts = []
     for a in parser._actions:
+        if a.help == '==SUPPRESS==':
+            continue
         all_opts.extend(_get_longopt(_opt(a)))
 
         if _choice(a) or _opt_choice(a):

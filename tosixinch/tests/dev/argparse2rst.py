@@ -16,7 +16,7 @@ MSG = '[auto] update commandline.rst'
 
 
 def print_args(print=print):
-    parser = tosixinch.main._build_parser()
+    _, parser = tosixinch.main._get_parser()
     formatter = parser._get_formatter()
     for g in parser._action_groups:
         # if g.title in ('general', 'actions', 'programs'):
@@ -28,10 +28,12 @@ def print_args(print=print):
         print('%s\n%s\n' % (t, underline))
 
         for a in g._group_actions:
+            h = a.help.replace('\n', ' ')
+            if h == '==SUPPRESS==':
+                continue
             # o = ', '.join(a.option_strings)
             o = formatter._format_action_invocation(a)
             o = _check_too_long_choices(o)
-            h = a.help
             print('.. option:: %s\n\n    %s\n' %  (o, h))
             d = a.default
             c = a.choices
