@@ -115,7 +115,7 @@ Actions
 
 .. option:: --printout {0,1,2,3,all}
 
-    print filenames the scripts' actions would create  (0=url, 1=Downloaded_Files, 2=Extracted_Files, 3=pdfname, all=0<tab>1<tab>2)
+    print filenames the scripts' actions would create (0=url, 1=Downloaded_Files, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
 
         choices=0, 1, 2, 3, all
 
@@ -150,6 +150,14 @@ Programs
 
     convert by wkhtmltopdf
 
+.. option:: --cnvpath CNVPATH
+
+    override converter executable path. also need to set converter itself
+
+.. option:: --css2 CSS2
+
+    add converter specific css
+
 Configs
 -------
 
@@ -157,15 +165,15 @@ Configs
 
     set http header user-agent when downloading by urllib (to see the default, run --appcheck)
 
-.. option:: --qt {webengine,webkit}
+.. option:: --qt {webkit,webengine}
 
     use either webengine or webkit (default) when running Qt
 
-        choices=webengine, webkit
+        choices=webkit, webengine
 
 .. option:: --encoding ENCODING
 
-    assign an encoding for file opening when extract [COMMA]
+    assign an encoding for file opening when extract (f: comma)
 
 .. option:: --encoding-errors { (choices...) }
 
@@ -175,7 +183,7 @@ Configs
 
 .. option:: --parts-download
 
-    download components (images etc.) before PDF conversion (default)
+    download components (images etc.) before PDF conversion (default: True)
 
 .. option:: --no-parts-download
 
@@ -183,27 +191,27 @@ Configs
 
 .. option:: --force-download
 
-    force --download or --parts-download even if the file already exists
+    force '--download' and '--parts-download' even if the file already exists
 
 .. option:: --guess GUESS
 
-    if there is no matched url, use this xpath for content selection [LINE]
+    if there is no matched url, use this xpath for content selection (f: line)
 
 .. option:: --full-image FULL_IMAGE
 
-    pxel size to add special class attributes to images
+    pxel size to add special class attributes to images (default: 200)
 
 .. option:: --add-binary-extensions ADD_BINARY_EXTENSIONS
 
-    add or subtract to-skip-binaries-extension list [PLUS]
+    add or subtract to-skip-binaries-extension list (f: plus_binaries)
 
 .. option:: --add-clean-tags ADD_CLEAN_TAGS
 
-    add or subtract to-delete-tag list [PLUS]
+    add or subtract to-delete-tag list (f: plus)
 
 .. option:: --add-clean-attrs ADD_CLEAN_ATTRS
 
-    add or subtract to-delete-attribute list [PLUS]
+    add or subtract to-delete-attribute list (f: plus)
 
 .. option:: --ftype {html,prose,nonprose,python}
 
@@ -233,69 +241,65 @@ Configs
 
 .. option:: --viewcmd VIEWCMD
 
-    commandline string to open the pdf viewer [CMD]
+    commandline string to open the pdf viewer (f: cmds)
 
 .. option:: --userdir USERDIR
 
-    override user configuration directory
+    specify user configuration directory
 
 .. option:: --nouserdir
 
-    do not parse user configuration (intended for testing)
-
-.. option:: --cnvpath CNVPATH
-
-    override the converter executable path. you also need to set the converter itself
+    disable user configuration (intended for testing)
 
 Styles
 ------
 
 .. option:: --orientation {portrait,landscape}
 
-    portrait(default) or landscape, determine which size data to use
+    portrait (default) or landscape, determine which size data to use
 
         choices=portrait, landscape
 
 .. option:: --portrait-size PORTRAIT_SIZE
 
-    portrait size for the css, e.g. '90mm 118mm'
+    portrait size for css, e.g. '90mm 118mm'
 
 .. option:: --landscape-size LANDSCAPE_SIZE
 
-    landscape size for the css, e.g. '118mm 90mm'
+    landscape size for css, e.g. '118mm 90mm'
 
 .. option:: --toc-depth TOC_DEPTH
 
-    tree depth of table of contents
+    specify depth of table of contents
 
 .. option:: --font-family FONT_FAMILY
 
-    main font for the css, e.g. '"DejaVu Sans", sans-serif'
+    main font for css, e.g. '"DejaVu Sans", sans-serif'
 
 .. option:: --font-mono FONT_MONO
 
-    monospace font for the css
+    monospace font for css
 
 .. option:: --font-serif FONT_SERIF
 
-    serif font for the css (not used by sample)
+    serif font for css (not used by sample)
 
 .. option:: --font-sans FONT_SANS
 
-    sans font for the css (not used by sample)
+    sans font for css (not used by sample)
 
 .. option:: --font-size FONT_SIZE
 
-    main font size for the css, e.g. '9px'
+    main font size for css, e.g. '9px'
 
 .. option:: --font-size-mono FONT_SIZE_MONO
 
-    monospace font size for the css
-
-.. option:: --line-height LINE_HEIGHT
-
-    'adjust spaces between lines, number like '1.3'
+    monospace font size for css
 
 .. option:: --font-scale FONT_SCALE
 
     number like 1.5 to scale base font sizes (default: 1.0)
+
+.. option:: --line-height LINE_HEIGHT
+
+    adjust line height (default: 1.3)
