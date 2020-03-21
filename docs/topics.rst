@@ -552,8 +552,8 @@ Also, the script includes a sample file `open_viewer.py <topics.html#open-viewer
 but cancels duplicate openings.)
 
 
-Pre_Percmds and Post_Percmds
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Pre_Each_Cmds and Post_Each_Cmds
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 An action group consists of ``precmd``, ``action``, ``postcmd``.
 But when ``download`` or ``extract``,
@@ -562,13 +562,13 @@ For this job, there are corresponding pre- and post- hookcmds.
 
 .. code-block:: none
 
-    precmd                  pre_percmd
+    precmd                  pre_each_cmd
     action (urls) ----+---  job (an url)
-    postcmd           |     post_percmd
+    postcmd           |     post_each_cmd
                       |
-                      |     pre_percmd
+                      |     pre_each_cmd
                       +---  job (an url)
-                      |     post_percmd
+                      |     post_each_cmd
                       |
                       :     ...
 
@@ -582,7 +582,7 @@ If a word in the statement begins with ``'site.'``,
 and the rest is dot-separated identifier (``[a-zA-Z_][a-zA-Z_0-9]+``),
 it is evaluated as the object ``site``. For example::
 
-    post_percmd1=   echo site.fnew site.match
+    post_each_cmd1=   echo site.fnew site.match
 
 will print each ``Extracted_File`` and url glob pattern.
 
@@ -603,13 +603,13 @@ Also, the following environment variables are exposed
 
     .. code-block:: none
 
-        post_percmd1=   echo $TOSIXINCH_FNAME
+        post_each_cmd1=   echo $TOSIXINCH_FNAME
 
     doesn't work;
 
     .. code-block:: none
 
-        post_percmd1=   foo.sh
+        post_each_cmd1=   foo.sh
 
         # in foo.sh
         echo $TOSIXINCH_FNAME
@@ -660,7 +660,7 @@ _man
 ^^^^
 
 A sample hook extractor for man pages.
-If you want to use it, add this command to ``pre_percmd2`` in user configuration.
+If you want to use it, add this command to ``pre_each_cmd2`` in user configuration.
 
 When ``extract``,
 if the filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
@@ -673,13 +673,13 @@ Normally, windows users can't use it
 
 .. note ::
 
-    * ``pre_percmd2`` is a ``LINE`` option,
+    * ``pre_each_cmd2`` is a ``LINE`` option,
       so multiple commands must be separated with newline and indent e.g.:
 
       .. code-block:: ini
 
-          pre_percmd2=    echo foo
-                          _man
+          pre_each_cmd2=    echo foo
+                            _man
 
     * If you supply multiple ``urls``,
       it triggers the binary-extension filter,
@@ -704,9 +704,9 @@ A sample hook extractor for source codes (means 'Pygments code extraction').
 It formats (html-wraps) some Pygments tokens.
 The purpose is to make them pdf bookmarks items,
 and create references to them.
-If you want to use it, add this command to ``pre_percmd2`` in user configuration.
+If you want to use it, add this command to ``pre_each_cmd2`` in user configuration.
 
-Note ``pre_percmd2`` is a ``LINE`` option, see the above note for ``_man``.
+Note ``pre_each_cmd2`` is a ``LINE`` option, see the above note for ``_man``.
 
 You need to install
 `Pygments <https://pygments.org/>`__,
@@ -729,7 +729,7 @@ The common names (lower cased) are provided as base,
 But you must explicitly define other names.
 
 If Pygments finds a language but the language is not mapped,
-It does not do formatting (skips to other ``pre_percmd2`` or the builtin text extraction).
+It does not do formatting (skips to other ``pre_each_cmd2`` or the builtin text extraction).
 But it registers the ``url``'s ``ftype`` as ``nonprose``.
 
 (It is an heuristic.

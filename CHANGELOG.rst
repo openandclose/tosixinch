@@ -102,6 +102,15 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
   If you are sourcing this bash completion file in e.g. .bashrc,
   you have to edit.
 
+* **[!]** Rename pre_percmds and post_percmds to pre_each_cmds and post_each_cmds. ::
+
+      pre_percmd1   ->  pre_each_cmd1
+      post_percmd1  ->  post_each_cmd1
+      pre_percmd2   ->  pre_each_cmd2
+      post_percmd2  ->  post_each_cmd2
+
+  You have to edit user config files if you are using them.
+
 **Add:**
 
 * Add Python3.8

@@ -424,21 +424,21 @@ General Section
     Run arbitrary command
     when specified in commandline options (``-4`` or ``--view``).
 
-.. confopt:: pre_percmd1
+.. confopt:: pre_each_cmd1
 
     | (None)
     | ``[LINE][CMDS]``
 
     Run arbitrary command before each ``download``.
 
-.. confopt:: post_percmd1
+.. confopt:: post_each_cmd1
 
     | (None)
     | ``[LINE][CMDS]``
 
     Run arbitrary command after each ``download``.
 
-.. confopt:: pre_percmd2
+.. confopt:: pre_each_cmd2
 
     | (None)
     | ``[LINE][CMDS]``
@@ -447,7 +447,7 @@ General Section
 
     There is a sample hook extractor for man pages. See `_man <topics.html#man>`__.
 
-.. confopt:: post_percmd2
+.. confopt:: post_each_cmd2
 
     | (None)
     | ``[LINE][CMDS]``

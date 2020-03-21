@@ -143,11 +143,11 @@ def _get_ftypes(conf):
 def dispatch(conf):
     _get_ftypes(conf)
 
-    pre_percmd = conf.general.pre_percmd2
-    post_percmd = conf.general.post_percmd2
+    pre_each_cmd = conf.general.pre_each_cmd2
+    post_each_cmd = conf.general.post_each_cmd2
 
     for site in conf.sites:
-        returncode = system.run_cmds(pre_percmd, conf, site)
+        returncode = system.run_cmds(pre_each_cmd, conf, site)
 
         if returncode not in (101, 102):
             if site.ftype == 'html':
@@ -156,7 +156,7 @@ def dispatch(conf):
                 textformat.dispatch(conf, site)
 
         if returncode not in (102,):
-            returncode = system.run_cmds(post_percmd, conf, site)
+            returncode = system.run_cmds(post_each_cmd, conf, site)
 
 
 def run(conf, site):

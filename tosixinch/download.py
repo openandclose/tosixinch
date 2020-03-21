@@ -246,18 +246,18 @@ def qt_webengine_download(url, fname, render):
 def dispatch(conf):
     global QT_APP
 
-    pre_percmd = conf.general.pre_percmd1
-    post_percmd = conf.general.post_percmd1
+    pre_each_cmd = conf.general.pre_each_cmd1
+    post_each_cmd = conf.general.post_each_cmd1
     # downloader = site.general.downloader
 
     for site in conf.sites:
-        returncode = system.run_cmds(pre_percmd, conf, site)
+        returncode = system.run_cmds(pre_each_cmd, conf, site)
 
         if returncode not in (101, 102):
             run(conf, site)
 
         if returncode not in (102,):
-            returncode = system.run_cmds(post_percmd, conf, site)
+            returncode = system.run_cmds(post_each_cmd, conf, site)
 
     if QT_APP:
         end_qt(QT_APP)
