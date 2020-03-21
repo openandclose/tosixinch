@@ -137,27 +137,10 @@ def _main(args=sys.argv[1:], conf=None):
     # logging_tree.printout()
     # return
 
-    # This script, by design, doesn't hold any state between each jobs
-    # (download, extract, etc.).
-    # As an compensation,
-    # it may use the first line in 'urls.txt' for communication.
-    # Some special magic words do some special things.
-    # It is commented out, machine generated,
-    # so users don't have to care most of the times.
-    # firstline = None
-
     urls = args.input
     ufile = None if urls else args.file
 
     settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
-
-    # setv = conf.general.set_value
-
-    # When handling urls the `news` module built,
-    # (with various source sites and comments),
-    # it is better to use `readability`.
-    # if firstline == news.FL_SOCIALNEWS:
-    #     setv('extractor', 'readability')
 
     if args.appcheck:
         conf.print_appconf()
