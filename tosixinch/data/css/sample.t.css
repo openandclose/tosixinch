@@ -137,6 +137,16 @@ span.tsi-href-visible {
     font-size: .7em;
 }
 
+/* For mathjax */
+span.MathJax {
+    /* font-family: "Latin Modern Roman", {{ font_mono }}; */
+    font-family: {{ font_mono }};
+    font-size: {{ font_size_mono|scale }};
+}
+span.MathJax > nobr[aria-hidden] {
+    display: none;
+}
+
 
 /* prince --------------------------------------------------------- */
 {% if prince %}
