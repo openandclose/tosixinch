@@ -111,6 +111,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
   You have to edit user config files if you are using them.
 
+* Rename 'qt' option to 'browser_engine'.
+
 **Add:**
 
 * Add Python3.8

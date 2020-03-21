@@ -52,7 +52,7 @@ General Section
 
     Specify user agent for downloader (only for ``urllib``).
 
-.. confopt:: qt \*
+.. confopt:: browser_engine \*
 
     (``webkit``)
 

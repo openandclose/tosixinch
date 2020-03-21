@@ -268,7 +268,7 @@ def run(conf, site):
     global QT_APP
 
     user_agent = site.general.user_agent
-    qt_ver = site.general.qt
+    qt_ver = site.general.browser_engine
 
     url = site.idna_url
     fname = site.fname
@@ -292,7 +292,7 @@ def run(conf, site):
                 render = qt_webkit_init(url, qt_app)
                 qt_download = qt_webkit_download
             else:
-                msg = ("You have to set option 'qt' to "
+                msg = ("You have to set option 'browser_engine' to "
                         "either 'webengine' or 'webkit'")
                 logger.critical(msg)
                 raise KeyError(msg)

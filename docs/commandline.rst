@@ -165,7 +165,7 @@ Configs
 
     set http header user-agent when downloading by urllib (to see the default, run --appcheck)
 
-.. option:: --qt {webkit,webengine}
+.. option:: --browser-engine {webkit,webengine}
 
     use either webengine or webkit (default) when running Qt
 
