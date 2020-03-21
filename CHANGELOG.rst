@@ -113,6 +113,10 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Rename 'qt' option to 'browser_engine'.
 
+* Move 'javascript' option from (general) site.in to tosixinch.ini.
+
+  You can now specify 'javascript' on commandline, tosixinch.ini, or some site sections.
+
 **Add:**
 
 * Add Python3.8

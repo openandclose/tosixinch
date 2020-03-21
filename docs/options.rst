@@ -52,6 +52,13 @@ General Section
 
     Specify user agent for downloader (only for ``urllib``).
 
+.. confopt:: javascript \*
+
+    | (``False``)
+    | ``[BOOL]``
+
+    If this value is ``True``, downloading is done by ``Qt``.
+
 .. confopt:: browser_engine \*
 
     (``webkit``)
@@ -824,14 +831,6 @@ So section names themselves can be arbitrary.
 
            # not removed
            <div class="tsi-keep-style other-values" style="font-weight:bold;">
-
-
-.. confopt:: javascript
-
-    | (``False``)
-    | ``[BOOL]``
-
-    If this value is ``True``, downloading is done by ``Qt``.
 
 
 .. confopt:: cookie

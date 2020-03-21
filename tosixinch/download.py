@@ -272,7 +272,7 @@ def run(conf, site):
 
     url = site.idna_url
     fname = site.fname
-    js = site.javascript
+    js = site.general.javascript
     cookies = site.cookie
     force = site.general.force_download
     cache = conf._cache.download
