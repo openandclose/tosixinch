@@ -607,7 +607,7 @@ and only the options of that converter's section are used.
 
 .. confopt:: cnvopts
 
-    | (``--javascript``)
+    | (None)
     | ``[CMD]``
 
     Options to pass to the command.
