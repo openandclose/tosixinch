@@ -183,7 +183,7 @@ def _get_configdir():
     return resource_filename('tosixinch', 'data').rstrip(os.sep)
 
 
-def _get_configs(paths, args, envs):
+def _get_configs(fmts, args, envs):
     configdir = _get_configdir()
 
     default_appconfig = os.path.join(configdir, 'tosixinch.default.ini')
@@ -191,11 +191,11 @@ def _get_configs(paths, args, envs):
     sample_siteconfig = os.path.join(configdir, 'site.sample.ini')
 
     appconf = configfetch.fetch(
-        default_appconfig, paths=paths, args=args, envs=envs, Func=Func,
+        default_appconfig, fmts=fmts, args=args, envs=envs, Func=Func,
         empty_lines_in_values=False)
     siteconf = configfetch.fetch(
         default_siteconfig, parser=ZConfigParser,
-        paths=paths, args=args, envs=envs, Func=Func,
+        fmts=fmts, args=args, envs=envs, Func=Func,
         empty_lines_in_values=False)
 
     with open(sample_siteconfig) as f:
@@ -375,11 +375,11 @@ class Conf(object):
     CSSDIR = 'css'
 
     def __init__(self, urls=None, ufile=None,
-            paths=None, args=None, envs=None):
-        paths = paths or {}
+            fmts=None, args=None, envs=None):
+        fmts = fmts or {}
         args = args or argparse.Namespace()
         envs = envs or {}
-        _confs = _get_configs(paths, args, envs)
+        _confs = _get_configs(fmts, args, envs)
         self._configdir, self._userdir, self._appconf, self._siteconf = _confs
 
         self._appdir = os.path.dirname(self._configdir)
