@@ -88,8 +88,8 @@ SELECT_SHORT_ULIST = (
 
 CONVERT_RELATED_FILES = (
     'convert.py',
-    'data/tosixinch.default.ini',
-    'data/site.default.ini',
+    'data/tosixinch.ini',
+    'data/site.ini',
     'data/css/sample.t.css',
 )
 TOC_RELATED_FILES = (

@@ -76,7 +76,7 @@ class URLLoader(object):
 class SampleURLLoader(URLLoader):
     """Get sample urls."""
 
-    SAMPLE_UFILE = 'urls.sample.txt'
+    SAMPLE_UFILE = 'urls.txt'
     PDFNAME = 'sample.pdf'
 
     def get_data(self):
@@ -186,8 +186,8 @@ def _get_configdir():
 def _get_configs(fmts, args, envs):
     configdir = _get_configdir()
 
-    default_appconfig = os.path.join(configdir, 'tosixinch.default.ini')
-    default_siteconfig = os.path.join(configdir, 'site.default.ini')
+    default_appconfig = os.path.join(configdir, 'tosixinch.ini')
+    default_siteconfig = os.path.join(configdir, 'site.ini')
     sample_siteconfig = os.path.join(configdir, 'site.sample.ini')
 
     appconf = configfetch.fetch(

@@ -512,7 +512,7 @@ Users have to fill the value accordingly, if setting.
 .. note::
 
     Application's config files
-    (``data/tosixinch.default.ini`` and ``data/site.default.ini``)
+    (``data/tosixinch.ini`` and ``data/site.ini``)
     use special syntax, defining some metadata, e.g.
 
     .. code-block:: ini
