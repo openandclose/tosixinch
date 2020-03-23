@@ -229,13 +229,33 @@ class Content(object):
         self.errors = errors
 
 
-class HtmlContent(Content):
-    """Represent html content. Define HtmlElement manupulations."""
+class SimpleHtmlContent(Content):
+    """Define basic (non-extract) HtmlElement manupulations."""
+
+    def read(self, fname, text):
+        reader = system.HtmlReader(fname, text,
+            codings=self.codings, errors=self.errors)
+        return reader.read()
 
     def load(self):
-        reader = system.HtmlReader(self.fname, text=self.text,
-            codings=self.codings, errors=self.errors)
-        self.root = reader.read()
+        self.doc = self.read(fname=self.fnew, text=None)
+
+    def add_css(self, cssfiles):
+        for cssfile in cssfiles:
+            url = build_external_css(self.fnew, cssfile)
+            el = lxml.html.fragment_fromstring(url)
+            self.doc.head.append(el)
+
+    def write(self):
+        writer = system.HtmlWriter(self.fnew, doc=self.doc)
+        writer.write()
+
+
+class HtmlContent(SimpleHtmlContent):
+    """Define HtmlElement manupulations for extraction."""
+
+    def load(self):
+        self.root = self.read(fname=self.fname, text=self.text)
 
         doctype = self.root.getroottree().docinfo.doctype or DEFAULT_DOCTYPE
         self.doctype = doctype
@@ -275,16 +295,6 @@ class HtmlContent(Content):
     def clean(self, tags, attrs):
         cleaner = clean.Clean(self.doc, tags, attrs)
         cleaner.run()
-
-    def add_css(self, cssfiles):
-        for cssfile in cssfiles:
-            url = build_external_css(self.fnew, cssfile)
-            el = lxml.html.fragment_fromstring(url)
-            self.doc.head.append(el)
-
-    def write(self):
-        writer = system.HtmlWriter(self.fnew, doc=self.doc)
-        writer.write()
 
     def _get_component(self, el, url):
         comp = location.Component(url, self.url)

@@ -21,6 +21,34 @@ from tosixinch import textformat
 logger = logging.getLogger(__name__)
 
 
+def add_css_reference(conf, site):
+    e = SimpleExtract(conf, site)
+    e.load()
+    e.add_css()
+    e.write()
+
+
+class SimpleExtract(content.SimpleHtmlContent):
+    """Inject config data into SimpleHtmlContent.
+
+    For now, mostly for adding external css to html files.
+    """
+
+    def __init__(self, conf, site):
+        self._conf = conf
+        self._site = site
+
+        self.url = site.url
+        self.fname = site.fname
+        self.fnew = site.fnew
+        self.codings = site.general.encoding
+        self.errors = site.general.encoding_errors
+
+    def add_css(self):
+        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
+        super().add_css(cssfiles)
+
+
 class Extract(content.HtmlContent):
     """Inject config data into HtmlContent."""
 
