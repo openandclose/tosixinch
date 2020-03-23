@@ -40,249 +40,39 @@ DEFAULT_UFILE = 'urls.txt'
 # To display arguments in more meaningful grouping,
 # the parts are also divided in multiple argument groups.
 
-def _build_cmd_parser():
+def _build_cmd_parser(conf):
     parser = argparse.ArgumentParser(prog='tosixinch-cmd', add_help=False)
+    set_arguments = conf._appconf.set_arguments
+
     general = parser.add_argument_group('general')
+    set_arguments(general, '_generic')
+
     actions = parser.add_argument_group('actions')
-
-    # general group
-    help = 'input url or file path. it can be specified multiple times'
-    general.add_argument('-i', '--input', action='append', help=help)
-
-    help = "file to read inputs. only one file"
-    general.add_argument('-f', '--file', default=DEFAULT_UFILE, help=help)
-
-    help = 'show this help message and exit'
-    general.add_argument('-h', '--help', action='store_true', help=help)
-
-    help = 'print out more detailed log messages'
-    general.add_argument('-v', '--verbose', action='store_true', help=help)
-
-    help = 'supress non-critical log messages'
-    general.add_argument('-q', '--quiet', action='store_true', help=help)
-
-    help = 'print version and exit'
-    general.add_argument('-V', '--version', action='store_true', help=help)
-
-    # actions group
-    help = 'download by default downloader'
-    actions.add_argument('-1', '--download', action='store_true', help=help)
-
-    help = 'extract by default extractor'
-    actions.add_argument('-2', '--extract', action='store_true', help=help)
-
-    help = 'convert by default converter'
-    actions.add_argument('-3', '--convert', action='store_true', help=help)
-
-    help = 'open a pdf viewer if configured'
-    actions.add_argument('-4', '--view', action='store_true', help=help)
-
-    help = 'print application settings after command line evaluation, and exit'
-    actions.add_argument('-a', '--appcheck', action='store_true', help=help)
-
-    help = 'open (first) extracted html in browser and exit'
-    actions.add_argument('-b', '--browser', action='store_true', help=help)
-
-    help = ('print matched url settings and exit '
-            '(so you have to supply url some way)')
-    actions.add_argument('-c', '--check', action='store_true', help=help)
-
-    help = "create toc htmls and a toc url list. conflicts with '--input'."
-    actions.add_argument('--toc', action='store_true', help=help)
-
-    help = 'get links in documents from urls (experimental)'
-    actions.add_argument('--link', action='store_true', help=help)
-
-    choices = ['hackernews']
-    help = 'fetch urls from socialnews site (experimental)'
-    actions.add_argument('--news', choices=choices, help=help)
-
-    choices = ['0', '1', '2', '3', 'all']
-    help = ("print filenames the scripts' actions would create  "
-            '(0=url, 1=Downloaded_Files, 2=Extracted_Files, '
-            '3=pdfname, all=0<tab>1<tab>2)')
-    actions.add_argument('--printout', choices=choices, help=help)
+    set_arguments(actions, '_action')
 
     return parser
 
 
-def _build_conf_parser():
+def _build_conf_parser(conf):
     parser = argparse.ArgumentParser(
         prog='tosixinch-conf', allow_abbrev=False, add_help=False)
+    set_arguments = conf._appconf.set_arguments
+
     programs = parser.add_argument_group('programs')
+    set_arguments(programs, '_program')
+
     configs = parser.add_argument_group('configs')
+    set_arguments(configs, 'general')
+
     styles = parser.add_argument_group('styles')
-
-    # programs group
-    help = 'download by urllib (default, and no other option)'
-    programs.add_argument(
-        '--urllib', action='store_const',
-        const='urllib', dest='downloader', help=help)
-
-    help = 'extract by lxml (default)'
-    programs.add_argument(
-        '--lxml', action='store_const',
-        const='lxml', dest='extractor', help=help)
-
-    help = 'extract by readability, if no settings matched'
-    programs.add_argument(
-        '--readability', action='store_const',
-        const='readability', dest='extractor', help=help)
-
-    help = 'extract by readability unconditionally'
-    programs.add_argument(
-        '--readability-only', action='store_const',
-        const='readability_only', dest='extractor', help=help)
-
-    help = 'convert by princexml'
-    programs.add_argument(
-        '--prince', action='store_const',
-        const='prince', dest='converter', help=help)
-
-    help = 'convert by weasyprint'
-    programs.add_argument(
-        '--weasyprint', action='store_const',
-        const='weasyprint', dest='converter', help=help)
-
-    help = 'convert by wkhtmltopdf'
-    programs.add_argument(
-        '--wkhtmltopdf', action='store_const',
-        const='wkhtmltopdf', dest='converter', help=help)
-
-    # configs group
-    help = ('set http header user-agent when downloading by urllib '
-            '(to see the default, run --appcheck)')
-    configs.add_argument('--user-agent', help=help)
-
-    choices = ['webengine', 'webkit']
-    help = 'use either webengine or webkit (default) when running Qt'
-    configs.add_argument(
-        '--qt', choices=choices, help=help)
-
-    help = 'assign an encoding for file opening when extract [COMMA]'
-    configs.add_argument('--encoding', help=help)
-
-    # Python 3.7.4
-    choices = [
-        'strict', 'ignore', 'replace', 'xmlcharrefreplace', 'backslashreplace',
-        'namereplace', 'surrogateescape', 'surrogatepass'
-    ]
-    help = 'assign an encoding error handler (default: strict)'
-    configs.add_argument('--encoding-errors', choices=choices, help=help)
-
-    # Toggling is difficult, see Paul Jacobson (hpaulj)'s explanation.
-    # https://stackoverflow.com/a/34750557
-    help = (
-        'download components (images etc.) '
-        'before PDF conversion (default)')
-    configs.add_argument(
-        '--parts-download', action='store_const',
-        const='yes', help=help)
-
-    help = 'not download components before PDF conversion'
-    configs.add_argument(
-        '--no-parts-download', action='store_const',
-        const='no', dest='parts_download', help=help)
-
-    help = ('force --download or --parts-download '
-            'even if the file already exists')
-    configs.add_argument(
-        '--force-download', action='store_const', const='yes', help=help)
-
-    help = ('if there is no matched url, '
-            'use this xpath for content selection [LINE]')
-    configs.add_argument('--guess', help=help)
-
-    help = 'pxel size to add special class attributes to images'
-    configs.add_argument('--full-image', help=help)
-
-    help = 'add or subtract to-skip-binaries-extension list [PLUS]'
-    configs.add_argument('--add-binary-extensions', help=help)
-
-    help = 'add or subtract to-delete-tag list [PLUS]'
-    configs.add_argument('--add-clean-tags', help=help)
-
-    help = 'add or subtract to-delete-attribute list [PLUS]'
-    configs.add_argument('--add-clean-attrs', help=help)
-
-    choices = ['html', 'prose', 'nonprose', 'python']
-    help = 'specify file type'
-    configs.add_argument('--ftype', choices=choices, help=help)
-
-    help = 'width (character numbers) for rendering non-prose text'
-    configs.add_argument('--textwidth', help=help)
-
-    help = 'line continuation marker for rendering non-prose text'
-    configs.add_argument('--textindent', help=help)
-
-    help = 'remove leading directories from local text name to shorten title'
-    configs.add_argument('--trimdirs', help=help)
-
-    help = ('use input paths as is '
-            '(no url transformation, and only for local files)')
-    configs.add_argument(
-        '--raw', action='store_const', const='yes', help=help)
-
-    help = 'override pdf file name'
-    configs.add_argument('--pdfname', help=help)
-
-    help = 'commandline string to open the pdf viewer [CMD]'
-    configs.add_argument('--viewcmd', help=help)
-
-    help = 'override user configuration directory'
-    configs.add_argument('--userdir', help=help)
-
-    help = 'do not parse user configuration (intended for testing)'
-    configs.add_argument('--nouserdir', action='store_true', help=help)
-
-    help = ('override the converter executable path. '
-            'you also need to set the converter itself')
-    configs.add_argument('--cnvpath', help=help)
-
-    # styles group
-    choices = ['portrait', 'landscape']
-    help = ('portrait(default) or landscape, determine which size data to use')
-    styles.add_argument('--orientation', choices=choices, help=help)
-
-    help = "portrait size for the css, e.g. '90mm 118mm'"
-    styles.add_argument('--portrait-size', help=help)
-
-    help = "landscape size for the css, e.g. '118mm 90mm'"
-    styles.add_argument('--landscape-size', help=help)
-
-    help = 'tree depth of table of contents'
-    styles.add_argument('--toc-depth', help=help)
-
-    help = """main font for the css, e.g. '"DejaVu Sans", sans-serif'"""
-    styles.add_argument('--font-family', help=help)
-
-    help = 'monospace font for the css'
-    styles.add_argument('--font-mono', help=help)
-
-    help = 'serif font for the css (not used by sample)'
-    styles.add_argument('--font-serif', help=help)
-
-    help = 'sans font for the css (not used by sample)'
-    styles.add_argument('--font-sans', help=help)
-
-    help = "main font size for the css, e.g. '9px'"
-    styles.add_argument('--font-size', help=help)
-
-    help = 'monospace font size for the css'
-    styles.add_argument('--font-size-mono', help=help)
-
-    help = "'adjust spaces between lines, number like '1.3'"
-    styles.add_argument('--line-height', help=help)
-
-    help = 'number like 1.5 to scale base font sizes (default: 1.0)'
-    styles.add_argument('--font-scale', help=help)
+    set_arguments(styles, 'style')
 
     return parser
 
 
-def _build_parser():
+def _build_parser(conf):
     """Build `argparse.ArgumentParser` object."""
-    parsers = (_build_cmd_parser(), _build_conf_parser())
+    parsers = (_build_cmd_parser(conf), _build_conf_parser(conf))
     parser = argparse.ArgumentParser(
         prog='tosixinch', description=__doc__,
         add_help=False, parents=parsers,
@@ -303,7 +93,10 @@ def _main(args=sys.argv[1:], conf=None):
         in partial parsing, in which
         'unknown' options might be interpreted as 'unambiguous' options.
     """
-    parser = _build_parser()
+    if conf is None:
+        conf = settings.Conf(envs=ENVS)
+
+    parser = _build_parser(conf)
 
     if not args:
         usage(parser)
@@ -311,8 +104,9 @@ def _main(args=sys.argv[1:], conf=None):
     _args = configfetch.minusadapter(parser, matcher='--add-.+', args=args)
     args = parser.parse_args(_args)
 
-    conf_parser = _build_conf_parser()
+    conf_parser = _build_conf_parser(conf)
     confargs, _ = conf_parser.parse_known_args(_args)
+    conf._appconf.set_args(confargs)
 
     if args.version:
         print_version()
@@ -344,9 +138,7 @@ def _main(args=sys.argv[1:], conf=None):
     urls = args.input
     ufile = None if urls else args.file
 
-    if conf is None:
-        conf = settings.Conf(args=confargs, envs=ENVS)
-        settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
+    settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
 
     # setv = conf.general.set_value
 
