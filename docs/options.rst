@@ -659,27 +659,6 @@ and consequently select which section to use.
 
 So section names themselves can be arbitrary.
 
-But the script includes ``site.sample.ini``,
-and, if not `disabled <#confopt-use_sample>`__,
-it first searches this file.
-So the names below are taken
-(You are free to override). ::
-
-    wikipedia
-    mobileread
-    gnu
-    python-doc
-    python-pep
-    bugs.python.org
-    hackernews
-    hackernews-threads
-    reddit
-    stackoverflow
-    stackprinter
-    github
-    github-issues
-    github-wiki
-    gist
 
 .. confopt:: match
 

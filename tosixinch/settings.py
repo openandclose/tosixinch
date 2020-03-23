@@ -131,6 +131,8 @@ def _getpdf(url, section, length=1):
     if query:
         path = path + '-' + slugify(query)
     section = section.split(' : ')[0].replace(os.sep, '_')
+    _sam = '_sam_'  # Application sample confings have this prefix.
+    section = section[len(_sam):] if section.startswith(_sam) else section
 
     if section == 'scriptdefault':
         name = host or section
