@@ -201,10 +201,14 @@ def _get_configs(fmts, args, envs):
     with open(sample_siteconfig) as f:
         siteconf.read_file(f)
 
-    if appconf.general.nouserdir:
+    return configdir, appconf, siteconf
+
+
+def _get_user_configs(args, appconf, siteconf):
+    if getattr(args, 'nouserdir', None):
         userdir = None
-    elif appconf.general.userdir:
-        userdir = appconf.general.userdir
+    elif getattr(args, 'userdir', None):
+        userdir = args.userdir
         userdir = os.path.expanduser(userdir).rstrip(os.sep)
         if not os.path.isdir(userdir):
             msg = ('userdir: %r is not an existing directory. '
@@ -228,7 +232,7 @@ def _get_configs(fmts, args, envs):
             with open(siteconfig) as f:
                 siteconf.read_file(f)
 
-    return configdir, userdir, appconf, siteconf
+    return userdir
 
 
 def _check_platform_dirs():
@@ -369,7 +373,20 @@ class Site(location.Location):
 
 
 class Conf(object):
-    """It possesses all configuration data."""
+    """Manage all configuration data.
+
+    Initialization from the main process takes three phases.
+
+    First, it loads application configs,
+    then define commandline argumets.
+
+    Second, after checking possible user config data from commandline,
+    ('--userdir' and '--nouserdir'),
+    it loads user configs.
+
+    Third, after possible preprocessing of urls,
+    It loads urls (by a URLLoader).
+    """
 
     SCRIPTDIR = 'script'
     CSSDIR = 'css'
@@ -380,17 +397,11 @@ class Conf(object):
         args = args or argparse.Namespace()
         envs = envs or {}
         _confs = _get_configs(fmts, args, envs)
-        self._configdir, self._userdir, self._appconf, self._siteconf = _confs
+        self._configdir, self._appconf, self._siteconf = _confs
 
         self._appdir = os.path.dirname(self._configdir)
         self._scriptdir = os.path.join(self._appdir, self.SCRIPTDIR)
         self._cssdir = os.path.join(self._configdir, self.CSSDIR)
-        if self._userdir:
-            self._user_scriptdir = os.path.join(self._userdir, self.SCRIPTDIR)
-            self._user_cssdir = os.path.join(self._userdir, self.CSSDIR)
-        else:
-            self._user_scriptdir = None
-            self._user_cssdir = None
 
         self._cache = Cache()
         self._cache.download = {}  # cache for already downloaded files
@@ -400,7 +411,19 @@ class Conf(object):
         self.style = self._appconf.style
 
         if urls or ufile:
+            self.user_init(args)
             self.sites_init(urls, ufile)
+
+    def user_init(self, args):
+        self._userdir = _get_user_configs(
+            args, self._appconf, self._siteconf)
+
+        if self._userdir:
+            self._user_scriptdir = os.path.join(self._userdir, self.SCRIPTDIR)
+            self._user_cssdir = os.path.join(self._userdir, self.CSSDIR)
+        else:
+            self._user_scriptdir = None
+            self._user_cssdir = None
 
     def sites_init(self, urls=None, ufile=None):
         sites = Sites(urls, ufile, self._appconf, self._siteconf)

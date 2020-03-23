@@ -68,6 +68,14 @@ General
 
     print version and exit
 
+.. option:: --userdir USERDIR
+
+    specify user configuration directory
+
+.. option:: --nouserdir
+
+    disable user configuration (intended for testing)
+
 Actions
 -------
 
@@ -242,14 +250,6 @@ Configs
 .. option:: --viewcmd VIEWCMD
 
     commandline string to open the pdf viewer (f: cmds)
-
-.. option:: --userdir USERDIR
-
-    specify user configuration directory
-
-.. option:: --nouserdir
-
-    disable user configuration (intended for testing)
 
 Styles
 ------

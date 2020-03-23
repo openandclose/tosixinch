@@ -112,6 +112,7 @@ def _get_conf(args, conf=None):
     conf_parser = _build_conf_parser(conf)
     confargs, _ = conf_parser.parse_known_args(_args)
     conf._appconf.set_args(confargs)
+    conf.user_init(args)
 
     return conf, parser, args
 
