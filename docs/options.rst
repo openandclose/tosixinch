@@ -732,32 +732,42 @@ So section names themselves can be arbitrary.
     After ``select`` and ``exclude``, arbitrary functions can be called
     if this option is specified.
 
-    The function name must include the module name.
-    And the function must be a top level one.
-    (So each name should have exactly one dot (``'.'``)).
+    The functions must be top level ones.
 
-    It is searched in user process directory
-    and application ``tosixinch.process`` directory, in order.
+    It is searched in `user process directory <overview.html#dword-process_directory>`__
+    and the program's process directory, in order.
 
     (You can use any module names and function names,
     except module names ``util``, ``gen``, and ``site``,
-    which are already take by the script.)
+    which are already take by the program.)
 
-    The first matched one is called with the argument ``'doc'`` auto-filled.
+    If the function name is found in multiple modules
+    in user process directory, the program raises Error.
+
+    In that case, you can use dot notation.
+    If the function name includes one dot (``'.'``),
+    the program interprets it as ``<module name>.<function name>``.
+    Two or more dots are not supported.
+
+    The first argument of the functions is always ``doc``,
+    which the program provides.
     It is ``lxml.html`` DOM object (``HtmlElement``),
     corresponding to the resultant ``Extracted_File``
     after ``select`` and ``exclude``.
-    The name (``'doc'``) is actually irrelevant.
 
     The function can have additional arguments.
-    In that case, users have to provide them in the option string.
     String after ``'?'`` (and before next ``'?'``) is interpreted as an argument.
 
-    For example, ``'aaa.bbb?cc?dd'`` is made into code either::
+    For example, ``'aaa.bbb?cc?dd'`` is made into code
+    if ``'aaa.bbb'`` is found in user process directory:
+
+    .. code-block:: none
 
         process.aaa.bbb(doc, cc, dd)
 
-    or::
+    or it is found in the program's process directory:
+
+    .. code-block:: none
 
         tosixinch.process.aaa.bbb(doc, cc, dd)
 
@@ -765,7 +775,7 @@ So section names themselves can be arbitrary.
     just manipulate ``doc`` as you like.
     The script uses the resultant ``doc`` subsequently.
 
-    For 'built-in' functions and examples, see modules in `process <api.html#process>`__.
+    See `API/process <api.html#process>`__ for included sample functions.
 
     ---
 

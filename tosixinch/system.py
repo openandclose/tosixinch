@@ -313,12 +313,15 @@ def _get_object(userdir, package_name, modname, objname):
 
 def _parse_func_string(func_string):
     names, *args = [f.strip() for f in func_string.split('?') if f.strip()]
-    if len(names.split('.')) != 2:
-        msg = ('You have to name a top-level function with a modulename, '
-            "like 'modulename.funcname'")
+    num = len(names.split('.'))
+    if num == 1:
+        return None, names, args
+    elif num == 2:
+        modname, funcname = names.split('.', maxsplit=1)
+        return modname, funcname, args
+    else:
+        msg = 'More than one dot is used in function name: %r' % names
         raise ValueError(msg)
-    modname, funcname = names.split('.', maxsplit=1)
-    return modname, funcname, args
 
 
 def _get_all_modules(userdir, package_name):
@@ -377,18 +380,30 @@ def _search_function(package_name_, funcname):
 
 
 def run_function(userdir, package_name, element, func_string):
-    """Search functions in ``process`` directories, and execute them.
+    """Search functions in modules in a directory, and execute them.
 
-    Modules and functions are delimitted by '.'.
     Functions must be top level ones.
-    The first argument is always 'element'.
-    Other argements are words splitted by '?' if any.
-    E.g. the string 'aaa.bbb?cc?dd' calls
-    '[tosixinch.]process.aaa.bbb(element, cc, dd)'.
+
+    The first argument of the function is 'element'.
+
+    ``func_string`` can have optinal '?'s.
+    Strings after '?' until next '?' (or end) are other arguments.
+
+    The rest of ``func_string`` must not include more than one dot ('.').
+    If it includes one dot,
+    the program interpretes it as ``<module name>.<function name>``.
+    If it includes no dot,
+    the program searches the name in all modules.
     """
     modname, funcname, args = _parse_func_string(func_string)
-    func = _get_object(userdir, package_name, modname, funcname)
+    if modname is None:
+        _register_all_functions(userdir, package_name)
+        func = _search_function(package_name, funcname)
+        msg = 'function (%r) is not found' % funcname
+    else:
+        func = _get_object(userdir, package_name, modname, funcname)
+        msg = "function ('%s.%s') is not found" % (modname, funcname)
+
     if func is None:
-        fmt = "function ('%s.%s') is not found"
-        raise AttributeError(fmt % (modname, funcname))
+        raise AttributeError(msg)
     return func(element, *args)

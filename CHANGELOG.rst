@@ -123,6 +123,14 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add css2 option (and fix misplaced css option)
 
+* Add no-dot function name in process option
+
+  Previously the option only accepted one-dot name form
+  (``<module name>.<function name>``).
+
+  Now this form is optional.
+  The program searches all modules for the function name.
+
 
 v0.3.0 (2020-02-24)
 -------------------
