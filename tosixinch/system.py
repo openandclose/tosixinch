@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 import subprocess
+import types
 
 from tosixinch import _ImportError
 from tosixinch import manuopen
@@ -239,6 +240,8 @@ def _add_files_env(site):
 
 # python import ----------------------------------
 
+_PROCESS_FUNCTIONS_REGISTERED = False
+
 _mod_cache = {}
 _obj_cache = {}
 
@@ -318,6 +321,59 @@ def _parse_func_string(func_string):
     return modname, funcname, args
 
 
+def _get_all_modules(userdir, package_name):
+    if userdir:
+        names = os.listdir(os.path.join(userdir, package_name))
+    else:
+        d = os.path.dirname(__file__)
+        names = os.listdir(os.path.join(d, package_name))
+    for name in names:
+        if name.startswith('__'):
+            continue
+        if name.endswith('.py'):
+            modname = name[:-3]
+            mod = _get_module(userdir, package_name, modname)
+            yield modname, mod
+
+
+def _register_all_functions(userdir, package_name):
+    global _PROCESS_FUNCTIONS_REGISTERED
+    if _PROCESS_FUNCTIONS_REGISTERED:
+        return
+
+    for u in (userdir, None):
+        for modname, mod in _get_all_modules(u, package_name):
+            for objname, obj in mod.__dict__.items():
+                if isinstance(obj, types.FunctionType):
+                    key = (userdir, package_name, modname, objname)
+                    _obj_cache[key] = obj
+
+    _PROCESS_FUNCTIONS_REGISTERED = True
+
+
+def _search_function(package_name_, funcname):
+    user_funcs = []
+    program_funcs = []
+    for key in _obj_cache:
+        userdir, package_name, modname, objname = key
+        if package_name == package_name_:
+            if funcname == objname:
+                if userdir:
+                    user_funcs.append(key)
+                else:
+                    program_funcs.append(key)
+
+    if len(user_funcs) > 1:
+        msg = ['%s.%s' % (modname, objname)
+            for userdir, package_name, modname, objname in user_funcs]
+        msg = 'duplicate function names: ' + ', '.join(msg)
+        raise ValueError(msg)
+
+    if user_funcs:
+        return _obj_cache[user_funcs[0]]
+    if program_funcs:
+        return _obj_cache[program_funcs[0]]
+    return None
 
 
 def run_function(userdir, package_name, element, func_string):
