@@ -288,23 +288,24 @@ def _get_module(userdir, package_name, modname, on_error_exit=False):
     return mod
 
 
-def _get_modules(userdir, package_name, modname):
-    mod = _get_module(userdir, package_name, modname)
-    mod2 = _get_module(None, package_name, modname)
-    return mod, mod2
+def run_module(userdir, package_name, modname, conf, site=None):
+    mod = _get_module(userdir, package_name, modname, True)
+    return mod.run(conf, site)
 
 
 def _get_object(userdir, package_name, modname, objname):
-    key = (modname, objname)
-    if key in _obj_cache:
-        return _obj_cache[key]
+    keys = [(u, package_name, modname, objname) for u in (userdir, None)]
+    for key in keys:
+        if key in _obj_cache:
+            return _obj_cache[key]
 
-    mod, mod2 = _get_modules(userdir, package_name, modname)
-    obj = getattr(mod, objname, None)  # note: it is OK when mod == None.
-    obj2 = getattr(mod2, objname, None)
-    obj = obj or obj2
-    _obj_cache[key] = obj
-    return obj
+    for key in keys:
+        mod = _get_module(key[0], package_name, modname)
+        if mod:
+            obj = getattr(mod, objname, None)
+            if obj:
+                _obj_cache[key] = obj
+                return obj
 
 
 def _parse_func_string(func_string):
@@ -317,9 +318,6 @@ def _parse_func_string(func_string):
     return modname, funcname, args
 
 
-def run_module(userdir, package_name, modname, conf, site=None):
-    mod = _get_module(userdir, package_name, modname, True)
-    return mod.run(conf, site)
 
 
 def run_function(userdir, package_name, element, func_string):
