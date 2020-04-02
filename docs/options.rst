@@ -175,7 +175,7 @@ General Section
 
 .. confopt:: defaultprocess \*
 
-    | (``gen.add_title, gen.youtube_video_to_thumbnail``)
+    | (``add_title, youtube_video_to_thumbnail``)
     | ``[COMMA][XPATH]``
 
     Before site specific ``process`` functions,
@@ -737,9 +737,8 @@ So section names themselves can be arbitrary.
     It is searched in `user process directory <overview.html#dword-process_directory>`__
     and the program's process directory, in order.
 
-    (You can use any module names and function names,
-    except module names ``util``, ``gen``, and ``site``,
-    which are already take by the program.)
+    (The program includes ``sample.py``.
+    See `process.sample <api.html#module-tosixinch.process.sample>`__.)
 
     If the function name is found in multiple modules
     in user process directory, the program raises Error.

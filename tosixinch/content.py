@@ -10,8 +10,9 @@ from tosixinch import clean
 from tosixinch import download
 from tosixinch import location
 from tosixinch import imagesize
-from tosixinch.process import gen
 from tosixinch import system
+
+import tosixinch.process.sample as process_sample
 
 try:
     import lxml.etree
@@ -322,9 +323,9 @@ class ReadabilityHtmlContent(HtmlContent):
         doc = build_new_html(title=title, content=content)
         heading = doc.xpath('//h1')
         if len(heading) == 0:
-            gen.add_title(doc)
+            process_sample.add_title(doc)
         if len(heading) > 1:
-            gen.decrease_heading(doc)
-            gen.add_title(doc)
+            process_sample.decrease_heading(doc)
+            process_sample.add_title(doc)
 
         self.doc = doc

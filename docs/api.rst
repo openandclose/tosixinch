@@ -2,40 +2,15 @@
 API reference
 =============
 
-*some* modules are documented here.
+A few modules are documented here.
 
+* process.sample
+* templite
 
-process
--------
+process.sample
+--------------
 
-.. note::
-
-    ``process`` package includes ``util``, ``gen`` and ``site`` modules,
-    and each module mostly consists of top level functions.
-
-    They are all simplest functions,
-    and not particularly easier to use,
-    so users don't have to use these 'built-ins' preferentially.
-
-
-process.util
-^^^^^^^^^^^^
-
-.. automodule:: tosixinch.process.util
-    :members:
-
-
-process.gen
-^^^^^^^^^^^
-
-.. automodule:: tosixinch.process.gen
-    :members:
-
-
-process.site
-^^^^^^^^^^^^
-
-.. automodule:: tosixinch.process.site
+.. automodule:: tosixinch.process.sample
     :members:
 
 
@@ -53,4 +28,3 @@ templite
 
 .. automodule:: tosixinch.templite
     :members:
-

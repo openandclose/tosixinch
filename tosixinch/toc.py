@@ -9,10 +9,11 @@ import re
 import sys
 
 from tosixinch import location
-from tosixinch.process import gen
 from tosixinch import system
 from tosixinch.content import (
     build_new_html, slugify, _relink_component, _relink)
+
+import tosixinch.process.sample as process_sample
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ class Node(location.Location):
     # TODO: consider using content.merge_htmls().
     def _append_body(self):
         for t in self.doc.xpath('//body'):
-            gen.decrease_heading(t)
+            process_sample.decrease_heading(t)
             _relink_component(t, self.root.fnew, self.fnew)
             t.tag = 'div'
             t.set('class', 'tsi-body-merged')

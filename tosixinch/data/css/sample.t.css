@@ -132,7 +132,7 @@ a:link { color: inherit; }
     /* visibility: hidden; */
 }
 
-/* When you use process.gen.make_ahref_visible, this class attribute is added. */
+/* When you use process.sample..make_ahref_visible, this class attribute is added. */
 span.tsi-href-visible {
     font-size: .7em;
 }

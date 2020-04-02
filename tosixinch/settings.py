@@ -27,7 +27,7 @@ from tosixinch import location
 from tosixinch import system
 
 from tosixinch.content import slugify
-from tosixinch.process.util import transform_xpath
+from tosixinch.process.sample import transform_xpath
 from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)

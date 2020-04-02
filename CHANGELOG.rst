@@ -117,6 +117,18 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
   You can now specify 'javascript' on commandline, tosixinch.ini, or some site sections.
 
+* **[!]** Cut util.py, gen.py and site.py and create sample.py (tosixinch.process directory)
+
+  Combined three sample files into one.
+
+  You have to edit user config files if you are using them. e.g.::
+
+    gen.youtube_video_to_thumbnail  -> sample.youtube_video_to_thumbnail
+
+  or just (See below: 'Add no-dot function name..')::
+
+    gen.youtube_video_to_thumbnail  -> youtube_video_to_thumbnail
+
 **Add:**
 
 * Add Python3.8
