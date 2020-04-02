@@ -1,26 +1,12 @@
 
-# flake8: noqa
+"""Sample functions to use in ``process`` option.
 
-"""Utility functions to use in other modules in ``process`` directory.
+Divided in three parts:
 
-Supposed to be imported by ``from tosixinch.process.util import *``.
-
----
-
-Naming Conventions:
-
-doc: relatively large element, mostly, but not necessarily, complete html.
-
-el: selected element(s), mostly from 'doc.xpath()'.
-
-element or elements: more smaller element(s),
-if you need to select parts in 'el'.
-
-tag: newly created, relatively simple element, to edit 'el'.
-
-The aim is to keep the best name 'el' for main target or main concern.
+    * Helper Functions
+    * General Functions (applicable for many websites)
+    * Site Specific Functions
 """
-
 
 from copy import deepcopy
 import logging
@@ -34,7 +20,7 @@ try:
 except ImportError:
     lxml = _ImportError('lxml')
 
-_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 # lxml.html.defs.empty_tags (only for html4)
 # http://xahlee.info/js/html5_non-closing_tag.html
@@ -76,6 +62,10 @@ def _fromstring_examples():
     >>> tostring(el)
     '<div><p>aaa</p><div>bbb</div></div>'
     """
+
+
+# ----------------------------------------------------------
+# Helper Functions
 
 
 def make_tag(tag='div', text=''):
@@ -136,7 +126,7 @@ def replace_tag(el, replace):
 def insert_tag(el, add, before=True):
     """Insert element ('add') before or after element ('el').
 
-    See `process.gen.add_hr` for doctest example.
+    See `add_hr` for doctest example.
     """
     parent = el.getparent()
     assert parent is not None
@@ -237,19 +227,9 @@ def transform_xpath(path):
     repl = r'\1[contains(concat(" ", normalize-space(@class), " "), " \3 ")]'
     return pat.sub(repl, path)
 
-"""Collect general functions applicable for many sites."""
-
-import logging
-import re
-
-from tosixinch.process.util import *
-
-logger = logging.getLogger(__name__)
-
 
 # ----------------------------------------------------------
-# Default or default candidates are collected in this section.
-# They should run only one argument (required 'doc').
+# General Functions
 
 
 def add_title(doc, force=False):
@@ -318,10 +298,6 @@ def youtube_video_to_thumbnail(doc):
         itagstr = itagfmt % m.group(1)
         itag = fromstring(itagstr)
         replace_tag(el, itag)
-
-
-# ----------------------------------------------------------
-# General functions
 
 
 def make_ahref_visible(doc):
@@ -531,17 +507,9 @@ def add_noscript_img(doc):
             if 'src' in element.attrib:
                 el.addnext(element)
 
-"""Collect functions including site specific logic.
 
-The purpose is to not clutter `gen` module.
-The boundary may not be clear-cut.
-"""
-
-import logging
-
-from tosixinch.process.util import *
-
-logger = logging.getLogger(__name__)
+# ----------------------------------------------------------
+# Site Specific Functions
 
 
 def convert_permalink_sign(doc, repl=''):
