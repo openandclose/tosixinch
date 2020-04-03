@@ -284,8 +284,7 @@ def _get_module(userdir, package_name, modname, on_error_exit=False):
         mod = importlib.import_module(name)
     except ModuleNotFoundError:
         if on_error_exit:
-            fmt = "module ('%s.%s') is not found"
-            raise ModuleNotFoundError(fmt % (package_name, modname))
+            raise
 
     _mod_cache[key] = mod
     return mod
@@ -335,7 +334,8 @@ def _get_all_modules(userdir, package_name):
             continue
         if name.endswith('.py'):
             modname = name[:-3]
-            mod = _get_module(userdir, package_name, modname)
+            mod = _get_module(
+                userdir, package_name, modname, on_error_exit=True)
             yield modname, mod
 
 
