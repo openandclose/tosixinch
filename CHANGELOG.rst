@@ -159,6 +159,18 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
   You have to edit user config files if you are using them.
 
+* **[!]** Rename script/open_viewer.py
+
+  From:
+  
+      open_viewer.py
+  
+  To:
+  
+      _view.py
+
+  You have to edit user config files if you are using them.
+
 **Add:**
 
 * Add Python3.8

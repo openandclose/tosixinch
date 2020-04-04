@@ -547,7 +547,7 @@ as pdf viewer, ::
 
 will open the viewer with the generated pdf file.
 
-Also, the script includes a sample file `open_viewer.py <topics.html#open-viewer>`__.
+Also, the script includes a sample file `_viewer.py <topics.html#viewer>`__.
 (It does basically the same thing as above,
 but cancels duplicate openings.)
 
@@ -625,8 +625,8 @@ They are not 'installed',
 just copied in the tosixinch installation directory
 (in ``script`` folder).
 
-open_viewer
-^^^^^^^^^^^
+_viewer
+^^^^^^^
 
 Intended to be used in ``viewcmd`` option in ``tosixinch.ini``.
 
@@ -640,7 +640,7 @@ So, only unixes users can use it.
 
 It can be used without full path.::
 
-    viewcmd=    open_viewer.py --command okular --check --null conf.pdfname
+    viewcmd=    _viewer.py --command okular --check --null conf.pdfname
 
 * ``--command`` accepts arbitrary commands with some options,
   but you need to quote.
@@ -650,7 +650,7 @@ It can be used without full path.::
 
 And one way to see the help is::
 
-    $ tosixinch -4 --viewcmd 'open_viewer.py --help' -i aaa
+    $ tosixinch -4 --viewcmd '_viewer.py --help' -i aaa
 
 (This doesn't work if ``urls`` is not supplied,
 so you have to supply something, like the above ``-i aaa``.)
