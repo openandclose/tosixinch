@@ -80,6 +80,29 @@ def _build_parser(conf):
     return parser
 
 
+def _get_parser(conf=None):
+    if conf is None:
+        conf = settings.Conf(envs=ENVS)
+    parser = _build_parser(conf)
+    return conf, parser
+
+
+def _get_conf(args, conf=None):
+    conf, parser = _get_parser(conf)
+
+    if not args:
+        usage(parser)
+
+    _args = configfetch.minusadapter(parser, matcher='--add-.+', args=args)
+    args = parser.parse_args(_args)
+
+    conf_parser = _build_conf_parser(conf)
+    confargs, _ = conf_parser.parse_known_args(_args)
+    conf._appconf.set_args(confargs)
+
+    return conf, parser, args
+
+
 def _main(args=sys.argv[1:], conf=None):
     """Parse commandline arguments and run accordingly.
 
@@ -93,20 +116,7 @@ def _main(args=sys.argv[1:], conf=None):
         in partial parsing, in which
         'unknown' options might be interpreted as 'unambiguous' options.
     """
-    if conf is None:
-        conf = settings.Conf(envs=ENVS)
-
-    parser = _build_parser(conf)
-
-    if not args:
-        usage(parser)
-
-    _args = configfetch.minusadapter(parser, matcher='--add-.+', args=args)
-    args = parser.parse_args(_args)
-
-    conf_parser = _build_conf_parser(conf)
-    confargs, _ = conf_parser.parse_known_args(_args)
-    conf._appconf.set_args(confargs)
+    conf, parser, args = _get_conf(args, conf)
 
     if args.version:
         print_version()
