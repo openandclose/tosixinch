@@ -176,7 +176,7 @@ General Section
 .. confopt:: defaultprocess \*
 
     | (``add_title, youtube_video_to_thumbnail``)
-    | ``[COMMA][XPATH]``
+    | ``[LINE][XPATH]``
 
     Before site specific ``process`` functions,
     the script applies default ``process`` functions to all ``url``,
@@ -727,7 +727,7 @@ So section names themselves can be arbitrary.
 .. confopt:: process
 
     | (None)
-    | ``[COMMA][XPATH]``
+    | ``[LINE][XPATH]``
 
     After ``select`` and ``exclude``, arbitrary functions can be called
     if this option is specified.

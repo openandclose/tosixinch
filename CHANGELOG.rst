@@ -129,6 +129,18 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
     gen.youtube_video_to_thumbnail  -> youtube_video_to_thumbnail
 
+* **[!]** Change syntax: from comma to line (defaultprocess and process options)
+
+  From::
+
+    process=    aaa, bbb, ccc
+
+  To::
+
+    process=    aaa
+                bbb
+                ccc
+
 **Add:**
 
 * Add Python3.8
