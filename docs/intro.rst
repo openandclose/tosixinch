@@ -393,4 +393,4 @@ So that users can do some of the script's jobs outside of the script.
 `commandline: printout <commandline.html#cmdoption-printout>`__.
 
 A basic bash completion script is included.
-`tosixinch-complete.bash <topics.html#script-tosixinch-complete.bash>`__.
+`_tosixinch.bash <topics.html#tosixinch-bash>`__.

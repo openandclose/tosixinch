@@ -38,7 +38,7 @@ setup(
     packages=['tosixinch', 'tosixinch.process',
         'tosixinch.script', 'tosixinch.script.pcode'],
     package_data={
-        'tosixinch': ['data/*', 'data/css/*', 'script/*', ],
+        'tosixinch': ['data/*', 'data/css/*'],
     },
     entry_points={
         'console_scripts': [

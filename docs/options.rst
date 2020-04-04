@@ -84,7 +84,7 @@ General Section
 
 .. note ::
 
-    The included `bash completion <topics.html#script-tosixinch-complete.bash>`__
+    The included `bash completion <topics.html#script-_tosixinch.bash>`__
     only completes canonical codec names (with underline changed to dash).
     But you can put any other alias name or names as long as they are legal in Python.
 

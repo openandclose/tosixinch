@@ -1,3 +1,4 @@
+# bash completion file for tosixinch
 _tosixinch()
 {
     local cur prev words cword split

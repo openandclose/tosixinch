@@ -89,6 +89,19 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
   Codes and config files will be changed considerably.
   It shouldn't affect tosixinch behavior.
 
+* **[!]** Rename tosixinch-complete.bash
+
+  From:
+
+      tosixinch/script/tosixinch-complete.bash
+
+  To:
+
+      tosixinch/data/_tosixinch.bash
+
+  If you are sourcing this bash completion file in e.g. .bashrc,
+  you have to edit.
+
 **Add:**
 
 * Add Python3.8

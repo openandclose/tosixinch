@@ -53,7 +53,7 @@ git: scripts copylib
 
 scripts:
 	$(DEV)/argparse2rst.py
-	$(DEV)/complete-bash.py -X
+	$(DEV)/argparse2bash.py -X
 
 copylib: libs
 	-copylib.py configfetch.py

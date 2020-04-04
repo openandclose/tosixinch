@@ -831,14 +831,14 @@ If you want to customize the formatter,
   Application automatically finds and uses this class.
 
 
-tosixinch-complete.bash
-^^^^^^^^^^^^^^^^^^^^^^^
+_tosixinch.bash
+^^^^^^^^^^^^^^^
 
 A basic bash completion script.
 If you are using bash, it should be useful.
 Source it in your ``.bashrc``. For example::
 
-    source [...]/site-packages/tosixinch/script/tosixinch-complete.bash
+    source [...]/site-packages/tosixinch/data/_tosixinch.bash
 
 
 Vendored Libraries

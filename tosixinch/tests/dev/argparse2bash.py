@@ -3,7 +3,7 @@
 """Generate bash completion file for the application.
 
 Read template and write to a file.
-(``complete.template.bash`` and ``tosixinch-complete.bash``, respectively.)
+(``_tosixinch.t.bash`` and ``_tosixinch.bash``, respectively.)
 
 You have to manually pick options for FILE_COMP and DIR_COMP.
 """
@@ -17,8 +17,8 @@ import tosixinch.templite
 
 
 SCRIPT_DIR = os.path.dirname(__file__)
-TEMPLATE_FILE = SCRIPT_DIR + '/complete.template.bash'
-OUTPUT_FILE = SCRIPT_DIR + '/../../script/tosixinch-complete.bash'
+TEMPLATE_FILE = SCRIPT_DIR + '/_tosixinch.t.bash'
+OUTPUT_FILE = SCRIPT_DIR + '/../../data/_tosixinch.bash'
 
 
 FILE_COMP = {
@@ -138,7 +138,7 @@ def render(template_file, output):
         f.write(text)
 
 
-HELP = """python complete-bash.py [-l][-p][-x TEMPLATE_FILE OUTPUT_FILE][-X]
+HELP = """python argparse2bash.py [-l][-p][-x TEMPLATE_FILE OUTPUT_FILE][-X]
     -l: list detailed options data to look and see.
     -p: print out just option names (may be good for copy and paste).
     -x: actually render TEMPLATE_FILE, write to OUTPUT_FILE
