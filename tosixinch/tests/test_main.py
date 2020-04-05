@@ -8,7 +8,8 @@ class TestParse:
 
     def test_add_binary_extension(self):
         base_args = [
-            '--input', 'http://example.com', '--add-binary-extensions']
+            '--nouserdir', '--input', 'http://example.com',
+            '--add-binary-extensions']
 
         num = 238  # number of items in the extension list
 
