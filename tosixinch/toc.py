@@ -26,7 +26,7 @@ class Node(location.Location):
     """Represent one non-blank line in ufile."""
 
     def __init__(self, level, url, title, root=None, platform=sys.platform):
-        super().__init__(url, platform)
+        super().__init__(url, platform=platform)
         self.level = level
         self.title = title
         self.root = root or self
