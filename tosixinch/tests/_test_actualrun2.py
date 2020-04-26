@@ -590,7 +590,7 @@ def tox_run():
 
     # Get only the first url (wikipedia.org).
     urls = [URLS[0]]
-    args = []
+    args = _minimum_args()
 
     with tempfile.TemporaryDirectory(prefix='tosixinch-') as tmpdir:
         os.chdir(tmpdir)
