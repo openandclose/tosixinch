@@ -15,6 +15,7 @@ import collections
 import functools
 import io
 import logging
+import ntpath
 import os
 import posixpath
 import re
@@ -211,10 +212,15 @@ class _Location(object):
         if self.is_local:
             if self._check_filescheme(url):
                 url = self._strip_filescheme(url)
-            elif self.platform == sys.platform:
-                url = os.path.expanduser(url)
-                url = os.path.expandvars(url)
-                url = os.path.abspath(url)
+            else:
+                if self.platform == sys.platform:
+                    url = os.path.expanduser(url)
+                    url = os.path.expandvars(url)
+
+                if self.platform == 'win32':
+                    url = ntpath.normcase(ntpath.abspath(url))
+                else:
+                    url = posixpath.abspath(url)
         return url
 
     def _check_filescheme(self, url):

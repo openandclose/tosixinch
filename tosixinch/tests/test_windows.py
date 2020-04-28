@@ -28,8 +28,8 @@ class TestWindowsMakePath:
 
         url, fname, fnew = (
             r'C:\aaa.org\bbb.html',
-            r'C:\aaa.org\bbb.html',
-            r'_htmls\C\aaa.org\bbb~.html')
+            r'c:\aaa.org\bbb.html',
+            r'_htmls\c\aaa.org\bbb~.html')
         self.compare(url, fname, fnew)
 
     def test_filescheme(self):
@@ -56,8 +56,7 @@ class TestWindowsMakePath:
         url = r'c:\aaa\bbb.html'
         self.compare(url, fname, fnew)
         url = r'c:\\aaa\bbb.html'
-        with pytest.raises(ValueError):
-            self.compare(url, url, fnew)  # note arguments: url, url, fnew
+        self.compare(url, fname, fnew)
 
         fnew = r'_htmls\aaa\bbb~.html'
 
