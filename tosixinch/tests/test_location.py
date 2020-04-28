@@ -204,7 +204,7 @@ class TestLocalReference:
         # colon in relative url
         url, local_url, fname = (
             'https://aaa.org/bbb:cc',
-            './bbb:cc/_',
+            'bbb%3Acc/_',
             '_htmls/aaa.org/bbb:cc/_')
         self.compare(url, local_url, fname)
 

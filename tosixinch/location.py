@@ -113,7 +113,7 @@ def _path2url(path, platform=sys.platform):
                     or comp[0] not in string.ascii_letters.split()):
                 raise OSError('Invalid filepath: %r' % path)
             path = '///%s:%s' % (comp[0], comp[1])
-    return urllib.parse.quote(path, safe=PATHSAFECHARS)
+    return urllib.parse.quote(path)
 
 
 def _url_quote(url):
