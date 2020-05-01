@@ -513,13 +513,15 @@ Users have to fill the value accordingly, if setting.
 
     Application's config files
     (``data/tosixinch.default.ini`` and ``data/site.default.ini``)
-    are special, defining the rule and the value at the same time, e.g.
+    use special syntax, defining some metadata, e.g.
 
     .. code-block:: ini
 
-        force_download=     [=BOOL] no
+        force_download=     : force '--download' and '--parts-download' even if the file already exists
+                            :: f: bool
+                            no
 
-    Users should write options without ``[=...]`` part.
+    Users should write options without lines starting with ``:``.
 
     .. code-block:: ini
 
