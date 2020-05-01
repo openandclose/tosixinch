@@ -1,12 +1,9 @@
 
 import argparse
 import os
-import sys
+import sys  # noqa: F401
 
-# sys.path.insert(0, os.path.abspath(__file__ + '/../..'))
-# print(sys.path)
-
-import pytest  # noqa: F401
+import pytest
 
 import tosixinch.settings
 
@@ -22,7 +19,7 @@ class TestParse:
         args.userdir = test_dir
         urls = (
             'http://bbb.com/ttt/xxx#yyy',
-            )
+        )
         return tosixinch.settings.Conf(urls, args=args)
 
     @pytest.fixture(scope='class')
@@ -37,7 +34,6 @@ class TestParse:
         assert conf.pdfname == 'bbb-xxx.pdf'
 
     def test_parse_fnew(self, site):
-        # fnew_value = '_htmls/bbb.com/ttt/xxx#yyy~.html'
         fnew_value = '_htmls/bbb.com/ttt/xxx/_~.html'
         assert site.fnew == fnew_value
 
@@ -50,7 +46,8 @@ class TestParse:
         assert site.exclude == exclude_value
 
     def test_parse_cnvopts(self, conf):
-        opts = ['--javascript', '--font', 'DejaVu Sans Mono', '-A', '1', '-B', '2']
+        opts = ['--javascript',
+            '--font', 'DejaVu Sans Mono', '-A', '1', '-B', '2']
         assert conf.converter.cnvopts == opts
 
 

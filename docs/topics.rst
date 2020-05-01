@@ -248,9 +248,8 @@ writes to a single html, and creates a new ``url`` list
 (`tocfile <overview.html#dword-tocfile>`__).
 
 When ``--file`` is ``'urls.txt'`` (default),
-the name of ``tocfile`` is ``'urls-toc.txt'``.
-They can be other names,
-but here, we only use them for explanation purpose.
+the name of ``tocfile`` is ``'urls-toc.txt'``
+(it can be other names).
 
 Table of Contents adjustments are done
 simply by decreasing ``heading`` numbers.
@@ -524,13 +523,11 @@ the script skips the following postcmd in addition.
                                  |
                            (to next action group)
 
-
-
-In running subprocess, other return codes (not 0, 100, 101, 102) aborts the script.
+In running subprocess, other return codes (not 0, 100, 101, 102) aborts the program.
 
 In running module, any other return codes and values (not 0, 100, 101, 102)
 are interpreted as 0.
-(Python itself aborts the script if something went wrong.)
+(Python itself aborts the program if something went wrong.)
 
 
 Viewcmd
@@ -562,7 +559,7 @@ but cancels duplicate openings.)
 Pre_Each_Cmds and Post_Each_Cmds
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An action group consists of ``precmd``, ``action``, ``postcmd``.
+An action group consists of ``precmd``, ``action`` and ``postcmd``.
 But when ``download`` or ``extract``,
 ``action`` itself is a collection of jobs, one job for each ``url``.
 For this job, there are corresponding pre- and post- hookcmds.
@@ -627,10 +624,9 @@ Also, the following environment variables are exposed
 Scripts
 -------
 
-A few script files are included in the application.
-They are not 'installed',
-just copied in the tosixinch installation directory
-(in ``script`` folder).
+A few sample script files are included in the application.
+They are in ``tosixinch/script`` directory in the installation.
+You can refer them in user configurations
 
 _viewer
 ^^^^^^^

@@ -7,6 +7,7 @@ Only called form _ftype.py.
 
 import argparse
 import subprocess
+import sys
 
 import pygments.lexers
 
@@ -25,20 +26,18 @@ def _get_pygments_langs():
     for lexer in pygments.lexers.get_all_lexers():
         name, aliases, filenames, mimetypes = lexer
         langs.append([name.lower(), name, aliases, filenames])
-    langs.sort()
-    return langs
+    return sorted(langs)
 
 
 def _get_ctags_langs(path):
     langs = []
     ret = subprocess.run([path, '--list-maps'], capture_output=True)
-    maps = ret.stdout.decode('utf-8').split('\n')[:-1]
+    maps = ret.stdout.decode(sys.stdout.encoding).split('\n')[:-1]
     for map_ in maps:
         k, *v = map_.split()
         langs.append([k.lower(), k, '', v])
 
-    langs.sort()
-    return langs
+    return sorted(langs)
 
 
 def _next(x):

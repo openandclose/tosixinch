@@ -347,7 +347,7 @@ class Site(location.Location):
             num = int(self.general.trimdirs)
             sep = os.sep
         else:
-            num = 2  # remove '_htmls' and scheme
+            num = 2  # remove '_htmls' and host
             sep = '/'
         parts = self.url.split(sep)
         num = min(num, len(parts) - 1)

@@ -29,9 +29,9 @@ class _PygmentsCode(textformat.Prose):
         super().__init__(conf, site)
         self.lexer = lexer
         self.tagdb = tagdb
-        start_token = start_token if start_token else 'Token.Name'
+        start_token = start_token or 'Token.Name'
         self.start_token = pygments.token.string_to_tokentype(start_token)
-        self.kindmap = kindmap if kindmap else {}
+        self.kindmap = kindmap or {}
         self.escape = escape or html.escape
         self.debug = debug
 
@@ -55,7 +55,7 @@ class _PygmentsCode(textformat.Prose):
         """Subdivide a line of tokens to words or whites groups.
 
         Token values are e.g. 'func', '(', 'arg', ')', ':'...
-        To calcurate text wrapping,
+        To calculate text wrapping,
         we have to concatenate successive non-whitespaces or whitespaces tokens
         (and divide a token if ever exists a mixed one).
 

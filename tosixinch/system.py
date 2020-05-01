@@ -30,15 +30,15 @@ def make_directories(fname, on_error_exit=True):
             sys.exit(1)
         else:
             return
-    dname = os.path.abspath(os.path.dirname(fname))
-    os.makedirs(dname, exist_ok=True)
+    path = os.path.abspath(os.path.dirname(fname))
+    os.makedirs(path, exist_ok=True)
 
 
 def _in_current_dir(fname, base=os.curdir):
     current = os.path.abspath(base)
-    filepath = os.path.abspath(fname)
+    path = os.path.abspath(fname)
     # note: the same filepath is not 'in' current dir.
-    if filepath.startswith(current + os.sep):
+    if path.startswith(current + os.sep):
         return True
     else:
         return False
@@ -167,11 +167,11 @@ def run_cmds(cmds, conf, site=None):
     return returncode or 0
 
 
-def run_cmd(_cmd, user_scriptdir, scriptdir, conf, site=None):
-    if not _cmd:
+def run_cmd(command, user_scriptdir, scriptdir, conf, site=None):
+    if not command:
         return
 
-    cmd = [_eval_obj(conf, 'conf', word) for word in _cmd]
+    cmd = [_eval_obj(conf, 'conf', word) for word in command]
     cmd = [_eval_obj(site, 'site', word) for word in cmd]
 
     paths = _add_path_env(user_scriptdir, scriptdir)
@@ -181,8 +181,8 @@ def run_cmd(_cmd, user_scriptdir, scriptdir, conf, site=None):
     env.update(paths)
     env.update(files)
     ret = subprocess.run(cmd, env=env)
-
     returncode = ret.returncode
+
     if returncode not in (0, 100, 101, 102):
         args = {
             'returncode': returncode,

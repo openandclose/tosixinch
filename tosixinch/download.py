@@ -78,8 +78,8 @@ def download(url, fname,
 
 
 def _add_cookie(cj, name, value, domain, path='/'):
-    # cf.
-    # class http.cookiejar.Cookie
+    # cf. http.cookiejar.Cookie signature
+    #
     # def __init__(
     #     version, name, value,
     #     port, port_specified,
@@ -93,7 +93,7 @@ def _add_cookie(cj, name, value, domain, path='/'):
     domain_initial_dot = False
     if domain.startswith('.'):
         domain_initial_dot = True
-    expires = time.time() + 60 * 60 * 24 * 2  # 2days from now
+    expires = time.time() + 60 * 60 * 24 * 2  # 2 days from now
 
     cookie = http.cookiejar.Cookie(
         0, name, value,
@@ -119,9 +119,8 @@ def add_cookie(cj, cookie):
 # Notes about Qt
 
 # Codes relating ``qt`` are just snippet copies arround the web.
-# And I don't know and rather don't want to underlined details.
 
-# Seems many stackoverflow answers follow his article.
+# It seems many stackoverflow answers follow his article.
 # https://impythonist.wordpress.com/2015/01/06/ultimate-guide-for-scraping-javascript-rendered-web-pages/  # noqa: E501
 
 # For continuous download
@@ -285,13 +284,12 @@ def run(conf, site):
 
     if js:
         if not QT_APP:
-            qt_app, QWebEngineView = start_qt(qt_ver)
-            QT_APP = qt_app
+            QT_APP, QWebEngineView = start_qt(qt_ver)
             if qt_ver == 'webengine':
-                render = qt_webengine_init(url, qt_app, QWebEngineView)
+                render = qt_webengine_init(url, QT_APP, QWebEngineView)
                 qt_download = qt_webengine_download
             elif qt_ver == 'webkit':
-                render = qt_webkit_init(url, qt_app)
+                render = qt_webkit_init(url, QT_APP)
                 qt_download = qt_webkit_download
             else:
                 msg = ("You have to set option 'browser_engine' to "

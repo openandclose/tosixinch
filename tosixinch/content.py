@@ -294,7 +294,6 @@ class HtmlContent(SimpleHtmlContent):
             s = xxpath(self.root, guess)
             if s and len(s) == 1:
                 return guess
-        return None
 
     def clean(self, tags, attrs):
         cleaner = clean.Clean(self.doc, tags, attrs)

@@ -57,9 +57,8 @@ def is_prose(fname, text):
 
 
 def is_python(fname, text=None):
-    # For now, only for python code
-    ext = fname.rsplit('.', maxsplit=1)
-    if len(ext) == 2 and ext[1] in PYTHONEXT:
+    parts = fname.rsplit('.', maxsplit=1)
+    if len(parts) == 2 and parts[1] in PYTHONEXT:
         return True
     if PYTHONFILE.match(text):
         return True

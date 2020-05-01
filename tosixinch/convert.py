@@ -179,6 +179,6 @@ def run(conf):
     elif converter == 'wkhtmltopdf':
         convert = WkhtmltopdfConvert(conf)
     else:
-        raise KeyError('Not known converter: %s' % converter)
+        raise KeyError('unknown converter: %s' % converter)
 
     convert.run()

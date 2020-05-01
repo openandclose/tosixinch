@@ -4,6 +4,7 @@
 
 import argparse
 import os
+import shlex
 import subprocess
 
 
@@ -13,7 +14,7 @@ def open_viewer(cmd, pdfname, check=False, null=False):
     if check:
         if _check_viewer(cmd, pdfname):
             return
-    cmd = cmd.split()
+    cmd = shlex.split(cmd, comments='#')
     cmd.append(pdfname)
     if null:
         pid = subprocess.Popen(cmd, stdout=devnull, stderr=devnull).pid
