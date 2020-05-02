@@ -25,13 +25,6 @@ def _get_scale_func(scale):  # length and percentage
     return func
 
 
-def _render_template(path, new_path, context):
-    with open(path) as f:
-        template = f.read()
-    template = templite.Templite(template)
-    text = template.render(context)
-    with open(new_path, 'w') as f:
-        f.write(text)
 
 
 class StyleSheet(object):
@@ -78,18 +71,26 @@ class StyleSheet(object):
                 path = os.path.join(d, name)
                 if os.path.isfile(path):
                     if name.endswith(TEMPLATE_EXT):
-                        return self._get_file_from_template(name, path)
+                        return self.render_template(name, path)
                     else:
                         return path
 
-    def _get_file_from_template(self, name, path):
+    def render_template(self, name, path):
         new_name = name[:-len(TEMPLATE_EXT)] + '.css'
         if self._user_cssdir:
             new_path = os.path.join(self._user_cssdir, new_name)
         else:
             new_path = new_name  # current directory
 
-        _render_template(path, new_path, self.context)
+        return self._render_template(path, new_path, self.context)
+
+    def _render_template(self, path, new_path, context):
+        with open(path) as f:
+            template = f.read()
+        template = templite.Templite(template)
+        text = template.render(context)
+        with open(new_path, 'w') as f:
+            f.write(text)
         return new_path
 
     def _build_context(self):
