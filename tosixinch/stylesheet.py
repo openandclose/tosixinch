@@ -25,6 +25,10 @@ def _get_scale_func(scale):  # length and percentage
     return func
 
 
+def _add_percent_scale_func(context, percent):
+    # add percent-scale function to context, e.g. percent80(20) -> 16
+    key = 'percent%02d' % percent
+    context[key] = _get_scale_func(percent / 100)
 
 
 class StyleSheet(object):
@@ -103,10 +107,8 @@ class StyleSheet(object):
         if len(sizes) == 2:
             context['width'], context['height'] = sizes
 
-        # https://stackoverflow.com/a/3693090
-        FUNC_TEMPLATE = """context['percent%d'] = _get_scale_func(%d/100)"""
         for i in range(80, 100):
-            exec(FUNC_TEMPLATE % (i, i))
+            _add_percent_scale_func(context, i)
 
         using = lambda x: self._conf.converter.name == x
         conv_dict = {
