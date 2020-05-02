@@ -73,20 +73,14 @@ class StyleSheet(object):
                 yield _cache[name]
 
     def _get_file(self, name):
-        path = None
         for d in (self._user_cssdir, self._cssdir):
             if d:
-                path_ = os.path.join(d, name)
-                if os.path.isfile(path_):
-                    path = path_
-                    break
-        if path is None:
-            return
-
-        if name.endswith(TEMPLATE_EXT):
-            return self._get_file_from_template(name, path)
-        else:
-            return path
+                path = os.path.join(d, name)
+                if os.path.isfile(path):
+                    if name.endswith(TEMPLATE_EXT):
+                        return self._get_file_from_template(name, path)
+                    else:
+                        return path
 
     def _get_file_from_template(self, name, path):
         new_name = name[:-len(TEMPLATE_EXT)] + '.css'
