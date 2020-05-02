@@ -57,7 +57,7 @@ class TestParse:
 class TestPDFName:
 
     def compare(self, url, section, length, pdfname):
-        f = tosixinch.settings._getpdf
+        f = tosixinch.settings._getpdfname
         assert f(url, section, length) == pdfname
 
     def test(self):

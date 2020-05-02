@@ -117,10 +117,10 @@ def _get_pdfname(sites):
     url = site.url
     section = site.section
     length = len(sites)
-    return _getpdf(url, section, length)
+    return _getpdfname(url, section, length)
 
 
-def _getpdf(url, section, length=1):
+def _getpdfname(url, section, length=1):
     parts = urllib.parse.urlsplit(url)
     host = ''
     if parts.netloc:
