@@ -8,6 +8,21 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 **Unreleased:**
 ---------------
 
+**Change:**
+
+* Add latin_1 to default encoding option
+
+  From::
+
+      utf-8, cp1252
+
+  To::
+
+      utf-8, cp1252, latin_1
+
+  Which means no encoding errors from input,
+  and in general it should be preferable.
+
 **Add:**
 
 * Add urlno.py and urlmap.py (internal)
