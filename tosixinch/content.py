@@ -125,7 +125,8 @@ def iter_component(doc):
         yield el, url
 
 
-def xpath_select(el, string):
+def xxpath(el, string):
+    # run el.xpath(string), but with more helpful message on errors.
     try:
         return el.xpath(string)
     except lxml.etree.LxmlError as e:
@@ -279,17 +280,17 @@ class HtmlContent(SimpleHtmlContent):
         self.doc = doc
 
     def select(self, sel):
-        for t in xpath_select(self.root.body, sel):
+        for t in xxpath(self.root.body, sel):
             self.doc.body.append(t)
 
     def exclude(self, sel):
-        for t in xpath_select(self.doc.body, sel):
+        for t in xxpath(self.doc.body, sel):
             if t.getparent() is not None:
                 t.getparent().remove(t)
 
     def guess_selection(self, guesses):
         for guess in guesses:
-            s = xpath_select(self.root, guess)
+            s = xxpath(self.root, guess)
             if s and len(s) == 1:
                 return guess
         return None
