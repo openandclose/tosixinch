@@ -160,6 +160,8 @@ def run_cmds(cmds, conf, site=None):
                 continue
 
         returncode = run_cmd(cmd, user_scriptdir, scriptdir, conf, site)
+        if returncode in (100, 101, 102):
+            break
 
     # If returncode is None, normalize it to 0
     return returncode or 0
