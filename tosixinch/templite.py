@@ -1,10 +1,19 @@
 
-# ----------------------------------------------------------
+# -------------------------------------------------------------------
+# This section is by openandclose (https://github.com/openandclose).
+#
 # This module is copied from Ned Batchelder's Coverage.py.
 # https://github.com/nedbat/coveragepy/blob/master/coverage/templite.py
+# 2de1c8f03fea7d234092508622ed84b7d03a079d
 
 # Small changes are made to work independently.
-# ----------------------------------------------------------
+#
+# - Add this section
+# - Cut Python2 code
+# - Reformat a few blank or long lines (to suit my PEP8 settings)
+#
+# -------------------------------------------------------------------
+# End of section by openandclose
 
 
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
@@ -95,7 +104,10 @@ class Templite(object):
 
         {# This will be ignored #}
 
-    Any of these constructs can have a hypen at the end (`-}}`, `-%}`, `-#}`),
+    Lines between `{% joined %}` and `{% endjoined %}` will have lines stripped
+    and joined.  Be careful, this could join words together!
+
+    Any of these constructs can have a hyphen at the end (`-}}`, `-%}`, `-#}`),
     which will collapse the whitespace following the tag.
 
     Construct a Templite with the template text, then use `render` against a
@@ -157,7 +169,7 @@ class Templite(object):
         # Split the text to form a list of tokens.
         tokens = re.split(r"(?s)({{.*?}}|{%.*?%}|{#.*?#})", text)
 
-        squash = False
+        squash = in_joined = False
 
         for token in tokens:
             if token.startswith('{'):
@@ -199,6 +211,9 @@ class Templite(object):
                             )
                         )
                         code.indent()
+                    elif words[0] == 'joined':
+                        ops_stack.append('joined')
+                        in_joined = True
                     elif words[0].startswith('end'):
                         # Endsomething.  Pop the ops stack.
                         if len(words) != 1:
@@ -209,12 +224,17 @@ class Templite(object):
                         start_what = ops_stack.pop()
                         if start_what != end_what:
                             self._syntax_error("Mismatched end tag", end_what)
-                        code.dedent()
+                        if end_what == 'joined':
+                            in_joined = False
+                        else:
+                            code.dedent()
                     else:
                         self._syntax_error("Don't understand tag", words[0])
             else:
                 # Literal content.  If it isn't empty, output it.
-                if squash:
+                if in_joined:
+                    token = re.sub(r"\s*\n\s*", "", token.strip())
+                elif squash:
                     token = token.lstrip()
                 if token:
                     buffered.append(repr(token))
