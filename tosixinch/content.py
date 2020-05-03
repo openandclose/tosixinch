@@ -132,7 +132,7 @@ def xpath_select(el, string):
         _e = e.error_log.last_error
         n = _e.column
         s = string[:n] + '^^^ ' + string[n] + ' ^^^' + string[n + 1:]
-        fmt = ("Xpath error occured probably at column %s "
+        fmt = ("Xpath error occured probably at column %d "
                "(find the mark '^^^'):\n%s\n")
         logger.error(fmt, n, s)
         raise
