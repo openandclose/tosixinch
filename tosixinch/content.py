@@ -132,9 +132,10 @@ def xxpath(el, string):
     except lxml.etree.LxmlError as e:
         _e = e.error_log.last_error
         n = _e.column
-        s = string[:n] + '^^^ ' + string[n] + ' ^^^' + string[n + 1:]
-        fmt = ("Xpath error occured probably at column %d "
-               "(find the mark '^^^'):\n%s\n")
+        s = ' ' * (n - 1) + '^'
+        s = string + '\n' + s
+        fmt = ("xpath error occured probably at column %d "
+               "(at the mark '^'):\n\n%s\n")
         logger.error(fmt, n, s)
         raise
 
