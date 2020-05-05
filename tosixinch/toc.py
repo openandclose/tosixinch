@@ -97,9 +97,6 @@ class Nodes(location.Locations):
 
         self._comment = (';',)
 
-    @property
-    def tocfile(self):
-        return self.get_tocfile()
 
     def _parse_toc_url(self, url):
         m = re.match(r'^\s*(#+)?\s*(.+)?\s*$', url)
@@ -157,7 +154,7 @@ class Nodes(location.Locations):
             node.write()
 
         urls = '\n'.join([node.url for node in self if node.root is node])
-        with open(self.tocfile, 'w') as f:
+        with open(self.get_tocfile(), 'w') as f:
             f.write(urls)
 
 
