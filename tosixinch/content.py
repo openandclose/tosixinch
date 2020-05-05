@@ -73,9 +73,7 @@ EXTERNAL_CSS = '<link class="tsi-css" href="%s" rel="stylesheet">'
 
 
 def is_html(fname, text, min_chars=4096):
-    if len(text) < min_chars:
-        return False
-    if HTMLFILE.match(text[:4096]):
+    if HTMLFILE.match(text[:min_chars]):
         return True
     return False
 
