@@ -68,14 +68,15 @@ import sys
 import tempfile
 import time
 
-from tosixinch import location
 import tosixinch.main
 import tosixinch.settings
+
+from tosixinch import location
 
 
 _FAIL = 0
 
-BUFSIZE = 8*1024
+BUFSIZE = 8 * 1024
 
 PNG_DIR = '_png'
 IMG_PREFIX = 'pdfcmp'
@@ -101,7 +102,6 @@ IMAGE_VIEWER_CMD = 'sxiv %s %s %s'
 PDF_PAGE_COUNT_CMD = 'pdfinfo %s'
 PDF_TO_PNG_CMD = 'pdftoppm -f %s -l %s -png %s %s'
 
-
 TESTDIR = os.path.dirname(os.path.abspath(__file__))
 TEMP = os.path.join(TESTDIR, 'temp')
 OUTCOME = os.path.join(TEMP, 'actualrun', 'outcome')
@@ -112,7 +112,7 @@ APPLICATION_ROOT = os.path.dirname(TESTDIR)
 class Checker(object):
     """Check file timestamps and the logfile.
 
-    the logfile keeps the last time some tests were run.
+    the logfile keeps the last time one of tests in this module was run.
 
     :param action_type: the type of tests to check
     """
@@ -257,7 +257,7 @@ def _bincmp(f1, f2):
                     return False
 
 
-def  _open_editor(ref, filename):
+def _open_editor(ref, filename):
     cmd = HTML_DIFF_VIEWER_CMD % (ref, filename)
     subprocess.run(cmd.split())
 
@@ -306,8 +306,8 @@ def _create_png_page(num, ref, filename):
 def _create_diff_png_page(png1, png2, png3):
     # from https://stackoverflow.com/a/1311122
     from PIL import Image, ImageChops
-    im1 = Image.open(png1) 
-    im2 = Image.open(png2) 
+    im1 = Image.open(png1)
+    im2 = Image.open(png2)
     im3 = ImageChops.difference(im1, im2)
     im3.save(png3)
 
@@ -455,7 +455,7 @@ def _clean_ref():
     assert os.path.abspath(os.curdir) == REFERENCE
 
     _clean_ref_directory()
-    
+
 
 def _get_downloaded_files(urls):
     for url in urls:
@@ -511,8 +511,8 @@ def update_one_ref(urls):
     """Update reference Extracted_File and PDFFile.
 
     If the present code changes and generated files changes is to remain,
-    from this new model, recreate reference files, only for one url."""
-
+    from this new model, recreate reference files, only for one url.
+    """
     curdir = os.curdir
     os.chdir(REFERENCE)
 
@@ -588,14 +588,14 @@ def _tox_run(urls, args):
 
 def tox_run():
     """Just check if actual invocation doesn't raise Errors (for tox)."""
-
     # Get only the first url (wikipedia.org).
     urls = [URLS[0]]
     args = _minimum_args()
 
     with tempfile.TemporaryDirectory(prefix='tosixinch-') as tmpdir:
         os.chdir(tmpdir)
-        _tox_run(urls,args)
+        _tox_run(urls, args)
+
 
 def update_url_download(urls):
     os.chdir(REFERENCE)

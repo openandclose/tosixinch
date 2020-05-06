@@ -27,6 +27,3 @@ class TestFilteredIter:
         for el in clean.conditioned_iter(doc, is_not_p):
             output.append(tostring(el))
         assert list(output) == expected
-
-
-
