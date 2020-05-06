@@ -17,7 +17,7 @@ import tosixinch.process.sample as process_sample
 
 logger = logging.getLogger(__name__)
 
-DIRECTIVE_PREFIX = ('#',)
+DIRECTIVE_PREFIX = '#'
 
 TOCDOMAIN = 'http://tosixinch.example.com'
 
@@ -95,11 +95,13 @@ class Nodes(location.Locations):
 
         super().__init__(urls, ufile)
 
-        self._comment = (';',)
-
+        # (';',)
+        self._comment = tuple(set(self._comment) - set(DIRECTIVE_PREFIX))
+        self._directive_re = re.compile(
+            r'^\s*(%s+)?\s*(.+)?\s*$' % DIRECTIVE_PREFIX)
 
     def _parse_toc_url(self, url):
-        m = re.match(r'^\s*(#+)?\s*(.+)?\s*$', url)
+        m = self._directive_re.match(url)
         if m.group(1):
             cnt = len(m.group(1))
         else:
