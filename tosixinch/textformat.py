@@ -79,10 +79,13 @@ class Prose(object):
         self.fnew = site.fnew
         self.width = int(conf.general.textwidth)
         self.indent = conf.general.textindent.strip('"\'')
-
-        self._name = self.__class__.__name__.lower()
-        self.textclass = TEXTCLASS_PREFIX + self._name
+        self.ftype = self._site.ftype
+        self.textclass = self._get_textclass()
         self.done_escape = False
+
+    def _get_textclass(self):
+        name = self.__class__.__name__.lower()
+        return TEXTCLASS_PREFIX + name
 
     def _wrap(self):
         self.wrapped = self.text

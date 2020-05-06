@@ -23,8 +23,6 @@ WORDSEP = re.compile(r'([\v\f ]+)')  # '\n\r\t' are already processed.
 class _PygmentsCode(textformat.Prose):
     """Collect non-exposed methods for PygmentsCode."""
 
-    TEXTCLASS_PREFIX = 'tsi-text tsi-pcode tsi-'
-
     def __init__(self, conf, site,
             lexer, tagdb=None, start_token=None, kindmap=None,
             escape=None, debug=False):
@@ -36,8 +34,10 @@ class _PygmentsCode(textformat.Prose):
         self.kindmap = kindmap if kindmap else {}
         self.escape = escape or html.escape
         self.debug = debug
-        self.ftype = self._site.ftype
-        self.textclass = self.TEXTCLASS_PREFIX + self.ftype
+
+    def _get_textclass(self):
+        # e.g. 'tsi-text tsi-pcode tsi-python'
+        return textformat.TEXTCLASS_PREFIX + 'pcode tsi-' + self.ftype
 
     def _preprocess(self):
         """Simulate what``pygments.Lexer.get_tokens()`` does.
