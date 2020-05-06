@@ -96,12 +96,12 @@ class Clean(object):
         cleaner = lxml.html.clean.Cleaner(**self.kwargs)
         cleaner(self.doc)
 
-    def _skip_tags(self, el):
+    def _keep_tags(self, el):
         if el.tag in SKIPTAGS:
             return False
         return True
 
-    def _skip_style(self, el):
+    def _keep_style(self, el):
         if KEEP_STYLE in el.classes:
             return True
         return False
@@ -109,13 +109,13 @@ class Clean(object):
     def _clean_attributes(self):
         if not self.attrs:
             return
-        for el in conditioned_iter(self.doc, self._skip_tags):
+        for el in conditioned_iter(self.doc, self._keep_tags):
             for attribute in el.attrib:
                 if attribute in self.attrs:
                     del el.attrib[attribute]
                     continue
                 if attribute == 'style':
-                    if self._skip_style(el):
+                    if self._keep_style(el):
                         continue
                     del el.attrib[attribute]
 
