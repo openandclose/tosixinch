@@ -19,21 +19,26 @@ def check_installation():
     return x, y
 
 
-X, Y = check_installation()
-if not X == Y:
-    msg = ("python and tosixinch are "
-        "either both in the tox environment, or both not.")
-    raise EnvironmentError(msg)
-
-if X:
-    try:
-        import tosixinch.tests
-        msg = "tox environment shouldn't have 'tosixinch.tests'."
-        raise EnvironmentError(msg)
-    except ImportError:
-        pass
-
-
 def test_pytest():
     x, y = check_installation()
     assert x == y
+
+
+def main():
+    x, y = check_installation()
+    if x != y:
+        msg = ("python and tosixinch should be "
+            "either both in the tox environment, or both not.")
+        raise EnvironmentError(msg)
+
+    if x:
+        try:
+            import tosixinch.tests
+            msg = "tox environment shouldn't have 'tosixinch.tests'."
+            raise EnvironmentError(msg)
+        except ImportError:
+            pass
+
+
+if __name__ == '__main__':
+    main()
