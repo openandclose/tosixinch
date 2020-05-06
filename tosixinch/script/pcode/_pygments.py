@@ -210,8 +210,8 @@ class PygmentsCode(_PygmentsCode):
         for rows in rows:
             for row in rows:
                 # just picking the first one
-                path = self.get_relpath(row[2])
-                return self.wrap_ref(value, row[0], path)
+                url = self.get_relative_url(row[2])
+                return self.wrap_ref(value, row[0], url)
 
     def wrap_def(self, value, id_, tagname=None, fmt=None):
         fdict = {
@@ -232,7 +232,7 @@ class PygmentsCode(_PygmentsCode):
         fmt = fmt or self.REFFMT
         return fmt.format(**fdict)
 
-    def get_relpath(self, refname):
+    def get_relative_url(self, refname):
         if refname == self.fname:
             return ''
         path = location.Location(refname).fnew

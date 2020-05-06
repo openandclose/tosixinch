@@ -23,6 +23,9 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
   Which means no encoding errors from input,
   and in general it should be preferable.
 
+* Rename method ``_get_relpath`` to ``_get_relative_url``
+  in ``tosixinch.pcode._pygments.PygmentsCode``.
+
 **Add:**
 
 * Add urlno.py and urlmap.py (internal)
