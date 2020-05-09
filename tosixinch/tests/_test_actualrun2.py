@@ -518,6 +518,7 @@ def update_one_ref(urls):
 
     args = _minimum_args()
 
+    update_url_download(urls)
     update_url_extract(urls)
     update_url_convert(urls)
 
@@ -599,6 +600,7 @@ def tox_run():
 def update_url_download(urls):
     os.chdir(REFERENCE)
     args = _minimum_args()
+    args.append('--force-download')
     _run(urls, args, 'download', do_compare=False)
     _copy_downloaded_files(urls)
 
@@ -606,6 +608,7 @@ def update_url_download(urls):
 def update_url_extract(urls):
     os.chdir(REFERENCE)
     args = _minimum_args()
+    args.append('--force-download')
     _run(urls, args, 'extract', do_compare=False)
 
 
