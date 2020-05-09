@@ -89,7 +89,7 @@ class Extract(content.HtmlContent):
         if self._parts_download:
             super().get_components()
 
-    def cleanup(self):
+    def clean(self):
         tags = self._site.general.add_clean_tags
         attrs = self._site.general.add_clean_attrs
         super().clean(tags, attrs)
@@ -105,7 +105,7 @@ class Extract(content.HtmlContent):
         self.exclude()
         self.process()
         self.components()
-        self.cleanup()
+        self.clean()
         self.add_css()
         self.write()
 
