@@ -54,7 +54,6 @@ class Extract(content.HtmlContent):
 
     def __init__(self, conf, site):
         self._conf = conf
-        self._appconf = conf._appconf
         self._site = site
 
         self.url = site.url
