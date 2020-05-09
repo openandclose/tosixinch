@@ -69,7 +69,6 @@ class Extract(content.HtmlContent):
         self.codings = site.general.encoding
         self.errors = site.general.encoding_errors
         self._parts_download = site.general.parts_download
-        self._force_download = site.general.force_download
         self._full_image = site.general.full_image
 
         self.text = site.text
