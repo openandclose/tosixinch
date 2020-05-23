@@ -167,7 +167,9 @@ def get_component_size(el, fname, stream=None):
         return int(w), int(h)
     except FileNotFoundError:
         return None, None
-    except ValueError:
+    except OSError:  # 'File name too long' etc.
+        return None, None
+    except ValueError:  # imagesize failed to guess
         return None, None
 
 

@@ -7,7 +7,6 @@ Either by ``urllib`` or ``pyqt5``.
 import http.cookiejar
 import gzip
 import logging
-import shutil
 import time
 import urllib.request
 import zlib
@@ -47,18 +46,15 @@ def download(url, fname,
         urllib.request.HTTPCookieProcessor(cj))
 
     try:
-        with opener.open(req) as f, open(fname, 'wb') as g:
-            # '_io.BufferedReader' (local files)
-            # does not have 'getheader' method.
+        with opener.open(req) as f:
+            text = f.read()
             if isinstance(f, http.client.HTTPResponse):
                 if f.getheader('Content-Encoding') == 'gzip':
-                    g.write(gzip.decompress(f.read()))
-                    return
+                    text = gzip.decompress(text)
                 elif f.getheader('Content-Encoding') == 'deflate':
                     logger.info("[http] 'Content-Encoding' is 'deflate'")
-                    g.write(zlib.decompress(f.read()))
-                    return
-            shutil.copyfileobj(f, g)
+                    text = zlib.decompress(text)
+            system.Writer(fname, text).write()
 
     except urllib.request.HTTPError as e:
         if on_error_exit:
@@ -69,6 +65,7 @@ def download(url, fname,
             logger.warning(
                 '[HTTPError %s %s %s] %s' % (
                     e.code, e.reason, e.headers, url))
+
     except urllib.request.URLError as e:
         if on_error_exit:
             raise
