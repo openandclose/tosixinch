@@ -71,6 +71,11 @@ def download(url, fname,
             raise
         logger.warning('[URLError %s] %s' % (e.reason, url))
 
+    except http.client.RemoteDisconnected as e:
+        if on_error_exit:
+            raise
+        logger.warning('[RemoteDisconnected: %s] %s' % (str(e), url))
+
 
 def _add_cookie(cj, name, value, domain, path='/'):
     # cf.
