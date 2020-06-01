@@ -246,24 +246,12 @@ _mod_cache = {}
 _obj_cache = {}
 
 
-def _load_user_package(userdir, package_name):
-    if package_name in sys.modules:
-        return
+def _register_userdir(userdir):
     if userdir is None:
         return
-    package_dir = os.path.join(userdir, *package_name.split('.'))
-    if not os.path.isdir(package_dir):
+    if userdir in sys.path:
         return
-
     sys.path.insert(0, userdir)
-    try:
-        importlib.import_module(package_name)
-    except ImportError:
-        pass
-    else:
-        fmt = "user %r directory is registered. (%r)"
-        logger.debug(fmt, package_name, package_dir)
-    sys.path.remove(userdir)
 
 
 def _get_module(userdir, package_name, modname, on_error_exit=False):
@@ -272,7 +260,7 @@ def _get_module(userdir, package_name, modname, on_error_exit=False):
         return _mod_cache[key]
 
     if userdir:
-        _load_user_package(userdir, package_name)
+        _register_userdir(userdir)
 
     if userdir:
         name = '%s.%s' % (package_name, modname)

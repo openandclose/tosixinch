@@ -8,6 +8,14 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 **Unreleased:**
 ---------------
 
+**Fix:**
+
+* Fix and change user package import
+
+  Previously if user's Python environment includes some library
+  which also has, say, 'script' package,
+  the program aborted.
+
 
 v0.4.0 (2020-06-02)
 -------------------

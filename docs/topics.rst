@@ -477,6 +477,13 @@ So the module must have ``run`` function with this signature.
 (In this context, ``site`` should be ``None``,
 since it is not available.)
 
+``userdir`` is inserted to ``sys.path`` (``sys.path[0]``).
+So if you want to import sibling modules in the script file,
+refer them from ``script`` package, e.g. ::
+
+    import script.bar
+    from script import baz
+
 The difference from running subprocess is that
 it should be a bit faster, and ``conf`` and ``site`` are writable.
 
