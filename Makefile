@@ -45,7 +45,7 @@ test:
 	python tosixinch/tests/_test_actualrun2.py -x
 
 tox:
-	tox
+	PYTHONPATH= tox
 
 git: scripts copylib
 	git update-index --refresh
