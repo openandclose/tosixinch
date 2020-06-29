@@ -122,6 +122,17 @@ class PrinceConvert(Convert):
     https://www.princexml.com/
     """
 
+    # prince doesn't resolve relative links in local htmls.
+    #
+    # https://www.princexml.com/forum/topic/3792/cross-document-links-from-relative-paths-in-local-files  # noqa: E501
+    # 'Currently the only way to avoid this is
+    # to structure the input filenames so that they match the paths used in the links exactly.'  # noqa: E501
+    #
+    # NG
+    # def _add_files(self):
+    #     files = [os.path.relpath(fl) for fl in self.files]
+    #     _extend(self.cmd, self.files)
+
     def run(self):
         self._add_css_arguments('--style')
         self._add_arguments()
