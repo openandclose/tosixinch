@@ -8,6 +8,16 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 **Unreleased:**
 ---------------
 
+
+v0.4.0 (2020-06-02)
+-------------------
+
+In this version,
+I concentrated many gratuitous API changes I've been thinking,
+while trying not to add positive features.
+
+So be careful to upgrade.
+
 **Change:**
 
 * Cut head data inclusion
@@ -113,7 +123,7 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Rename 'qt' option to 'browser_engine'.
 
-* Move 'javascript' option from (general) site.in to tosixinch.ini.
+* Move 'javascript' option from (general) site.ini to tosixinch.ini.
 
   You can now specify 'javascript' on commandline, tosixinch.ini, or some site sections.
 
@@ -188,6 +198,9 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 v0.3.0 (2020-02-24)
 -------------------
+
+Add very detailed source code highlighter (_pcode).
+Use it in pre-extraction hook ('pre_percmd2').
 
 **Change:**
 
