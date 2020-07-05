@@ -323,9 +323,9 @@ class ReadabilityHtmlContent(HtmlContent):
         doc = build_new_html(title=title, content=content)
         heading = doc.xpath('//h1')
         if len(heading) == 0:
-            process_sample.add_title(doc)
+            process_sample.add_h1(doc)
         if len(heading) > 1:
-            process_sample.decrease_heading(doc)
-            process_sample.add_title(doc)
+            process_sample.lower_heading(doc)
+            process_sample.add_h1(doc)
 
         self.doc = doc

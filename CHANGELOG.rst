@@ -141,6 +141,24 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
                 bbb
                 ccc
 
+  You have to edit user config files if you are using them.
+
+* **[!]** Rename many process functions (process/sample.py) ::
+
+      check_parents_tag       -> check_parent_tag
+      transform_xpath         -> build_class_xpath
+      add_title               -> add_h1
+      add_title_force         -> add_h1_force
+      make_ahref_visible      -> show_href
+      decrease_heading        -> lower_heading
+      decrease_heading_order  -> lower_heading_from_order
+      split_h1_string         -> split_h1
+      replace_h1_string       -> replace_h1
+      change_tagname          -> replace_tags
+      add_noscript_img        -> add_noscript_image
+
+  You have to edit user config files if you are using them.
+
 **Add:**
 
 * Add Python3.8

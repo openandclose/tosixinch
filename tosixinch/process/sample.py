@@ -136,14 +136,14 @@ def insert_tag(el, add, before=True):
     parent.insert(num, add)
 
 
-def check_parents_tag(el, tag='div', generation=2):
+def check_parent_tag(el, tag='div', generation=2):
     """Check existance of tag in an element's parent elements.
 
     And returns it if found.
 
     >>> doc = fromstring('<table><tr><td>aaa</td></tr></table>')
     >>> el = doc.xpath('//td')[0]
-    >>> el = check_parents_tag(el, 'table')
+    >>> el = check_parent_tag(el, 'table')
     >>> el.tag
     'table'
     """
@@ -216,10 +216,10 @@ def get_metadata(el):
         created=created, modified=modified)
 
 
-def transform_xpath(path):
+def build_class_xpath(path):
     """Create a selector for a class from multi classes element.
 
-    >>> transform_xpath('//div[@class=="main-article"]')
+    >>> build_class_xpath('//div[@class=="main-article"]')
     '//div[contains(concat(" ", normalize-space(@class), " "), " main-article ")]'
     """  # noqa: E501 line too long
     pat = r'([a-zA-Z]+|[hH][1-6]|\*)\[@class==([\'"])([_a-zA-Z0-9-]+)\2\]'
@@ -232,12 +232,12 @@ def transform_xpath(path):
 # General Functions
 
 
-def add_title(doc, force=False):
+def add_h1(doc, force=False):
     """If there is no ``<h1>``, make ``<h1>`` from ``<title>`` tag text.
 
     >>> s = '<html><head><title>aaa</title></head><body></body></html>'
     >>> doc = fromstring(s)
-    >>> add_title(doc)
+    >>> add_h1(doc)
     >>> tostring(doc)
     '<html><head><title>aaa</title></head><body><h1>aaa</h1></body></html>'
     """
@@ -252,9 +252,9 @@ def add_title(doc, force=False):
     doc.body.insert(0, el)
 
 
-def add_title_force(doc):
+def add_h1_force(doc):
     """Add title even if there are ``<h1>`` s already."""
-    add_title(doc, True)
+    add_h1(doc, True)
 
 
 def delete_duplicate_br(doc, maxnum=2):
@@ -300,11 +300,11 @@ def youtube_video_to_thumbnail(doc):
         replace_tag(el, itag)
 
 
-def make_ahref_visible(doc):
+def show_href(doc):
     r"""Make ``<a href=...>`` links to visible text.
 
     >>> el = fromstring('<div><a href="aaa">bbb</a></div>')
-    >>> make_ahref_visible(el)
+    >>> show_href(el)
     >>> tostring(el)
     '<div><a href="aaa">bbb</a><span class="tsi-href-visible">\xa0 [[aaa]] \xa0</span></div>'
     """  # noqa: E501
@@ -316,7 +316,7 @@ def make_ahref_visible(doc):
         el.addnext(link)
 
 
-def decrease_heading(doc, path=None):
+def lower_heading(doc, path=None):
     """Decrease heading number except specified element (by xpath).
 
     That is, ``<h1>`` becomes ``<h2>``, ... ``<h5>`` becomes ``<h6>``.
@@ -328,7 +328,7 @@ def decrease_heading(doc, path=None):
     want only one of them on top.
 
     >>> el = fromstring('<div><h1>aaa</h1><h1 class="b">bbb</h1><h2>ccc</h2></div>')  # noqa: E501
-    >>> decrease_heading(el, './@class="b"')
+    >>> lower_heading(el, './@class="b"')
     >>> tostring(el)
     '<div><h2>aaa</h2><h1 class="b">bbb</h1><h3>ccc</h3></div>'
     """
@@ -346,16 +346,16 @@ def decrease_heading(doc, path=None):
                 return
 
 
-def decrease_heading_order(doc, tag=1, order=1):
+def lower_heading_from_order(doc, tag=1, order=1):
     """Decrease heading number except specified element (by order).
 
-    The purpose is the same as `decrease_heading`,
+    The purpose is the same as `lower_heading`,
     except you specify keep-element by heading number and order.
     So e.g. argument ``'tag=2, order=3'`` means
     third ``<h2>`` tag element in the document.
 
     >>> el = fromstring('<div><h1>aaa</h1><h1>bbb</h1><h2>ccc</h2></div>')
-    >>> decrease_heading_order(el, 1, 2)
+    >>> lower_heading_from_order(el, 1, 2)
     >>> tostring(el)
     '<div><h2>aaa</h2><h1>bbb</h1><h3>ccc</h3></div>'
     """
@@ -366,7 +366,7 @@ def decrease_heading_order(doc, tag=1, order=1):
             el.tag = 'h' + str(i + 1)
 
 
-def split_h1_string(doc, seps=None, part='1'):
+def split_h1(doc, seps=None, part='1'):
     """Remove unwanted parts from h1 string.
 
     Headings or titles are often composed of multiple items,
@@ -382,11 +382,11 @@ def split_h1_string(doc, seps=None, part='1'):
                  special number '-1' selects last item.
 
     >>> el = fromstring('<h1>aaa ~ bbb</h1>')
-    >>> split_h1_string(el, '~', '2')
+    >>> split_h1(el, '~', '2')
     >>> tostring(el)
     '<h1>bbb</h1>'
     >>> el = fromstring('<h1>aaa ~ bbb</h1>')
-    >>> split_h1_string(el, '~', '-1')
+    >>> split_h1(el, '~', '-1')
     >>> tostring(el)
     '<h1>bbb</h1>'
     """
@@ -403,11 +403,11 @@ def split_h1_string(doc, seps=None, part='1'):
             break
 
 
-def replace_h1_string(el, pat, repl=''):
+def replace_h1(el, pat, repl=''):
     """Change ``<h1>`` string by regular expression, ``pat`` to ``repl``.
 
     >>> el = fromstring('<h1>A boring article</h1>')
-    >>> replace_h1_string(el, 'A boring', 'An exciting')
+    >>> replace_h1(el, 'A boring', 'An exciting')
     >>> tostring(el)
     '<h1>An exciting article</h1>'
     """
@@ -443,7 +443,7 @@ def code_to_pre_code(doc):
     """
     for el in doc.xpath('//code'):
         if r'\n' in el.text_content():
-            if check_parents_tag(el, 'pre') is not None:
+            if check_parent_tag(el, 'pre') is not None:
                 continue
             wrap_tag(el, 'pre')
 
@@ -482,11 +482,11 @@ def add_style(doc, path, style):
         el.set('style', style)
 
 
-def change_tagname(doc, path, tag='div'):
+def replace_tags(doc, path, tag='div'):
     """Change just the tagname while keeping anything inside.
 
     >>> doc = fromstring('<div><p>aaa</p>bbb</div>')
-    >>> change_tagname(doc, '//div', 'h3')
+    >>> replace_tags(doc, '//div', 'h3')
     >>> tostring(doc)
     '<h3><p>aaa</p>bbb</h3>'
     """
@@ -494,11 +494,11 @@ def change_tagname(doc, path, tag='div'):
         el.tag = tag
 
 
-def add_noscript_img(doc):
+def add_noscript_image(doc):
     """Move element inside <noscript> to outside.
 
     >>> doc = fromstring('<h3><noscript><div><img src="a.jpg"></div></noscript></h3>')  # noqa: E501
-    >>> add_noscript_img(doc)
+    >>> add_noscript_image(doc)
     >>> tostring(doc)
     '<h3><noscript><div></div></noscript><img src="a.jpg"></h3>'
     """
@@ -571,10 +571,10 @@ def reddit_indent(doc):
     They are in the site's external css.
     So we have to insert inline css made from it.
     """
-    for el in doc.xpath(transform_xpath('//div[@class=="comment"]')):
+    for el in doc.xpath(build_class_xpath('//div[@class=="comment"]')):
         el.set('style', 'margin-left:8px;')
         el.classes.add(KEEP_STYLE)
-        path = transform_xpath('.//p[@class="tagline"]/a[@class=="author"]')
+        path = build_class_xpath('.//p[@class="tagline"]/a[@class=="author"]')
         for e in el.xpath(path):
             e.set('style', 'font-weight:bold;')
             e.classes.add(KEEP_STYLE)

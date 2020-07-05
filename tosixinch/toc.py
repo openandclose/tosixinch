@@ -69,7 +69,7 @@ class Node(location.Location):
     # TODO: consider using content.merge_htmls().
     def _append_body(self):
         for t in self.doc.xpath('//body'):
-            process_sample.decrease_heading(t)
+            process_sample.lower_heading(t)
             _relink_component(t, self.root.fnew, self.fnew)
             t.tag = 'div'
             t.set('class', 'tsi-body-merged')

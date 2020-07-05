@@ -175,7 +175,7 @@ General Section
 
 .. confopt:: defaultprocess \*
 
-    | (``add_title, youtube_video_to_thumbnail``)
+    | (``add_h1, youtube_video_to_thumbnail``)
     | ``[LINE][XPATH]``
 
     Before site specific ``process`` functions,
@@ -186,7 +186,7 @@ General Section
 
     About default functions:
 
-        * ``add_title``: If there is no ``<h1>``,
+        * ``add_h1``: If there is no ``<h1>``,
           make ``<h1>`` tag from ``<title>`` tag text.
           It is to help make pdf bookmarks (TOC).
         * ``youtube_video_to_thumbnail``: Change embedded youtube video object

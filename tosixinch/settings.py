@@ -27,7 +27,7 @@ from tosixinch import location
 from tosixinch import system
 
 from tosixinch.content import slugify
-from tosixinch.process.sample import transform_xpath
+from tosixinch.process.sample import build_class_xpath
 from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)
@@ -274,7 +274,7 @@ class Func(configfetch.Func):
     @configfetch.register
     def xpath(self, value):
         # Presuppose 'value' is already a list.
-        return [transform_xpath(val) for val in value]
+        return [build_class_xpath(val) for val in value]
 
     @configfetch.register
     def plus_binaries(self, value):
