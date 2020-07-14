@@ -12,7 +12,6 @@ from tosixinch import _ImportError
 from tosixinch import manuopen
 
 try:
-    import lxml.etree
     import lxml.html
 except ImportError:
     lxml = _ImportError('lxml')
