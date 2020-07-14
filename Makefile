@@ -42,7 +42,7 @@ flake8:
 test:
 	python -m doctest tosixinch/process/*.py
 	pytest -x
-	python tosixinch/tests/_test_actualrun2.py -x
+	python tosixinch/tests/_test_actualrun.py -x
 
 tox:
 	PYTHONPATH= tox
@@ -73,8 +73,8 @@ htmllibs:
 	$(MAKE) -C ../zconfigparser html
 
 x:
-	python tosixinch/tests/_test_actualrun2.py -x
+	python tosixinch/tests/_test_actualrun.py -x
 xx:
-	python tosixinch/tests/_test_actualrun2.py -xx
+	python tosixinch/tests/_test_actualrun.py -xx
 xxx:
-	python tosixinch/tests/_test_actualrun2.py -xxx
+	python tosixinch/tests/_test_actualrun.py -xxx
