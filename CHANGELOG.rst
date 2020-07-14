@@ -8,6 +8,12 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 **Unreleased:**
 ---------------
 
+**Add:**
+
+* Add urlno.py and urlmap.py (internal)
+
+  ('urlno' means url normalization)
+
 **Fix:**
 
 * Fix and change user package import

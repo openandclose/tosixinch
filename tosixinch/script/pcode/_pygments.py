@@ -5,7 +5,6 @@ Only called from _pcode.py.
 """
 
 import html
-import os
 import re
 import sys
 
@@ -236,10 +235,8 @@ class PygmentsCode(_PygmentsCode):
     def get_relpath(self, refname):
         if refname == self.fname:
             return ''
-        start = os.path.dirname(self.fnew)
-        refname = location.Location(url=refname).fnew
-        path = os.path.relpath(refname, start=start)
-        return location._path2url(path, platform=PLATFORM)
+        path = location.Location(refname).fnew
+        return location.path2ref(path, self.fnew)
 
     def get_tagname(self, kind):
         d = self.kindmap

@@ -55,13 +55,14 @@ class TestMakePath:
 
         url = 'file:/aaa/bbb.html'
         self.compare(url, fname, fnew)
-        url = 'file://aaa/bbb.html'
-        with pytest.raises(ValueError):
-            self.compare(url, fname, fnew)
         url = 'file:///aaa/bbb.html'
         self.compare(url, fname, fnew)
         url = 'file://localhost/aaa/bbb.html'
         self.compare(url, fname, fnew)
+
+        url = 'file://aaa/bbb.html'
+        with pytest.raises(ValueError):
+            self.compare(url, fname, fnew)
         url = 'file:////aaa/bbb.html'
         with pytest.raises(ValueError):
             self.compare(url, fname, fnew)
@@ -79,147 +80,98 @@ class TestMakePath:
         self.compare(url, fname, fnew)
 
 
-class TestLocalReferenceRaw:
-
-    def compare(self, url, local_url, fname):
-        base = 'http://aaa.org'
-        component = location.Component(url, base, platform='linux')
-        assert component._escape_fname_reference(url) == local_url
-        assert location._url2path(url, platform='linux') == fname
-
-    def test(self):
-        url, local_url, fname = (
-            'https://aaa.org/bbb?cc',
-            'https://aaa.org/bbb%3Fcc',
-            'https://aaa.org/bbb?cc')
-        self.compare(url, local_url, fname)
-
-        url, local_url, fname = (
-            'https://aaa.org/bbb%3Fcc',
-            'https://aaa.org/bbb%3Fcc',
-            'https://aaa.org/bbb?cc')
-        self.compare(url, local_url, fname)
-
-        url, local_url, fname = (
-            'aaa/bbb?cc',
-            'aaa/bbb%3Fcc',
-            'aaa/bbb?cc')
-        self.compare(url, local_url, fname)
-
-        url, local_url, fname = (
-            'aaa/bbb%3Fcc',
-            'aaa/bbb%3Fcc',
-            'aaa/bbb?cc')
-        self.compare(url, local_url, fname)
-
-    def test_unicode(self):
-        url, local_url, fname = (
-            'aaa/fran%C3%A7ais',
-            'aaa/fran%C3%A7ais',
-            'aaa/français')
-        self.compare(url, local_url, fname)
-
-        # url, local_url, fname = (
-        #     'aaa/français',
-        #     'aaa/fran%C3%A7ais',
-        #     'aaa/français')
-        # self.compare(url, local_url, fname)
-
-
 class TestLocalReference:
 
-    def compare(self, url, local_url, fname):
-        base = 'http://aaa.org'
-        component = location.Component(url, base, platform='linux')
-        assert component.fname_reference == local_url
+    def compare(self, url, fname, ref):
+        baseurl = 'http://aaa.org'
+        component = location.Component(url, baseurl, platform='linux')
         assert component.fname == fname
+        assert component.relative_reference == ref
 
     def test(self):
         # No extension
-        url, local_url, fname = (
+        url, fname, ref = (
             'https://aaa.org/bbb',
-            'bbb/_',
-            '_htmls/aaa.org/bbb/_')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb/_',
+            'bbb/_')
+        self.compare(url, fname, ref)
 
-        url, local_url, fname = (
+        url, fname, ref = (
             'aaa/bbb',
-            'aaa/bbb/_',
-            '_htmls/aaa.org/aaa/bbb/_')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/aaa/bbb/_',
+            'aaa/bbb/_')
+        self.compare(url, fname, ref)
 
         # With extension
-        url, local_url, fname = (
+        url, fname, ref = (
             'https://aaa.org/bbb.jpg',
-            'bbb.jpg',
-            '_htmls/aaa.org/bbb.jpg')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb.jpg',
+            'bbb.jpg')
+        self.compare(url, fname, ref)
 
-        url, local_url, fname = (
+        url, fname, ref = (
             'aaa/bbb.jpg',
-            'aaa/bbb.jpg',
-            '_htmls/aaa.org/aaa/bbb.jpg')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/aaa/bbb.jpg',
+            'aaa/bbb.jpg')
+        self.compare(url, fname, ref)
 
         # With query
-        url, local_url, fname = (
+        url, fname, ref = (
             'https://aaa.org/bbb?cc',
-            'bbb%3Fcc',
-            '_htmls/aaa.org/bbb?cc')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb?cc',
+            'bbb%3Fcc')
+        self.compare(url, fname, ref)
 
-        url, local_url, fname = (
+        url, fname, ref = (
             'https://aaa.org/bbb%3Fcc',
-            'bbb%3Fcc/_',
-            '_htmls/aaa.org/bbb?cc/_')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb?cc/_',
+            'bbb%3Fcc/_')
+        self.compare(url, fname, ref)
 
-        url, local_url, fname = (
+        url, fname, ref = (
             'aaa/bbb?cc',
-            'aaa/bbb%3Fcc',
-            '_htmls/aaa.org/aaa/bbb?cc')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/aaa/bbb?cc',
+            'aaa/bbb%3Fcc')
+        self.compare(url, fname, ref)
 
-        url, local_url, fname = (
+        url, fname, ref = (
             'aaa/bbb%3Fcc',
-            'aaa/bbb%3Fcc/_',
-            '_htmls/aaa.org/aaa/bbb?cc/_')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/aaa/bbb?cc/_',
+            'aaa/bbb%3Fcc/_')
+        self.compare(url, fname, ref)
 
         # With unquoted characters
-        url, local_url, fname = (
+        url, fname, ref = (
             'https://aaa.org/bbb 1.jpg',
-            'bbb%201.jpg',
-            # 'bbb 1.jpg',
-            '_htmls/aaa.org/bbb 1.jpg')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb 1.jpg',
+            'bbb%201.jpg')
+        self.compare(url, fname, ref)
 
-        url, local_url, fname = (
+        url, fname, ref = (
             'aaa/bbb 1.jpg',
-            'aaa/bbb%201.jpg',
-            # 'aaa/bbb 1.jpg',
-            '_htmls/aaa.org/aaa/bbb 1.jpg')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/aaa/bbb 1.jpg',
+            'aaa/bbb%201.jpg')
+        self.compare(url, fname, ref)
 
-        # colon in relative url
-        url, local_url, fname = (
+        # colon in relative reference
+        url, fname, ref = (
             'https://aaa.org/bbb:cc',
-            'bbb%3Acc/_',
-            '_htmls/aaa.org/bbb:cc/_')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb:cc/_',
+            'bbb%3Acc/_')
+        self.compare(url, fname, ref)
 
     def test_relative_reference(self):
-        url, local_url, fname = (
+        url, fname, ref = (
             '//aaa.org/bbb?cc',
-            'bbb%3Fcc',
-            '_htmls/aaa.org/bbb?cc')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb?cc',
+            'bbb%3Fcc')
+        self.compare(url, fname, ref)
 
-        url, local_url, fname = (
+        url, fname, ref = (
             '/bbb/cc.jpg',
-            'bbb/cc.jpg',
-            '_htmls/aaa.org/bbb/cc.jpg')
-        self.compare(url, local_url, fname)
+            '_htmls/aaa.org/bbb/cc.jpg',
+            'bbb/cc.jpg')
+        self.compare(url, fname, ref)
 
 
 class TestReplacementParser:

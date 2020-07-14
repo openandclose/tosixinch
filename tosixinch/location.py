@@ -5,23 +5,20 @@ URL object collections (URLS):
     Locations
 
 URL object (a URL and destination filepaths):
-    _Location -> Location
+    Location
 
 component URL localizer:
-    _Component -> Component
+    Component
 """
 
-import collections
 import functools
 import io
 import logging
-import ntpath
 import os
-import posixpath
 import re
-import string
-import sys
 import urllib.parse
+
+from tosixinch import urlmap
 
 logger = logging.getLogger(__name__)
 
@@ -29,113 +26,9 @@ COMMENT_PREFIX = ('#', ';',)
 
 DOWNLOAD_DIR = '_htmls'
 
-# Only http, https and file schemes are suported.
-# Also file scheme is only for local files.
-SCHEMES = re.compile('^https?://', flags=re.IGNORECASE)
-# Note: Wikipedia says 'file://localhost/c:/aaa' is an illegal UNC.
-# https://en.wikipedia.org/wiki/File_URI_scheme
-FILESCHEME = re.compile(
-    '^file:/(/(|localhost)/)*(?=[^/])', flags=re.IGNORECASE)
 
-# Not used.
-# Borrows from https://github.com/Kozea/WeasyPrint/blob/master/weasyprint/urls.py  # noqa: E501
-# cf. urlsplit(r'c:\aaa\bb') returns
-#     SplitResult(scheme='c', netloc='', path='\\aaa\\bb')
-OTHER_SCHEMES = re.compile('^([a-zA-Z][a-zA-Z0-9.+-]+):')
-
-ROOTPATH = re.compile('^//?(/*)')
-WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?([/\\])*|\\\\([?.\\]*)')
-
-# sub-delims, legal gen-delims, and segment separator
-PATHSAFECHARS = "!$&'()*+,;=" + ':@' + '/'
-
-
-_Rule = collections.namedtuple('_Rule', ['quote', 'change'])
-_Delimiters = collections.namedtuple(
-    '_Delimiters', ['scheme', 'netloc', 'path', 'query', 'fragment'])
-_delimiters = _Delimiters(
-    _Rule('', ''),
-    _Rule('@:[]', ''),
-    _Rule('[]', ''),
-    _Rule('?', '/'),
-    _Rule('?', ''),
-)
-
-_changes = {
-    '/': '_',
-}
-
-_win_changes = {
-    ':': '_',
-    '?': '_',
-    '*': '_',
-    '"': '_',
-    '<': '_',
-    '>': '_',
-    '|': '_',
-}
-
-
-def _tamper_windows_fname(url):
-    for key, value in _win_changes.items():
-        url = url.replace(key, value)
-        url = url.replace(urllib.parse.quote(key), value)
-    url = url.replace('/', '\\')
-    return url
-
-
-def _tamper_fname(url):
-    parts = urllib.parse.urlsplit(url)
-    newparts = []
-    for part, delimiters in zip(parts, _delimiters):
-        for delim in delimiters.change:
-            part = part.replace(delim, _changes[delim])
-        newparts.append(part)
-    url = urllib.parse.urlunsplit(newparts)
-    return url
-
-
-def _url2path(url, platform=sys.platform):
-    fname = _tamper_fname(url)
-    if platform == 'win32':
-        fname = _tamper_windows_fname(fname)
-    fname = urllib.parse.unquote(fname)
-    return fname
-
-
-def _path2url(path, platform=sys.platform):
-    """Make relative file url from filepath."""
-    if platform == 'win32':
-        path = slashify(path)
-        comp = path.split(':')
-        if len(comp) > 1:
-            if (len(comp) > 2
-                    or comp[0] not in string.ascii_letters.split()):
-                raise OSError('Invalid filepath: %r' % path)
-            path = '///%s:%s' % (comp[0], comp[1])
-    return urllib.parse.quote(path)
-
-
-def _url_quote(url):
-    """Quote only path part of url."""
-    scheme, netloc, path, query, fragment = urllib.parse.urlsplit(url)
-    path = urllib.parse.quote(path, safe=PATHSAFECHARS + '%')
-    return urllib.parse.urlunsplit((scheme, netloc, path, query, fragment))
-
-
-def slashify(name):
-    return name.replace('\\', '/')
-
-
-def get_relative_ref(path, target_path):
-    """For local files, get relative url reference of target for path.
-
-    E.g. Get the href url in local html files.
-    """
-    base = os.path.dirname(path)
-    filename = os.path.relpath(target_path, start=base)
-    url = _path2url(filename)
-    return url
+def path2ref(path, basepath):
+    return urlmap._path2ref(path, basepath)
 
 
 class Locations(object):
@@ -186,90 +79,16 @@ class Locations(object):
         return self._container.__iter__()
 
 
-class _Location(object):
-    """Calculate filepaths."""
+class Location(urlmap.Map):
+    """Implement concrete url and system path conversion."""
 
-    INDEX = '_'
+    PREFIX = DOWNLOAD_DIR
+
     APPENDIX = '~'
     EXTENSION = '.html'
 
-    def __init__(self, url, platform=sys.platform):
-        self._url = url
-        self.platform = platform
-        self.is_local = self._is_local(url)
-
-    def _is_local(self, url):
-        if SCHEMES.match(url):
-            return False
-        # m = OTHER_SCHEMES.match(url)
-        # if m:
-        #     msg = 'Only http, https and file schemes are supported, got %r'
-        #     raise ValueError(msg % m.group(1))
-        return True
-
-    def _parse_url(self):
-        url = self._url
-        if self.is_local:
-            if self._check_filescheme(url):
-                url = self._strip_filescheme(url)
-            else:
-                if self.platform == sys.platform:
-                    url = os.path.expanduser(url)
-                    url = os.path.expandvars(url)
-
-                if self.platform == 'win32':
-                    url = ntpath.normcase(ntpath.abspath(url))
-                else:
-                    url = posixpath.abspath(url)
-        return url
-
-    def _check_filescheme(self, url):
-        return True if url.startswith('file:/') else False
-
-    def _strip_filescheme(self, url):
-        m = FILESCHEME.match(url)
-        if m:
-            if self.platform == 'win32':
-                url = url[m.end(0):]
-                url = url.replace('/', '\\')
-            else:
-                url = '/' + url[m.end(0):]
-            url = urllib.parse.unquote(url)
-        else:
-            raise ValueError('Not local file url: %r' % url)
-        return url
-
-    def _make_fname(self, url):
-        if self.is_local:
-            return url
-
-        fname = SCHEMES.sub('', url)
-        fname = fname.split('#', 1)[0]
-        fname = self._add_index(fname)
-        fname = _url2path(fname, platform=self.platform)
-        fname = os.path.join(DOWNLOAD_DIR, fname)
-        return fname
-
-    def _make_fnew(self, fname):
-        if self.is_local:
-            fname = self._strip_root(fname)
-            fname = os.path.join(DOWNLOAD_DIR, fname)
-        return self._add_appendix(fname)
-
-    def _add_index(self, fname):
-        if '/' not in fname:
-            fname += '/'
-        root, ext = posixpath.splitext(fname)
-        if ext:
-            pass
-        elif '?' in fname:
-            pass
-        else:
-            fname = os.path.join(fname, self.INDEX)
-        return fname
-
-    def _add_appendix(self, fname):
-        root, ext = os.path.splitext(fname)
+    def _add_appendix(self, name):
+        root, ext = os.path.splitext(name)
         root += self.APPENDIX
         if ext and ext == self.EXTENSION:
             pass
@@ -277,58 +96,24 @@ class _Location(object):
             ext = ext + self.EXTENSION
         return root + ext
 
-    def _strip_root(self, fname):
-        if self.platform == 'win32':
-            drive = None
-            m = WINROOTPATH.match(fname)
-            # cf. 'C:aaa.txt' means 'aaa.txt' in current directory in C.
-            # but the result of this function is the same as 'C:\aaa.txt'.
-            if m:
-                if m.group(2) or m.group(3):
-                    raise ValueError('Unsupported filename format: %r' % fname)
-                if m.group(1):
-                    drive = m.group(1)
-            fname = WINROOTPATH.sub('', fname)
-            if drive:
-                fname = os.path.join(drive, fname)
-        else:
-            # Note: normalization is already done by os.path.abspath
-            fname = ROOTPATH.sub('', fname)
-        return fname
+    def _map_name(self, name):
+        return self.PREFIX + self.sep + name
 
+    def get_relative_reference_fnew(self, other):
+        return self._get_relative_reference(other, name='fnew')
 
-class Location(_Location):
-    """Add convenient APIs."""
-
-    @property
-    def is_remote(self):
-        return not self.is_local
-
+    # TODO: invent more general term
     @property
     def url(self):
-        return self._parse_url()
-
-    @property
-    def fname(self):
-        return self._make_fname(self.url)
+        return self.input_name
 
     @property
     def fnew(self):
-        return self._make_fnew(self.fname)
-
-    @property
-    def slash_url(self):
-        if self.is_local:
-            return _path2url(self.url, self.platform)
-        return self.url
-
-    @property
-    def slash_fname(self):
-        return _path2url(self.fname, self.platform)
+        return self._add_appendix(self.mapped_name)
 
     @property
     def slash_fnew(self):
-        return _path2url(self.fnew, self.platform)
+        return urlmap._path2url(self.fnew, platform=self.platform)
 
     @property
     def idna_url(self):
@@ -361,7 +146,7 @@ class Location(_Location):
             return url
 
     def check_url(self):
-        if self.is_local:
+        if self.is_local():
             url = self.url
             if not os.path.exists(url):
                 raise FileNotFoundError('[url] File not found: %r' % url)
@@ -388,73 +173,13 @@ class Location(_Location):
         return False
 
 
-class _Component(Location):
-    """Calculate component filepath."""
+class Component(urlmap.Ref):
+    """Create relative reference for class 'Location'."""
 
-    def __init__(self, url, base, platform=sys.platform):
-        super().__init__(url, platform)
+    _CLS = Location
 
-        if isinstance(base, str):
-            base = Location(base, platform=self.platform)
-        self.base = base
-
-        if base.is_remote:
-            self.is_local = False
-
-    def _normalize_source_url(self, url, base):
-        # It seems relative references starting with slashes
-        # are not uniformly handled by libraries.
-        # So we'd better manually expand them.
-        # cf. https://tools.ietf.org/html/rfc3986#section-4.2
-        if url.startswith('//'):
-            url = urllib.parse.urlsplit(base)[0] + ':' + url
-        elif url.startswith('/'):
-            url = '://'.join(urllib.parse.urlsplit(base)[0:2]) + url
-
-        # quote needed, since some websites provide unquoted urls.
-        return _url_quote(url)
-
-    def _escape_fname_reference(self, url):
-        parts = urllib.parse.urlsplit(url)
-        newparts = []
-        for part, delimiters in zip(parts, _delimiters):
-            for delim in delimiters.quote:
-                part = part.replace(delim, urllib.parse.quote(delim))
-            newparts.append(part)
-        return self._urlunsplit_with_quote(newparts)
-
-    def _escape_colon_in_first_path(self, path):
-        firstpath = path.split('/')[0]
-        if firstpath:  # relative url
-            if ':' in firstpath:
-                return './' + path
-        return path
-
-    def _urlunsplit_with_quote(self, parts):
-        url = urllib.parse.urlunsplit((*parts[:3], '', ''))
-        if parts[3]:
-            url = '%3F'.join((url, parts[3]))
-        if parts[4]:
-            url = '%23'.join((url, parts[4]))
-        return url
-
-
-class Component(_Component):
-    """Add convenient APIs."""
-
-    @property
-    def url(self):
-        url = self._url
-        url = self._normalize_source_url(url, self.base.url)
-        url = urllib.parse.urljoin(self.base.url, url)
-        return url
-
-    @property
-    def fname_reference(self):
-        src = posixpath.relpath(
-            self.slash_fname, posixpath.dirname(self.base.slash_fname))
-        src = self._escape_colon_in_first_path(src)
-        return self._escape_fname_reference(src)
+    def check_fname(self, force=False, cache=None):
+        return self._cls.check_fname(force, cache)
 
 
 class ReplacementParser(object):

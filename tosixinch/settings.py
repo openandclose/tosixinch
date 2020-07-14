@@ -343,12 +343,12 @@ class Site(location.Location):
 
     @property
     def shortname(self):
-        if self.is_remote:
-            num = 2  # remove '_htmls' and scheme
-            sep = '/'
-        else:
+        if self.is_local():
             num = int(self.general.trimdirs)
             sep = os.sep
+        else:
+            num = 2  # remove '_htmls' and scheme
+            sep = '/'
         parts = self.url.split(sep)
         num = min(num, len(parts) - 1)
         return sep.join(parts[num:])

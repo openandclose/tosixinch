@@ -100,7 +100,7 @@ def build_blank_html(doctype=None):
 
 def build_external_css(html_path, cssfile_path):
     """Build external css tag (link) string, resolving the paths."""
-    url = location.get_relative_ref(html_path, cssfile_path)
+    url = location.path2ref(cssfile_path, html_path)
     return EXTERNAL_CSS % url
 
 
