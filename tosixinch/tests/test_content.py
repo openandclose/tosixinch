@@ -3,6 +3,7 @@ import lxml.html
 import pytest
 
 from tosixinch import content
+from tosixinch import location
 
 fromstring = lxml.html.fromstring
 tostring = lambda el: lxml.html.tostring(el, encoding='unicode')
@@ -73,7 +74,124 @@ class TestReadabilityHtmlContent:
           </body>
         </html>"""
         if content.readability:
-            c = content.ReadabilityHtmlContent(
-                    'url', 'fname', 'fnew', text)
+            c = content.ReadabilityHtmlContent('http://example.com', text=text)
             c.build()
             compare_html(c.doc, fromstring(expected))
+
+
+class TestBaseResolver:
+
+    urls = (
+        'http://h/a/b/c.html',
+        'http://h/a/b/?q',
+        'http://h/a/b/c.html?q',
+        'http://h/a/b/d.html',
+        'http://h/a/b/e.html',
+    )
+    locs = [location.Location(url) for url in urls]
+
+    def compare(self, doc, xpath, expected):
+        selected = doc.xpath(xpath)
+        assert selected[0] == expected
+
+    def resolve(self, doc):
+        doc = lxml.html.fromstring(doc)
+        resolver = content.BaseResolver(doc, self.locs[0], self.locs)
+        resolver.resolve()
+        return resolver.doc
+
+    def test_same(self):
+        doc = """
+        <!DOCTYPE html><html><head><meta charset="utf-8"></head><body>
+            <div id="blank">        <a href="">            blank</a></div>
+            <div id="blank-query">  <a href="?">           blank-query</a></div>
+            <div id="blank-frag">   <a href="#">           blank-frag</a></div>
+
+            <div id="query">        <a href="?q">          query</a></div>
+            <div id="query2">       <a href="?q2">         query2</a></div>
+            <div id="frag">         <a href="#f">          frag</a></div>
+        </body></html>
+        """
+        doc = self.resolve(doc)
+
+        self.compare(doc, '//div[@id="blank"]/a/@href',         '')
+        # urllib.parse strips '?' with blank query
+        # self.compare(doc, '//div[@id="blank-query"]/a/@href',   'c.html%3F')
+        self.compare(doc, '//div[@id="blank-frag"]/a/@href',    '#')
+
+        self.compare(doc, '//div[@id="query"]/a/@href',         'c~.html%3Fq.html')
+        self.compare(doc, '//div[@id="query2"]/a/@href',        'http://h/a/b/c.html?q2')
+        self.compare(doc, '//div[@id="frag"]/a/@href',          '#f')
+
+    def test_same_dot(self):
+        doc = """
+        <!DOCTYPE html><html><head><meta charset="utf-8"></head><body>
+            <div id="dot">        <a href=".">              dot</a></div>
+            <div id="dot-query">  <a href=".?">             dot-query</a></div>
+            <div id="dot-frag">   <a href=".#">             dot-frag</a></div>
+
+            <div id="query">      <a href=".?q">            query</a></div>
+            <div id="query2">     <a href=".?q2">           query2</a></div>
+            <div id="frag">       <a href=".#f">            frag</a></div>
+        </body></html>
+        """
+        doc = self.resolve(doc)
+
+        self.compare(doc, '//div[@id="dot"]/a/@href',           'http://h/a/b/')
+        # urllib.parse strips '?' with blank query
+        # self.compare(doc, '//div[@id="dot-query"]/a/@href',     'http://h/a/b/?')  # noqa: E501
+        self.compare(doc, '//div[@id="dot-frag"]/a/@href',      'http://h/a/b/#')
+
+        self.compare(doc, '//div[@id="query"]/a/@href',         '%3Fq~.html')
+        self.compare(doc, '//div[@id="query2"]/a/@href',        'http://h/a/b/?q2')
+        self.compare(doc, '//div[@id="frag"]/a/@href',          'http://h/a/b/#f')
+
+    def test_same_dot_slash(self):
+        doc = """
+        <!DOCTYPE html><html><head><meta charset="utf-8"></head><body>
+            <div id="dot">        <a href="./">              dot</a></div>
+            <div id="dot-query">  <a href="./?">             dot-query</a></div>
+            <div id="dot-frag">   <a href="./#">             dot-frag</a></div>
+
+            <div id="query">      <a href="./?q">            query</a></div>
+            <div id="query2">     <a href="./?q2">           query2</a></div>
+            <div id="frag">       <a href="./#f">            frag</a></div>
+        </body></html>
+        """
+        doc = self.resolve(doc)
+
+        self.compare(doc, '//div[@id="dot"]/a/@href',           'http://h/a/b/')
+        # self.compare(doc, '//div[@id="dot-query"]/a/@href',     'http://h/a/b/?')  # noqa: E501
+        self.compare(doc, '//div[@id="dot-frag"]/a/@href',      'http://h/a/b/#')
+
+        self.compare(doc, '//div[@id="query"]/a/@href',         '%3Fq~.html')
+        self.compare(doc, '//div[@id="query2"]/a/@href',        'http://h/a/b/?q2')
+        self.compare(doc, '//div[@id="frag"]/a/@href',          'http://h/a/b/#f')
+
+    def test_other(self):
+        doc = """
+        <!DOCTYPE html><html><head><meta charset="utf-8"></head><body>
+            <div id="sib">          <a href="d.html">               sib</a></div>
+            <div id="sib-query">    <a href="d.html?q">             sibi-query</a></div>
+            <div id="sib-frag">     <a href="d.html#f">             sib-frag</a></div>
+            <div id="sib-slash">    <a href="/a/b/e.html">          sib-slash</a></div>
+            <div id="sib-slash2">   <a href="//h/a/b/e.html">       sib-slash2</a></div>
+
+            <div id="img">          <img src="http://h/a/x.jpg">    </div>
+            <div id="img-slash">    <img src="/a/x.jpg">            </div>
+            <div id="img-slash2">   <img src="//h/a/x.jpg">         </div>
+            <div id="img-rel">      <img src="../x.jpg">            </div>
+        </body></html>
+        """
+        doc = self.resolve(doc)
+
+        self.compare(doc, '//div[@id="sib"]/a/@href',           'd~.html')
+        self.compare(doc, '//div[@id="sib-query"]/a/@href',     'http://h/a/b/d.html?q')
+        self.compare(doc, '//div[@id="sib-frag"]/a/@href',      'd~.html#f')
+        self.compare(doc, '//div[@id="sib-slash"]/a/@href',     'e~.html')
+        self.compare(doc, '//div[@id="sib-slash2"]/a/@href',    'e~.html')
+
+        self.compare(doc, '//div[@id="img"]/img/@src',          '../x.jpg')
+        self.compare(doc, '//div[@id="img-slash"]/img/@src',    '../x.jpg')
+        self.compare(doc, '//div[@id="img-slash2"]/img/@src',   '../x.jpg')
+        self.compare(doc, '//div[@id="img-rel"]/img/@src',      '../x.jpg')

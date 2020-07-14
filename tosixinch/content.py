@@ -7,12 +7,13 @@ import re
 
 from tosixinch import _ImportError
 from tosixinch import clean
-from tosixinch import download
 from tosixinch import location
 from tosixinch import imagesize
 from tosixinch import system
 
 import tosixinch.process.sample as process_sample
+
+from tosixinch.urlmap import _split_fragment, _add_fragment
 
 try:
     import lxml.etree
@@ -219,20 +220,24 @@ def _relink(url, prev_base, new_base):
     return url
 
 
-class Content(object):
+class _Content(object):
     """Represent general content."""
 
-    def __init__(self, url, fname, fnew, text=None,
-            codings=None, errors='strict'):
-        self.url = url
-        self.fname = fname
-        self.fnew = fnew
+    def __init__(self, loc, text=None, codings=None, errors='strict'):
+        if isinstance(loc, str):
+            loc = location.Location(loc, input_type='url')
+
+        self._loc = loc
+        self.url = loc.url
+        self.fname = loc.fname
+        self.fnew = loc.fnew
+
         self.text = text
         self.codings = codings
         self.errors = errors
 
 
-class SimpleHtmlContent(Content):
+class SimpleHtmlContent(_Content):
     """Define basic (non-extract) HtmlElement manupulations."""
 
     def read(self, fname, text):
@@ -291,26 +296,9 @@ class HtmlContent(SimpleHtmlContent):
                 return guess
         return None
 
-    def get_components(self):
-        for el, url in iter_component(self.doc):
-            self._get_component(el, url)
-
     def clean(self, tags, attrs):
         cleaner = clean.Clean(self.doc, tags, attrs)
         cleaner.run()
-
-    def _get_component(self, el, url):
-        comp = location.Component(url, self.url)
-        url = comp.url
-        src = comp.fname_reference
-        fname = comp.fname
-        el.attrib['src'] = src
-        self._download_component(comp, url, fname)
-        return comp
-
-    def _download_component(self, comp, url, fname):
-        system.make_directories(fname)
-        download.download(url, fname, on_error_exit=False)
 
 
 class ReadabilityHtmlContent(HtmlContent):
@@ -331,3 +319,61 @@ class ReadabilityHtmlContent(HtmlContent):
             process_sample.add_h1(doc)
 
         self.doc = doc
+
+
+class BaseResolver(object):
+    """Rewrite relative references in html doc."""
+
+    LINK_ATTRS = ('cite', 'href', 'src')
+    COMP_ATTRS = (('img', 'src'),)  # tuple of tag-attribute tuples
+
+    def __init__(self, doc, loc, locs):
+        self.doc = doc
+        self.loc = loc
+        self.sibling_urls = {k: v for k, v in self._build_sibling_urls(locs)}
+        self._comp_cache = {}
+
+    def _build_sibling_urls(self, locs):
+        for loc in locs:
+            ref = self.loc.get_relative_reference_fnew(loc)
+            yield loc.url, ref
+
+    def _get_comp_cache(self, url):
+        if not self._comp_cache.get(url):
+            self._comp_cache[url] = location.Component(url, self.loc)
+        return self._comp_cache[url]
+
+    def _get_url_data(self, el, attr):
+        url = el.attrib[attr].strip()
+        url, fragment = _split_fragment(url)
+        comp = self._get_comp_cache(url)
+        return comp, url, fragment
+
+    def resolve(self):
+        for el in self.doc.iter(lxml.etree.Element):
+            self.get_component(el)
+            self._resolve(el)
+
+    def get_component(self, el):
+        for tag, attr in self.COMP_ATTRS:
+            if el.tag == tag and attr in el.attrib:
+                comp, url, fragment = self._get_url_data(el, attr)
+                self._get_component(el, comp)
+                self._set_component(comp)
+
+    def _get_component(self, el, comp):
+        pass
+
+    def _set_component(self, comp):
+        self.sibling_urls[comp.url] = comp.relative_reference
+
+    def _resolve(self, el):
+        for attr in self.LINK_ATTRS:
+            if attr in el.attrib:
+                comp, url, fragment = self._get_url_data(el, attr)
+                url = comp.url
+                if url in self.sibling_urls:
+                    ref = _add_fragment(self.sibling_urls[url], fragment)
+                else:
+                    ref = _add_fragment(url, fragment)
+                el.attrib[attr] = ref

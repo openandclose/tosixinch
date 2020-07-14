@@ -14,6 +14,7 @@
 import logging
 
 from tosixinch import content
+from tosixinch import download
 from tosixinch import stylesheet
 from tosixinch import system
 from tosixinch import textformat
@@ -28,49 +29,44 @@ def add_css_reference(conf, site):
     e.write()
 
 
-class SimpleExtract(content.SimpleHtmlContent):
+class _Extract(content.SimpleHtmlContent):
+    """Implement base initialization."""
+
+    def __init__(self, conf, site):
+        super().__init__(site)
+
+        self._conf = conf
+        self._site = site
+
+        self.codings = site.general.encoding
+        self.errors = site.general.encoding_errors
+        self._parts_download = site.general.parts_download
+
+
+class SimpleExtract(_Extract, content.SimpleHtmlContent):
     """Inject config data into SimpleHtmlContent.
 
     For now, mostly for adding external css to html files.
     """
-
-    def __init__(self, conf, site):
-        self._conf = conf
-        self._site = site
-
-        self.url = site.url
-        self.fname = site.fname
-        self.fnew = site.fnew
-        self.codings = site.general.encoding
-        self.errors = site.general.encoding_errors
 
     def add_css(self):
         cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
         super().add_css(cssfiles)
 
 
-class Extract(content.HtmlContent):
+class Extract(_Extract, content.HtmlContent):
     """Inject config data into HtmlContent."""
 
     def __init__(self, conf, site):
-        self._conf = conf
-        self._site = site
+        super().__init__(conf, site)
 
-        self.url = site.url
-        self.fname = site.fname
-        self.fnew = site.fnew
         self.sel = site.select
         self.excl = site.exclude
         self.sp = site.general.defaultprocess + site.process
         self.section = site.section
 
         self._guess = conf.general.guess
-        self.codings = site.general.encoding
-        self.errors = site.general.encoding_errors
-        self._parts_download = site.general.parts_download
         self._full_image = site.general.full_image
-
-        self.text = site.text
 
     def select(self):
         if self.sel == '':
@@ -85,14 +81,13 @@ class Extract(content.HtmlContent):
         for s in self.sp:
             system.run_function(self._conf._userdir, 'process', self.doc, s)
 
-    def components(self):
-        if self._parts_download:
-            super().get_components()
-
     def clean(self):
         tags = self._site.general.add_clean_tags
         attrs = self._site.general.add_clean_attrs
         super().clean(tags, attrs)
+
+    def resolve(self):
+        Resolver(self.doc, self._site, self._conf.sites, self._conf).resolve()
 
     def add_css(self):
         cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
@@ -104,25 +99,38 @@ class Extract(content.HtmlContent):
         self.select()
         self.exclude()
         self.process()
-        self.components()
         self.clean()
+        self.resolve()
         self.add_css()
         self.write()
 
-    def _get_component(self, el, url):
-        comp = super()._get_component(el, url)
+
+class Resolver(content.BaseResolver):
+    """Download components and rewrite links."""
+
+    def __init__(self, doc, loc, locs, conf):
+        super().__init__(doc, loc, locs)
+        self._conf = conf
+
+    def _get_component(self, el, comp):
+        self._download_component(comp, comp.url, comp.fname)
         self._add_component_attributes(el, comp.fname)
 
+    def _set_component(self, comp):
+        if comp.check_fname():
+            super()._set_component(comp)
+
     def _download_component(self, comp, url, fname):
-        force = self._site.general.force_download
+        force = self.loc.general.force_download
         cache = self._conf._cache.download
         if comp.check_fname(force=force, cache=cache):
             return
         logger.info('[img] %s', url)
-        super()._download_component(comp, url, fname)
+        system.make_directories(fname)
+        download.download(url, fname, on_error_exit=False)
 
     def _add_component_attributes(self, el, fname):
-        full = int(self._full_image)
+        full = int(self.loc.general.full_image)
         w, h = content.get_component_size(el, fname)
         if w and h:
             length = max(w, h)
@@ -134,14 +142,8 @@ class Extract(content.HtmlContent):
                     el.classes.add('tsi-wide')
 
 
-class ReadabilityExtract(content.ReadabilityHtmlContent):
+class ReadabilityExtract(_Extract, content.ReadabilityHtmlContent):
     """Methods for readability."""
-
-    def __init__(self, conf, site, text):
-        super().__init__(site.url, site.fname, site.fnew, text)
-        self._conf = conf
-        self._site = site
-        self._parts_download = site.general.parts_download
 
     def components(self):
         if self._parts_download:
