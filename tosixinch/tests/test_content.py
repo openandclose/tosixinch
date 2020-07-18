@@ -1,12 +1,12 @@
 
-import lxml.html
 import pytest
 
 from tosixinch import content
 from tosixinch import location
+from tosixinch import lxml_html
 
-fromstring = lxml.html.fromstring
-tostring = lambda el: lxml.html.tostring(el, encoding='unicode')
+fromstring = lxml_html.fromstring
+tostring = lambda el: lxml_html.tostring(el, encoding='unicode')
 
 
 # cf.
@@ -95,7 +95,7 @@ class TestBaseResolver:
         assert selected[0] == expected
 
     def resolve(self, doc):
-        doc = lxml.html.fromstring(doc)
+        doc = fromstring(doc)
         resolver = content.BaseResolver(doc, self.locs[0], self.locs)
         resolver.resolve()
         return resolver.doc

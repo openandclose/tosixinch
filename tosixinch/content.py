@@ -8,18 +8,13 @@ import re
 from tosixinch import _ImportError
 from tosixinch import clean
 from tosixinch import location
+from tosixinch import lxml_html
 from tosixinch import imagesize
 from tosixinch import system
 
 import tosixinch.process.sample as process_sample
 
 from tosixinch.urlmap import _split_fragment, _add_fragment
-
-try:
-    import lxml.etree
-    import lxml.html
-except ImportError:
-    lxml = _ImportError('lxml')
 
 try:
     import readability
@@ -86,14 +81,14 @@ def build_new_html(doctype=None, title=None, content=None):
         'content': content or ''
     }
     html = HTML_TEMPLATE.format(**fdict)
-    root = lxml.html.document_fromstring(html)
+    root = lxml_html.document_fromstring(html)
     return root
 
 
 def build_blank_html(doctype=None):
     """Build 'more' minimal html."""
     html = BLANK_HTML % (doctype or DEFAULT_DOCTYPE)
-    root = lxml.html.document_fromstring(html)
+    root = lxml_html.document_fromstring(html)
     return root
 
 
@@ -123,21 +118,6 @@ def iter_component(doc):
             continue
 
         yield el, url
-
-
-def xxpath(el, string):
-    # run el.xpath(string), but with more helpful message on errors.
-    try:
-        return el.xpath(string)
-    except lxml.etree.LxmlError as e:
-        _e = e.error_log.last_error
-        n = _e.column
-        s = ' ' * (n - 1) + '^'
-        s = string + '\n' + s
-        fmt = ("xpath error occured probably at column %d "
-               "(at the mark '^'):\n\n%s\n")
-        logger.error(fmt, n, s)
-        raise
 
 
 # experimental
@@ -251,7 +231,7 @@ class SimpleHtmlContent(_Content):
     def add_css(self, cssfiles):
         for cssfile in cssfiles:
             url = build_external_css(self.fnew, cssfile)
-            el = lxml.html.fragment_fromstring(url)
+            el = lxml_html.fragment_fromstring(url)
             self.doc.head.append(el)
 
     def write(self):
@@ -281,17 +261,17 @@ class HtmlContent(SimpleHtmlContent):
         self.doc = doc
 
     def select(self, sel):
-        for t in xxpath(self.root.body, sel):
+        for t in self.root.body.xpath(sel):
             self.doc.body.append(t)
 
     def exclude(self, sel):
-        for t in xxpath(self.doc.body, sel):
+        for t in self.doc.body.xpath(sel):
             if t.getparent() is not None:
                 t.getparent().remove(t)
 
     def guess_selection(self, guesses):
         for guess in guesses:
-            s = xxpath(self.root, guess)
+            s = self.root.xpath(guess)
             if s and len(s) == 1:
                 return guess
 
@@ -349,7 +329,7 @@ class BaseResolver(object):
         return comp, url, fragment
 
     def resolve(self):
-        for el in self.doc.iter(lxml.etree.Element):
+        for el in self.doc.iter(lxml_html.etree.Element):
             self.get_component(el)
             self._resolve(el)
 

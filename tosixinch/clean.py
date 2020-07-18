@@ -26,12 +26,7 @@ And attributes cleanup is skipped inside <svg> and <math> elements.
 you need ``color`` and ``width`` for svg image, for example.
 """
 
-from tosixinch import _ImportError
-
-try:
-    import lxml.html.clean
-except ImportError:
-    lxml = _ImportError('lxml')
+from tosixinch import lxml_html  # use lxml.html.clean from lxml_html.clean
 
 SKIPTAGS = ('svg', 'math')
 KEEP_STYLE = 'tsi-keep-style'
@@ -93,7 +88,7 @@ class Clean(object):
     def _clean_html(self):
         if self.tags:
             self.kwargs['kill_tags'] = self.tags
-        cleaner = lxml.html.clean.Cleaner(**self.kwargs)
+        cleaner = lxml_html.clean.Cleaner(**self.kwargs)
         cleaner(self.doc)
 
     def _keep_tags(self, el):

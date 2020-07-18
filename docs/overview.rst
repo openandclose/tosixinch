@@ -618,59 +618,6 @@ Users have to fill the value accordingly, if setting.
         ... --plus-option '-two, -three, +four'
 
 
-.. dword:: XPATH
-
-    some values are interpreted as xpath,
-    in most cases, `[LINE] <#dword-LINE>`__ is also specified
-    (Because they tend to be long).
-
-    One custom syntax, *double equals* (``'=='``) is added.
-    If the string matches:
-
-    .. code-block:: none
-
-        <tag>[@class==<value>]
-
-        in which
-        <tag> is some tag name or '*'
-        <value> is some value with optional quotes (' or ")
-
-    It is rewritten to:
-
-    .. code-block:: none
-
-        <tag>[contains(concat(" ", normalize-space(@class), " "), " <value> ")]'
-
-    It is to get around one inconvenient point of Xpath,
-    compared to CSS Selector.
-    see note below.
-
-    .. note::
-
-        There are many occasions when you want to select an element by a ``class`` attribute.
-        But it is not easy for Xpath, if the ``class`` has multiple values.
-
-        For example, if you want to select ``<div class="aa bb cc">``,
-
-        * You cannot select it by ``'@class="aa"'``.
-          Because Xpath compares strings, and ``'aa bb cc'`` and ``'aa'`` are different strings.
-
-        * You can select it by ``'contains(@class, "aa")'``,
-          but it also selects elements
-          whose ``class`` just *contains* the string, e.g. ``'aaa'`` or ``'aaxxx'``.
-
-        * You can more wisely select it by ``'contains(@class, "aa ")'`` (with space),
-          but the existence of a space is not so reliable.
-
-        * Verbose syntax above is the established practice.
-          So in this case, ::
-
-            div[contains(concat(" ", normalize-space(@class), " "), " aa ")]
-
-        `Scrapy document <https://docs.scrapy.org/en/latest/topics/selectors.html#when-querying-by-class-consider-using-css>`__
-        has a slightly longer explanation.
-
-
 CSS Template Values
 -------------------
 
@@ -731,3 +678,60 @@ In ``sample.t. css``, it is used like::
     h3 { prince-bookmark-level: {{ bm3 }} }
     h4 { prince-bookmark-level: {{ bm4 }} }
     ...
+
+
+lxml.html.HtmlElement
+---------------------
+
+The program uses a lightly customized version of ``lxml.html.HtmlElement``,
+which means mainly two things.
+
+* You can use a custom XPath syntax, ``double equals``.
+* When XPath string is invalid, it prints out a bit more helpful error message.
+
+Double Equals
+^^^^^^^^^^^^^
+
+When using XPath,
+it is inconvenient to select elements from class attributes.
+
+For example, if you want to select ``<div class="aa bb cc">`` using ``'aa'``,
+you cannot simply write ``'@class="aa"'``
+(XPath sees ``'aa'`` as literal strings,
+and ``'aa bb cc'`` and ``'aa'`` are different strings).
+
+So you have to write::
+
+    div[contains(concat(" ", normalize-space(@class), " "), " aa ")]
+
+(See e.g. `When selecting by class, be as specific as necessary <https://blog.scrapinghub.com/2014/07/17/xpath-tips-from-the-web-scraping-trenches>`__,
+for explanations.)
+
+To ease this, the program introduces a custom syntax ``double equals`` (``'=='``).
+
+In configuration options supposing XPath strings,
+or arguments in ``.xpath()`` method in user python modules,
+
+if the string matches:
+
+.. code-block:: none
+
+    <tag>[@class==<value>]
+
+    in which
+    <tag> is some tag name or '*'
+    <value> is some value with optional quotes (' or ")
+
+It is rewritten to:
+
+.. code-block:: none
+
+    <tag>[contains(concat(" ", normalize-space(@class), " "), " <value> ")]'
+
+So you can write e.g.:
+
+.. code-block:: ini
+
+    [somesite]
+    ...
+    select=     //div[@class=="aa"]

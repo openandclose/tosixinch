@@ -27,7 +27,6 @@ from tosixinch import location
 from tosixinch import system
 
 from tosixinch.content import slugify
-from tosixinch.process.sample import build_class_xpath
 from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)
@@ -270,11 +269,6 @@ def _check_platform_dirs():
 
 class Func(configfetch.Func):
     """Customize configfetch.Func for this application."""
-
-    @configfetch.register
-    def xpath(self, value):
-        # Presuppose 'value' is already a list.
-        return [build_class_xpath(val) for val in value]
 
     @configfetch.register
     def plus_binaries(self, value):

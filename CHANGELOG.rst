@@ -32,6 +32,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
   ('urlno' means url normalization)
 
+* Add lxml_html.py (internal)
+
 **Fix:**
 
 * Fix and change user package import

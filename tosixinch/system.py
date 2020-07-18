@@ -8,13 +8,8 @@ import sys
 import subprocess
 import types
 
-from tosixinch import _ImportError
+from tosixinch import lxml_html
 from tosixinch import manuopen
-
-try:
-    import lxml.html
-except ImportError:
-    lxml = _ImportError('lxml')
 
 logger = logging.getLogger(__name__)
 
@@ -101,9 +96,7 @@ class HtmlReader(Reader):
     """
 
     def _parse(self):
-        parser = lxml.html.HTMLParser(encoding='utf-8')
-        self.doc = lxml.html.document_fromstring(
-            self.text.encode('utf-8'), parser=parser)
+        self.doc = lxml_html.document_fromstring(self.text.encode('utf-8'))
 
     def read(self):
         self._prepare()
@@ -125,7 +118,7 @@ class HtmlWriter(Writer):
         if self.text:
             return
         tree = self.doc.getroottree()
-        self.text = lxml.html.tostring(tree, encoding='unicode')
+        self.text = lxml_html.tostring(tree, encoding='unicode')
 
     def _prepare(self):
         self._serialize()

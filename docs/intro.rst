@@ -346,7 +346,7 @@ by adding arbitrary functions.
 `option: process <options.html#confopt-process>`__.
 
 One custom xpath syntax is added, to select class attributes easier.
-`double equals <overview.html#dword-XPATH>`__.
+`double equals <overview.html#double-equals>`__.
 
 If you install
 `Pygments <https://pygments.org/>`__,
