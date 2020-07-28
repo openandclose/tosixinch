@@ -351,7 +351,7 @@ class Site(location.Location):
         fname = self.fname
         codings = self.general.encoding
         errors = self.general.encoding_errors
-        return system.Reader(fname, codings=codings, errors=errors).read()
+        return system.read(fname, codings=codings, errors=errors)
 
     @cached_property
     def sibling_urls(self):

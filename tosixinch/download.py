@@ -54,7 +54,7 @@ def download(url, fname,
                 elif f.getheader('Content-Encoding') == 'deflate':
                     logger.info("[http] 'Content-Encoding' is 'deflate'")
                     text = zlib.decompress(text)
-            system.Writer(fname, text).write()
+            system.write(fname, text=text)
 
     except urllib.request.HTTPError as e:
         if on_error_exit:

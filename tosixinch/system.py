@@ -88,6 +88,15 @@ class Writer(_File):
             logger.warning(fmt % (e.errno, e.strerror, self.fname))
 
 
+def read(fname, text=None, codings=None,
+        errors='strict', platform=sys.platform):
+    return Reader(fname, text, codings, errors, platform).read()
+
+
+def write(fname, text, platform=sys.platform):
+    return Writer(fname, text, platform).write()
+
+
 # shell invocation ------------------------------
 
 def run_cmds(cmds, conf, site=None):

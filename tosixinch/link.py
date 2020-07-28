@@ -27,7 +27,7 @@ def getlinks(conf):
 
 
 def getlink(url, path):
-    root = lxml_html.HtmlReader(url).read()
+    root = lxml_html.read(url)
     links = root.xpath(path)
     links = [urllib.parse.urljoin(url, link.strip()) for link in links]
     return links

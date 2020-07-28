@@ -159,7 +159,7 @@ def merge_htmls(paths, pdfname, codings=None, errors='strict'):
         hname = pdfname.replace('.pdf', '.html')
         root = build_blank_html()
         _append_bodies(root, hname, paths, codings, errors)
-        lxml_html.HtmlWriter(hname, doc=root).write()
+        lxml_html.write(hname, doc=root)
         return hname
     else:
         return paths[0]
@@ -167,8 +167,8 @@ def merge_htmls(paths, pdfname, codings=None, errors='strict'):
 
 def _append_bodies(root, rootname, fnames, codings, errors):
     for fname in fnames:
-        reader = lxml_html.HtmlReader(fname, codings=codings, errors=errors)
-        bodies = reader.read().xpath('//body')
+        doc = lxml_html.read(fname, codings=codings, errors=errors)
+        bodies = doc.xpath('//body')
         for b in bodies:
             _relink_component(b, rootname, fname)
             b.tag = 'div'
@@ -210,9 +210,8 @@ class SimpleHtmlContent(_Content):
     """Define basic (non-extract) HtmlElement manupulations."""
 
     def read(self, fname, text):
-        reader = lxml_html.HtmlReader(fname, text,
+        return lxml_html.read(fname, text,
             codings=self.codings, errors=self.errors)
-        return reader.read()
 
     def load(self):
         self.doc = self.read(fname=self.fnew, text=None)
@@ -224,8 +223,7 @@ class SimpleHtmlContent(_Content):
             self.doc.head.append(el)
 
     def write(self):
-        writer = lxml_html.HtmlWriter(self.fnew, doc=self.doc)
-        writer.write()
+        lxml_html.write(self.fnew, doc=self.doc)
 
 
 class HtmlContent(SimpleHtmlContent):

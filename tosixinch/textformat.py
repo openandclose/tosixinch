@@ -105,7 +105,7 @@ class Prose(object):
         self.highlighted = self.built
 
     def _write(self):
-        system.Writer(self.fnew, text=self.highlighted).write()
+        system.write(self.fnew, text=self.highlighted)
 
     def run(self):
         self._wrap()

@@ -53,7 +53,7 @@ class Node(location.Location):
         if self.title:
             self._doc = self._make_toc_html()
         else:
-            self._doc = lxml_html.HtmlReader(self.fnew).read()
+            self._doc = lxml_html.read(self.fnew)
 
     def _append_css(self):
         for el in self.doc.xpath('//head/link[@class="tsi-css"]'):
@@ -81,7 +81,7 @@ class Node(location.Location):
             self._append_body()
 
         if self.last:
-            lxml_html.HtmlWriter(self.root.fnew, doc=self.root.doc).write()
+            lxml_html.write(self.root.fnew, doc=self.root.doc)
 
 
 class Nodes(location.Locations):

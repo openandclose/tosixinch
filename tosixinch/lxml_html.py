@@ -126,6 +126,8 @@ def fromstring(html, **kw):
     return lxml.html.fromstring(html, parser=HTMLParser(), **kw)
 
 
+# read and write utility functions
+
 class HtmlReader(system.Reader):
     """html reader object.
 
@@ -160,3 +162,12 @@ class HtmlWriter(system.Writer):
     def _prepare(self):
         self._serialize()
         system.make_directories(self.fname)
+
+
+def read(fname, text=None, codings=None,
+        errors='strict', platform=sys.platform):
+    return HtmlReader(fname, text, codings, errors, platform).read()
+
+
+def write(fname, doc=None, text=None, platform=sys.platform):
+    return HtmlWriter(fname, doc, text, platform).write()

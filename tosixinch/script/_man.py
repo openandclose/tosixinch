@@ -34,7 +34,7 @@ def man(fname, fnew, delete=True):
     else:
         logger.info('[man] processing %r...', fname)
     text = ret.stdout.decode(sys.stdout.encoding)
-    system.Writer(fnew, text=text).write()
+    system.write(fnew, text=text)
     if delete:
         delete_images()
     return 101
