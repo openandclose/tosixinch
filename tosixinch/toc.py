@@ -9,7 +9,7 @@ import re
 import sys
 
 from tosixinch import location
-from tosixinch import system
+from tosixinch import lxml_html
 from tosixinch.content import (
     build_new_html, slugify, _relink_component, _relink)
 
@@ -53,7 +53,7 @@ class Node(location.Location):
         if self.title:
             self._doc = self._make_toc_html()
         else:
-            self._doc = system.HtmlReader(self.fnew).read()
+            self._doc = lxml_html.HtmlReader(self.fnew).read()
 
     def _append_css(self):
         for el in self.doc.xpath('//head/link[@class="tsi-css"]'):
@@ -81,7 +81,7 @@ class Node(location.Location):
             self._append_body()
 
         if self.last:
-            system.HtmlWriter(self.root.fnew, doc=self.root.doc).write()
+            lxml_html.HtmlWriter(self.root.fnew, doc=self.root.doc).write()
 
 
 class Nodes(location.Locations):

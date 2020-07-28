@@ -3,8 +3,10 @@
 
 import logging
 import re
+import sys
 
 from tosixinch import _ImportError
+from tosixinch import system
 
 try:
     import lxml
@@ -122,3 +124,39 @@ def fragment_fromstring(html, **kw):
 
 def fromstring(html, **kw):
     return lxml.html.fromstring(html, parser=HTMLParser(), **kw)
+
+
+class HtmlReader(system.Reader):
+    """html reader object.
+
+    From fname or text, return document object (lxml_html.HtmlElement).
+    """
+
+    def _parse(self):
+        self.doc = document_fromstring(self.text.encode('utf-8'))
+
+    def read(self):
+        self._prepare()
+        self._parse()
+        return self.doc
+
+
+class HtmlWriter(system.Writer):
+    """html writer object.
+
+    From document object, write serialized text to fname.
+    """
+
+    def __init__(self, fname, doc=None, text=None, platform=sys.platform):
+        super().__init__(fname, text, platform)
+        self.doc = doc
+
+    def _serialize(self):
+        if self.text:
+            return
+        tree = self.doc.getroottree()
+        self.text = tostring(tree, encoding='unicode')
+
+    def _prepare(self):
+        self._serialize()
+        system.make_directories(self.fname)

@@ -8,7 +8,6 @@ import sys
 import subprocess
 import types
 
-from tosixinch import lxml_html
 from tosixinch import manuopen
 
 logger = logging.getLogger(__name__)
@@ -87,42 +86,6 @@ class Writer(_File):
         except OSError as e:
             fmt = '[OSError] Errno %s: %s\nskipping %r...'
             logger.warning(fmt % (e.errno, e.strerror, self.fname))
-
-
-class HtmlReader(Reader):
-    """html reader object.
-
-    From fname or text, return document object (lxml.html.HtmlElement).
-    """
-
-    def _parse(self):
-        self.doc = lxml_html.document_fromstring(self.text.encode('utf-8'))
-
-    def read(self):
-        self._prepare()
-        self._parse()
-        return self.doc
-
-
-class HtmlWriter(Writer):
-    """html writer object.
-
-    From document object, write serialized text to fname.
-    """
-
-    def __init__(self, fname, doc=None, text=None, platform=sys.platform):
-        super().__init__(fname, text, platform)
-        self.doc = doc
-
-    def _serialize(self):
-        if self.text:
-            return
-        tree = self.doc.getroottree()
-        self.text = lxml_html.tostring(tree, encoding='unicode')
-
-    def _prepare(self):
-        self._serialize()
-        make_directories(self.fname)
 
 
 # shell invocation ------------------------------

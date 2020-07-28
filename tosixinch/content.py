@@ -10,7 +10,6 @@ from tosixinch import clean
 from tosixinch import location
 from tosixinch import lxml_html
 from tosixinch import imagesize
-from tosixinch import system
 
 import tosixinch.process.sample as process_sample
 
@@ -170,7 +169,7 @@ def merge_htmls(paths, pdfname, codings=None, errors='strict'):
         hname = pdfname.replace('.pdf', '.html')
         root = build_blank_html()
         _append_bodies(root, hname, paths, codings, errors)
-        system.HtmlWriter(hname, doc=root).write()
+        lxml_html.HtmlWriter(hname, doc=root).write()
         return hname
     else:
         return paths[0]
@@ -178,7 +177,7 @@ def merge_htmls(paths, pdfname, codings=None, errors='strict'):
 
 def _append_bodies(root, rootname, fnames, codings, errors):
     for fname in fnames:
-        reader = system.HtmlReader(fname, codings=codings, errors=errors)
+        reader = lxml_html.HtmlReader(fname, codings=codings, errors=errors)
         bodies = reader.read().xpath('//body')
         for b in bodies:
             _relink_component(b, rootname, fname)
@@ -221,7 +220,7 @@ class SimpleHtmlContent(_Content):
     """Define basic (non-extract) HtmlElement manupulations."""
 
     def read(self, fname, text):
-        reader = system.HtmlReader(fname, text,
+        reader = lxml_html.HtmlReader(fname, text,
             codings=self.codings, errors=self.errors)
         return reader.read()
 
@@ -235,7 +234,7 @@ class SimpleHtmlContent(_Content):
             self.doc.head.append(el)
 
     def write(self):
-        writer = system.HtmlWriter(self.fnew, doc=self.doc)
+        writer = lxml_html.HtmlWriter(self.fnew, doc=self.doc)
         writer.write()
 
 
