@@ -21,9 +21,6 @@ import webbrowser
 
 from tosixinch import _set_logger
 from tosixinch import configfetch
-from tosixinch import download
-from tosixinch import extract
-from tosixinch import convert
 from tosixinch import settings
 from tosixinch.system import run_cmds
 
@@ -181,12 +178,14 @@ def _main(args=sys.argv[1:], conf=None):
 
 def _dispatch(args, conf):
     if args.download:
+        from tosixinch import download
         returncode = run_cmds(conf.general.precmd1, conf)
         if returncode not in (101, 102):
             download.dispatch(conf)
         if returncode not in (102,):
             run_cmds(conf.general.postcmd1, conf)
     if args.extract:
+        from tosixinch import extract
         returncode = run_cmds(conf.general.precmd2, conf)
         if returncode not in (101, 102):
             extract.dispatch(conf)
@@ -196,6 +195,7 @@ def _dispatch(args, conf):
         from tosixinch import toc
         toc.run(conf)
     if args.convert:
+        from tosixinch import convert
         returncode = run_cmds(conf.general.precmd3, conf)
         if returncode not in (101, 102):
             convert.run(conf)
