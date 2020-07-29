@@ -26,7 +26,6 @@ from tosixinch import configfetch
 from tosixinch import location
 from tosixinch import system
 
-from tosixinch.content import slugify
 from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)
@@ -129,7 +128,7 @@ def _getpdfname(url, section, length=1):
     path = parts.path.rstrip('/').split('/')[-1]
     query = parts.query[:20]
     if query:
-        path = path + '-' + slugify(query)
+        path = path + '-' + location.slugify(query)
     section = section.split(' : ')[0].replace(os.sep, '_')
     _sam = '_sam_'  # Application sample confings have this prefix.
     section = section[len(_sam):] if section.startswith(_sam) else section

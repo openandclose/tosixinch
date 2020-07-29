@@ -31,6 +31,16 @@ def path2ref(path, basepath):
     return urlmap._path2ref(path, basepath)
 
 
+# https://github.com/django/django/blob/master/django/utils/text.py
+def slugify(value):
+    import unicodedata
+    value = unicodedata.normalize('NFKD', value)
+    value = value.encode('ascii', 'ignore').decode('ascii')
+    value = re.sub(r'[^\w\s-]', '', value).strip().lower()
+    value = re.sub(r'[-\s]+', '-', value)
+    return value
+
+
 class Locations(object):
     """Make ``Location`` object and implement iteration."""
 

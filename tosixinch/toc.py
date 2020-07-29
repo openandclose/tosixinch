@@ -11,7 +11,7 @@ import sys
 from tosixinch import location
 from tosixinch import lxml_html
 from tosixinch.content import (
-    build_new_html, slugify, _relink_component, _relink)
+    build_new_html, _relink_component, _relink)
 
 import tosixinch.process.sample as process_sample
 
@@ -109,7 +109,7 @@ class Nodes(location.Locations):
         line = m.group(2)
         if cnt and line:
             title = line
-            url = '%s/%s' % (TOCDOMAIN, slugify(title))
+            url = '%s/%s' % (TOCDOMAIN, location.slugify(title))
         elif cnt and not line:
             title = None
             url = None

@@ -153,16 +153,6 @@ def get_component_size(el, fname, stream=None):
         return None, None
 
 
-# https://github.com/django/django/blob/master/django/utils/text.py
-def slugify(value):
-    import unicodedata
-    value = unicodedata.normalize('NFKD', value)
-    value = value.encode('ascii', 'ignore').decode('ascii')
-    value = re.sub(r'[^\w\s-]', '', value).strip().lower()
-    value = re.sub(r'[-\s]+', '-', value)
-    return value
-
-
 # TODO: Links to merged htmls should be rewritten to fragment links.
 def merge_htmls(paths, pdfname, codings=None, errors='strict'):
     if len(paths) > 1:
