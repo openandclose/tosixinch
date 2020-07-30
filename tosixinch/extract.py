@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 def add_css_reference(conf, site):
-    e = SimpleExtract(conf, site)
+    e = _Extract(conf, site)
     e.load()
     e.add_css()
     e.write()
@@ -41,13 +41,6 @@ class _Extract(content._Content):
         self.codings = site.general.encoding
         self.errors = site.general.encoding_errors
         self._parts_download = site.general.parts_download
-
-
-class SimpleExtract(_Extract, content._Content):
-    """Inject config data into SimpleHtmlContent.
-
-    For now, mostly for adding external css to html files.
-    """
 
     def add_css(self):
         cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
@@ -88,10 +81,6 @@ class Extract(_Extract, content.HtmlContent):
 
     def resolve(self):
         Resolver(self.doc, self._site, self._conf.sites, self._conf).resolve()
-
-    def add_css(self):
-        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
-        super().add_css(cssfiles)
 
     def run(self):
         self.load()
