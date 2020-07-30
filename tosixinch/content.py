@@ -205,12 +205,12 @@ class _Content(object):
         self.codings = codings
         self.errors = errors
 
-    def read(self, fname, text):
+    def _read(self, fname, text):
         return lxml_html.read(fname, text,
             codings=self.codings, errors=self.errors)
 
-    def load(self):
-        self.doc = self.read(fname=self.fnew, text=None)
+    def read(self):
+        self.doc = self._read(fname=self.fnew, text=self.text)
 
     def add_css(self, cssfiles):
         for cssfile in cssfiles:
@@ -226,7 +226,7 @@ class HtmlContent(_Content):
     """Define HtmlElement manupulations for extraction."""
 
     def load(self):
-        self.root = self.read(fname=self.fname, text=self.text)
+        self.root = self._read(fname=self.fname, text=self.text)
 
         doctype = self.root.getroottree().docinfo.doctype or DEFAULT_DOCTYPE
         self.doctype = doctype
