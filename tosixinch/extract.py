@@ -127,14 +127,11 @@ class Resolver(content.BaseResolver):
 class ReadabilityExtract(Extract, content.ReadabilityHtmlContent):
     """Methods for readability."""
 
-    def components(self):
-        if self._parts_download:
-            super().get_components()
-
     def run(self):
         self.load()
         self.build()
-        self.components()
+        self.resolve()
+        self.add_css()
         self.write()
 
 

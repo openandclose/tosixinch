@@ -266,6 +266,9 @@ class HtmlContent(object):
 class ReadabilityHtmlContent(HtmlContent):
     """Define methods only for readability."""
 
+    def load(self):
+        self.text = self._read_text(fname=self.fname, text=self.text)
+
     def build(self):
         title = readability.Document(self.text).title()
         content = readability.Document(self.text).summary(html_partial=True)
