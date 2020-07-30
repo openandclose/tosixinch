@@ -22,13 +22,6 @@ from tosixinch import textformat
 logger = logging.getLogger(__name__)
 
 
-def add_css_reference(conf, site):
-    e = Extract(conf, site)
-    e.read()
-    e.add_css()
-    e.write()
-
-
 class Extract(content.HtmlContent):
     """Inject config data into HtmlContent."""
 
@@ -133,6 +126,23 @@ class ReadabilityExtract(Extract, content.ReadabilityHtmlContent):
         self.resolve()
         self.add_css()
         self.write()
+
+
+class CSSWriter(Extract):
+    """Just add css reference (through lxml)."""
+
+    def load(self):
+        self.doc = self._read(fname=self.fnew, text=self.text)
+
+    def run(self):
+        self.load()
+        self.add_css()
+        self.write()
+
+
+def add_css_reference(conf, site):
+    writer = CSSWriter(conf, site)
+    writer.run()
 
 
 def _get_ftypes(conf):
