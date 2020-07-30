@@ -189,8 +189,8 @@ def _relink(url, prev_base, new_base):
     return url
 
 
-class _Content(object):
-    """Represent general content."""
+class HtmlContent(object):
+    """Define HtmlElement manupulations for extraction."""
 
     def __init__(self, loc, text=None, codings=None, errors='strict'):
         if isinstance(loc, str):
@@ -211,19 +211,6 @@ class _Content(object):
 
     def read(self):
         self.doc = self._read(fname=self.fnew, text=self.text)
-
-    def add_css(self, cssfiles):
-        for cssfile in cssfiles:
-            url = build_external_css(self.fnew, cssfile)
-            el = lxml_html.fragment_fromstring(url)
-            self.doc.head.append(el)
-
-    def write(self):
-        lxml_html.write(self.fnew, doc=self.doc)
-
-
-class HtmlContent(_Content):
-    """Define HtmlElement manupulations for extraction."""
 
     def load(self):
         self.root = self._read(fname=self.fname, text=self.text)
@@ -261,6 +248,15 @@ class HtmlContent(_Content):
     def clean(self, tags, attrs):
         cleaner = clean.Clean(self.doc, tags, attrs)
         cleaner.run()
+
+    def add_css(self, cssfiles):
+        for cssfile in cssfiles:
+            url = build_external_css(self.fnew, cssfile)
+            el = lxml_html.fragment_fromstring(url)
+            self.doc.head.append(el)
+
+    def write(self):
+        lxml_html.write(self.fnew, doc=self.doc)
 
 
 class ReadabilityHtmlContent(HtmlContent):
