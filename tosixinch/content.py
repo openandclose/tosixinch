@@ -209,6 +209,10 @@ class HtmlContent(object):
         return lxml_html.read(fname, text,
             codings=self.codings, errors=self.errors)
 
+    def _read_text(self, fname, text):
+        return lxml_html.read_text(
+            fname, text, codings=self.codings, errors=self.errors)
+
     def read(self):
         self.doc = self._read(fname=self.fnew, text=self.text)
 
