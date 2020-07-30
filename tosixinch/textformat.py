@@ -90,7 +90,7 @@ class Prose(object):
         self.wrapped = self.text
 
     def _build(self):
-        css = ''.join(self._get_css())
+        css = '\n    '.join(self._get_css())
         text = self.wrapped
         content = text if self.done_escape else html.escape(text)
         fdict = {
