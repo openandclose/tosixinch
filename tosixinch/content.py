@@ -205,10 +205,6 @@ class _Content(object):
         self.codings = codings
         self.errors = errors
 
-
-class SimpleHtmlContent(_Content):
-    """Define basic (non-extract) HtmlElement manupulations."""
-
     def read(self, fname, text):
         return lxml_html.read(fname, text,
             codings=self.codings, errors=self.errors)
@@ -226,7 +222,7 @@ class SimpleHtmlContent(_Content):
         lxml_html.write(self.fnew, doc=self.doc)
 
 
-class HtmlContent(SimpleHtmlContent):
+class HtmlContent(_Content):
     """Define HtmlElement manupulations for extraction."""
 
     def load(self):

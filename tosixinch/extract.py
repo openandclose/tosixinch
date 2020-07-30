@@ -29,7 +29,7 @@ def add_css_reference(conf, site):
     e.write()
 
 
-class _Extract(content.SimpleHtmlContent):
+class _Extract(content._Content):
     """Implement base initialization."""
 
     def __init__(self, conf, site):
@@ -43,7 +43,7 @@ class _Extract(content.SimpleHtmlContent):
         self._parts_download = site.general.parts_download
 
 
-class SimpleExtract(_Extract, content.SimpleHtmlContent):
+class SimpleExtract(_Extract, content._Content):
     """Inject config data into SimpleHtmlContent.
 
     For now, mostly for adding external css to html files.
