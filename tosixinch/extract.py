@@ -23,14 +23,14 @@ logger = logging.getLogger(__name__)
 
 
 def add_css_reference(conf, site):
-    e = _Extract(conf, site)
-    e.load()
+    e = Extract(conf, site)
+    e.read()
     e.add_css()
     e.write()
 
 
-class _Extract(content._Content):
-    """Implement base initialization."""
+class Extract(content.HtmlContent):
+    """Inject config data into HtmlContent."""
 
     def __init__(self, conf, site):
         super().__init__(site)
@@ -40,24 +40,13 @@ class _Extract(content._Content):
 
         self.codings = site.general.encoding
         self.errors = site.general.encoding_errors
-        self._parts_download = site.general.parts_download
-
-    def add_css(self):
-        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
-        super().add_css(cssfiles)
-
-
-class Extract(_Extract, content.HtmlContent):
-    """Inject config data into HtmlContent."""
-
-    def __init__(self, conf, site):
-        super().__init__(conf, site)
 
         self.sel = site.select
         self.excl = site.exclude
         self.sp = site.general.defaultprocess + site.process
         self.section = site.section
 
+        self._parts_download = site.general.parts_download
         self._guess = conf.general.guess
         self._full_image = site.general.full_image
 
@@ -81,6 +70,10 @@ class Extract(_Extract, content.HtmlContent):
 
     def resolve(self):
         Resolver(self.doc, self._site, self._conf.sites, self._conf).resolve()
+
+    def add_css(self):
+        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
+        super().add_css(cssfiles)
 
     def run(self):
         self.load()
@@ -131,7 +124,7 @@ class Resolver(content.BaseResolver):
                     el.classes.add('tsi-wide')
 
 
-class ReadabilityExtract(_Extract, content.ReadabilityHtmlContent):
+class ReadabilityExtract(Extract, content.ReadabilityHtmlContent):
     """Methods for readability."""
 
     def components(self):
