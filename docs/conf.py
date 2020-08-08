@@ -232,3 +232,7 @@ def setup(app):
         objname='other scripts',
         indextemplate='pair: %s; other scripts',
         parse_node=word_to_name)
+
+
+# https://github.com/sphinx-doc/sphinx/pull/6473
+strip_signature_backslash = True
