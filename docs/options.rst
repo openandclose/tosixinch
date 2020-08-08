@@ -464,11 +464,11 @@ General Section
 .. confopt:: browsercmd
 
     | (None)
-    | ``[LINE][CMDS]``
+    | ``[CMD]``
 
     When action is ``--browser``,
-    specify commands to open a browser,
-    if the default (using Python stdlib webbrowser) is not desirable. E.g.::
+    specify the command to open a browser,
+    if the default (calling Python stdlib webbrowser) is not desirable. E.g.::
 
         firefox 'site.fnew'
 

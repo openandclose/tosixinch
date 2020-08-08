@@ -228,9 +228,9 @@ def open_browser(conf):
     if not os.path.exists(html):
         FileNotFoundError('No extracted html to open: %r' % html)
 
-    cmds = conf.general.browsercmd
-    if cmds:
-        returncode = run_cmds(cmds, conf, site)
+    cmd = conf.general.browsercmd
+    if cmd:
+        returncode = run_cmds([cmd], conf, site)
     else:
         ret = webbrowser.open(html)
         # ret is True or False
