@@ -44,8 +44,8 @@ class NoOptionError(Error, configparser.NoOptionError):
         super().__init__(option, section)
 
 
-class OptionParseError(Error):
-    """Raised when config has a invalid line."""
+class OptionBuildError(Error):
+    """Raised when config file has a invalid line."""
 
 
 def register(meth):
@@ -194,41 +194,89 @@ class Func(object):
         return value
 
 
-class OptionParser(object):
-    """Parse option values for ``ConfigFetch``."""
+class DictOptionBuilder(object):
+    """Parse and edit option values from a dictionay."""
+
+    def __init__(self, conf):
+        self._config = conf._config
+        self._conf = conf
+
+    def parse(self, input_):
+        if not isinstance(input_, dict):
+            raise ValueError('input data must be dict.')
+
+        self._input = input_
+        return self._parse()
+
+    def _parse(self):
+        ctx = {}
+        for sec, section in self._input.items():
+            if sec not in self._config:
+                self._config.add_section(sec)
+            for opt, option in section.items():
+                self._parse_option(sec, section, opt, option, ctx)
+        return ctx
+
+    def _parse_option(self, sec, section, opt, option, ctx):
+        self._config[sec][opt] = option['value']
+        if option.get('argparse'):
+            if not ctx.get(opt):
+                ctx[opt] = {}
+            ctx[opt]['argparse'] = option['argparse']
+        if option.get('func'):
+            if not ctx.get(opt):
+                ctx[opt] = {}
+            ctx[opt]['func'] = option['func']
+
+
+class FiniOptionBuilder(object):
+    """Parse ``FINI`` option values and create context dict."""
 
     HELP_PREFIX = ':'
     ARGS_PREFIX = '::'
     ARGS_SHORTNAMES = {'f': 'func'}
 
-    def __init__(self, config, ctx):
-        self._config = config
-        self._ctx = ctx
+    def __init__(self, conf):
+        self._config = conf._config
+        self._conf = conf
 
         # Note: require a space (' ') for nonblank values
         comp = re.compile
         self._help_re = comp(r'^\s*(%s)(?: (.+))*$' % self.HELP_PREFIX)
         self._args_re = comp(r'^\s*(%s)(?: (.+))*\s*$' % self.ARGS_PREFIX)
 
-    def parse(self):
+    def parse(self, input_):
+        """Parse input and build conifg data and metadata."""
+        if hasattr(input_, 'read'):
+            self._config.read_file(input_)
+        elif isinstance(input_, str):
+            self._config.read_string(input_)
+        else:
+            raise ValueError('input data must be file object or string.')
+
+        self._input = input_
+        return self._parse()
+
+    def _parse(self):
+        ctx = {}
         for secname, section in self._config.items():
             for option in section:
-                self._parse_option(section, option)
-        return self._ctx
+                self._parse_option(section, option, ctx)
+        return ctx
 
-    def _parse_option(self, section, option):
+    def _parse_option(self, section, option, ctx):
         value = section[option]
         args, value = self._parse_args(value)
 
         section[option] = value
         if args['argparse']:
-            if not self._ctx.get(option):
-                self._ctx[option] = {}
-            self._ctx[option]['argparse'] = args['argparse']
+            if not ctx.get(option):
+                ctx[option] = {}
+            ctx[option]['argparse'] = args['argparse']
         if args['func']:
-            if not self._ctx.get(option):
-                self._ctx[option] = {}
-            self._ctx[option]['func'] = args['func']
+            if not ctx.get(option):
+                ctx[option] = {}
+            ctx[option]['func'] = args['func']
 
     def _parse_args(self, value):
         help_ = []
@@ -244,26 +292,28 @@ class OptionParser(object):
             m = self._help_re.match(line)
             if m:
                 if state not in ('root', 'help'):
-                    raise OptionParseError(error_fmt % line)
+                    raise OptionBuildError(error_fmt % line)
                 state = 'help'
+                # create blank 'help' key beforehand, to preserve key order
+                args['argparse']['help'] = ''
                 help_.append(m.group(2) if m.group(2) else '')
                 continue
 
             m = self._args_re.match(line)
             if m:
                 if not m.group(2):
-                    raise OptionParseError(error_fmt % line)
+                    raise OptionBuildError(error_fmt % line)
 
                 key, val = m.group(2).split(':', maxsplit=1)
                 key, val = self._convert_arg(key, val)
                 if key != 'func':
                     if state not in ('help', 'argparse'):
-                        raise OptionParseError(error_fmt % line)
+                        raise OptionBuildError(error_fmt % line)
                     args['argparse'][key] = val
                     state = 'argparse'
                 else:
                     if state not in ('root', 'help', 'argparse'):
-                        raise OptionParseError(error_fmt % line)
+                        raise OptionBuildError(error_fmt % line)
                     args['func'] = val
                     state = 'func'
                 continue
@@ -341,6 +391,14 @@ class OptionParser(object):
             if val == 'argparse.SUPPRESS':
                 args['argparse'][key] = argparse.SUPPRESS
 
+
+class ArgumentBuilder(object):
+    """Fill ``argparse.ArgumentParser`` object with arguments."""
+
+    def __init__(self, conf):
+        self._config = conf._config
+        self._ctx = conf._ctx
+
     def build(self, argument_parser, sections=None):
         if sections is None:
             sections = self._config.sections()
@@ -389,43 +447,47 @@ class ConfigFetch(object):
     It keeps a ``ConfigParser`` object (``_config``)
     and a correspondent option-name-to-metadata map (``_ctx``).
 
-    The metadata includes function list specific to the option name (global).
-    Option access returns a functions-applied-value.
-
     It also has ``argparse.Namespace`` object (``args``),
     and Environment variable dictionay (``envs``).
 
-    They are also global, having no concept of sections.
-    If the option name counterpart is defined,
+    If the option name counterpart is defined in ``args`` or ``envs``,
     their value precedes the config value.
 
-    Functions are similarly applied.
+    So most config option names must be global,
+    since ``args`` and ``envs`` do not have ``section`` namespace.
+
+    E.g. if a config has 'foo' section and 'bar' option in it,
+    ``args``, and ``envs`` just check the name 'bar',
+    ignoring section hierarchy.
+
+    The metadata includes function list specific to the option name.
+    Option access gets value from ``arg``, ``envs`` or config,
+    and returns a functions-applied-value.
 
     The class ``__init__`` should accept
     all ``ConfigParser.__init__`` keyword arguments.
 
-    The class specific argumants are:
+    Additional argumants are:
 
     :param fmts: dictionay ``Func._fmt`` uses
-    :param args: ``argparse.Namespace`` object,
-        already commandline arguments parsed
+    :param args: ``argparse.Namespace`` object
     :param envs: dictionary with option name and Environment Variable name
         as key and value
-    :param Func: ``Func`` or subclasses, keep actual functions
-    :param optionparser: ``OptionParser`` or a subclass,
-        parse option value string and build actual value and metadata
+    :param Func: ``Func`` or subclasses, worker to keep and look-up functions
+    :param option_builder: ``DictOptionBuilder`` or ``FiniOptionBuilder``,
+        worker to build value and metadata from data input
     :param parser: ``ConfigParser`` or a subclass,
-        keep actual config data
+        keep actual config values
     """
 
     def __init__(self, *, fmts=None, args=None, envs=None,
-            Func=Func, optionparser=OptionParser,
+            Func=Func, option_builder=DictOptionBuilder,
             parser=configparser.ConfigParser, **kwargs):
         self._fmts = fmts or {}
         self._args = args or argparse.Namespace()
         self._envs = envs or {}
         self._Func = Func
-        self._optionparser = optionparser
+        self._option_builder = option_builder
         self._parser = parser
         self._ctx = {}  # option -> metadata dict
         self._cache = {}  # SectionProxy object cache
@@ -434,54 +496,28 @@ class ConfigFetch(object):
         self._config = parser(**kwargs)
         self._config.optionxform = self._optionxform
 
-    def read_file(self, f, format=None):
-        """Read config from an opened file object.
+    def fetch(self, input_):
+        """Read input and build config data and metadata.
 
-        :param f: a file object
-        :param format: 'fini', 'ini' or ``None``
-
-        If ``format`` is 'fini',
-        read config values and metadata.
-        Previous metadata definitions are overwritten, if any.
-
-        If ``format`` is 'ini' (or actually any other string than 'fini'),
-        read only config values, just using the ``ConfigParser`` or a subclass.
-        Metadata are kept intact, if any.
-
-        If ``format`` is ``None`` (default),
-        only when the metadata dict (``_ctxs``) is blank,
-        read the file as 'fini'
-        (supposed to be the first time read).
-        Otherwise read the file as 'ini'.
+        Note type of input entirely depends on option_builder.
+        ``DictOptionBuilder`` accepts only python dictionary object.
+        ``FiniOptionBuilder`` accepts only opened file object or string.
         """
-        self._config.read_file(f)
-        self._check_and_parse_config(format)
+        option_builder = self._option_builder(self)
+        self._ctx.update(option_builder.parse(input_))
 
-    def read_string(self, string, format=None):
-        """Read config from a string.
-
-        :param string: a string
-        :param format: 'fini', 'ini' or ``None``
-
-        The meaning of ``format`` is the same as ``.read_file``.
-        """
-        self._config.read_string(string)
-        self._check_and_parse_config(format)
+        # shortcut
+        self.read = self._config.read
+        self.read_file = self._config.read_file
+        self.read_string = self._config.read_string
+        self.read_dict = self._config.read_dict
 
     def _get_optionxform(self):
         def _xform(option):
             return option
         return _xform
 
-    def _check_and_parse_config(self, format):
-        if format is None:
-            if len(self._ctx) == 0:
-                format = 'fini'
-        if format == 'fini':
-            optionparser = self._optionparser(self._config, self._ctx)
-            self._ctx = optionparser.parse()
-
-    def set_arguments(self, argument_parser, sections=None):
+    def build_arguments(self, argument_parser, sections=None):
         """Run ``argument_parser.add_argument`` according to config metadata.
 
         :param argument_parser: ``argparse.ArgumentParser`` or a subclass,
@@ -495,15 +531,14 @@ class ConfigFetch(object):
 
         1. Instantiate ``ConfigFetch`` with blank ``arg``.
         2. Create ``ArgumentParser``, edit as necessary.
-        3. ``.set_arguments`` (populate ``ArgumentParser`` with metadata).
+        3. ``.build_arguments`` (populate ``ArgumentParser`` with arguments).
         4. Parse commandline (``ArgumentParser.parse_args``).
-        5. ``.set_args`` below with the new ``args``.
+        5. ``.set_arguments`` below with the new ``args``.
         """
-        optionparser = self._optionparser(self._config, self._ctx)
-        optionparser.build(argument_parser, sections)
+        ArgumentBuilder(self).build(argument_parser, sections)
         return argument_parser
 
-    def set_args(self, namespace):
+    def set_arguments(self, namespace):
         """Set ``_args`` attribute.
 
         :param namespace: ``argparse.Namespace`` object
@@ -515,13 +550,11 @@ class ConfigFetch(object):
     # TODO: Invalidate attribute names this class uses.
     # cf. set(dir(configfetch.fetch(''))) - set(dir(object()))
     def __getattr__(self, section):
-        if section in self._cache:
-            return self._cache[section]
-
-        s = SectionProxy(
-            self, section, self._ctx, self._fmts, self._Func)
-        self._cache[section] = s
-        return s
+        if section not in self._cache:
+            s = SectionProxy(
+                self, section, self._ctx, self._fmts, self._Func)
+            self._cache[section] = s
+        return self._cache[section]
 
     def get(self, section):
         try:
@@ -627,7 +660,7 @@ class SectionProxy(object):
 
 
 class Double(object):
-    """Supply a parent section to fallback, before 'DEFAULT'.
+    """Supply a parent section fallback, before 'DEFAULT'.
 
     An accessory helper class,
     not so related to this module's main concern.
@@ -693,9 +726,10 @@ class Double(object):
         return self.sec.__iter__()
 
 
-def fetch(file_or_string, *, encoding=None,
+def fetch(input_, *, encoding=None,
         fmts=None, args=None, envs=None, Func=Func,
-        parser=configparser.ConfigParser, **kwargs):
+        parser=configparser.ConfigParser, option_builder=DictOptionBuilder,
+        **kwargs):
     """Fetch ``ConfigFetch`` object.
 
     It is a convenience function for the basic use of the library.
@@ -703,20 +737,22 @@ def fetch(file_or_string, *, encoding=None,
 
     the specific arguments are:
 
-    :param file_or_string: a filename to open
-        if the name is in system path, or a string
-    :param encoding: encoding to use when openning the name
-
-    Files are read with ``format=None``.
+    :param input_: ``dict``, ``file obj`` or ``string``
+        according to ``option_builder``.
+        Additionally, if the input is string and in system path,
+        it tries to open to make file object
+    :param encoding: encoding to use when opening the input
     """
     conf = ConfigFetch(fmts=fmts, args=args, envs=envs, Func=Func,
-        parser=parser)
+        parser=parser, option_builder=option_builder)
 
-    if os.path.isfile(file_or_string):
-        with open(file_or_string, encoding=encoding) as f:
-            conf.read_file(f)
-    else:
-        conf.read_string(file_or_string)
+    if issubclass(option_builder, FiniOptionBuilder):
+        if isinstance(input_, str) and os.path.isfile(input_):
+            with open(input_, encoding=encoding) as f:
+                conf.fetch(f)
+                return conf
+
+    conf.fetch(input_)
     return conf
 
 
@@ -821,3 +857,121 @@ def minusadapter(parser, matcher=None, args=None):
 
     args = args if args else sys.argv[1:]
     return list(_iter_args(args, actions))
+
+
+class ConfigPrinter(object):
+    """Print dictionay or INI format strings from configuration.
+
+    :param conf: ConfigFetch object, with _config and _ctx attributes
+    :param sections: list of section names to print, all sections if None
+    :param width: indent unit width
+    :param print: any function with one string argument,
+        to customize printout behavior
+    """
+
+    def __init__(self, conf, sections=None, width=4, print=print):
+        self._conf = conf
+        self.sections = sections
+        self._dict = self.build_dict(conf)
+        self.width = width
+        self.print = print
+
+    # Build clean dictionay from conf object
+    def build_dict(self, conf):
+
+        def build_section(section, ctx, defaults=None):
+            d = {}
+            for option, value in section.items():
+                if value is None:
+                    continue
+                if defaults and option in defaults:
+                    if value == defaults[option]:
+                        continue
+                d[option] = build_option(option, value, ctx)
+            return d
+
+        def build_option(option, value, ctx):
+            d = {}
+            for key in ctx:
+                if key == option:
+                    for k, v in ctx[key].items():
+                        d[k] = v
+            if value is not None:
+                d['value'] = value
+            return d
+
+        config = conf._config
+        ctx = conf._ctx
+
+        default_section = config.default_section
+        defaults = config.defaults()
+        section_names = self.sections or config.sections()
+
+        d = {}
+        section = build_section(defaults, ctx)
+        if section:
+            d[default_section] = section
+
+        for sec in section_names:
+            section = config[sec]
+            if len(section) == 0:
+                continue
+            section = build_section(section, ctx, defaults)
+            if section:
+                d[sec] = section
+
+        return d
+
+    def print_dict(self):
+        """Print dictionary string."""
+        width = self.width
+        print = self.print
+
+        def iterate(d, level):
+
+            def p(string):
+                s = ' ' * level * width + string
+                print(s)
+
+            for k, v in d.items():
+                if getattr(v, 'items', None):
+                    p('%r: {' % k)
+                    iterate(v, level + 1)
+                    p('},')
+                else:
+                    p('%r: %r,' % (k, v))
+
+        print('{')
+        iterate(self._dict, level=1)
+        print('}')
+
+    def print_ini(self):
+        """Print INI format string."""
+        width = self.width
+        print = self.print
+
+        def p(string):
+            print(string.rstrip())
+
+        option_len = 0
+        for sec, section in self._dict.items():
+            for option, value in section.items():
+                if len(option) > option_len:
+                    option_len = len(option)
+
+        # Just avoiding importing math module
+        # https://stackoverflow.com/a/14822457
+        # plus 1 for '='
+        ceil = (option_len + 1 + width - 1) // width
+        option_len = ceil * width
+
+        for sec, section in self._dict.items():
+            p('[%s]' % sec)
+            for option, val in section.items():
+                value = val['value']
+                first, *rest = value.split('\n')
+                p('%*s%s' % (-option_len, option + '=', first))
+                if rest:
+                    for r in rest:
+                        p('%s%s' % (' ' * option_len, r))
+            print('')
