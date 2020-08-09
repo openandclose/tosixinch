@@ -16,20 +16,19 @@ logger = logging.getLogger(__name__)
 
 
 def _extend(obj, args):
-    # Utility function to extend ``list`` or similar object.
-    # Mainly to absorb ``append`` and ``extend`` distinction.
-    # Presuppose flattened sequence, so you can't do e.g. ``.append([1, 2])``.
+    """.append or .extend wisely, according to args type."""
+    if not args:
+        return
+
     Sequence = collections.abc.Sequence
     if isinstance(args, str):
-        if args:
-            return obj.append(args)
+        return obj.append(args)
     elif isinstance(args, Sequence):
-        if args:
-            return obj.extend(args)
-    else:
-        fmt = "'args' must be 'str' or 'Sequence'. Got %r(%r)."
-        msg = fmt % (type(args), args)
-        raise ValueError(msg)
+        return obj.extend(args)
+
+    fmt = "'args' must be 'str' or 'Sequence'. Got %r(%r)."
+    msg = fmt % (type(args), args)
+    raise ValueError(msg)
 
 
 def _is_newer(oldfile, newfile):
