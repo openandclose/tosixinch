@@ -50,13 +50,13 @@ DEFAULT_UFILE = 'urls.txt'
 
 def _build_cmd_parser(conf):
     parser = argparse.ArgumentParser(prog='tosixinch-cmd', add_help=False)
-    set_arguments = conf._appconf.set_arguments
+    build_arguments = conf._appconf.build_arguments
 
     general = parser.add_argument_group('general')
-    set_arguments(general, '_generic')
+    build_arguments(general, '_generic')
 
     actions = parser.add_argument_group('actions')
-    set_arguments(actions, '_action')
+    build_arguments(actions, '_action')
 
     return parser
 
@@ -64,16 +64,16 @@ def _build_cmd_parser(conf):
 def _build_conf_parser(conf):
     parser = argparse.ArgumentParser(
         prog='tosixinch-conf', allow_abbrev=False, add_help=False)
-    set_arguments = conf._appconf.set_arguments
+    build_arguments = conf._appconf.build_arguments
 
     programs = parser.add_argument_group('programs')
-    set_arguments(programs, '_program')
+    build_arguments(programs, '_program')
 
     configs = parser.add_argument_group('configs')
-    set_arguments(configs, 'general')
+    build_arguments(configs, 'general')
 
     styles = parser.add_argument_group('styles')
-    set_arguments(styles, 'style')
+    build_arguments(styles, 'style')
 
     return parser
 
@@ -108,7 +108,7 @@ def _get_conf(args, conf=None):
 
     conf_parser = _build_conf_parser(conf)
     confargs, _ = conf_parser.parse_known_args(_args)
-    conf._appconf.set_args(confargs)
+    conf._appconf.set_arguments(confargs)
     conf.user_init(args)
 
     return conf, parser, args

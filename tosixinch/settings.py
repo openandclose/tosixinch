@@ -188,13 +188,15 @@ def _get_configs(fmts, args, envs):
     default_siteconfig = os.path.join(configdir, 'site.ini')
     sample_siteconfig = os.path.join(configdir, 'site.sample.ini')
 
+    builder = configfetch.FiniOptionBuilder
+
     appconf = configfetch.fetch(
         default_appconfig, fmts=fmts, args=args, envs=envs, Func=Func,
-        empty_lines_in_values=False)
+        option_builder=builder, empty_lines_in_values=False)
     siteconf = configfetch.fetch(
         default_siteconfig, parser=ZConfigParser,
         fmts=fmts, args=args, envs=envs, Func=Func,
-        empty_lines_in_values=False)
+        option_builder=builder, empty_lines_in_values=False)
 
     with open(sample_siteconfig) as f:
         siteconf.read_file(f)
