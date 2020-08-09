@@ -26,6 +26,13 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 * Rename method ``_get_relpath`` to ``_get_relative_url``
   in ``tosixinch.pcode._pygments.PygmentsCode``.
 
+* Change application config data files to normal INI format
+
+  (``data/tosixinch.ini`` and ``data/site.ini``)
+
+  Previously the program exposed foreign FINI format files
+  which is specific to configfetch library.
+
 **Add:**
 
 * Add urlno.py and urlmap.py (internal)

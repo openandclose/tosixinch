@@ -54,6 +54,7 @@ git: scripts copylib
 scripts:
 	$(DEV)/argparse2rst.py
 	$(DEV)/argparse2bash.py -X
+	$(DEV)/fini2ini.py
 
 copylib: libs
 	-copylib.py configfetch.py

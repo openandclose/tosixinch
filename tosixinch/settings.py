@@ -184,24 +184,61 @@ def _get_configdir():
 def _get_configs(fmts, args, envs):
     configdir = _get_configdir()
 
-    default_appconfig = os.path.join(configdir, 'tosixinch.ini')
-    default_siteconfig = os.path.join(configdir, 'site.ini')
+    default_appconfig = os.path.join(configdir, 'fini', '_tosixinch.fini')
+    default_siteconfig = os.path.join(configdir, 'fini', '_site.fini')
     sample_siteconfig = os.path.join(configdir, 'site.sample.ini')
 
-    builder = configfetch.FiniOptionBuilder
-
-    appconf = configfetch.fetch(
-        default_appconfig, fmts=fmts, args=args, envs=envs, Func=Func,
-        option_builder=builder, empty_lines_in_values=False)
-    siteconf = configfetch.fetch(
-        default_siteconfig, parser=ZConfigParser,
-        fmts=fmts, args=args, envs=envs, Func=Func,
-        option_builder=builder, empty_lines_in_values=False)
+    appconf, siteconf = _read_configs(
+        default_appconfig, default_siteconfig, fmts, args, envs)
 
     with open(sample_siteconfig) as f:
         siteconf.read_file(f)
 
     return configdir, appconf, siteconf
+
+
+def _read_configs(appconfig, siteconfig, fmts, args, envs):
+    """Read appconfig and siteconfig files.
+
+    Option names which start with '*' in appconfig are common options.
+
+    When reading the appconfig file, these '*'s are stripped.
+    And when reading the siteconfig file,
+    the corresponding options and their 'func' are added.
+    """
+    common_re = re.compile(r'^\*(.*?)=')
+    common_options = {}
+    builder = configfetch.FiniOptionBuilder
+
+    def _iterate(f):
+        for line in f:
+            m = common_re.match(line)
+            if m:
+                common_options[m.group(1)] = 1  # value (1) is not used
+                yield line[1:]
+            else:
+                yield line
+
+    with open(appconfig) as f:
+        cstring = ''.join(_iterate(f))
+
+    appconf = configfetch.fetch(
+        cstring, fmts=fmts, args=args, envs=envs, Func=Func,
+        option_builder=builder, empty_lines_in_values=False)
+
+    siteconf = configfetch.fetch(
+        siteconfig, parser=ZConfigParser,
+        fmts=fmts, args=args, envs=envs, Func=Func,
+        option_builder=builder, empty_lines_in_values=False)
+
+    for option in common_options:
+        siteconf._config['DEFAULT'][option] = ''
+        func = appconf._ctx.get(option, {}).get('func')
+        if func:
+            siteconf._ctx[option] = {}
+            siteconf._ctx[option]['func'] = func
+
+    return appconf, siteconf
 
 
 def _get_user_configs(args, appconf, siteconf):

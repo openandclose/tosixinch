@@ -1,0 +1,27 @@
+
+# tosixinch base configurations for each websites.
+
+# For the syntax, see https://github.com/openandclose/configfetch.
+
+# If you just want to check valid option names and defaults,
+# see data/site.ini and data/site.sample.ini.
+
+[DEFAULT]
+
+match=
+
+select=             :: f: line, bar
+
+exclude=            :: f: line, bar
+
+process=            :: f: line
+
+cookie=             :: f: line
+
+link=               //a/@href
+                    # //iframe/@src[contains(., "youtube.com")]
+
+
+[scriptdefault]
+
+match=              http://tosixinch.example.com

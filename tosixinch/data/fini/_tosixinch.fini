@@ -1,0 +1,334 @@
+
+# tosixinch application configurations
+
+# For the syntax, see https://github.com/openandclose/configfetch.
+
+# '*' at the beginning of option names are common option markers.
+# when reading, they are stripped.
+
+# If you just want to check valid option names and defaults,
+# see data/tosixinch.ini.
+
+[_generic]
+
+input=              : input url or file path. it can be specified multiple times
+                    :: names: i
+                    :: action: append
+
+file=               : file to read inputs. only one file
+                    :: names: f
+                    :: default: urls.txt
+
+help=               : show this help message and exit
+                    :: names: h
+                    :: action: store_true
+
+verbose=            : print out more detailed log messages
+                    :: names: v
+                    :: action: store_true
+
+quiet=              : supress non-critical log messages
+                    :: names: q
+                    :: action: store_true
+
+version=            : print version and exit
+                    :: names: V
+                    :: action: store_true
+
+userdir=            : specify user configuration directory
+
+nouserdir=          : disable user configuration (intended for testing)
+                    :: f: bool
+                    no
+
+
+[_action]
+
+download=           : download by default downloader
+                    :: names: 1
+                    :: action: store_true
+
+extract=            : extract by default extractor
+                    :: names: 2
+                    :: action: store_true
+
+convert=            : convert by default converter
+                    :: names: 3
+                    :: action: store_true
+
+view=               : open a pdf viewer if configured
+                    :: names: 4
+                    :: action: store_true
+
+appcheck=           : print application settings after command line evaluation, and exit
+                    :: names: a
+                    :: action: store_true
+
+browser=            : open (first) extracted html in browser and exit
+                    :: names: b
+                    :: action: store_true
+
+check=              : print matched url settings and exit (so you have to supply url some way)
+                    :: names: c
+                    :: action: store_true
+
+toc=                : create toc htmls and a toc url list. conflicts with '--input'.
+                    :: action: store_true
+
+link=               : get links in documents from urls (experimental)
+                    :: action: store_true
+
+news=               : fetch urls from socialnews site (experimental)
+                    :: choices: hackernews
+
+printout=           : print filenames the scripts' actions would create
+                    : (0=url, 1=Downloaded_Files, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
+                    :: choices: '0', '1', '2', '3', 'all'
+
+
+[_program]
+
+urllib=             : download by urllib (default, and no other option)
+                    :: action: store_const
+                    :: const: urllib
+                    :: dest: downloader
+
+lxml=               : extract by lxml (default)
+                    :: action: store_const
+                    :: const: lxml
+                    :: dest: extractor
+
+readability=        : extract by readability, if no settings matched
+                    :: action: store_const
+                    :: const: readability
+                    :: dest: extractor
+
+readability_only=   : extract by readability unconditionally
+                    :: action: store_const
+                    :: const: readability_only
+                    :: dest: extractor
+
+prince=             : convert by princexml
+                    :: action: store_const
+                    :: const: prince
+                    :: dest: converter
+
+weasyprint=         : convert by weasyprint
+                    :: action: store_const
+                    :: const: weasyprint
+                    :: dest: converter
+
+wkhtmltopdf=        : convert by wkhtmltopdf
+                    :: action: store_const
+                    :: const: wkhtmltopdf
+                    :: dest: converter
+
+cnvpath=            : override converter executable path. also need to set converter itself
+
+css2=               : add converter specific css
+                    :: f: comma
+
+
+[general]
+
+*downloader=        : argparse.SUPPRESS
+                    :: choices: urllib
+                    urllib
+
+*extractor=         : argparse.SUPPRESS
+                    :: choices: lxml, readability, readability_only
+                    lxml
+
+converter=          : argparse.SUPPRESS
+                    :: choices: prince, weasyprint, wkhtmltopdf
+                    prince
+
+*user_agent=        : set http header user-agent when downloading by urllib
+                    : (to see the default, run --appcheck)
+                    Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0
+
+*javascript=        :: f: bool
+                    no
+
+*browser_engine=    : use either webengine or webkit (default) when running Qt
+                    :: choices: webkit, webengine
+                    webkit
+
+*encoding=          : assign an encoding for file opening when extract (f: comma)
+                    :: f: comma
+                    utf-8, cp1252, latin_1
+
+*encoding_errors=   : assign an encoding error handler (default: strict)
+                    # Python 3.7.4
+                    :: choices: strict, ignore, replace, xmlcharrefreplace, backslashreplace, namereplace, surrogateescape, surrogatepass
+                    strict
+
+*parts_download=    : download components (images etc.) before PDF conversion (default: True)
+                    :: f: bool
+                    yes
+
+*no_parts_download= : not download components before PDF conversion
+                    :: dest: parts_download
+                    :: f: bool
+                    no
+
+*force_download=    : force '--download' and '--parts-download' even if the file already exists
+                    :: f: bool
+                    no
+
+guess=              : if there is no matched url, use this xpath for content selection (f: line)
+                    :: f: line
+                    //div[@itemprop="articleBody"]
+                    //div[@id="main"]
+                    //div[@id="content"]
+                    //div[@class=="body"]
+
+*defaultprocess=    :: f: line
+                    add_h1
+                    youtube_video_to_thumbnail
+                    convert_permalink_sign
+
+*full_image=        : pxel size to add special class attributes to images (default: 200)
+                    200
+
+*add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: plus_binaries)
+                        :: f: plus_binaries
+
+*add_clean_tags=    : add or subtract to-delete-tag list (f: plus)
+                    :: f: plus
+
+*add_clean_attrs=   : add or subtract to-delete-attribute list (f: plus)
+                    :: f: plus
+                    color, width, height
+
+*ftype=             : specify file type
+                    :: choices: html, prose, nonprose, python
+
+textwidth=          : width (character numbers) for rendering non-prose text
+                    65
+
+textindent=         : line continuation marker for rendering non-prose text
+                    '                    --> '
+
+*trimdirs=          : remove leading directories from local text name to shorten title
+                    3
+
+raw=                : use input paths as is (no url transformation, and only for local files)
+                    :: f: bool
+                    no
+
+*css=               :: f: comma
+                    sample
+
+pdfname=            : override pdf file name
+
+precmd1=            :: f: line, cmds
+
+postcmd1=           :: f: line, cmds
+
+precmd2=            :: f: line, cmds
+
+postcmd2=           :: f: line, cmds
+
+precmd3=            :: f: line, cmds
+
+postcmd3=           :: f: line, cmds
+
+pre_each_cmd1=      :: f: line, cmds
+
+post_each_cmd1=     :: f: line, cmds
+
+pre_each_cmd2=      :: f: line, cmds
+
+post_each_cmd2=     :: f: line, cmds
+
+viewcmd=            : commandline string to open the pdf viewer (f: cmds)
+                    :: f: line, cmds
+
+browsercmd=         :: f: cmd
+
+loc_index=
+
+loc_appendix=
+
+xx=                 :: f: comma
+
+
+[style]
+
+orientation=        : portrait (default) or landscape, determine which size data to use
+                    :: choices: portrait, landscape
+                    portrait
+
+portrait_size=      : portrait size for css, e.g. '90mm 118mm'
+                    90mm 118mm
+
+landscape_size=     : landscape size for css, e.g. '118mm 90mm'
+                    118mm 90mm
+
+toc_depth=          : specify depth of table of contents
+                    3
+
+font_family=        : main font for css, e.g. '"DejaVu Sans", sans-serif'
+                    "DejaVu Sans", sans-serif
+
+font_mono=          : monospace font for css
+                    "Dejavu Sans Mono", monospace
+
+font_serif=         : serif font for css (not used by sample)
+
+font_sans=          : sans font for css (not used by sample)
+
+font_size=          : main font size for css, e.g. '9px'
+                    9px
+
+font_size_mono=     : monospace font size for css
+                    8px
+
+font_scale=         : number like 1.5 to scale base font sizes (default: 1.0)
+                    1.0
+
+line_height=        : adjust line height (default: 1.3)
+                    1.3
+
+# hedding_scale=      1.125
+
+
+[prince]
+
+cnvpath=            prince
+
+css2=               :: f: comma
+
+cnvopts=            :: f: cmd
+                    # --javascript
+                    # --no-default-style
+                    # --no-warn-css
+
+
+[weasyprint]
+
+cnvpath=            weasyprint
+
+css2=               :: f: comma
+
+cnvopts=            :: f: cmd
+
+
+[wkhtmltopdf]
+
+cnvpath=            wkhtmltopdf
+
+css2=               :: f: comma
+
+cnvopts=            :: f: cmd
+                    --disable-smart-shrinking
+                    --no-background
+                    --javascript-delay 1000
+
+                    --page-width 90mm --page-height 118mm
+                    -B 1 -L 1 -R 1 -T 1
+                    # --minimum-font-size 6
+                    # --orientation landscape
+
+                    --encoding utf-8

@@ -509,24 +509,6 @@ Value Functions
 Each option value field has predetermined transformation rules.
 Users have to fill the value accordingly, if setting.
 
-.. note::
-
-    Application's config files
-    (``data/tosixinch.ini`` and ``data/site.ini``)
-    use special syntax, defining some metadata, e.g.
-
-    .. code-block:: ini
-
-        force_download=     : force '--download' and '--parts-download' even if the file already exists
-                            :: f: bool
-                            no
-
-    Users should write options without lines starting with ``:``.
-
-    .. code-block:: ini
-
-        force_download=     no
-
 .. dword:: None
 
     If nothing is specified, it is an ordinary ``ConfigParser`` value.
