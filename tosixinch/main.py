@@ -20,6 +20,7 @@ import sys
 import webbrowser
 
 from tosixinch import _set_logger
+from tosixinch import action
 from tosixinch import configfetch
 from tosixinch import settings
 from tosixinch.system import run_cmds
@@ -171,38 +172,9 @@ def _main(args=sys.argv[1:], conf=None):
         link.print_links(conf)
         return
 
-    _dispatch(args, conf)
+    action.main_dispatch(conf, args)
 
     return conf
-
-
-def _dispatch(args, conf):
-    if args.download:
-        from tosixinch import download
-        returncode = run_cmds(conf.general.precmd1, conf)
-        if returncode not in (101, 102):
-            download.dispatch(conf)
-        if returncode not in (102,):
-            run_cmds(conf.general.postcmd1, conf)
-    if args.extract:
-        from tosixinch import extract
-        returncode = run_cmds(conf.general.precmd2, conf)
-        if returncode not in (101, 102):
-            extract.dispatch(conf)
-        if returncode not in (102,):
-            run_cmds(conf.general.postcmd2, conf)
-    if args.toc:
-        from tosixinch import toc
-        toc.run(conf)
-    if args.convert:
-        from tosixinch import convert
-        returncode = run_cmds(conf.general.precmd3, conf)
-        if returncode not in (101, 102):
-            convert.run(conf)
-        if returncode not in (102,):
-            run_cmds(conf.general.postcmd3, conf)
-    if args.view:
-        run_cmds(conf.general.viewcmd, conf)
 
 
 def main():

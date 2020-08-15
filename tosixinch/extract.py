@@ -1,8 +1,6 @@
 
 """Prepare html content before PDF conversion.
 
-* (load file and decode)
-* (if text is not html, delegate to textformat.py)
 * select the main content parts
 * strip undesirable parts in them
 * process (call arbitrary functions) accoding to site specific settings
@@ -12,27 +10,29 @@
 """
 
 import logging
+import os
 
+from tosixinch import _ImportError
+from tosixinch import action
+from tosixinch import clean
 from tosixinch import content
-from tosixinch import download
-from tosixinch import stylesheet
 from tosixinch import system
-from tosixinch import textformat
+
+import tosixinch.process.sample as process_sample
+
+try:
+    import readability
+except ImportError:
+    readability = _ImportError('readability')
 
 logger = logging.getLogger(__name__)
 
 
-class Extract(content.HtmlContent):
-    """Inject config data into HtmlContent."""
+class Extract(action.Extractor):
+    """Provide actual extractor with config data."""
 
     def __init__(self, conf, site):
-        super().__init__(site)
-
-        self._conf = conf
-        self._site = site
-
-        self.codings = site.general.encoding
-        self.errors = site.general.encoding_errors
+        super().__init__(conf, site)
 
         self.sel = site.select
         self.excl = site.exclude
@@ -43,14 +43,40 @@ class Extract(content.HtmlContent):
         self._guess = conf.general.guess
         self._full_image = site.general.full_image
 
+    def load(self):
+        self.root = self.parse()
+
+        doctype = self.root.getroottree().docinfo.doctype
+        self.doctype = doctype or content.DEFAULT_DOCTYPE
+
+    def build(self):
+        title = self.root.xpath('//title/text()')
+        title = title[0] if title else content.DEFAULT_TITLE
+        baseurl = self.root.base or self.url
+        logger.debug('[base url] %s', baseurl)
+
+        doc = content.build_new_html(doctype=self.doctype, title=title)
+
+        self.title = title
+        self.baseurl = baseurl
+        self.doc = doc
+
+    def guess_selection(self):
+        for guess in self._guess:
+            sel = self.root.xpath(guess)
+            if sel and len(sel) == 1:
+                return guess
+
     def select(self):
-        if self.sel == '':
-            self.sel = self.guess_selection(self._guess) or '*'
-        super().select(self.sel)
+        sel = self.sel or self.guess_selection() or '*'
+        for t in self.root.body.xpath(sel):
+            self.doc.body.append(t)
 
     def exclude(self):
         if self.excl:
-            super().exclude(self.excl)
+            for t in self.doc.body.xpath(self.excl):
+                if t.getparent() is not None:
+                    t.getparent().remove(t)
 
     def process(self):
         for s in self.sp:
@@ -59,14 +85,14 @@ class Extract(content.HtmlContent):
     def clean(self):
         tags = self._site.general.add_clean_tags
         attrs = self._site.general.add_clean_attrs
-        super().clean(tags, attrs)
+        cleaner = clean.Clean(self.doc, tags, attrs)
+        cleaner.run()
 
     def resolve(self):
         Resolver(self.doc, self._site, self._conf.sites, self._conf).resolve()
 
-    def add_css(self):
-        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
-        super().add_css(cssfiles)
+    def write(self):
+        super().write(self.doc)
 
     def run(self):
         self.load()
@@ -76,7 +102,33 @@ class Extract(content.HtmlContent):
         self.process()
         self.clean()
         self.resolve()
-        self.add_css()
+        self.add_css_elememnt()
+        self.write()
+
+
+class ReadabilityExtract(Extract):
+    """Define methods for readability."""
+
+    def build(self):
+        title = readability.Document(self.text).title()
+        content_ = readability.Document(self.text).summary(html_partial=True)
+
+        # ``Readability`` generally does not care about main headings.
+        # So we manually insert a probable ``title``.
+        doc = content.build_new_html(title=title, content=content_)
+        heading = doc.xpath('//h1')
+        if len(heading) == 0:
+            process_sample.add_h1(doc)
+        if len(heading) > 1:
+            process_sample.lower_heading(doc)
+            process_sample.add_h1(doc)
+
+        self.doc = doc
+
+    def run(self):
+        self.build()
+        self.resolve()
+        self.add_css_elememnt()
         self.write()
 
 
@@ -92,17 +144,15 @@ class Resolver(content.BaseResolver):
         self._add_component_attributes(el, comp.fname)
 
     def _set_component(self, comp):
-        if comp.check_fname():
+        if os.path.isfile(comp.fname):
             super()._set_component(comp)
 
     def _download_component(self, comp, url, fname):
-        force = self.loc.general.force_download
-        cache = self._conf._cache.download
-        if comp.check_fname(force=force, cache=cache):
+        if url.startswith('data:image/'):
             return
         logger.info('[img] %s', url)
-        system.make_directories(fname)
-        download.download(url, fname, on_error_exit=False)
+        downloader = action.CompDownloader(self._conf, self.loc)
+        downloader.download(comp)
 
     def _add_component_attributes(self, el, fname):
         full = int(self.loc.general.full_image)
@@ -117,67 +167,9 @@ class Resolver(content.BaseResolver):
                     el.classes.add('tsi-wide')
 
 
-class ReadabilityExtract(Extract, content.ReadabilityHtmlContent):
-    """Methods for readability."""
-
-    def run(self):
-        self.load()
-        self.build()
-        self.resolve()
-        self.add_css()
-        self.write()
-
-
-class CSSWriter(Extract):
-    """Just add css reference (through lxml)."""
-
-    def load(self):
-        self.doc = self._read(fname=self.fnew, text=self.text)
-
-    def run(self):
-        self.load()
-        self.add_css()
-        self.write()
-
-
-def add_css_reference(conf, site):
-    writer = CSSWriter(conf, site)
-    writer.run()
-
-
-def _get_ftypes(conf):
-    for site in conf.sites:
-        ftype = site.ftype = site.general.ftype.lower()
-        if ftype:
-            continue
-
-        fname = site.fname
-        text = site.text
-        if content.is_html(fname, text):
-            site.ftype = 'html'
-
-
-def dispatch(conf):
-    _get_ftypes(conf)
-
-    pre_each_cmd = conf.general.pre_each_cmd2
-    post_each_cmd = conf.general.post_each_cmd2
-
-    for site in conf.sites:
-        returncode = system.run_cmds(pre_each_cmd, conf, site)
-
-        if returncode not in (101, 102):
-            if site.ftype == 'html':
-                run(conf, site)
-            else:
-                textformat.dispatch(conf, site)
-
-        if returncode not in (102,):
-            returncode = system.run_cmds(post_each_cmd, conf, site)
-
-
 def run(conf, site):
     extractor = site.general.extractor
+
     if extractor == 'lxml':
         runner = Extract
     elif extractor == 'readability':

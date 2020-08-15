@@ -49,7 +49,7 @@ class _PygmentsCode(textformat.Prose):
         text = text.replace('\r', '\n')
         text = text.rstrip('\n') + '\n'
         text = text.expandtabs(4)
-        self.text = text
+        return text
 
     def _collect_chunk(self, line):
         """Subdivide a line of tokens to words or whites groups.
@@ -153,23 +153,23 @@ class _PygmentsCode(textformat.Prose):
             yield '<span title="%s">%s</span>' % (tok, self.escape(value))
 
     def _get_text(self):
-        self._preprocess()
-        self.tokensource = self.lexer.get_tokens_unprocessed(self.text)
+        text = self._preprocess()
+        self.tokensource = self.lexer.get_tokens_unprocessed(text)
         if self.debug:
             format_lines = self._format_lines_debug
         else:
             format_lines = self._format_lines
         return ''.join(format_lines())
 
-    def _wrap(self):
+    def wrap(self):
         self.wrapped = self._get_text()
         self.done_escape = True
 
     def run(self):
-        self._wrap()
-        self._build()
-        self._highlight()
-        self._write()
+        self.wrap()
+        self.build()
+        self.highlight()
+        self.write()
         return 101
 
 

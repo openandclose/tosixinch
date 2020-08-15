@@ -41,6 +41,8 @@ Important changes (that users especially need to know) are marked by '**[!]**.'
 
 * Add lxml_html.py (internal)
 
+* Add action.py (internal)
+
 **Fix:**
 
 * Fix and change user package import

@@ -1,16 +1,121 @@
 
 """Communicate with outside environments (OS, shell, python import)."""
 
+import http.cookiejar
+import gzip
 import importlib
 import logging
 import os
 import sys
 import subprocess
+import time
 import types
+import urllib.request
+import zlib
 
 from tosixinch import manuopen
 
 logger = logging.getLogger(__name__)
+
+
+# download  --------------------------------------
+
+def download(url, fname,
+        user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
+    headers = {
+        'User-Agent': user_agent,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # noqa: E501
+        'Accept-Encoding': 'gzip, deflate',
+        # 'Accept-Charset': 'utf-8,*;q=0.1',
+        # 'Accept-Language': 'en-US,en;q=0.8',
+    }
+    # Many things are wrong.
+    # http://stackoverflow.com/questions/789856/turning-on-debug-output-for-python-3-urllib  # noqa: E501
+    # https://bugs.python.org/issue26892
+    debuglevel = 0
+    if logger.getEffectiveLevel() == 10:
+        debuglevel = 1
+    logger.debug("[download] '%s'", url)
+
+    req = urllib.request.Request(url, headers=headers)
+    cj = http.cookiejar.CookieJar()
+    if cookies:
+        for cookie in cookies:
+            cj = add_cookie(cj, cookie)
+
+    opener = urllib.request.build_opener(
+        urllib.request.HTTPSHandler(debuglevel=debuglevel),
+        urllib.request.HTTPCookieProcessor(cj))
+
+    try:
+        with opener.open(req) as f:
+            text = f.read()
+            if isinstance(f, http.client.HTTPResponse):
+                if f.getheader('Content-Encoding') == 'gzip':
+                    text = gzip.decompress(text)
+                elif f.getheader('Content-Encoding') == 'deflate':
+                    logger.info("[http] 'Content-Encoding' is 'deflate'")
+                    text = zlib.decompress(text)
+            return text
+
+    except urllib.request.HTTPError as e:
+        if on_error_exit:
+            raise
+        if e.code == 404:
+            logger.info('[HTTPError 404 %s] %s' % (e.reason, url))
+        else:
+            logger.warning(
+                '[HTTPError %s %s %s] %s' % (
+                    e.code, e.reason, e.headers, url))
+
+    except urllib.request.URLError as e:
+        if on_error_exit:
+            raise
+        logger.warning('[URLError %s] %s' % (e.reason, url))
+
+    except http.client.RemoteDisconnected as e:
+        if on_error_exit:
+            raise
+        logger.warning('[RemoteDisconnected: %s] %s' % (str(e), url))
+
+
+def _add_cookie(cj, name, value, domain, path='/'):
+    # cf. http.cookiejar.Cookie signature
+    #
+    # def __init__(
+    #     version, name, value,
+    #     port, port_specified,
+    #     domain, domain_specified, domain_initial_dot,
+    #     path, path_specified,
+    #     secure, expires, discard,
+    #     comment, comment_url, rest,
+    #     rfc2109=False,
+    # )
+    #
+    domain_initial_dot = False
+    if domain.startswith('.'):
+        domain_initial_dot = True
+    expires = time.time() + 60 * 60 * 24 * 2  # 2 days from now
+
+    cookie = http.cookiejar.Cookie(
+        0, name, value,
+        '80', True,
+        domain, True, domain_initial_dot,
+        path, True,
+        False, expires, False,
+        'simple-cookie', None, None,
+    )
+    cj.set_cookie(cookie)
+    return cj
+
+
+def add_cookie(cj, cookie):
+    # 'cookie' is now an unparsed string.
+    values = [c.strip() for c in cookie.split(',') if c.strip()] or []
+    if len(values) == 3:
+        values.append('/')
+    name, value, domain, path = values
+    return _add_cookie(cj, name, value, domain, path)
 
 
 # file read and write ---------------------------

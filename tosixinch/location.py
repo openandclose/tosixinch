@@ -127,8 +127,8 @@ class Location(urlmap.Map):
 
     @property
     def idna_url(self):
-        # This is only used by `download` module internally.
-        # So every other resource name representations are kept unicode.
+        # This is only used when downloading remote resources.
+        # So every other name representations are kept unicode.
         # cf. https://github.com/kjd/idna implements newer idna spec.
         def to_ascii(s):
             return s.encode('idna').decode('ascii')
@@ -162,6 +162,8 @@ class Location(urlmap.Map):
                 raise FileNotFoundError('[url] File not found: %r' % url)
             if os.path.isdir(url):
                 raise IsADirectoryError('[url] Got directory name: %r' % url)
+            return True
+        return False
 
     def check_fname(self, force=False, cache=None):
         """Check if downloading is necessary (done).
@@ -169,7 +171,9 @@ class Location(urlmap.Map):
         True:  not necessary
         False: necessary
         """
-        self.check_url()
+        if self.check_url():
+            return True
+
         fname = self.fname
         if os.path.exists(fname):
             if not force:
@@ -190,6 +194,10 @@ class Component(urlmap.Ref):
 
     def check_fname(self, force=False, cache=None):
         return self._cls.check_fname(force, cache)
+
+    @property
+    def idna_url(self):
+        return self.url
 
 
 class ReplacementParser(object):

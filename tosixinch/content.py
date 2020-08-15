@@ -5,20 +5,11 @@ import logging
 import posixpath
 import re
 
-from tosixinch import _ImportError
-from tosixinch import clean
 from tosixinch import location
 from tosixinch import lxml_html
 from tosixinch import imagesize
 
-import tosixinch.process.sample as process_sample
-
 from tosixinch.urlmap import _split_fragment, _add_fragment
-
-try:
-    import readability
-except ImportError:
-    readability = _ImportError('readability')
 
 logger = logging.getLogger(__name__)
 
@@ -42,28 +33,10 @@ HTML_TEMPLATE = """{doctype}
 </html>
 """
 
-HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>{title}</title>
-    {csslinks}
-</head>
-  <body>
-    <h1 class="{textclass}">{title}</h1>
-    <pre class="{textclass}">
-{content}
-    </pre>
-  </body>
-</html>"""
-
 BLANK_HTML = '%s<html><body></body></html>'
 
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
-
-# c.f. 'media="print"' does't work for wkhtmltopdf.
-EXTERNAL_CSS = '<link class="tsi-css" href="%s" rel="stylesheet">'
 
 
 def is_html(fname, text, min_chars=4096):
@@ -89,12 +62,6 @@ def build_blank_html(doctype=None):
     html = BLANK_HTML % (doctype or DEFAULT_DOCTYPE)
     root = lxml_html.document_fromstring(html)
     return root
-
-
-def build_external_css(html_path, cssfile_path):
-    """Build external css tag (link) string, resolving the paths."""
-    url = location.path2ref(cssfile_path, html_path)
-    return EXTERNAL_CSS % url
 
 
 def iter_component(doc):
@@ -187,100 +154,6 @@ def _relink(url, prev_base, new_base):
     url = posixpath.relpath(url, start=posixpath.dirname(new_base))
     url = posixpath.normpath(url)
     return url
-
-
-class HtmlContent(object):
-    """Define HtmlElement manupulations for extraction."""
-
-    def __init__(self, loc, text=None, codings=None, errors='strict'):
-        if isinstance(loc, str):
-            loc = location.Location(loc, input_type='url')
-
-        self._loc = loc
-        self.url = loc.url
-        self.fname = loc.fname
-        self.fnew = loc.fnew
-
-        self.text = text
-        self.codings = codings
-        self.errors = errors
-
-    def _read(self, fname, text):
-        return lxml_html.read(fname, text,
-            codings=self.codings, errors=self.errors)
-
-    def _read_text(self, fname, text):
-        return lxml_html.read_text(
-            fname, text, codings=self.codings, errors=self.errors)
-
-    def load(self):
-        self.root = self._read(fname=self.fname, text=self.text)
-
-        doctype = self.root.getroottree().docinfo.doctype or DEFAULT_DOCTYPE
-        self.doctype = doctype
-
-    def build(self):
-        title = self.root.xpath('//title/text()')
-        title = title[0] if title else DEFAULT_TITLE
-        baseurl = self.root.base or self.url
-        logger.debug('[base url] %s', baseurl)
-
-        doc = build_new_html(doctype=self.doctype, title=title)
-
-        self.title = title
-        self.baseurl = baseurl
-        self.doc = doc
-
-    def select(self, sel):
-        for t in self.root.body.xpath(sel):
-            self.doc.body.append(t)
-
-    def exclude(self, sel):
-        for t in self.doc.body.xpath(sel):
-            if t.getparent() is not None:
-                t.getparent().remove(t)
-
-    def guess_selection(self, guesses):
-        for guess in guesses:
-            s = self.root.xpath(guess)
-            if s and len(s) == 1:
-                return guess
-
-    def clean(self, tags, attrs):
-        cleaner = clean.Clean(self.doc, tags, attrs)
-        cleaner.run()
-
-    def add_css(self, cssfiles):
-        for cssfile in cssfiles:
-            url = build_external_css(self.fnew, cssfile)
-            el = lxml_html.fragment_fromstring(url)
-            self.doc.head.append(el)
-
-    def write(self):
-        lxml_html.write(self.fnew, doc=self.doc)
-
-
-class ReadabilityHtmlContent(HtmlContent):
-    """Define methods only for readability."""
-
-    def load(self):
-        self.text = self._read_text(fname=self.fname, text=self.text)
-
-    def build(self):
-        title = readability.Document(self.text).title()
-        content = readability.Document(self.text).summary(html_partial=True)
-
-        # ``Readability`` generally does not care about main headings.
-        # So we manually insert a probable ``title``.
-        doc = build_new_html(title=title, content=content)
-        heading = doc.xpath('//h1')
-        if len(heading) == 0:
-            process_sample.add_h1(doc)
-        if len(heading) > 1:
-            process_sample.lower_heading(doc)
-            process_sample.add_h1(doc)
-
-        self.doc = doc
 
 
 class BaseResolver(object):

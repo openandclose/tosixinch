@@ -16,7 +16,7 @@ import re
 import subprocess
 import sys
 
-from tosixinch import extract
+from tosixinch import action
 from tosixinch import system
 
 logger = logging.getLogger(__name__)
@@ -58,7 +58,7 @@ def match(fname):
 def run(conf, site):
     ret = _run(site.fname, site.fnew)
     if ret == 101:
-        extract.add_css_reference(conf, site)
+        action.CSSWriter(conf, site).read_and_write()
     return ret
 
 

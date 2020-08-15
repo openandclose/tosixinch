@@ -46,39 +46,6 @@ class TestRelinkComponent:
         assert doc.get('src') == '../sss/tt/uu'
 
 
-class TestReadabilityHtmlContent:
-
-    def test_imports(self):
-        text = """
-        <html>
-          <head>
-            <title>aaa - bbb</title>
-          </head>
-          <body>
-            <h1>xxx</h1>
-            <h1>yyy</h1>
-            <div>zzz</div>
-          </body>
-        </html>"""
-        expected = """
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <title>aaa - bbb</title>
-          </head>
-          <body>
-            <h1>aaa - bbb</h1>
-            <h2>xxx</h2>
-            <h2>yyy</h2>
-            <p>zzz</p>
-          </body>
-        </html>"""
-        if content.readability:
-            c = content.ReadabilityHtmlContent('http://example.com', text=text)
-            c.build()
-            compare_html(c.doc, fromstring(expected))
-
-
 class TestBaseResolver:
 
     urls = (

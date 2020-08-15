@@ -6,11 +6,24 @@ import logging
 import re
 import textwrap
 
-from tosixinch import stylesheet
-from tosixinch import system
-from tosixinch.content import HTML_TEXT_TEMPLATE, build_external_css
+from tosixinch import action
 
 logger = logging.getLogger(__name__)
+
+HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{title}</title>
+    {csslinks}
+</head>
+  <body>
+    <h1 class="{textclass}">{title}</h1>
+    <pre class="{textclass}">
+{content}
+    </pre>
+  </body>
+</html>"""
 
 TEXTCLASS_PREFIX = 'tsi-text tsi-'
 
@@ -65,17 +78,13 @@ def is_python(fname, text=None):
     return False
 
 
-class Prose(object):
+class Prose(action.TextFormatter):
     """General text type, paragraph oriented."""
 
     def __init__(self, conf, site):
-        self._conf = conf
-        self._site = site
-        self.text = site.text
+        super().__init__(conf, site)
 
-        self.fname = site.fname
         self.shortname = site.shortname
-        self.fnew = site.fnew
         self.width = int(conf.general.textwidth)
         self.indent = conf.general.textindent.strip('"\'')
         self.ftype = self._site.ftype
@@ -86,11 +95,11 @@ class Prose(object):
         name = self.__class__.__name__.lower()
         return TEXTCLASS_PREFIX + name
 
-    def _wrap(self):
+    def wrap(self):
         self.wrapped = self.text
 
-    def _build(self):
-        css = '\n    '.join(self._get_css())
+    def build(self):
+        css = '\n    '.join(self.get_css_reference())
         text = self.wrapped
         content = text if self.done_escape else html.escape(text)
         fdict = {
@@ -101,28 +110,23 @@ class Prose(object):
         }
         self.built = HTML_TEXT_TEMPLATE.format(**fdict)
 
-    def _highlight(self):
+    def highlight(self):
         self.highlighted = self.built
 
-    def _write(self):
-        system.write(self.fnew, text=self.highlighted)
+    def write(self):
+        return self._write(self.fnew, text=self.highlighted)
 
     def run(self):
-        self._wrap()
-        self._build()
-        self._highlight()
-        self._write()
-
-    def _get_css(self):
-        cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
-        for cssfile in cssfiles:
-            yield build_external_css(self.fnew, cssfile)
+        self.wrap()
+        self.build()
+        self.highlight()
+        self.write()
 
 
 class NonProse(Prose):
     """Text type with significant line breaks. Require special text-wrap."""
 
-    def _wrap(self):
+    def wrap(self):
         wrapper = textwrap.TextWrapper()
         wrapper.width = self.width
         wrapper.tabsize = 4
@@ -155,7 +159,7 @@ class PythonCode(Code):
     REF = r'(?<!def )(?<!class )(?<![^ ()*+,.:=@[\]{|}])(%s)\b'
     ALLDEF = re.compile(DEF % (LEAD, KW, VAR), flags=re.MULTILINE)
 
-    def _highlight(self):
+    def highlight(self):
         text = self.built
         matches = self.ALLDEF.finditer(text)
         varset = set()
@@ -199,11 +203,8 @@ class PythonCode(Code):
         self.highlighted = text
 
 
-def _get_ftypes(conf):
-    for site in conf.sites:
-        if site.ftype:
-            continue
-
+def run(conf, site):
+    if not site.ftype:
         fname = site.fname
         text = site.text
         if is_prose(fname, text):
@@ -213,17 +214,12 @@ def _get_ftypes(conf):
         else:
             site.ftype = 'nonprose'  # default
 
-
-def dispatch(conf, site):
-    _get_ftypes(conf)
-
-    ftype = site.ftype
-    if ftype == 'prose':
+    if site.ftype == 'prose':
         runner = Prose
-    elif ftype == 'python':
+    elif site.ftype == 'python':
         runner = PythonCode
     else:
         runner = NonProse
 
-    logger.info('[ftype] %s: %r', ftype, site.fname)
+    logger.info('[ftype] %s: %r', site.ftype, site.fname)
     runner(conf, site).run()
