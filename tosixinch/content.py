@@ -13,14 +13,6 @@ from tosixinch.urlmap import _split_fragment, _add_fragment
 
 logger = logging.getLogger(__name__)
 
-HTMLEXT = ('htm', 'html')
-_COMMENT = r'\s*(<!--.+?-->\s*)*'
-_XMLDECL = r'(<\?xml version.+?\?>)?'
-_DOCTYPE = r'(<!doctype\s+.+?>)?'
-HTMLFILE = re.compile(
-    '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + r'<html(|\s.+?)>',
-    flags=re.IGNORECASE | re.DOTALL)
-
 HTML_TEMPLATE = """{doctype}
 <html>
   <head>
@@ -37,12 +29,6 @@ BLANK_HTML = '%s<html><body></body></html>'
 
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
-
-
-def is_html(fname, text, min_chars=4096):
-    if HTMLFILE.match(text[:min_chars]):
-        return True
-    return False
 
 
 def build_new_html(doctype=None, title=None, content=None):

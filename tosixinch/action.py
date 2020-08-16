@@ -2,9 +2,9 @@
 """Provide abstract action processes and classes."""
 
 import logging
+import re
 
 from tosixinch import cached_property
-from tosixinch import content
 from tosixinch import location
 from tosixinch import lxml_html
 from tosixinch import stylesheet
@@ -69,13 +69,28 @@ def _get_downloader(conf):
     return download.run
 
 
+HTMLEXT = ('htm', 'html')
+_COMMENT = r'\s*(<!--.+?-->\s*)*'
+_XMLDECL = r'(<\?xml version.+?\?>)?'
+_DOCTYPE = r'(<!doctype\s+.+?>)?'
+_HTMLFILE = re.compile(
+    '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + r'<html(|\s.+?)>',
+    flags=re.IGNORECASE | re.DOTALL)
+
+
+def _is_html(fname, text, min_chars=4096):
+    if _HTMLFILE.match(text[:min_chars]):
+        return True
+    return False
+
+
 def _get_ftypes(conf):
     for site in conf.sites:
         site.ftype = site.general.ftype.lower()
         if site.ftype:
             continue
 
-        if content.is_html(site.fname, site.text):
+        if _is_html(site.fname, site.text):
             site.ftype = 'html'
 
 
