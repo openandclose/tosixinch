@@ -69,7 +69,6 @@ def _get_downloader(conf):
     return download.run
 
 
-HTMLEXT = ('htm', 'html')
 _COMMENT = r'\s*(<!--.+?-->\s*)*'
 _XMLDECL = r'(<\?xml version.+?\?>)?'
 _DOCTYPE = r'(<!doctype\s+.+?>)?'
