@@ -33,6 +33,8 @@ Important changes (that especially affect users) are marked by '**!!**'.
   Previously the program exposed foreign FINI format files
   which is specific to configfetch library.
 
+* Cut Python 3.5
+
 **Add:**
 
 * Add urlno.py and urlmap.py (internal)

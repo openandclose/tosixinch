@@ -26,7 +26,6 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
@@ -45,7 +44,7 @@ setup(
             'tosixinch = tosixinch.main:main',
         ],
     },
-    python_requires='~=3.5',
+    python_requires='~=3.6',
     extras_require={
         'test': ['lxml', 'pytest'],
         'dev': ['lxml', 'pytest', 'sphinx'],

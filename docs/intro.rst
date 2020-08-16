@@ -68,7 +68,7 @@ Or rather::
 The command will only install ``tosixinch`` package.
 (You will need other external libraries, but it is not done automatically.)
 
-**Python 3.5 and above** are supported.
+**Python 3.6 and above** are supported.
 
 .. note::
 
