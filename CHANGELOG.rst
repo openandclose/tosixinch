@@ -5,8 +5,10 @@ Changelog
 Important changes (that especially affect users) are marked by '**!!**'.
 
 
-**Unreleased:**
----------------
+v0.5.0 (2020-08-16)
+-------------------
+
+Most changes are just internal refactorings.
 
 **Change:**
 
