@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Important changes (that users especially need to know) are marked by '**[!]**.'
+Important changes (that especially affect users) are marked by '**!!**'.
 
 
 **Unreleased:**
@@ -69,7 +69,7 @@ So be careful to upgrade.
   Now it just includes a minimal <head> content.
   (Shouldn't affect the end user usage).
 
-* **[!]** Change default intermediary filenames to '-' and '~'
+* **!!** Change default intermediary filenames to '-' and '~'
 
   Previously::
 
@@ -109,11 +109,11 @@ So be careful to upgrade.
   (Note: Unlike ``auto_css``,
   All css files must be specified explicitly. Not additions to the default.)
 
-* **[!]** Cut auto_css
+* **!!** Cut auto_css
 
   It is now redundant. Just use 'css' option instead (see the above change).
 
-* **[!]** Cut auto glob feature (for 'match' option)
+* **!!** Cut auto glob feature (for 'match' option)
 
   Sometimes we need exact match of the end. (like: '\*.html')
 
@@ -142,7 +142,7 @@ So be careful to upgrade.
   Codes and config files will be changed considerably.
   It shouldn't affect tosixinch behavior.
 
-* **[!]** Rename tosixinch-complete.bash
+* **!!** Rename tosixinch-complete.bash
 
   From:
 
@@ -155,7 +155,7 @@ So be careful to upgrade.
   If you are sourcing this bash completion file in e.g. .bashrc,
   you have to edit.
 
-* **[!]** Rename pre_percmds and post_percmds to pre_each_cmds and post_each_cmds. ::
+* **!!** Rename pre_percmds and post_percmds to pre_each_cmds and post_each_cmds. ::
 
       pre_percmd1   ->  pre_each_cmd1
       post_percmd1  ->  post_each_cmd1
@@ -170,7 +170,7 @@ So be careful to upgrade.
 
   You can now specify 'javascript' on commandline, tosixinch.ini, or some site sections.
 
-* **[!]** Cut util.py, gen.py and site.py and create sample.py (tosixinch.process directory)
+* **!!** Cut util.py, gen.py and site.py and create sample.py (tosixinch.process directory)
 
   Combined three sample files into one.
 
@@ -182,7 +182,7 @@ So be careful to upgrade.
 
     gen.youtube_video_to_thumbnail  -> youtube_video_to_thumbnail
 
-* **[!]** Change syntax: from comma to line (defaultprocess and process options)
+* **!!** Change syntax: from comma to line (defaultprocess and process options)
 
   From::
 
@@ -196,7 +196,7 @@ So be careful to upgrade.
 
   You have to edit user config files if you are using them.
 
-* **[!]** Rename many process functions (process/sample.py) ::
+* **!!** Rename many process functions (process/sample.py) ::
 
       check_parents_tag       -> check_parent_tag
       transform_xpath         -> build_class_xpath
@@ -212,7 +212,7 @@ So be careful to upgrade.
 
   You have to edit user config files if you are using them.
 
-* **[!]** Rename script/open_viewer.py
+* **!!** Rename script/open_viewer.py
 
   From:
   
@@ -247,7 +247,7 @@ Use it in pre-extraction hook ('pre_percmd2').
 
 **Change:**
 
-* **[!]** Cut add_extractors and move man hook to pre_percmd2
+* **!!** Cut add_extractors and move man hook to pre_percmd2
 
   Change you config (If you are using) from:
 
@@ -291,12 +291,12 @@ v0.2.0 (2019-11-10)
 * Stop adding './' prefix unconditionally for relative references.
   Now only when necessary to comply to url spec (colon-in-first-path case).
 
-* **[!]** Change 'userprocess' to just 'process'.
+* **!!** Change 'userprocess' to just 'process'.
   So Users have to rename this 'userprocess' directory if used.
 
-* **[!]** Change (rather Fix) default encodings, to only utf-8 and cp1252.
+* **!!** Change (rather Fix) default encodings, to only utf-8 and cp1252.
 
-* **[!]** Change 'preprocess' option name to 'defaultprocess'.
+* **!!** Change 'preprocess' option name to 'defaultprocess'.
   Again, users have to rename this option if used.
 
 * pdfname (when the script creates) is made more descriptive.
