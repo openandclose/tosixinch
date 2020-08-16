@@ -260,7 +260,7 @@ General Section
     checking strange extensions is a bit of work.
     But I'm afraid sometimes it gets in the way.
 
-    (An example I found: some old unix software uses ``README.doc`` for README.)
+    (An example I found: some old unix software uses ``doc`` extension for text (like ``README.doc``).
 
 .. confopt:: add_clean_tags \*
 
@@ -458,7 +458,8 @@ General Section
 
     Run arbitrary command before each ``extract``.
 
-    There is a sample hook extractor for man pages. See `_man <topics.html#man>`__.
+    There are sample hook extractors.
+    See `_man <topics.html#man>`__ and `_pcode <topics.html#pcode>`__.
 
 .. confopt:: post_each_cmd2
 
@@ -642,10 +643,6 @@ and only the options of that converter's section are used.
     The files must be in ``css directory``,
     just the filenames (not full path).
 
-    The script includes sample css ``sample.t.css``,
-    and as a special case, it can be abbreviated as ``sample``
-    (default).
-
 .. confopt:: cnvopts
 
     | (None)
@@ -738,13 +735,12 @@ So section names themselves can be arbitrary.
     After ``select`` and ``exclude``, arbitrary functions can be called
     if this option is specified.
 
+    **Selection**:
+
     The functions must be top level ones.
 
     It is searched in `user process directory <overview.html#dword-process_directory>`__
     and the program's process directory, in order.
-
-    (The program includes ``sample.py``.
-    See `process.sample <api.html#module-tosixinch.process.sample>`__.)
 
     If the function name is found in multiple modules
     in user process directory, the program raises Error.
@@ -753,6 +749,8 @@ So section names themselves can be arbitrary.
     If the function name includes one dot (``'.'``),
     the program interprets it as ``<module name>.<function name>``.
     Two or more dots are not supported.
+
+    **Invocation**:
 
     The first argument of the functions is always ``doc``,
     which the program provides.
@@ -763,7 +761,7 @@ So section names themselves can be arbitrary.
     The function can have additional arguments.
     String after ``'?'`` (and before next ``'?'``) is interpreted as an argument.
 
-    For example, ``'aaa.bbb?cc?dd'`` is made into code
+    For example, ``'aaa.bbb?cc?dd'`` is made into code,
     if ``'aaa.bbb'`` is found in user process directory:
 
     .. code-block:: none
@@ -780,11 +778,9 @@ So section names themselves can be arbitrary.
     just manipulate ``doc`` as you like.
     The script uses the resultant ``doc`` subsequently.
 
-    See `API/process <api.html#process>`__ for included sample functions.
+    See `process.sample <api.html#module-tosixinch.process.sample>`__ for included sample functions.
 
-    ---
-
-    An Example:
+    **Example**:
 
     Let's say you want to change ``h3`` tag to ``div`` for http://somesite.com.
 

@@ -528,7 +528,10 @@ Users have to fill the value accordingly, if setting.
 
     ``'0'``, ``'no'``, ``'false'`` and ``'off'`` are interpreted as ``False``.
 
-    It accepts only one of the eight (case insensitive).
+    ``''`` is interpreted as ``None``
+    (the same as ``False`` in many contexts. Normally do not use it. ).
+
+    It accepts only one of the nine (case insensitive).
 
 .. dword:: COMMA
 

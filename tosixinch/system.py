@@ -118,7 +118,7 @@ def add_cookie(cj, cookie):
     return _add_cookie(cj, name, value, domain, path)
 
 
-# file read and write ---------------------------
+# file read and write ----------------------------
 
 def make_directories(fname, on_error_exit=True):
     if not _in_current_dir(fname):
@@ -199,7 +199,7 @@ def write(fname, text, platform=sys.platform):
     return Writer(fname, text, platform).write()
 
 
-# shell invocation ------------------------------
+# shell invocation -------------------------------
 
 def run_cmds(cmds, conf, site=None):
     returncode = 0

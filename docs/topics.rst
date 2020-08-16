@@ -458,9 +458,9 @@ It uses ``eval``, so be careful.)
 **Running Module:**
 
 If a command consists of one word, without 'dot',
-and the module actually exists in `script directory <overview.html#dword-script_directory>`__,
-the script runs the command as module internally
-(as opposed to running it as a system subprocess).
+and the file actually exists in `script directory <overview.html#dword-script_directory>`__,
+the script runs the command as Python module internally
+(as opposed to running it as an external system subprocess).
 
 That is, if a cmd is ``['foo']``, for example::
 
@@ -527,7 +527,8 @@ In running subprocess, other return codes (not 0, 100, 101, 102) aborts the prog
 
 In running module, any other return codes and values (not 0, 100, 101, 102)
 are interpreted as 0.
-(Python itself aborts the program if something went wrong.)
+(It is to permit normal Python return value ``None``.
+Python itself will abort the program if something goes wrong.)
 
 
 Viewcmd
