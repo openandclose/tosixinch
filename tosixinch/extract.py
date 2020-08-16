@@ -140,14 +140,15 @@ class Resolver(content.BaseResolver):
         self._conf = conf
 
     def _get_component(self, el, comp):
-        self._download_component(comp, comp.url, comp.fname)
+        self._download_component(comp)
         self._add_component_attributes(el, comp.fname)
 
     def _set_component(self, comp):
         if os.path.isfile(comp.fname):
             super()._set_component(comp)
 
-    def _download_component(self, comp, url, fname):
+    def _download_component(self, comp):
+        url = comp.url
         if url.startswith('data:image/'):
             return
         logger.info('[img] %s', url)
