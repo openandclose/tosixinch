@@ -4,6 +4,7 @@
 the process, in effect, makes them current directory paths.
 """
 
+import hashlib
 import ntpath
 import os
 import posixpath
@@ -326,6 +327,7 @@ class Map(object):
         self.platform = platform
         self.sep = '\\' if platform == 'win32' else '/'
         self._cls = self._detect(input_name, baseurl, input_type)
+        self._hashed = False
 
     def _detect(self, input_name, baseurl, input_type):
         if input_type:
@@ -346,6 +348,11 @@ class Map(object):
         return self.Path(input_name, platform=self.platform)
 
     def _map_name(self, name):
+        # 'name' is always derived from a url, so it is ascii.
+        for segment in name.split(self.sep):
+            if len(segment) > 255:
+                self._hashed = True
+                return hashlib.sha1(name.encode('utf-8')).hexdigest()
         return name
 
     def is_url(self):

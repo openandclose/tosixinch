@@ -8,6 +8,13 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+**Change:**
+
+* When the name of Downloaded_File is too long
+  (if it has a path segment more than 255 characters),
+  the url is hashed,
+  and the filename now takes '_htmls/_hash/<sha1-hexdigit>' form.
+
 **Fix:**
 
 * Fix ignore any errors in component download.

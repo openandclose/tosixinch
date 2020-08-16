@@ -96,6 +96,7 @@ class Location(urlmap.Map):
 
     APPENDIX = '~'
     EXTENSION = '.html'
+    HASH_DIR = '_hash'
 
     def _add_appendix(self, name):
         root, ext = os.path.splitext(name)
@@ -107,7 +108,11 @@ class Location(urlmap.Map):
         return root + ext
 
     def _map_name(self, name):
-        return self.PREFIX + self.sep + name
+        if self._hashed:
+            return self.sep.join(
+                (self.PREFIX, self.HASH_DIR, super()._map_name(name)))
+        else:
+            return self.sep.join((self.PREFIX, name))
 
     def get_relative_reference_fnew(self, other):
         return self._get_relative_reference(other, name='fnew')

@@ -166,7 +166,7 @@ But disposing of the files (deleting or moving) is users' job.
 
     If ``url`` is a remote one,
     ``Downloaded_File`` is created inside ``_htmls`` directory,
-    with URL ``domain`` and ``paths`` as subdirectories.
+    with URL ``authority`` and ``path segments`` as subdirectories.
 
     If ``url``'s last ``path`` doesn't have file extension or ``'?'``,
     string ``'/_'`` is added.
@@ -210,6 +210,13 @@ But disposing of the files (deleting or moving) is users' job.
     Example::
 
         ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/_
+
+    .. note::
+
+        As an exception, if original ``url`` is too long for file name conversion
+        (a path segment more than 255 characters),
+        the whole ``url`` is sha1-hashed,
+        and the name takes a ``_html/_hash/<sha1-hexdigit>`` form.
 
 .. dword:: Extracted_File
 
