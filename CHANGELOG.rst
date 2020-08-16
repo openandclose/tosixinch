@@ -5,6 +5,14 @@ Changelog
 Important changes (that especially affect users) are marked by '**!!**'.
 
 
+Unreleased
+----------
+
+**Fix:**
+
+* Fix ignore any errors in component download.
+
+
 v0.5.0 (2020-08-16)
 -------------------
 

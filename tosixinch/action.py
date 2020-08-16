@@ -180,12 +180,14 @@ class Downloader(Action):
 
         return site.check_fname(force=force, cache=cache)
 
-    def _download(self, site):
+    def _download(self, site, on_error_exit=True):
         user_agent = self._site.general.user_agent
         cookies = self._site.cookie
 
         return system.download(
-            site.idna_url, site.fname, user_agent=user_agent, cookies=cookies)
+            site.idna_url, site.fname,
+            user_agent=user_agent, cookies=cookies,
+            on_error_exit=on_error_exit)
 
     def download(self):
         if self._check_fname(self._site):
@@ -202,8 +204,9 @@ class CompDownloader(Downloader):
         if self._check_fname(comp):
             return
 
-        text = self._download(comp)
-        self._write(comp.fname, text)
+        text = self._download(comp, on_error_exit=False)
+        if text:
+            self._write(comp.fname, text)
 
 
 class TextFormatter(Action):
