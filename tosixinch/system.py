@@ -185,12 +185,8 @@ class Writer(_File):
     def write(self):
         self._prepare()
         mode = 'wb' if isinstance(self.text, bytes) else 'w'
-        try:
-            with open(self.fname, mode) as f:
-                f.write(self.text)
-        except OSError as e:
-            fmt = '[OSError] Errno %s: %s\nskipping %r...'
-            logger.warning(fmt % (e.errno, e.strerror, self.fname))
+        with open(self.fname, mode) as f:
+            f.write(self.text)
 
 
 def read(fname, text=None, codings=None,
