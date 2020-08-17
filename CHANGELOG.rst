@@ -15,6 +15,10 @@ Unreleased
   the url is hashed,
   and the filename now takes '_htmls/_hash/<sha1-hexdigit>' form.
 
+**Add:**
+
+* Add 'html5prescan' encoding option
+
 **Fix:**
 
 * Fix ignore any errors in component download.

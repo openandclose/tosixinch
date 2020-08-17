@@ -16,13 +16,17 @@ try:
     import chardet
 except ImportError:
     chardet = _ImportError('chardet')
+try:
+    import html5prescan
+except ImportError:
+    html5prescan = _ImportError('html5prescan')
 
 logger = logging.getLogger(__name__)
 
 CODINGS = ('utf_8',)
 
 
-def manuopen(fname, codings=None, errors='strict'):
+def manuopen(fname, codings=None, errors='strict', length=1024):
     codings = codings or CODINGS
     text = None
     encoding = None
@@ -38,6 +42,12 @@ def manuopen(fname, codings=None, errors='strict'):
             logger.debug('using chardet ... %s' % fname)
             try:
                 text, encoding = use_chardet(fname)
+            except UnicodeDecodeError as e:
+                elist.append(e)
+        elif coding == 'html5prescan':
+            logger.debug('using html5prescan ... %s' % fname)
+            try:
+                text, encoding = use_html5prescan(fname, errors, length)
             except UnicodeDecodeError as e:
                 elist.append(e)
         else:
@@ -72,6 +82,16 @@ def use_chardet(fname):
     logger.debug('chardet: %s, %s' % (ret["encoding"], ret["confidence"]))
     text = open(fname, encoding=ret["encoding"]).read()
     return text, ret["encoding"]
+
+
+def use_html5prescan(fname, errors, length):
+    with open(fname, 'rb') as f:
+        buf = f.read(length)
+        scan, buf = html5prescan.get(buf, length=length)
+        logger.info('[html5prescan] got encoding: %s' % repr(scan))
+    coding = scan.pyname
+    text = open(fname, encoding=coding, errors=errors).read()
+    return text, coding
 
 
 def build_message(elist):

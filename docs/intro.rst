@@ -321,7 +321,9 @@ URL strings can be pre-processed by regular expressions
 before mainline processing. `URL replace <topics.html#urlreplace>`__.
 
 You can specify multiple encodings for documents,
-including ``chardet`` auto detection and ``ftfy`` UTF-8 encoding fix.
+including ``chardet`` auto detection,
+``html5prescan`` encoding declaration parser,
+and ``ftfy`` UTF-8 encoding fix.
 `option: encoding <options.html#confopt-encoding>`__.
 
 The script has very basic Qt web rendering functions (``webkit`` or ``webengine``).

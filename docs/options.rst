@@ -77,14 +77,20 @@ General Section
     First successful one is used.
     Encoding names are as specified in
     `codecs library <https://docs.python.org/3/library/codecs.html#standard-encodings>`__,
-    and `chardet <https://chardet.readthedocs.io/en/latest/index.html>`__
-    and `ftfy <https://ftfy.readthedocs.io/en/latest/>`__ if they are installed.
+    or `chardet <https://chardet.readthedocs.io/en/latest/index.html>`__,
+    `html5prescan <https://github.com/openandclose/html5prescan>`__,
+    or `ftfy <https://ftfy.readthedocs.io/en/latest/>`__ if they are installed.
 
     If the name is ``chardet``, ``chardet.detect`` method is tried.
     It may be able to auto-detect the right encoding.
 
+    If the name is ``html5prescan``, ``html5prescan`` tries to get
+    a valid encoding declaration from html.
+    (The library strictly follows html5 spec and usually it is not necessary nor useful.
+    It is intended for occasional debug purpose.)
+
     After successful encoding by one of the encodings,
-    if the list include ``ftfy``,
+    if the list includes ``ftfy``,
     ``ftfy.fixes.fix_encoding`` method is called with the decoded text.
     It may be able to fix some 'mojibake'.
     (So it is always called last, the place in the list is irrelevant.)

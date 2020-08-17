@@ -155,17 +155,18 @@ class Reader(_File):
     """Text reader object."""
 
     def __init__(self, fname, text=None, codings=None,
-            errors='strict', platform=sys.platform):
+            errors='strict', length=None, platform=sys.platform):
         super().__init__(fname, platform)
         self.text = text
         self.codings = codings
         self.errors = errors
+        self.buf_length = length or 102400
 
     def _prepare(self):
         if self.text:
             return
         self.text, self.encoding = manuopen.manuopen(
-            self.fname, self.codings, self.errors)
+            self.fname, self.codings, self.errors, self.buf_length)
 
     def read(self):
         self._prepare()
@@ -190,8 +191,8 @@ class Writer(_File):
 
 
 def read(fname, text=None, codings=None,
-        errors='strict', platform=sys.platform):
-    return Reader(fname, text, codings, errors, platform).read()
+        errors='strict', length=None, platform=sys.platform):
+    return Reader(fname, text, codings, errors, length, platform).read()
 
 
 def write(fname, text, platform=sys.platform):
