@@ -474,12 +474,12 @@ General Section
 
     When action is ``--browser``,
     specify the command to open a browser,
-    if the default (calling Python stdlib webbrowser) is not desirable. E.g.::
+    if the default (calling Python stdlib ``webbrowser``) is not desirable. E.g.::
 
-        firefox 'site.fnew'
+        firefox 'site.slash_fnew'
 
-    Here, you have to use a magic word ``site.fnew``.
-    It evaluates to the intended ``Extracted_File``.
+    Here, you have to use the magic word ``site.slash_fnew``.
+    It evaluates to the intended url version of ``Extracted_File``.
 
 .. confopt:: loc_index
 

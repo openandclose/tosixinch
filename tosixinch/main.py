@@ -196,15 +196,15 @@ def print_version():
 
 def open_browser(conf):
     site = list(conf.sites)[0]
-    html = site.fnew
-    if not os.path.exists(html):
-        FileNotFoundError('No extracted html to open: %r' % html)
+    if not os.path.exists(site.fnew):
+        FileNotFoundError('No extracted html to open: %r' % site.fnew)
 
+    url = site.slash_fnew
     cmd = conf.general.browsercmd
     if cmd:
         returncode = run_cmds([cmd], conf, site)
     else:
-        ret = webbrowser.open(html)
+        ret = webbrowser.open(url)
         # ret is True or False
         returncode = int(not ret)
     sys.exit(returncode)

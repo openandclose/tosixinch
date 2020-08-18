@@ -21,7 +21,9 @@ Unreleased
 
 **Fix:**
 
-* Fix ignore any errors in component download.
+* Fix ignore any errors in component download
+
+* Fix --browser option error (url was not percent escaped)
 
 
 v0.5.0 (2020-08-16)
