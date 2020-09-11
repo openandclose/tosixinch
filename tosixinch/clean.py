@@ -32,7 +32,7 @@ SKIPTAGS = ('svg', 'math')
 KEEP_STYLE = 'tsi-keep-style'
 
 
-def conditioned_iter(el, test):
+def conditioned_iter(el, *tests):
     """Recursively iterate on an element, yield just matching ones.
 
     It is like ``element.iter(condition)``,
@@ -42,13 +42,14 @@ def conditioned_iter(el, test):
     Argument ``el`` is presupposed to be an single ``lxml.etree.element``.
     No checks are done.
     """
-    if not test(el):
-        return
+    for test in tests:
+        if not test(el):
+            return
     yield el
     if len(el) == 0:
         return
     for sub in el:
-        yield from conditioned_iter(sub, test)
+        yield from conditioned_iter(sub, *tests)
 
 
 class Clean(object):
