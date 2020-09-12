@@ -1,5 +1,5 @@
 
-"""Download either by ``urllib`` or ``pyqt5``."""
+"""Download by ``urllib``, ``pyqt5`` or ``selenium``."""
 
 import logging
 
@@ -170,6 +170,84 @@ class QtWebEngineDownloader(QtDownloader):
         return qt_webengine_download(url, site.fname, render)
 
 
+SELENIUM_DRIVER = None
+
+
+def start_selenium(driver, driver_path=None):
+    try:
+        from selenium import webdriver
+    except ImportError:
+        msg = 'Error occured while importing selenium.webdriver package.'
+        logger.critical(msg)
+        raise
+
+    if driver == 'firefox':
+        driver = webdriver.Firefox
+        from selenium.webdriver.firefox.options import Options
+    elif driver == 'chrome':
+        driver = webdriver.Chrome
+        from selenium.webdriver.chrome.options import Options
+
+    options = Options()
+    options.headless = True
+
+    kwargs = {'options': options}
+    if driver_path:
+        kwargs['executable_path'] = driver_path
+
+    driver = driver(**kwargs)
+    driver.implicitly_wait(10)
+
+    return driver
+
+
+def end_selenium(driver):
+    driver.close()
+
+
+def selenium_download(url):
+    driver = SELENIUM_DRIVER
+
+    driver.get(url)
+    return driver.page_source
+
+
+class SeleniumDownloader(action.Downloader):
+    """Download by Selenium."""
+
+    def __init__(self, conf, site):
+        super().__init__(conf, site)
+
+        global SELENIUM_DRIVER
+        if not SELENIUM_DRIVER:
+            SELENIUM_DRIVER = self.start()
+
+        action.add_cleanup(self.cleanup)
+
+    def start(self):
+        driver_paths = {
+            'chrome': self._site.general.selenium_chrome_path,
+            'firefox': self._site.general.selenium_firefox_path,
+        }
+
+        driver = self._site.general.browser_engine[9:]
+        driver_path = driver_paths[driver]
+
+        logger.info('using selenium (%s)...', driver)
+        return start_selenium(driver, driver_path)
+
+    def cleanup(self):
+        global SELENIUM_DRIVER
+
+        if SELENIUM_DRIVER:
+            end_selenium(SELENIUM_DRIVER)
+            SELENIUM_DRIVER = None
+
+    def _download(self, site):
+        url = site.idna_url
+        return selenium_download(url)
+
+
 def run(conf, site):
     javascript = site.general.javascript
     browser_engine = site.general.browser_engine
@@ -179,9 +257,10 @@ def run(conf, site):
             QtWebKitDownloader(conf, site).download()
         elif browser_engine == 'webengine':
             QtWebEngineDownloader(conf, site).download()
+        elif browser_engine.startswith('selenium-'):
+            SeleniumDownloader(conf, site).download()
         else:
-            msg = ("You have to set option 'browser_engine'"
-                    "to either 'webengine' or 'webkit'")
+            msg = ('Invalid browser_engine option: %r' % browser_engine)
             logger.critical(msg)
             raise ValueError(msg)
     else:

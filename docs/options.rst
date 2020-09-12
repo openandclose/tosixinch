@@ -57,16 +57,14 @@ General Section
     | (``False``)
     | ``[BOOL]``
 
-    If this value is ``True``, downloading is done by ``Qt``.
+    If this value is ``True``, downloading is done by one of headless browsers.
 
 .. confopt:: browser_engine \*
 
     (``webkit``)
 
-    Specify rendering engine when using ``qt``.
-    Either ``webkit`` or ``webengine``.
-    ``webengine`` is a newer one,
-    and newer functionalities are not used in this script.
+    Specify browser engine when ``javascript`` option is True.
+    ``webkit``, ``webengine``, ``selenium-chrome`` or ``selenium-firefox``.
 
 .. confopt:: encoding \*
 
@@ -844,7 +842,7 @@ So section names themselves can be arbitrary.
         are unconditionally stripped.
 
         (In ``download``, we occasionally need javascript,
-        and in that case we might use ``Qt``.
+        and in that case we might use headless browsers.
         In ``extract``, javascript has already rendered the contents.
         So we shouldn't need it any more.)
 

@@ -15,11 +15,15 @@ Unreleased
   the url is hashed,
   and the filename now takes '_htmls/_hash/<sha1-hexdigit>' form.
 
+* Change browser_engine option default: webkit -> selenium-firefox
+
 **Add:**
 
 * Add 'html5prescan' encoding option
 
 * Add elements_to_keep_attrs option
+
+* Add selenium downloading (browser_engine option)
 
 **Fix:**
 

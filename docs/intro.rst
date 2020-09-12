@@ -326,15 +326,18 @@ including ``chardet`` auto detection,
 and ``ftfy`` UTF-8 encoding fix.
 `option: encoding <options.html#confopt-encoding>`__.
 
-The script has very basic Qt web rendering functions (``webkit`` or ``webengine``).
-So if you are lucky, by installing
-`pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
-and `Qt5 <https://www.qt.io>`__,
+The script has vary basic headless browser downloading functions.
+Either ``PyQt`` or ``Selenium``.
+So if you are lucky,
 you may get javascript generated html contents.
-(In most cases, we can safely ignore javascript.
-In content sites, the content itself is most likely static.
-In that case, you don't need Qt libraries.)
 `option: javascript <options.html#confopt-javascript>`__.
+
+Note ``PyQt`` requires
+`pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
+and `Qt5 <https://www.qt.io>`__.
+``Selenium`` requires
+`selenium <https://selenium-python.readthedocs.io/installation.html#downloading-python-bindings-for-selenium>`__
+and `firefox or chrome webdrivers <https://selenium-python.readthedocs.io/installation.html#drivers>`__.
 
 Sometimes writing configurations for each site is too cumbersome.
 You can fallback to automatic article extraction by installing

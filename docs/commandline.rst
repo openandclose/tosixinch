@@ -175,13 +175,21 @@ Configs
 
 .. option:: --javascript
 
-    download using Qt
+    download by one of headless browsers
 
-.. option:: --browser-engine {webkit,webengine}
+.. option:: --browser-engine {webkit,webengine,selenium-chrome,selenium-firefox}
 
-    use either webengine or webkit (default) when running Qt
+    specify the browser when javascript option is True
 
-        choices=webkit, webengine
+        choices=webkit, webengine, selenium-chrome, selenium-firefox
+
+.. option:: --selenium-chrome-path SELENIUM_CHROME_PATH
+
+    specify the path of chromedriver for selenium
+
+.. option:: --selenium-firefox-path SELENIUM_FIREFOX_PATH
+
+    specify the path of geckodriver for selenium
 
 .. option:: --encoding ENCODING
 

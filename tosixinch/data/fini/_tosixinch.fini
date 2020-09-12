@@ -147,13 +147,17 @@ converter=          : argparse.SUPPRESS
                     : (to see the default, run --appcheck)
                     Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0
 
-*javascript=        : download using Qt
+*javascript=        : download by one of headless browsers
                     :: f: bool
                     no
 
-*browser_engine=    : use either webengine or webkit (default) when running Qt
-                    :: choices: webkit, webengine
-                    webkit
+*browser_engine=    : specify the browser when javascript option is True
+                    :: choices: webkit, webengine, selenium-chrome, selenium-firefox
+                    selenium-firefox
+
+*selenium_chrome_path=  : specify the path of chromedriver for selenium
+
+*selenium_firefox_path= : specify the path of geckodriver for selenium
 
 *encoding=          : assign an encoding for file opening when extract (f: comma)
                     :: f: comma
