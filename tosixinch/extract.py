@@ -85,7 +85,8 @@ class Extract(action.Extractor):
     def clean(self):
         tags = self._site.general.add_clean_tags
         attrs = self._site.general.add_clean_attrs
-        cleaner = clean.Clean(self.doc, tags, attrs)
+        paths = self._site.general.elements_to_keep_attrs
+        cleaner = clean.Clean(self.doc, tags, attrs, paths)
         cleaner.run()
 
     def resolve(self):

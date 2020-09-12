@@ -289,6 +289,27 @@ General Section
 
     Width and height conflict with user css rules.
 
+.. confopt:: elements_to_keep_attrs \*
+
+    | (``self::math``
+    | ``self::svg``)
+
+    ``[LINE][XPATH]``
+
+    After ``select``, ``exclude`` and ``process`` in ``extract``,
+    the script ``clean`` s the resultant html.
+
+    The program skips cleaning attributes
+    for the elements that matches one of the xPath in this option.
+
+    The default is ``math`` and ``svg`` tags.
+    They have inter-related width and hight information,
+    without which, they are not intelligible.
+
+    Note xpaths are checked against each element, not from the root document.
+    So the selectors tend to be a bit complex
+    (not the usual e.g. ``'//math'``).
+
 .. confopt:: ftype
 
     | (None)
@@ -843,6 +864,10 @@ So section names themselves can be arbitrary.
            # not removed
            <div class="tsi-keep-style other-values" style="font-weight:bold;">
 
+    **skip tags**:
+        According to `elements_to_keep_attrs <#confopt-elements_to_keep_attrs>`__.
+        The program skips cleaning the matched elements (and all sub-elements),
+        if the elements are not already removed by ``add_clean_tags``.
 
 .. confopt:: cookie
 

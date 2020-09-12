@@ -225,6 +225,10 @@ Configs
 
     add or subtract to-delete-attribute list (f: plus)
 
+.. option:: --elements-to-keep-attrs ELEMENTS_TO_KEEP_ATTRS
+
+    specify elements (Xpath) in which you want to keep attributes (default: <math> and <svg> tag) (f: line)
+
 .. option:: --ftype {html,prose,nonprose,python}
 
     specify file type

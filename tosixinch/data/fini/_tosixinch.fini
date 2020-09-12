@@ -202,6 +202,12 @@ guess=              : if there is no matched url, use this xpath for content sel
                     :: f: plus
                     color, width, height
 
+*elements_to_keep_attrs=    : specify elements (Xpath) in which you want to keep attributes
+                            : (default: <math> and <svg> tag) (f: line)
+                            :: f: line
+                            self::math
+                            self::svg
+
 *ftype=             : specify file type
                     :: choices: html, prose, nonprose, python
 

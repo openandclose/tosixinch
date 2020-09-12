@@ -28,7 +28,6 @@ you need ``color`` and ``width`` for svg image, for example.
 
 from tosixinch import lxml_html  # use lxml.html.clean from lxml_html.clean
 
-SKIPTAGS = ('svg', 'math')
 KEEP_STYLE = 'tsi-keep-style'
 
 
@@ -81,10 +80,11 @@ class Clean(object):
         whitelist_tags=set(['iframe', 'embed']),
     )
 
-    def __init__(self, doc, tags=None, attrs=None):
+    def __init__(self, doc, tags=None, attrs=None, paths=None):
         self.doc = doc
         self.tags = tags
         self.attrs = attrs
+        self.paths = paths
 
     def _clean_html(self):
         if self.tags:
@@ -92,10 +92,20 @@ class Clean(object):
         cleaner = lxml_html.clean.Cleaner(**self.kwargs)
         cleaner(self.doc)
 
-    def _keep_tags(self, el):
-        if el.tag in SKIPTAGS:
-            return False
-        return True
+    def _make_skip_element_tests(self):
+
+        def make_test(path):
+            def f(doc):
+                if doc.xpath(path):
+                    return False
+                return True
+            return f
+
+        tests = []
+        for test in self.paths:
+            tests.append(make_test(test))
+
+        return tests
 
     def _keep_style(self, el):
         if KEEP_STYLE in el.classes:
@@ -105,7 +115,7 @@ class Clean(object):
     def _clean_attributes(self):
         if not self.attrs:
             return
-        for el in conditioned_iter(self.doc, self._keep_tags):
+        for el in conditioned_iter(self.doc, *self._make_skip_element_tests()):
             for attribute in el.attrib:
                 if attribute in self.attrs:
                     del el.attrib[attribute]

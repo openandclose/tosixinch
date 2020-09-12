@@ -19,6 +19,8 @@ Unreleased
 
 * Add 'html5prescan' encoding option
 
+* Add elements_to_keep_attrs option
+
 **Fix:**
 
 * Fix ignore any errors in component download
