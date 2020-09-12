@@ -147,7 +147,8 @@ converter=          : argparse.SUPPRESS
                     : (to see the default, run --appcheck)
                     Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0
 
-*javascript=        :: f: bool
+*javascript=        : download using Qt
+                    :: f: bool
                     no
 
 *browser_engine=    : use either webengine or webkit (default) when running Qt
