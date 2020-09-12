@@ -299,7 +299,7 @@ General Section
     the script ``clean`` s the resultant html.
 
     The program skips cleaning attributes
-    for the elements that matches one of the xPath in this option.
+    for the elements that matches one of the XPath in this option.
 
     The default is ``math`` and ``svg`` tags.
     They have inter-related width and hight information,
