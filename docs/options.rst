@@ -290,7 +290,8 @@ General Section
 .. confopt:: elements_to_keep_attrs \*
 
     | (``self::math``
-    | ``self::svg``)
+    | ``self::svg``
+    | ``self::node()[starts-with(@class, "MathJax")]``)
 
     ``[LINE][XPATH]``
 

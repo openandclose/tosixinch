@@ -207,10 +207,11 @@ guess=              : if there is no matched url, use this xpath for content sel
                     color, width, height
 
 *elements_to_keep_attrs=    : specify elements (Xpath) in which you want to keep attributes
-                            : (default: <math> and <svg> tag) (f: line)
+                            : (default: <math>, <svg> and some mathjax tags) (f: line)
                             :: f: line
                             self::math
                             self::svg
+                            self::node()[starts-with(@class, "MathJax")]
 
 *ftype=             : specify file type
                     :: choices: html, prose, nonprose, python

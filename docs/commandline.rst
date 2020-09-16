@@ -235,7 +235,7 @@ Configs
 
 .. option:: --elements-to-keep-attrs ELEMENTS_TO_KEEP_ATTRS
 
-    specify elements (Xpath) in which you want to keep attributes (default: <math> and <svg> tag) (f: line)
+    specify elements (Xpath) in which you want to keep attributes (default: <math>, <svg> and some mathjax tags) (f: line)
 
 .. option:: --ftype {html,prose,nonprose,python}
 

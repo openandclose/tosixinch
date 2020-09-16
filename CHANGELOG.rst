@@ -17,6 +17,8 @@ Unreleased
 
 * Change browser_engine option default: webkit -> selenium-firefox
 
+* Skip cleaning possible MathJax tag attributes
+
 **Add:**
 
 * Add 'html5prescan' encoding option
