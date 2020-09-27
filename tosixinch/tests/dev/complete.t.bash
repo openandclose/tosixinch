@@ -1,5 +1,6 @@
-# bash completion file for tosixinch
-_tosixinch()
+# bash completion file for {{ prog }}
+
+{{ prefix }}{{ prog }}()
 {
     local cur prev words cword split
     _init_completion -s || return
@@ -28,8 +29,6 @@ _tosixinch()
 
     COMPREPLY=( $( compgen -W '{{ all_opts }}' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
-    return
 
-    _filedir
 } &&
-complete -F _tosixinch tosixinch
+complete -F {{ prefix }}{{ prog }} {{ prog }}

@@ -53,7 +53,7 @@ git: scripts copylib
 
 scripts:
 	$(DEV)/argparse2rst.py
-	$(DEV)/argparse2bash.py -X
+	$(DEV)/argparse2bash_tosixinch.py
 	$(DEV)/fini2ini.py
 
 copylib: libs
