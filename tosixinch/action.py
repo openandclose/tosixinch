@@ -185,8 +185,7 @@ class Downloader(Action):
         cookies = self._site.cookie
 
         return system.download(
-            site.idna_url, site.fname,
-            user_agent=user_agent, cookies=cookies,
+            site.idna_url, user_agent=user_agent, cookies=cookies,
             on_error_exit=on_error_exit)
 
     def download(self):

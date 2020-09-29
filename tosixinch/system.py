@@ -20,8 +20,7 @@ logger = logging.getLogger(__name__)
 
 # download  --------------------------------------
 
-def download(url, fname,
-        user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
+def download(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
     headers = {
         'User-Agent': user_agent,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # noqa: E501
