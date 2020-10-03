@@ -164,7 +164,7 @@ General Section
     | ``//div[@id="content"]``
     | ``//div[@class=="body"]``)
 
-    ``[LINE][XPATH]``
+    ``[LINE]``
 
     If ``url`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
     ``select`` is done according to this value.
@@ -180,7 +180,7 @@ General Section
 .. confopt:: defaultprocess \*
 
     | (``add_h1, youtube_video_to_thumbnail``)
-    | ``[LINE][XPATH]``
+    | ``[LINE]``
 
     Before site specific ``process`` functions,
     the script applies default ``process`` functions to all ``url``,
@@ -293,7 +293,7 @@ General Section
     | ``self::svg``
     | ``self::node()[starts-with(@class, "MathJax")]``)
 
-    ``[LINE][XPATH]``
+    ``[LINE]``
 
     After ``select``, ``exclude`` and ``process`` in ``extract``,
     the script ``clean`` s the resultant html.
@@ -721,7 +721,7 @@ So section names themselves can be arbitrary.
 .. confopt:: select
 
     | (None)
-    | ``[LINE][XPATH]``
+    | ``[LINE]``
 
     Xpath strings to select elements
     from ``Downloaded_File`` when ``extract``.
@@ -739,7 +739,7 @@ So section names themselves can be arbitrary.
 .. confopt:: exclude
 
     | (None)
-    | ``[LINE][XPATH]``
+    | ``[LINE]``
 
     Xpath strings to remove elements
     from the new ``Extracted_File`` after ``select``.
@@ -750,7 +750,7 @@ So section names themselves can be arbitrary.
 .. confopt:: process
 
     | (None)
-    | ``[LINE][XPATH]``
+    | ``[LINE]``
 
     After ``select`` and ``exclude``, arbitrary functions can be called
     if this option is specified.
@@ -888,7 +888,7 @@ So section names themselves can be arbitrary.
 .. confopt:: link
 
     | (``//a/@href``)
-    | ``[LINE][XPATH]``
+    | ``[LINE]``
 
     (Experimental)
 
