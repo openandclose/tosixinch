@@ -77,12 +77,6 @@ def qt_webkit_init(url, qt_app):
     return Render
 
 
-def qt_webkit_download(url, fname, render):
-    logger.info('using Qt5 WebKit...')
-    r = render(url)
-    return r.frame.toHtml()
-
-
 def qt_webengine_init(url, qt_app, QWebEngineView):
     try:
         from PyQt5.QtCore import QEventLoop
@@ -116,12 +110,6 @@ def qt_webengine_init(url, qt_app, QWebEngineView):
     return Render
 
 
-def qt_webengine_download(url, fname, render):
-    logger.info('using Qt5 WebEngine...')
-    r = render(url)
-    return r.html
-
-
 class QtDownloader(action.Downloader):
     """Provide common Qt downloader methods."""
 
@@ -151,10 +139,14 @@ class QtWebKitDownloader(QtDownloader):
     def start(self):
         return start_qt_webkit()
 
-    def _download(self, site):
+    def request(self, site):
+        logger.info('using Qt5 WebKit...')
         url = site.idna_url
         render = qt_webkit_init(url, QT_APP)
-        return qt_webkit_download(url, site.fname, render)
+        self.agent = render(url)
+
+    def retrieve(self):
+        self.text = self.agent.frame.toHtml()
 
 
 class QtWebEngineDownloader(QtDownloader):
@@ -164,10 +156,14 @@ class QtWebEngineDownloader(QtDownloader):
         qt_app, self.QWebEngineView = start_qt_webengine()
         return qt_app
 
-    def _download(self, site):
+    def request(self, site):
+        logger.info('using Qt5 WebEngine...')
         url = site.idna_url
         render = qt_webengine_init(url, QT_APP, self.QWebEngineView)
-        return qt_webengine_download(url, site.fname, render)
+        self.agent = render(url)
+
+    def retrieve(self):
+        self.text = self.agent.html
 
 
 SELENIUM_DRIVER = None
@@ -205,13 +201,6 @@ def end_selenium(driver):
     driver.close()
 
 
-def selenium_download(url):
-    driver = SELENIUM_DRIVER
-
-    driver.get(url)
-    return driver.page_source
-
-
 class SeleniumDownloader(action.Downloader):
     """Download by Selenium."""
 
@@ -222,6 +211,7 @@ class SeleniumDownloader(action.Downloader):
         if not SELENIUM_DRIVER:
             SELENIUM_DRIVER = self.start()
 
+        self.agent = SELENIUM_DRIVER
         action.add_cleanup(self.cleanup)
 
     def start(self):
@@ -243,9 +233,12 @@ class SeleniumDownloader(action.Downloader):
             end_selenium(SELENIUM_DRIVER)
             SELENIUM_DRIVER = None
 
-    def _download(self, site):
+    def request(self, site):
         url = site.idna_url
-        return selenium_download(url)
+        self.agent.get(url)
+
+    def retrieve(self):
+        self.text = self.agent.page_source
 
 
 def run(conf, site):

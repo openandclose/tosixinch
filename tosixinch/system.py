@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 # download  --------------------------------------
 
-def download(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
+def request(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
     headers = {
         'User-Agent': user_agent,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # noqa: E501
@@ -47,15 +47,7 @@ def download(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
         urllib.request.HTTPCookieProcessor(cj))
 
     try:
-        with opener.open(req) as f:
-            text = f.read()
-            if isinstance(f, http.client.HTTPResponse):
-                if f.getheader('Content-Encoding') == 'gzip':
-                    text = gzip.decompress(text)
-                elif f.getheader('Content-Encoding') == 'deflate':
-                    logger.info("[http] 'Content-Encoding' is 'deflate'")
-                    text = zlib.decompress(text)
-            return text
+        return opener.open(req)
 
     except urllib.request.HTTPError as e:
         if on_error_exit:
@@ -72,10 +64,23 @@ def download(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
             raise
         logger.warning('[URLError %s] %s' % (e.reason, url))
 
+
+def retrieve(f, on_error_exit=True):
+    # ``f`` is either file object or http.client.HTTPResponse object.
+    try:
+        text = f.read()
+        if isinstance(f, http.client.HTTPResponse):
+            if f.getheader('Content-Encoding') == 'gzip':
+                text = gzip.decompress(text)
+            elif f.getheader('Content-Encoding') == 'deflate':
+                logger.info("[http] 'Content-Encoding' is 'deflate'")
+                text = zlib.decompress(text)
+        return text
+
     except http.client.RemoteDisconnected as e:
         if on_error_exit:
             raise
-        logger.warning('[RemoteDisconnected: %s] %s' % (str(e), url))
+        logger.warning('[RemoteDisconnected: %s] %s' % (str(e), f.url))
 
 
 def _add_cookie(cj, name, value, domain, path='/'):
