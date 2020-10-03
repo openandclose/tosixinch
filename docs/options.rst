@@ -884,6 +884,50 @@ So section names themselves can be arbitrary.
     Note it is not secure and not right.
     Do not provide sensitive data.
 
+.. confopt:: dprocess
+
+    | (None)
+    | ``[LINE]``
+
+    When ``download``,
+    the program runs functions specified by this option
+    after getting http response, and before serializing to html text.
+
+    For completeness, it runs when downloader is ``urllib``,
+    but the supposed usage is for other headless browsers.
+
+    For example, some webpages have folded contents
+    which users need to click and run javascript to expand.
+
+    The mechanism is similar to ``process``,
+    Users define a function in a python file in user ``dprocess`` directory,
+    with ``agent`` as the first argument,
+    and modify it. If necessary, they can define other arguments
+    by using ``'?'``
+    (see `process <#confopt-process>`__).
+
+    But what comes as ``agent`` is dependent on
+    what is actually ``downloader`` now::
+
+        urllib      http.client.HTTPResponse
+        webkit      PyQt5.QtWebKitWidgets.QWebPage
+        webengine   PyQt5.QtWebEngineWidgets.QWebEngineView
+        selenium    selenium.webdriver.remote.webdriver.WebDriver
+
+    So user should be careful.
+    (For example, when you define ``dprocess`` in ``site.ini``,
+    it is advisable to also define ``browser_engine``).
+
+    Example:
+
+    .. code-block:: python
+
+        def sitefoo_click(agent):  # for selenium
+            path = '//div[@class="see_more"]'
+            elements = agent.find_elements_by_xpath(path)
+            for element in elements:
+                element.click()
+                time.sleep(1)
 
 .. confopt:: link
 

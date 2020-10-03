@@ -191,7 +191,8 @@ class Downloader(Action):
             on_error_exit=on_error_exit)
 
     def process(self):
-        pass
+        for p in self._site.general.dprocess:
+            system.run_function(self._conf._userdir, 'dprocess', self.agent, p)
 
     def retrieve(self, on_error_exit=True):
         self.text = system.retrieve(self.agent, on_error_exit=on_error_exit)

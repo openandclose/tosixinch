@@ -27,6 +27,8 @@ Unreleased
 
 * Add selenium downloading (browser_engine option)
 
+* Add dprocess option
+
 **Fix:**
 
 * Fix ignore any errors in component download

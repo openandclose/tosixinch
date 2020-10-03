@@ -397,13 +397,18 @@ Config Files
     If it cannot find the one,
     it searches next in application's ``tosixinch.process`` directory.
 
+.. dword:: dprocess directory
+
+    ``userdir`` can also have 'dprocess' sub directory.
+
+    (See `dprocess <options.html#confopt-dprocess>`__).
+
 .. dword:: script directory
 
-    ``userdir`` can also have 'script' sub directory
-    (It can be used for hooks commands).
-    For example::
+    ``userdir`` can also have 'script' sub directory.
+    (For user hooks commands.
 
-        ~/.config/tosixinch/script
+    See `Hookcmds <topics.html#hookcmds>`__ and `Scripts <topics.html#scripts>`__).
 
 
 Config Format

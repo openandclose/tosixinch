@@ -339,6 +339,10 @@ and `Qt5 <https://www.qt.io>`__.
 `selenium <https://selenium-python.readthedocs.io/installation.html#downloading-python-bindings-for-selenium>`__
 and `firefox or chrome webdrivers <https://selenium-python.readthedocs.io/installation.html#drivers>`__.
 
+Users can define additional instructions for browsers.
+`option: dprocess <options.html#confopt-dprocess>`__,
+but I recommend you read `process <options.html#confopt-process>`__ first.
+
 Sometimes writing configurations for each site is too cumbersome.
 You can fallback to automatic article extraction by installing
 `readability <https://github.com/buriy/python-readability>`__.
