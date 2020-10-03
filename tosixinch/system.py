@@ -388,7 +388,8 @@ def _get_all_modules(userdir, package_name):
         names = os.listdir(os.path.join(userdir, package_name))
     else:
         d = os.path.dirname(__file__)
-        names = os.listdir(os.path.join(d, package_name))
+        d = os.path.join(d, package_name)
+        names = os.listdir(d) if os.path.isdir(d) else []
     for name in names:
         if name.startswith('__'):
             continue
