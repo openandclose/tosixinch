@@ -215,6 +215,8 @@ class CompDownloader(Downloader):
             return
 
         self.request(comp, on_error_exit=False)
+        if self.agent is None:  # URLError or HTTPError
+            return
         self.retrieve(on_error_exit=False)
         if self.text:
             self._write(comp.fname, self.text)
