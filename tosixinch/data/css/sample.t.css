@@ -323,7 +323,7 @@ h1.tsi-text, h2.tsi-text, h3.tsi-text, h4.tsi-text {
     font-weight: bold;
 }
 
-h2.tsi-text, h3.tsi-text, h4.tsi-text {
+h2.tsi-text, h3.tsi-text, h4.tsi-text, h5.tsi-text, h6.tsi-text {
     display: inline;
 }
 
