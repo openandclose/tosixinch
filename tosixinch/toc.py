@@ -34,11 +34,6 @@ class Node(location.Location):
         self._doc = None
         self.cssfiles = []
 
-    def _is_local(self, url):
-        if url.strip().startswith(DIRECTIVE_PREFIX):
-            return False
-        return super()._is_local(url)
-
     @property
     def doc(self):
         if self._doc is None:
