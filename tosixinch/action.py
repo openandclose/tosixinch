@@ -77,8 +77,8 @@ _HTMLFILE = re.compile(
     flags=re.IGNORECASE | re.DOTALL)
 
 
-def _is_html(fname, text, min_chars=4096):
-    if _HTMLFILE.match(text[:min_chars]):
+def _is_html(fname, text, max_chars=4096):
+    if _HTMLFILE.match(text[:max_chars]):
         return True
     return False
 
