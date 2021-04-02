@@ -668,7 +668,7 @@ according to the currently selected converter.
 For example, if ``toc_depth`` is ``3``,
 they are ``1``, ``2``, ``3``, ``none``, ``none`` and ``none``.
 
-In ``sample.t. css``, it is used like::
+In ``sample.t.css``, it is used like::
 
     h1 { prince-bookmark-level: {{ bm1 }} }
     h2 { prince-bookmark-level: {{ bm2 }} }

@@ -331,13 +331,12 @@ Either ``PyQt`` or ``Selenium``.
 So if you are lucky,
 you may get javascript generated html contents.
 `option: javascript <options.html#confopt-javascript>`__.
-
-Note ``PyQt`` requires
+(Note ``PyQt`` requires
 `pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
 and `Qt5 <https://www.qt.io>`__.
 ``Selenium`` requires
 `selenium <https://selenium-python.readthedocs.io/installation.html#downloading-python-bindings-for-selenium>`__
-and `firefox or chrome webdrivers <https://selenium-python.readthedocs.io/installation.html#drivers>`__.
+and `firefox or chrome webdrivers <https://selenium-python.readthedocs.io/installation.html#drivers>`__.)
 
 Users can define additional instructions for browsers.
 `option: dprocess <options.html#confopt-dprocess>`__,
