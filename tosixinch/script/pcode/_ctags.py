@@ -95,7 +95,7 @@ class Tags(object):
         if fname not in self._files_cache:
             return [], []
 
-        rows1 = rows2 = []  # rows1: in the same file, rows2: different files.
+        rows1, rows2 = [], []  # rows1: in the same file, rows2: in other.
         cur = self.cur
         cmd = 'SELECT rowid, * FROM tags WHERE tag = (?) AND lang = (?)'
         cur.execute(cmd, (tag, ftype))
