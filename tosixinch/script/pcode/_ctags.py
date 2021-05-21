@@ -134,5 +134,7 @@ def _create_ctags(tagfile, cmd, files):
 
 
 def _get_checksum(cmd, files):
-    data = '\n'.join([cmd] + sorted(files)).encode('utf-8')
+    mtime = max(os.stat(f).st_mtime for f in files)
+    data = '\n'.join([cmd] + sorted(files) + [str(mtime)])
+    data = data.encode('utf-8')
     return '%08x' % (zlib.crc32(data) & 0xffffffff)
