@@ -61,7 +61,7 @@ def _sub_action_dispatch(conf, command, pre_each_cmd, post_each_cmd):
 def _download(conf):
     _action_dispatch(conf, _get_downloader(conf),
         conf.general.precmd1, conf.general.postcmd1,
-        conf.general.pre_each_cmd1, conf.general.pre_each_cmd1)
+        conf.general.pre_each_cmd1, conf.general.post_each_cmd1)
 
 
 def _get_downloader(conf):
@@ -98,7 +98,7 @@ def _extract(conf):
 
     _action_dispatch(conf, _get_extractor(conf),
         conf.general.precmd2, conf.general.postcmd2,
-        conf.general.pre_each_cmd2, conf.general.pre_each_cmd2)
+        conf.general.pre_each_cmd2, conf.general.post_each_cmd2)
 
 
 def _get_extractor(conf):
