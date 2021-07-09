@@ -219,7 +219,7 @@ Configs
 
 .. option:: --full-image FULL_IMAGE
 
-    pxel size to add special class attributes to images (default: 200)
+    pixel size to add special class attributes to images (default: 200)
 
 .. option:: --add-binary-extensions ADD_BINARY_EXTENSIONS
 

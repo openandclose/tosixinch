@@ -16,7 +16,7 @@ HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
     <meta charset="utf-8">
     <title>{title}</title>
     {csslinks}
-</head>
+  </head>
   <body>
     <h1 class="{textclass}">{title}</h1>
     <pre class="{textclass}">
@@ -133,9 +133,9 @@ class NonProse(Prose):
         wrapper.subsequent_indent = self.indent
         text = []
         for line in self.text.split('\n'):
-            s = wrapper.fill(line) + '\n'
+            s = wrapper.fill(line)
             text.append(s)
-        self.wrapped = ''.join(text)
+        self.wrapped = '\n'.join(text)
 
 
 class Code(NonProse):
