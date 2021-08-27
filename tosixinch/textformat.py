@@ -55,9 +55,9 @@ def is_prose(fname, text):
     times = 0
     for count in counts:
         if count > width:
-            width = count
             if count > width + 1:
                 continuation = 0
+            width = count
         elif count in (width, width - 1):
             continuation += 1
         else:
