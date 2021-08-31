@@ -523,7 +523,10 @@ def hackernews_indent(doc):
         comhead = dd.xpath('.//span[@class="comhead"]')[0]
         comhead.classes.add(KEEP_STYLE)
         comhead.set('style', 'font-weight:bold;')
-        comment = dd.xpath('.//div[@class="comment"]')[0]
+        comment = dd.xpath('.//div[@class="comment"]')
+        # sometimes comment is '[]' (javascript folded)
+        if comment != []:
+            comment = comment[0]
         # changing image width (px) to padding-left (px),
         # dividing number arbitrarily.
         block = fromstring(
@@ -531,7 +534,8 @@ def hackernews_indent(doc):
             '<div class="%s" style="margin-bottom:1em;padding-left:%dpx;"></div>' % (  # noqa: E501
                 KEEP_STYLE, int(int(width) / 4)))
         block.append(comhead)
-        block.append(comment)
+        if comment != []:
+            block.append(comment)
         ddd = dd.getparent()
         ddd.replace(dd, block)
 
