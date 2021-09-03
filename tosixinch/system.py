@@ -47,7 +47,7 @@ def request(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
         urllib.request.HTTPCookieProcessor(cj))
 
     try:
-        return opener.open(req)
+        return opener.open(req, timeout=5)
 
     except urllib.request.HTTPError as e:
         if on_error_exit:
