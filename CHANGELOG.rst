@@ -8,6 +8,15 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+
+v0.6.0 (2021-10-29)
+-------------------
+
+I have refrained from uploading local changes,
+waiting for a time when I could look into it closely.
+But the time is not coming for a long time,
+let's make it updated now.
+
 **Change:**
 
 * When the name of Downloaded_File is too long
