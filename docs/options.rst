@@ -61,14 +61,14 @@ General Section
 
 .. confopt:: browser_engine \*
 
-    (``webkit``)
+    (``selenium-firefox``)
 
     Specify browser engine when ``javascript`` option is True.
     ``webkit``, ``webengine``, ``selenium-chrome`` or ``selenium-firefox``.
 
 .. confopt:: encoding \*
 
-    | (``utf-8, cp1252``)
+    | (``utf-8, cp1252, latin_1``)
     | ``[COMMA]``
 
     Specify preferred encoding or encodings.
