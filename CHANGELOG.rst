@@ -8,6 +8,10 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+**Add:**
+
+* Add github discussions to sample
+
 
 v0.6.0 (2021-10-29)
 -------------------
