@@ -272,12 +272,13 @@ def youtube_video_to_thumbnail(doc):
     """
     for el in doc.xpath('//iframe[contains(@src, "www.youtube.com/embed/")]'):
         m = re.match(
-            r'https?://www\.youtube\.com/embed/([^/?]+)',
+            r'(?:https?:)?//www\.youtube\.com/embed/([^/?]+)',
             el.get("src"))
-        itagfmt = '<img src="http://img.youtube.com/vi/%s/hqdefault.jpg">'
-        itagstr = itagfmt % m.group(1)
-        itag = fromstring(itagstr)
-        replace_tag(el, itag)
+        if m:
+            itagfmt = '<img src="http://img.youtube.com/vi/%s/hqdefault.jpg">'
+            itagstr = itagfmt % m.group(1)
+            itag = fromstring(itagstr)
+            replace_tag(el, itag)
 
 
 def show_href(doc):
