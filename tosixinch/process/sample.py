@@ -53,6 +53,9 @@ def _fromstring_examples():
     >>> el = fromstring('aaa<div>bbb</div>')
     >>> tostring(el)
     '<div><p>aaa</p><div>bbb</div></div>'
+    >>> el = fromstring('<body></body>')
+    >>> tostring(el)
+    '<span></span>'
     """
 
 
