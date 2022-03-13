@@ -12,6 +12,10 @@ Unreleased
 
 * Add github discussions to sample
 
+**Fix:**
+
+* Fix Add charset for BLANK_HTML (for weasyprint)
+
 
 v0.6.0 (2021-10-29)
 -------------------

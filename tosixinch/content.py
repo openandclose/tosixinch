@@ -25,7 +25,7 @@ HTML_TEMPLATE = """{doctype}
 </html>
 """
 
-BLANK_HTML = '%s<html><body></body></html>'
+BLANK_HTML = '%s<html><head><meta charset="utf-8"></head><body></body></html>'
 
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
