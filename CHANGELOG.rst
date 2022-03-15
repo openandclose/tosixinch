@@ -8,6 +8,10 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+**Change:**
+
+* Change @page and <body> margin slightly (for weasyprint)
+
 **Add:**
 
 * Add github discussions to sample

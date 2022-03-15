@@ -1,7 +1,7 @@
 
 @page {
     size: {{ size }};
-    margin: 1%;
+    margin: 2%;
 }
 
 html { page-break-before: always; }
@@ -11,6 +11,7 @@ body {
     font-size: {{ font_size|scale }};
     line-height: {{ line_height }};
     color: black;
+    margin: 0;
 }
 
 /* http://pythonhosted.org/feedparser uses 'div.pre'. */
