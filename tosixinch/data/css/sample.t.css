@@ -82,6 +82,10 @@ img.tsi-tall {
     height: {{ height|percent98 }};
 }
 
+table img.tsi-wide, table img.tsi-tall {
+    width: auto;
+}
+
 /* img.tsi-small { */
 /*     width: 10%; */
 /* } */

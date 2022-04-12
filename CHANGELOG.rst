@@ -16,6 +16,8 @@ Unreleased
 
 * Add github discussions to sample
 
+* Add loose heuristic for too big images (for inside <table>)
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)
