@@ -18,6 +18,8 @@ Unreleased
 
 * Add loose heuristic for too big images (for inside <table>)
 
+* Add more exclusion of secondary boxes (sample wikipedia)
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)
