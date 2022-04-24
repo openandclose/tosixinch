@@ -134,9 +134,6 @@ class URL(object):
             return True
         return False
 
-    def is_absolute(self):
-        return urllib.parse.urlsplit(self._url)[0] != ''
-
     def _normalize(self, url, baseurl):
         # manually resolve network-path and absolute-path reference
         if url.startswith('/'):
