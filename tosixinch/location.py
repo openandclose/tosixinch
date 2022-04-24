@@ -16,6 +16,7 @@ import io
 import logging
 import os
 import re
+import unicodedata
 import urllib.parse
 
 from tosixinch import urlmap
@@ -33,7 +34,6 @@ def path2ref(path, basepath):
 
 # https://github.com/django/django/blob/master/django/utils/text.py
 def slugify(value):
-    import unicodedata
     value = unicodedata.normalize('NFKD', value)
     value = value.encode('ascii', 'ignore').decode('ascii')
     value = re.sub(r'[^\w\s-]', '', value).strip().lower()
