@@ -33,9 +33,13 @@ def path2ref(path, basepath):
 
 
 # https://github.com/django/django/blob/master/django/utils/text.py
-def slugify(value):
-    value = unicodedata.normalize('NFKD', value)
-    value = value.encode('ascii', 'ignore').decode('ascii')
+def slugify(value, allow_unicode=False):
+    if allow_unicode:
+        value = unicodedata.normalize("NFKC", value)
+    else:
+        value = unicodedata.normalize('NFKD', value)
+        value = value.encode('ascii', 'ignore').decode('ascii')
+
     value = re.sub(r'[^\w\s-]', '', value.lower())
     value = re.sub(r'[-\s]+', '-', value).strip('-_')
     return value

@@ -24,6 +24,8 @@ Unreleased
 
 * Fix Add charset for BLANK_HTML (for weasyprint)
 
+* Fix toc title (able to use unicode)
+
 
 v0.6.0 (2021-10-29)
 -------------------

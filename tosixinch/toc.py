@@ -7,6 +7,7 @@ Use comment structure in 'urls.txt' as directive.
 import logging
 import re
 import sys
+import urllib.parse
 
 from tosixinch import location
 from tosixinch import lxml_html
@@ -20,6 +21,12 @@ logger = logging.getLogger(__name__)
 DIRECTIVE_PREFIX = '#'
 
 TOCDOMAIN = 'http://tosixinch.example.com'
+
+
+def _create_toc_url(title):
+    """Create toc root url, from html title string."""
+    t = location.slugify(title, allow_unicode=True)
+    return '%s/%s' % (TOCDOMAIN, urllib.parse.quote(t))
 
 
 class Node(location.Location):
@@ -104,7 +111,7 @@ class Nodes(location.Locations):
         line = m.group(2)
         if cnt and line:
             title = line
-            url = '%s/%s' % (TOCDOMAIN, location.slugify(title))
+            url = _create_toc_url(title)
         elif cnt and not line:
             title = None
             url = None
