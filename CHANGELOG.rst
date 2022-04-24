@@ -20,6 +20,8 @@ Unreleased
 
 * Add more exclusion of secondary boxes (sample wikipedia)
 
+* Update and Change slugify, add more word separation ('-')
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

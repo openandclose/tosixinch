@@ -76,4 +76,4 @@ class TestPDFName:
 
         # with querry
         url = 'https://aaa.com/bbb?s=3+t=5&u=7+8'
-        self.compare(url, 'x', 1, 'x-bbb-s3t5u78.pdf')
+        self.compare(url, 'x', 1, 'x-bbb-s-3-t-5-u-7-8.pdf')

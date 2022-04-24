@@ -27,12 +27,15 @@ COMMENT_PREFIX = ('#', ';',)
 
 DOWNLOAD_DIR = '_htmls'
 
+# string.punctuation minus '-' and '_'
+PUNCTUATION_RE = re.compile(r'[!"#$%&\'()*+,./:;<=>?@[\\\]^`{|}~]')
+
 
 def path2ref(path, basepath):
     return urlmap._path2ref(path, basepath)
 
 
-# https://github.com/django/django/blob/master/django/utils/text.py
+# based from: django/django/utils/text.py
 def slugify(value, allow_unicode=False):
     if allow_unicode:
         value = unicodedata.normalize("NFKC", value)
@@ -40,6 +43,7 @@ def slugify(value, allow_unicode=False):
         value = unicodedata.normalize('NFKD', value)
         value = value.encode('ascii', 'ignore').decode('ascii')
 
+    value = PUNCTUATION_RE.sub('-', value)
     value = re.sub(r'[^\w\s-]', '', value.lower())
     value = re.sub(r'[-\s]+', '-', value).strip('-_')
     return value
