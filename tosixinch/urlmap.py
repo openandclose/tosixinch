@@ -426,9 +426,6 @@ class Ref(object):
         self.url = self._cls.input_name
         self.fname = self._cls.fname
 
-    def split_fragment(self):
-        return _split_fragment(self.url)
-
     @property
     def relative_reference(self):
         return self._base_cls.get_relative_reference(self._cls)
