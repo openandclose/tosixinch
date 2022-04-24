@@ -17,11 +17,10 @@ from tosixinch import PLATFORM
 from tosixinch import urlno
 
 
-# When creating system path from url strings,
-# '/' in query and fragment parts are changed.
-# Otherwise e.g. 'aaa?bbb/ccc' would be segmented to
-# 'aaa?bbb' and 'ccc' in system path.
-# So we treat it as a single opaque segment ('aaa?bbb_ccc').
+# query and fragment can have '/' character.
+# So when creating system path from url strings,
+# it is better to change it to some.
+# (given URL 'aaa?bbb/ccc', to 'aaa?bbb_ccc')
 _CHANGE_TO = {
     'scheme': {},
     'netloc': {},
@@ -351,9 +350,9 @@ class Ref(object):
     """Create relative reference from url and parent_url.
 
     Note it creates it through two system paths.
-    So, e.g. from 'http://foo.com/aaa' and 'http://bar.com/bbb',
-    (through './foo.com/aaa' and './bar.com/bbb'),
-    it creates '../foo.com/aaa'.
+    So, e.g. from 'http://foo.com/aaa.html' and 'http://bar.com/bbb.html',
+    (through './foo.com/aaa.html' and './bar.com/bbb.html'),
+    it creates '../foo.com/aaa.html'.
     """
 
     _CLS = Map
