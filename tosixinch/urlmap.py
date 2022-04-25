@@ -149,10 +149,9 @@ class URL(object):
 
         return urlno.URL(url).url
 
-    def _resolve(self, url, baseurl):
-        if not baseurl:
-            return url
-        url = urllib.parse.urljoin(baseurl, url)
+    def _resolve(self, url, baseurl=None):
+        if baseurl:
+            url = urllib.parse.urljoin(baseurl, url)
         return urlno.URL(url).url
 
     @property
