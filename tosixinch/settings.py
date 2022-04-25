@@ -349,8 +349,9 @@ class Sites(location.Locations):
 class Site(location.Location):
     """Settings for each url."""
 
-    def __init__(self, url, conf, siteconf):
-        super().__init__(url)
+    def __init__(self, url, conf, siteconf,
+            baseurl=None, input_type=None, platform=sys.platform):
+        super().__init__(url, baseurl, input_type, platform)
         self._conf = conf
         self._siteconf = siteconf
         self._config = siteconf._config
