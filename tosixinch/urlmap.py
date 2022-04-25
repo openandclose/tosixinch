@@ -155,6 +155,12 @@ class URL(object):
         url = urllib.parse.urljoin(baseurl, url)
         return urlno.URL(url).url
 
+    @property
+    def url(self):
+        url = self._normalize(self._url, self.baseurl)
+        url = self._resolve(url, self.baseurl)
+        return url
+
     def _add_index(self, url):
         if '/' not in url:
             url += '/'
@@ -168,20 +174,12 @@ class URL(object):
         return url
 
     def unroot(self):
-        url = self.absolute_url
+        url = self.url
         url, _ = _split_fragment(url)
         url = self.MATCHER.sub('', url)
         url = self._add_index(url)
         url = _url2path(url, platform=self.platform)
         return url
-
-    @property
-    def url(self):
-        return self._normalize(self._url, self.baseurl)
-
-    @property
-    def absolute_url(self):
-        return self._resolve(self.url, self.baseurl)
 
 
 class FileURL(object):
@@ -223,15 +221,7 @@ class FileURL(object):
         return self._normalize(self._url)
 
     @property
-    def absolute_url(self):
-        return self.url
-
-    @property
     def path(self):
-        return self.absolute_path
-
-    @property
-    def absolute_path(self):
         url = self.url
         url, _ = _split_fragment(url)
         m = self.MATCHER.match(url)
@@ -294,15 +284,13 @@ class Path(object):
         return name
 
     def unroot(self):
-        return self._strip_root(self.absolute_path)
+        return self._strip_root(self.path)
 
     @property
     def path(self):
-        return self._normalize(self._path)
-
-    @property
-    def absolute_path(self):
-        return self._resolve(self.path)
+        path = self._normalize(self._path)
+        path = self._resolve(path)
+        return path
 
 
 class Map(object):
@@ -362,9 +350,9 @@ class Map(object):
     def input_name(self):
         if self.is_local():
             # Note: FileURL returns system path.
-            return self._cls.absolute_path
+            return self._cls.path
         else:
-            return self._cls.absolute_url
+            return self._cls.url
 
     @property
     def mapped_name(self):

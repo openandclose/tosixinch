@@ -207,7 +207,7 @@ class TestFileURLOnWindows:
 
         for url, path, expected in tests:
             u = urlmap.FileURL(url, platform='win32')
-            assert u.absolute_path == path
+            assert u.path == path
             assert u.unroot() == expected
 
 
@@ -224,7 +224,7 @@ class TestPath:
 
         for path, normalized, unrooted in tests:
             p = urlmap.Path(path, platform='linux')
-            assert p.absolute_path == normalized
+            assert p.path == normalized
             assert p.unroot() == unrooted
 
 
@@ -242,7 +242,7 @@ class TestPathOnWindows:
 
         for path, normalized, unrooted in tests:
             p = urlmap.Path(path, platform='win32')
-            assert p.absolute_path == normalized
+            assert p.path == normalized
             assert p.unroot() == unrooted
 
 
