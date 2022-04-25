@@ -134,21 +134,6 @@ class URL(object):
             return True
         return False
 
-    def _normalize(self, url, baseurl):
-        # manually resolve network-path and absolute-path reference
-        if url.startswith('/'):
-            fmt = "invalid url: url begins with '/', and base url is None."
-            if url.startswith('//'):
-                if not baseurl:
-                    raise ValueError(fmt)
-                url = urllib.parse.urlsplit(baseurl)[0] + ':' + url
-            elif url.startswith('/'):
-                if not baseurl:
-                    raise ValueError(fmt)
-                url = '://'.join(urllib.parse.urlsplit(baseurl)[0:2]) + url
-
-        return urlno.URL(url).url
-
     def _resolve(self, url, baseurl=None):
         if baseurl:
             url = urllib.parse.urljoin(baseurl, url)
@@ -156,8 +141,7 @@ class URL(object):
 
     @property
     def url(self):
-        url = self._normalize(self._url, self.baseurl)
-        url = self._resolve(url, self.baseurl)
+        url = self._resolve(self._url, self.baseurl)
         return url
 
     def _add_index(self, url):
