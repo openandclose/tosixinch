@@ -305,6 +305,11 @@ class Map(object):
         return not self.is_url()
 
     @property
+    def url(self):
+        # Note: Error when self._cls is Path.
+        return self._cls.url
+
+    @property
     def input_name(self):
         if self.is_local():
             # Note: FileURL returns system path.
@@ -367,7 +372,7 @@ class Ref(object):
         self.fname = self._cls.fname
 
     def _resolve(self, url):
-        baseurl = self.baseurl or self._parent_cls.input_name
+        baseurl = self.baseurl or self._parent_cls.url
         return urllib.parse.urljoin(baseurl, url)
 
     def _detect(self, url):
