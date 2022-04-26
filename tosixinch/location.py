@@ -122,9 +122,6 @@ class Location(urlmap.Map):
         else:
             return self.sep.join((self.PREFIX, name))
 
-    def get_relative_reference_fnew(self, other):
-        return self._get_relative_reference(other, name='fnew')
-
     # TODO: invent more general term
     @property
     def url(self):
