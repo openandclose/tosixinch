@@ -223,7 +223,7 @@ class Path(object):
     """Unroot paths."""
 
     ROOTPATH = re.compile('^//?(/*)')
-    WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?(?=[^/\\])|\\\\([?.\\]*)')
+    WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?(?=[^/\\])')
 
     def __init__(self, path, platform=sys.platform):
         self._path = path
@@ -248,8 +248,6 @@ class Path(object):
         fmt = 'Unsupported windows filename format: %r'
         m = self.WINROOTPATH.match(name)
         if not m:
-            raise ValueError(fmt % name)
-        if m.group(2):
             raise ValueError(fmt % name)
 
         if m.group(1):

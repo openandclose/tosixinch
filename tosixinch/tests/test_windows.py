@@ -51,13 +51,6 @@ class TestWindowsMakePath:
 
         url = r'c:\aaa\bbb.html'
         self.compare(url, fname, fnew)
-        url = r'c:\\aaa\bbb.html'
-        self.compare(url, fname, fnew)
-
-        fnew = r'_htmls\aaa\bbb~.html'
-
-        url = r'\\aaa\bbb.html'
-        self.compare(url, url, fnew)  # note arguments: url, url, fnew
 
         url = r'\\?\aaa\bbb.html'
         with pytest.raises(ValueError):
