@@ -72,7 +72,6 @@ class TestFileURLOnWindows:
         tests = (
             ('file:///C:/p.html',       r'c:\p.html',   r'c\p.html'),
             ('file:///C:/p',            r'c:\p',        r'c\p'),
-            ('file:///C:p.html',        r'c:p.html',    r'c\p.html'),  # OK?
             ('file:///C:/p.html?q',     r'c:\p.html_q', r'c\p.html_q'),
         )
 
@@ -106,7 +105,8 @@ class TestMapOnWindows:
 
         tests = (
             ('http://a/b',      'http://a/b',       r'a\b\_'),
-            ('file:///c:a/b',   r'c:a\b',           r'c\a\b'),
+            ('file:///c:/a/b',   r'c:\a\b',           r'c\a\b'),
+            (r'c:\a\b',          r'c:\a\b',           r'c\a\b'),
             (r'c:a\b',          r'c:a\b',           r'c\a\b'),
         )
 

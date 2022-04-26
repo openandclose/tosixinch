@@ -161,7 +161,7 @@ class FileURL(object):
     # Only for local files (no domain names or UNC).
     MATCHER = re.compile(
         '^file:/(/(localhost)?/)?(?=[^/])', flags=re.IGNORECASE)
-    WINROOTPATH = re.compile(r'^([a-zA-z]:)(/?)(?=[^/])')
+    WINROOTPATH = re.compile(r'^([a-zA-z]:)(/)(?=[^/])')
 
     def __init__(self, url):
         self._url = url
@@ -178,8 +178,6 @@ class FileURL(object):
         if not m:
             raise ValueError('invalid file scheme url: %r' % self._url)
         drive = m.group(1).lower()
-        if m.group(2):
-            drive += '\\'
         name = name[m.end():]
         return drive, name
 
@@ -197,7 +195,7 @@ class FileURL(object):
 
         if PLATFORM == 'win32':
             drive, name = self._split_windows_drive(url)
-            return drive + _url2path(name)
+            return drive + '\\' + _url2path(name)
         else:
             return _url2path('/' + url)
 
