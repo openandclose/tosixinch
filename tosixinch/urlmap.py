@@ -366,7 +366,7 @@ class Map(object):
 
 
 class Ref(object):
-    """Create relative reference from url and baseurl.
+    """Create relative reference from url and parent_url.
 
     Note it creates it through two system paths.
     So, e.g. from 'http://foo.com/aaa' and 'http://bar.com/bbb',
@@ -376,12 +376,12 @@ class Ref(object):
 
     _CLS = Map
 
-    def __init__(self, url, baseurl, platform=sys.platform):
-        if isinstance(baseurl, str):
-            self._base_cls = self._CLS(
-                baseurl, input_type=None, platform=platform)
+    def __init__(self, url, parent_url, platform=sys.platform):
+        if isinstance(parent_url, str):
+            self._parent_cls = self._CLS(
+                parent_url, input_type=None, platform=platform)
         else:
-            self._base_cls = baseurl
+            self._parent_cls = parent_url
 
         self.platform = platform
         self._cls = self._detect(url)
@@ -389,16 +389,18 @@ class Ref(object):
         self.fname = self._cls.fname
 
     def _detect(self, url):
-        base = self._base_cls
+        base = self._parent_cls
         if base.is_url():
             input_type = 'url'
         else:
             input_type = None
 
+        baseurl = self._parent_cls._baseurl or self._parent_cls.input_name
+
         return self._CLS(
-            url, baseurl=self._base_cls._baseurl or self._base_cls.input_name,
+            url, baseurl=baseurl,
             input_type=input_type, platform=self.platform)
 
     @property
     def relative_reference(self):
-        return self._base_cls.get_relative_reference(self)
+        return self._parent_cls.get_relative_reference(self)
