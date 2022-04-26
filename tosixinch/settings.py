@@ -277,7 +277,7 @@ def _check_platform_dirs():
 
     Only the most typical ones.
     """
-    platform = sys.platform
+    platform = sys.platform  # here, not using tosixinch.PLATFORM
     home = os.path.expanduser('~')
     if platform not in ('win32', 'darwin'):
         platform = 'others'
@@ -350,8 +350,8 @@ class Site(location.Location):
     """Settings for each url."""
 
     def __init__(self, url, conf, siteconf,
-            baseurl=None, input_type=None, platform=sys.platform):
-        super().__init__(url, baseurl, input_type, platform)
+            baseurl=None, input_type=None):
+        super().__init__(url, baseurl, input_type)
         self._conf = conf
         self._siteconf = siteconf
         self._config = siteconf._config

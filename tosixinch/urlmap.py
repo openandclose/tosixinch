@@ -13,7 +13,9 @@ import string
 import sys
 import urllib.parse
 
-from . import urlno
+from tosixinch import PLATFORM
+from tosixinch import urlno
+
 
 # When creating system path from url strings,
 # '/' in query and fragment parts are changed.
@@ -46,7 +48,7 @@ _WIN_CHANGE_TO = {
 _BLANK_SEG = '/_blank_'
 
 
-def _url2path(url, platform=sys.platform):
+def _url2path(url):
     """Convert normalized url path to system path."""
     def _to_filename(url):
         parts = urllib.parse.urlsplit(url)
@@ -70,14 +72,14 @@ def _url2path(url, platform=sys.platform):
 
     name = _to_filename(url)
     name = _replace_blank_seg(name)
-    if platform == 'win32':
+    if PLATFORM == 'win32':
         name = _to_windows_filename(name)
     return urllib.parse.unquote(name)
 
 
-def _path2url(path, platform=sys.platform):
+def _path2url(path):
     """Convert normalized system path to url path."""
-    if platform == 'win32':
+    if PLATFORM == 'win32':
         path = path.replace('\\', '/')
         comp = path.split(':')
         if len(comp) > 1:
@@ -93,14 +95,14 @@ def _path2url(path, platform=sys.platform):
     return url
 
 
-def _path2ref(path, basepath, platform=sys.platform):
+def _path2ref(path, basepath):
     """Convert normalized system path to relative reference."""
     if path == basepath:
         path = ''
     else:
-        mod = ntpath if platform == 'win32' else posixpath
+        mod = ntpath if PLATFORM == 'win32' else posixpath
         path = mod.relpath(path, mod.dirname(basepath))
-    return _path2url(path, platform)
+    return _path2url(path)
 
 
 def _split_fragment(url):
@@ -123,10 +125,9 @@ class URL(object):
     MATCHER = re.compile('^https?://', flags=re.IGNORECASE)
     INDEX = '_'
 
-    def __init__(self, url, baseurl=None, platform=sys.platform):
+    def __init__(self, url, baseurl=None):
         self._url = url
         self.baseurl = baseurl
-        self.platform = platform
 
     @classmethod
     def detect(cls, url):
@@ -161,7 +162,7 @@ class URL(object):
         url, _ = _split_fragment(url)
         url = self.MATCHER.sub('', url)
         url = self._add_index(url)
-        url = _url2path(url, platform=self.platform)
+        url = _url2path(url)
         return url
 
 
@@ -173,9 +174,8 @@ class FileURL(object):
         '^file:/(/(localhost)?/)?(?=[^/])', flags=re.IGNORECASE)
     WINROOTPATH = re.compile(r'^([a-zA-z]:)(/?)(?=[^/])')
 
-    def __init__(self, url, platform=sys.platform):
+    def __init__(self, url):
         self._url = url
-        self.platform = platform
 
     @classmethod
     def detect(cls, url):
@@ -197,7 +197,7 @@ class FileURL(object):
         return drive, name
 
     def unroot(self):
-        return Path(self.path, platform=self.platform).unroot()
+        return Path(self.path).unroot()
 
     @property
     def url(self):
@@ -212,11 +212,11 @@ class FileURL(object):
             raise ValueError('Not local file URL: %r' % url)
         url = url[m.end():]
 
-        if self.platform == 'win32':
+        if PLATFORM == 'win32':
             drive, name = self._split_windows_drive(url)
-            return drive + _url2path(name, platform='win32')
+            return drive + _url2path(name)
         else:
-            return _url2path('/' + url, platform=self.platform)
+            return _url2path('/' + url)
 
 
 class Path(object):
@@ -225,17 +225,16 @@ class Path(object):
     ROOTPATH = re.compile('^/(/*)(?=[^/]*)')
     WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?(?=[^/\\])')
 
-    def __init__(self, path, platform=sys.platform):
+    def __init__(self, path):
         self._path = path
-        self.platform = platform
-        self._pathmodule = ntpath if platform == 'win32' else posixpath
+        self._pathmodule = ntpath if PLATFORM == 'win32' else posixpath
 
     def _normalize(self, path):
-        if self.platform == sys.platform:
+        if PLATFORM == sys.platform:
             path = os.path.expanduser(path)
             path = os.path.expandvars(path)
 
-        if self.platform == 'win32':
+        if PLATFORM == 'win32':
             return self._pathmodule.normcase(path)
         else:
             return path
@@ -256,7 +255,7 @@ class Path(object):
         return drive, name
 
     def _strip_root(self, name):
-        if self.platform == 'win32':
+        if PLATFORM == 'win32':
             drive, name = self._split_windows_drive(name)
             if drive:
                 name = drive + '\\' + name
@@ -287,31 +286,30 @@ class Map(object):
     INDEX = URL.INDEX
 
     def __init__(self, input_name, baseurl=None,
-            input_type=None, platform=sys.platform):
+            input_type=None):
         self._input_name = input_name
         self._baseurl = baseurl
-        self.platform = platform
-        self.sep = '\\' if platform == 'win32' else '/'
+        self.sep = '\\' if PLATFORM == 'win32' else '/'
         self._cls = self._detect(input_name, baseurl, input_type)
         self._hashed = False
 
     def _detect(self, input_name, baseurl, input_type):
         if input_type:
             if input_type == 'url':
-                return self.URL(input_name, baseurl, platform=self.platform)
+                return self.URL(input_name, baseurl)
             if input_type == 'fileurl':
-                return self.FileURL(input_name, platform=self.platform)
+                return self.FileURL(input_name)
             if input_type == 'path':
-                return self.Path(input_name, platform=self.platform)
+                return self.Path(input_name)
             fmt = ("got invalid input_type for class 'Map': %r"
                 "(must be one of 'url', 'fileurl' or 'path').")
             raise ValueError(fmt % input_type)
 
         if self.URL.detect(input_name):
-            return self.URL(input_name, baseurl, platform=self.platform)
+            return self.URL(input_name, baseurl)
         if self.FileURL.detect(input_name):
-            return self.FileURL(input_name, platform=self.platform)
-        return self.Path(input_name, platform=self.platform)
+            return self.FileURL(input_name)
+        return self.Path(input_name)
 
     def _map_name(self, name):
         # 'name' is always derived from a url, so it is ascii.
@@ -361,7 +359,7 @@ class Map(object):
         url, fragment = _split_fragment(other.url)
         path = getattr(other, name)
         basepath = getattr(self, name)
-        ref = _path2ref(path, basepath, platform=self.platform)
+        ref = _path2ref(path, basepath)
         return _add_fragment(ref, fragment)
 
 
@@ -376,14 +374,12 @@ class Ref(object):
 
     _CLS = Map
 
-    def __init__(self, url, parent_url, platform=sys.platform):
+    def __init__(self, url, parent_url):
         if isinstance(parent_url, str):
-            self._parent_cls = self._CLS(
-                parent_url, input_type=None, platform=platform)
+            self._parent_cls = self._CLS(parent_url, input_type=None)
         else:
             self._parent_cls = parent_url
 
-        self.platform = platform
         self._cls = self._detect(url)
         self.url = self._cls.input_name
         self.fname = self._cls.fname
@@ -396,10 +392,7 @@ class Ref(object):
             input_type = None
 
         baseurl = self._parent_cls._baseurl or self._parent_cls.input_name
-
-        return self._CLS(
-            url, baseurl=baseurl,
-            input_type=input_type, platform=self.platform)
+        return self._CLS(url, baseurl=baseurl, input_type=input_type)
 
     @property
     def relative_reference(self):

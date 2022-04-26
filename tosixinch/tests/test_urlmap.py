@@ -5,6 +5,7 @@ import sys
 
 import pytest
 
+from tosixinch import PLATFORM
 from tosixinch import urlmap
 
 
@@ -46,7 +47,7 @@ def test_url2path():
         ('a///b',           'a/_blank_/_blank_/b'),
     )
     for url, path in tests:
-        assert urlmap._url2path(url, platform='linux') == path
+        assert urlmap._url2path(url) == path
 
 
 def test_path2url():
@@ -60,12 +61,12 @@ def test_path2url():
         ('a/français',  'a/fran%C3%A7ais'),
     )
     for path, expected in tests:
-        assert urlmap._path2url(path, platform='linux') == expected
+        assert urlmap._path2url(path) == expected
 
 
 def test_path2ref():
 
-    if sys.platform == 'win32':
+    if PLATFORM == 'win32':
         return
 
     pwd = posixpath.abspath('.')
@@ -80,7 +81,7 @@ def test_path2ref():
     )
 
     for path, expected in tests:
-        ref = urlmap._path2ref(path, basepath, platform='linux')
+        ref = urlmap._path2ref(path, basepath)
         assert ref == expected
 
     basepath = '/x/y'
@@ -92,7 +93,7 @@ def test_path2ref():
     )
 
     for path, expected in tests:
-        ref = urlmap._path2ref(path, basepath, platform='linux')
+        ref = urlmap._path2ref(path, basepath)
         assert ref == expected
 
 
@@ -108,7 +109,7 @@ class TestURL:
         )
 
         for url, expected in tests:
-            assert urlmap.URL(url, platform='linux').unroot() == expected
+            assert urlmap.URL(url).unroot() == expected
 
 
 class TestFileURL:
@@ -123,7 +124,7 @@ class TestFileURL:
         )
 
         for url, expected in tests:
-            u = urlmap.FileURL(url, platform='linux')
+            u = urlmap.FileURL(url)
             assert u.unroot() == expected
 
     def test_unroot_error(self):
@@ -134,7 +135,7 @@ class TestFileURL:
         )
 
         for url, expected in tests:
-            u = urlmap.FileURL(url, platform='linux')
+            u = urlmap.FileURL(url)
             with pytest.raises(ValueError):
                 assert u.unroot() == expected
 
@@ -151,7 +152,7 @@ class TestPath:
         )
 
         for path, normalized, unrooted in tests:
-            p = urlmap.Path(path, platform='linux')
+            p = urlmap.Path(path)
             assert p.path == normalized
             assert p.unroot() == unrooted
 
@@ -167,7 +168,7 @@ class TestMap:
         )
 
         for src, input_name, mapped_name in tests:
-            m = urlmap.Map(src, platform='linux')
+            m = urlmap.Map(src)
             assert m.input_name == input_name
             assert m.mapped_name == mapped_name
 

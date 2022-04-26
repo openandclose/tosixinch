@@ -6,7 +6,6 @@ Use comment structure in 'urls.txt' as directive.
 
 import logging
 import re
-import sys
 import urllib.parse
 
 from tosixinch import location
@@ -32,8 +31,8 @@ def _create_toc_url(title):
 class Node(location.Location):
     """Represent one non-blank line in ufile."""
 
-    def __init__(self, level, url, title, root=None, platform=sys.platform):
-        super().__init__(url, platform=platform)
+    def __init__(self, level, url, title, root=None):
+        super().__init__(url)
         self.level = level
         self.title = title
         self.root = root or self

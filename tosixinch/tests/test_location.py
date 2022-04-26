@@ -39,7 +39,7 @@ def test_slugify():
 class TestMakePath:
 
     def compare(self, url, fname, fnew):
-        loc= location.Location(url, platform='linux')
+        loc= location.Location(url)
         assert loc.fname == fname
         assert loc.fnew == fnew
 
@@ -109,7 +109,7 @@ class TestLocalReference:
 
     def compare(self, url, fname, ref):
         baseurl = 'http://aaa.org'
-        component = location.Component(url, baseurl, platform='linux')
+        component = location.Component(url, baseurl)
         assert component.fname == fname
         assert component.relative_reference == ref
 

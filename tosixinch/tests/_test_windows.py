@@ -21,7 +21,7 @@ def test_url2path_on_windows():
         ('a/fran%C3%A7ais', r'a\français'),
     )
     for url, expected in tests:
-        assert urlmap._url2path(url, platform='win32') == expected
+        assert urlmap._url2path(url) == expected
 
 
 def test_path2url_on_windows():
@@ -32,7 +32,7 @@ def test_path2url_on_windows():
         (r'a\français',     'a/fran%C3%A7ais'),
     )
     for path, expected in tests:
-        assert urlmap._path2url(path, platform='win32') == expected
+        assert urlmap._path2url(path) == expected
 
 
 def test_path2ref_on_windows(monkeypatch):
@@ -49,7 +49,7 @@ def test_path2ref_on_windows(monkeypatch):
     )
 
     for path, expected in tests:
-        ref = urlmap._path2ref(path, basepath, platform='win32')
+        ref = urlmap._path2ref(path, basepath)
         assert ref == expected
 
     basepath = r'c:\x\y'
@@ -61,7 +61,7 @@ def test_path2ref_on_windows(monkeypatch):
     )
 
     for path, expected in tests:
-        ref = urlmap._path2ref(path, basepath, platform='win32')
+        ref = urlmap._path2ref(path, basepath)
         assert ref == expected
 
 
@@ -77,7 +77,7 @@ class TestFileURLOnWindows:
         )
 
         for url, path, expected in tests:
-            u = urlmap.FileURL(url, platform='win32')
+            u = urlmap.FileURL(url)
             assert u.path == path
             assert u.unroot() == expected
 
@@ -95,7 +95,7 @@ class TestPathOnWindows:
         )
 
         for path, normalized, unrooted in tests:
-            p = urlmap.Path(path, platform='win32')
+            p = urlmap.Path(path)
             assert p.path == normalized
             assert p.unroot() == unrooted
 
@@ -111,7 +111,7 @@ class TestMapOnWindows:
         )
 
         for src, input_name, mapped_name in tests:
-            m = urlmap.Map(src, platform='win32')
+            m = urlmap.Map(src)
             assert m.input_name == input_name
             assert m.mapped_name == mapped_name
 
@@ -121,7 +121,7 @@ class TestMapOnWindows:
 class TestWindowsMakePath:
 
     def compare(self, url, fname, fnew):
-        loc = location.Location(url, platform='win32')
+        loc = location.Location(url)
         assert loc.fname == fname
         assert loc.fnew == fnew
         
@@ -174,7 +174,7 @@ class TestWindowsLocalReference:
 
     def compare(self, url, fname, ref):
         base = 'http://aaa.org'
-        comp= location.Component(url, base, platform='win32')
+        comp= location.Component(url, base)
         assert comp.fname == fname
         assert comp.relative_reference == ref
 

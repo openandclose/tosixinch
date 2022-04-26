@@ -6,7 +6,6 @@ Only called from _pcode.py.
 
 import html
 import re
-import sys
 
 import pygments
 import pygments.lexers
@@ -16,7 +15,6 @@ import pygments.token
 from tosixinch import location
 from tosixinch import textformat
 
-PLATFORM = sys.platform
 WORDSEP = re.compile(r'([\v\f ]+)')  # '\n\r\t' are already processed.
 
 

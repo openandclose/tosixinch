@@ -133,7 +133,7 @@ class Location(urlmap.Map):
 
     @property
     def slash_fnew(self):
-        return urlmap._path2url(self.fnew, platform=self.platform)
+        return urlmap._path2url(self.fnew)
 
     @property
     def idna_url(self):

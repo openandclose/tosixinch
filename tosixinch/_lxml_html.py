@@ -3,7 +3,6 @@
 
 import logging
 import re
-import sys
 
 from tosixinch import system
 
@@ -143,8 +142,8 @@ class HtmlWriter(system.Writer):
     From document object, write serialized text to fname.
     """
 
-    def __init__(self, fname, doc=None, text=None, platform=sys.platform):
-        super().__init__(fname, text, platform)
+    def __init__(self, fname, doc=None, text=None):
+        super().__init__(fname, text)
         self.doc = doc
 
     def _serialize(self):
@@ -158,18 +157,17 @@ class HtmlWriter(system.Writer):
         system.make_directories(self.fname)
 
 
-def read_text(fname, text=None, codings=None,
-        errors='strict', platform=sys.platform):
+def read_text(fname, text=None, codings=None, errors='strict'):
     """Return raw html text. Just exposing system.Reader.read()."""
-    reader = HtmlReader(fname, text, codings, errors, platform)
+    reader = HtmlReader(fname, text, codings, errors)
     reader._prepare()
     return reader.text
 
 
 def read(fname, text=None, codings=None,
-        errors='strict', platform=sys.platform):
-    return HtmlReader(fname, text, codings, errors, platform).read()
+        errors='strict'):
+    return HtmlReader(fname, text, codings, errors).read()
 
 
-def write(fname, doc=None, text=None, platform=sys.platform):
-    return HtmlWriter(fname, doc, text, platform).write()
+def write(fname, doc=None, text=None):
+    return HtmlWriter(fname, doc, text).write()

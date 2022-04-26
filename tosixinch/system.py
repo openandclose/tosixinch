@@ -149,9 +149,8 @@ def _in_current_dir(fname, base=os.curdir):
 class _File(object):
     """Common object for Reader and Writer."""
 
-    def __init__(self, fname, platform):
+    def __init__(self, fname):
         self.fname = fname
-        self.platform = platform
         self.encoding = 'utf-8'
 
 
@@ -159,8 +158,8 @@ class Reader(_File):
     """Text reader object."""
 
     def __init__(self, fname, text=None, codings=None,
-            errors='strict', length=None, platform=sys.platform):
-        super().__init__(fname, platform)
+            errors='strict', length=None):
+        super().__init__(fname)
         self.text = text
         self.codings = codings
         self.errors = errors
@@ -180,8 +179,8 @@ class Reader(_File):
 class Writer(_File):
     """Text writer object."""
 
-    def __init__(self, fname, text, platform=sys.platform):
-        super().__init__(fname, platform)
+    def __init__(self, fname, text):
+        super().__init__(fname)
         self.text = text
 
     def _prepare(self):
@@ -194,13 +193,12 @@ class Writer(_File):
             f.write(self.text)
 
 
-def read(fname, text=None, codings=None,
-        errors='strict', length=None, platform=sys.platform):
-    return Reader(fname, text, codings, errors, length, platform).read()
+def read(fname, text=None, codings=None, errors='strict', length=None):
+    return Reader(fname, text, codings, errors, length).read()
 
 
-def write(fname, text, platform=sys.platform):
-    return Writer(fname, text, platform).write()
+def write(fname, text):
+    return Writer(fname, text).write()
 
 
 # shell invocation -------------------------------
