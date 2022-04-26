@@ -304,12 +304,11 @@ class TestRef:
             ('http://a/b/c',        '../../../a/b/c/_'),
         )
 
-        for url, ref in tests:
+        for url, expected in tests:
             m = urlmap.Map(baseurl, input_type='url')
-            assert m.get_relative_reference(url) == ref
-
             r = urlmap.Ref(url, baseurl)
-            assert r.relative_reference == ref
+            assert m.get_relative_reference(r) == expected
+            assert r.relative_reference == expected
 
         baseurl = 'http://x/y/z.html'
 
@@ -322,9 +321,8 @@ class TestRef:
             ('a.html?q#f',          'a.html%3Fq#f'),
         )
 
-        for url, ref in tests:
+        for url, expected in tests:
             m = urlmap.Map(baseurl, input_type='url')
-            assert m.get_relative_reference(url) == ref
-
             r = urlmap.Ref(url, baseurl)
-            assert r.relative_reference == ref
+            assert m.get_relative_reference(r) == expected
+            assert r.relative_reference == expected

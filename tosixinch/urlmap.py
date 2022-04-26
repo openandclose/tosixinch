@@ -359,10 +359,8 @@ class Map(object):
         return self._get_relative_reference(other, name='fname')
 
     def _get_relative_reference(self, other, name):
-        if isinstance(other, str):
-            other = self.__class__(other, self.input_name, input_type='url')
-
-        url, fragment = _split_fragment(other.input_name)
+        # other is a url class with .url and .<name>
+        url, fragment = _split_fragment(other.url)
         path = getattr(other, name)
         basepath = getattr(self, name)
         ref = _path2ref(path, basepath, platform=self.platform)
@@ -383,20 +381,25 @@ class Ref(object):
     def __init__(self, url, baseurl, platform=sys.platform):
         if isinstance(baseurl, str):
             self._base_cls = self._CLS(
-                baseurl, input_type='url', platform=platform)
+                baseurl, input_type=None, platform=platform)
         else:
             self._base_cls = baseurl
 
-        if isinstance(url, str):
-            self._cls = self._CLS(
-                url, self._base_cls.input_name,
-                input_type='url', platform=platform)
-        else:
-            self._cls = url
-
+        self.platform = platform
+        self._cls = self._detect(url)
         self.url = self._cls.input_name
         self.fname = self._cls.fname
 
+    def _detect(self, url):
+        base = self._base_cls
+        if base.is_url():
+            input_type = 'url'
+        else:
+            input_type = None
+        return self._CLS(
+            url, baseurl=self._base_cls.input_name,
+            input_type=input_type, platform=self.platform)
+
     @property
     def relative_reference(self):
-        return self._base_cls.get_relative_reference(self._cls)
+        return self._base_cls.get_relative_reference(self)
