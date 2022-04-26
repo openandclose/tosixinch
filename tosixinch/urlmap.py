@@ -263,10 +263,6 @@ class Map(object):
     'map' here means to change somewhat neutral paths to actual filepaths.
     """
 
-    URL = URL
-    FileURL = FileURL
-    Path = Path
-
     INDEX = URL.INDEX
 
     def __init__(self, input_name,
@@ -279,20 +275,20 @@ class Map(object):
     def _detect(self, input_name, input_type):
         if input_type:
             if input_type == 'url':
-                return self.URL(input_name)
+                return URL(input_name)
             if input_type == 'fileurl':
-                return self.FileURL(input_name)
+                return FileURL(input_name)
             if input_type == 'path':
-                return self.Path(input_name)
+                return Path(input_name)
             fmt = ("got invalid input_type for class 'Map': %r"
                 "(must be one of 'url', 'fileurl' or 'path').")
             raise ValueError(fmt % input_type)
 
-        if self.URL.detect(input_name):
-            return self.URL(input_name)
-        if self.FileURL.detect(input_name):
-            return self.FileURL(input_name)
-        return self.Path(input_name)
+        if URL.detect(input_name):
+            return URL(input_name)
+        if FileURL.detect(input_name):
+            return FileURL(input_name)
+        return Path(input_name)
 
     def _map_name(self, name):
         # 'name' is always derived from a url, so it is ascii.
@@ -303,7 +299,7 @@ class Map(object):
         return name
 
     def is_url(self):
-        return isinstance(self._cls, self.URL)
+        return isinstance(self._cls, URL)
 
     def is_local(self):
         return not self.is_url()
