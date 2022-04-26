@@ -396,8 +396,9 @@ class Ref(object):
             input_type = 'url'
         else:
             input_type = None
+
         return self._CLS(
-            url, baseurl=self._base_cls.input_name,
+            url, baseurl=self._base_cls._baseurl or self._base_cls.input_name,
             input_type=input_type, platform=self.platform)
 
     @property
