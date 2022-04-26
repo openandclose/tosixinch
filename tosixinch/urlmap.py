@@ -125,25 +125,15 @@ class URL(object):
     MATCHER = re.compile('^https?://', flags=re.IGNORECASE)
     INDEX = '_'
 
-    def __init__(self, url, baseurl=None):
+    def __init__(self, url):
         self._url = url
-        self.baseurl = baseurl
+        self.url = urlno.URL(url).url
 
     @classmethod
     def detect(cls, url):
         if cls.MATCHER.match(url):
             return True
         return False
-
-    def _resolve(self, url, baseurl=None):
-        if baseurl:
-            url = urllib.parse.urljoin(baseurl, url)
-        return urlno.URL(url).url
-
-    @property
-    def url(self):
-        url = self._resolve(self._url, self.baseurl)
-        return url
 
     def _add_index(self, url):
         if '/' not in url:
@@ -176,15 +166,13 @@ class FileURL(object):
 
     def __init__(self, url):
         self._url = url
+        self.url = urlno.URL(url).url
 
     @classmethod
     def detect(cls, url):
         if url.lower().startswith('file:/'):
             return True
         return False
-
-    def _normalize(self, url):
-        return urlno.URL(url).url
 
     def _split_windows_drive(self, name):
         m = self.WINROOTPATH.match(name)
@@ -198,10 +186,6 @@ class FileURL(object):
 
     def unroot(self):
         return Path(self.path).unroot()
-
-    @property
-    def url(self):
-        return self._normalize(self._url)
 
     @property
     def path(self):
@@ -285,18 +269,17 @@ class Map(object):
 
     INDEX = URL.INDEX
 
-    def __init__(self, input_name, baseurl=None,
+    def __init__(self, input_name,
             input_type=None):
         self._input_name = input_name
-        self._baseurl = baseurl
         self.sep = '\\' if PLATFORM == 'win32' else '/'
-        self._cls = self._detect(input_name, baseurl, input_type)
+        self._cls = self._detect(input_name, input_type)
         self._hashed = False
 
-    def _detect(self, input_name, baseurl, input_type):
+    def _detect(self, input_name, input_type):
         if input_type:
             if input_type == 'url':
-                return self.URL(input_name, baseurl)
+                return self.URL(input_name)
             if input_type == 'fileurl':
                 return self.FileURL(input_name)
             if input_type == 'path':
@@ -306,7 +289,7 @@ class Map(object):
             raise ValueError(fmt % input_type)
 
         if self.URL.detect(input_name):
-            return self.URL(input_name, baseurl)
+            return self.URL(input_name)
         if self.FileURL.detect(input_name):
             return self.FileURL(input_name)
         return self.Path(input_name)
@@ -374,15 +357,22 @@ class Ref(object):
 
     _CLS = Map
 
-    def __init__(self, url, parent_url):
+    def __init__(self, url, parent_url, baseurl=None):
         if isinstance(parent_url, str):
             self._parent_cls = self._CLS(parent_url, input_type=None)
         else:
             self._parent_cls = parent_url
 
-        self._cls = self._detect(url)
+        self.baseurl = baseurl
+        self._url = self._resolve(url)
+
+        self._cls = self._detect(self._url)
         self.url = self._cls.input_name
         self.fname = self._cls.fname
+
+    def _resolve(self, url):
+        baseurl = self.baseurl or self._parent_cls.input_name
+        return urllib.parse.urljoin(baseurl, url)
 
     def _detect(self, url):
         base = self._parent_cls
@@ -391,8 +381,7 @@ class Ref(object):
         else:
             input_type = None
 
-        baseurl = self._parent_cls._baseurl or self._parent_cls.input_name
-        return self._CLS(url, baseurl=baseurl, input_type=input_type)
+        return self._CLS(url, input_type=input_type)
 
     @property
     def relative_reference(self):

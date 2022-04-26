@@ -148,10 +148,11 @@ class BaseResolver(object):
     LINK_ATTRS = ('cite', 'href', 'src')
     COMP_ATTRS = (('img', 'src'),)  # tuple of tag-attribute tuples
 
-    def __init__(self, doc, loc, locs):
+    def __init__(self, doc, loc, locs, baseurl=None):
         self.doc = doc
         self.loc = loc
         self.sibling_urls = {k: v for k, v in self._build_sibling_urls(locs)}
+        self.baseurl = baseurl
         self._comp_cache = {}
 
     def _build_sibling_urls(self, locs):
@@ -161,7 +162,8 @@ class BaseResolver(object):
 
     def _get_comp_cache(self, url):
         if not self._comp_cache.get(url):
-            self._comp_cache[url] = location.Component(url, self.loc)
+            comp = location.Component(url, self.loc, baseurl=self.baseurl)
+            self._comp_cache[url] = comp
         return self._comp_cache[url]
 
     def _get_url_data(self, el, attr):

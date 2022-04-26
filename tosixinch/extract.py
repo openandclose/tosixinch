@@ -58,7 +58,7 @@ class Extract(action.Extractor):
         doc = content.build_new_html(doctype=self.doctype, title=title)
 
         self.title = title
-        self._site._baseurl = baseurl
+        self.baseurl = baseurl
         self.doc = doc
 
     def guess_selection(self):
@@ -90,7 +90,9 @@ class Extract(action.Extractor):
         cleaner.run()
 
     def resolve(self):
-        Resolver(self.doc, self._site, self._conf.sites, self._conf).resolve()
+        doc, loc, locs = self.doc, self._site, self._conf.sites
+        baseurl, conf = self.baseurl, self._conf
+        Resolver(doc, loc, locs, baseurl, conf).resolve()
 
     def write(self):
         super().write(self.doc)
@@ -136,8 +138,8 @@ class ReadabilityExtract(Extract):
 class Resolver(content.BaseResolver):
     """Download components and rewrite links."""
 
-    def __init__(self, doc, loc, locs, conf):
-        super().__init__(doc, loc, locs)
+    def __init__(self, doc, loc, locs, baseurl, conf):
+        super().__init__(doc, loc, locs, baseurl)
         self._conf = conf
 
     def _get_component(self, el, comp):

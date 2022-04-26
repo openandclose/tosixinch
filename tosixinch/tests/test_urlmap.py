@@ -178,8 +178,8 @@ class TestRef:
     def test_names(self):
 
         def compare(parent_url, baseurl, url, expected):
-            m = urlmap.Map(parent_url, baseurl=baseurl)
-            r = urlmap.Ref(url, m)
+            m = urlmap.Map(parent_url)
+            r = urlmap.Ref(url, m, baseurl=baseurl)
             assert m.get_relative_reference(r) == expected
             assert r.relative_reference == expected
 
