@@ -52,13 +52,13 @@ class Extract(action.Extractor):
     def build(self):
         title = self.root.xpath('//title/text()')
         title = title[0] if title else content.DEFAULT_TITLE
-        baseurl = self.root.base or self.url
+        baseurl = self.root.base  # may be None
         logger.debug('[base url] %s', baseurl)
 
         doc = content.build_new_html(doctype=self.doctype, title=title)
 
         self.title = title
-        self.baseurl = baseurl
+        self._site._baseurl = baseurl
         self.doc = doc
 
     def guess_selection(self):

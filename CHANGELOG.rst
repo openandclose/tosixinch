@@ -28,6 +28,8 @@ Unreleased
 
 * Fix toc title (able to use unicode)
 
+* Fix link when baseurl (<base> tag) is provided
+
 
 v0.6.0 (2021-10-29)
 -------------------
