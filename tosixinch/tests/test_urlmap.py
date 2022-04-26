@@ -282,8 +282,14 @@ class TestRef:
 
     def test_names(self):
 
-        baseurl = 'http://x/y/z'
+        def compare(parent_url, baseurl, url, expected):
+            m = urlmap.Map(parent_url, baseurl=baseurl)
+            r = urlmap.Ref(url, m)
+            assert m.get_relative_reference(r) == expected
+            assert r.relative_reference == expected
 
+        baseurl = None
+        parent_url = 'http://x/y/z'
         tests = (
             ('',                    ''),
             ('#',                   ''),
@@ -303,15 +309,11 @@ class TestRef:
 
             ('http://a/b/c',        '../../../a/b/c/_'),
         )
-
         for url, expected in tests:
-            m = urlmap.Map(baseurl, input_type='url')
-            r = urlmap.Ref(url, baseurl)
-            assert m.get_relative_reference(r) == expected
-            assert r.relative_reference == expected
+            compare(parent_url, baseurl, url, expected)
 
-        baseurl = 'http://x/y/z.html'
-
+        baseurl = None
+        parent_url = 'http://x/y/z.html'
         tests = (
             ('a.html',              'a.html'),
             ('a.html#f',            'a.html#f'),
@@ -320,16 +322,11 @@ class TestRef:
             ('a.html?q',            'a.html%3Fq'),
             ('a.html?q#f',          'a.html%3Fq#f'),
         )
-
         for url, expected in tests:
-            m = urlmap.Map(baseurl, input_type='url')
-            r = urlmap.Ref(url, baseurl)
-            assert m.get_relative_reference(r) == expected
-            assert r.relative_reference == expected
+            compare(parent_url, baseurl, url, expected)
 
         parent_url = 'http://h/x/y/z.html'
         baseurl = 'http://h/x/y'
-
         tests = (
             ('a.html',              '../a.html'),
             ('a.html#f',            '../a.html#f'),
@@ -338,16 +335,11 @@ class TestRef:
             ('a.html?q',            '../a.html%3Fq'),
             ('a.html?q#f',          '../a.html%3Fq#f'),
         )
-
         for url, expected in tests:
-            m = urlmap.Map(parent_url, baseurl=baseurl, input_type='url')
-            r = urlmap.Ref(url, m)
-            assert m.get_relative_reference(r) == expected
-            assert r.relative_reference == expected
+            compare(parent_url, baseurl, url, expected)
 
         parent_url = 's/t/u.html'  # local system path
         baseurl = 'http://h/x/y'
-
         tests = (
             ('a.html',              '../../h/x/a.html'),
             ('a.html#f',            '../../h/x/a.html#f'),
@@ -356,9 +348,5 @@ class TestRef:
             ('a.html?q',            '../../h/x/a.html%3Fq'),
             ('a.html?q#f',          '../../h/x/a.html%3Fq#f'),
         )
-
         for url, expected in tests:
-            m = urlmap.Map(parent_url, baseurl=baseurl)
-            r = urlmap.Ref(url, m)
-            assert m.get_relative_reference(r) == expected
-            assert r.relative_reference == expected
+            compare(parent_url, baseurl, url, expected)
