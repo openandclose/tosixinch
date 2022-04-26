@@ -49,20 +49,6 @@ def test_url2path():
         assert urlmap._url2path(url, platform='linux') == path
 
 
-def test_url2path_on_windows():
-    tests = (
-        ('a/b?q#f',         r'a\b_q#f'),
-        ('a/b/?q',          r'a\b\_q'),
-        ('a/b?q/r',         r'a\b_q_r'),
-        ('a/b?q?r',         r'a\b_q_r'),
-        ('a/b%3Fq',         r'a\b_q'),
-        ('a/b%3Fq%3Fr',     r'a\b_q_r'),
-        ('a/fran%C3%A7ais', r'a\français'),
-    )
-    for url, expected in tests:
-        assert urlmap._url2path(url, platform='win32') == expected
-
-
 def test_path2url():
     tests = (
         ('a/b?q#f',     'a/b%3Fq%23f'),
@@ -75,17 +61,6 @@ def test_path2url():
     )
     for path, expected in tests:
         assert urlmap._path2url(path, platform='linux') == expected
-
-
-def test_path2url_on_windows():
-    tests = (
-        (r'a\b#f',          'a/b%23f'),
-        (r'a\b%3Fq',        'a/b%253Fq'),
-        (r'a\b%3Fq%3Fr',    'a/b%253Fq%253Fr'),
-        (r'a\français',     'a/fran%C3%A7ais'),
-    )
-    for path, expected in tests:
-        assert urlmap._path2url(path, platform='win32') == expected
 
 
 def test_path2ref():
@@ -118,36 +93,6 @@ def test_path2ref():
 
     for path, expected in tests:
         ref = urlmap._path2ref(path, basepath, platform='linux')
-        assert ref == expected
-
-
-def test_path2ref_on_windows(monkeypatch):
-
-    # ntpath._abspath_fallback uses this 'getcwd'.
-    monkeypatch.setattr(os, 'getcwd', lambda: r'c:\s\t')
-
-    basepath = r'x\y'
-
-    tests = (
-        (r'a\b',         '../a/b'),
-        (r'a\b?q#f',     '../a/b%3Fq%23f'),
-        (r'c:\a\b',      '../../../a/b'),
-    )
-
-    for path, expected in tests:
-        ref = urlmap._path2ref(path, basepath, platform='win32')
-        assert ref == expected
-
-    basepath = r'c:\x\y'
-
-    tests = (
-        (r'a\b',         '../s/t/a/b'),
-        (r'a\b?q#f',     '../s/t/a/b%3Fq%23f'),
-        (r'c:\a\b',      '../a/b'),
-    )
-
-    for path, expected in tests:
-        ref = urlmap._path2ref(path, basepath, platform='win32')
         assert ref == expected
 
 
@@ -194,23 +139,6 @@ class TestFileURL:
                 assert u.unroot() == expected
 
 
-class TestFileURLOnWindows:
-
-    def test_unroot(self):
-
-        tests = (
-            ('file:///C:/p.html',       r'c:\p.html',   r'c\p.html'),
-            ('file:///C:/p',            r'c:\p',        r'c\p'),
-            ('file:///C:p.html',        r'c:p.html',    r'c\p.html'),  # OK?
-            ('file:///C:/p.html?q',     r'c:\p.html_q', r'c\p.html_q'),
-        )
-
-        for url, path, expected in tests:
-            u = urlmap.FileURL(url, platform='win32')
-            assert u.path == path
-            assert u.unroot() == expected
-
-
 class TestPath:
 
     def test_unroot(self):
@@ -228,24 +156,6 @@ class TestPath:
             assert p.unroot() == unrooted
 
 
-class TestPathOnWindows:
-
-    def test_unroot(self, monkeypatch):
-
-        # ntpath._abspath_fallback uses this 'getcwd'.
-        monkeypatch.setattr(os, 'getcwd', lambda: r'c:\s\t')
-
-        tests = (
-            (r'a\b',        r'c:\s\t\a\b',      r'c\s\t\a\b'),
-            (r'c:\a\b',     r'c:\a\b',          r'c\a\b'),
-        )
-
-        for path, normalized, unrooted in tests:
-            p = urlmap.Path(path, platform='win32')
-            assert p.path == normalized
-            assert p.unroot() == unrooted
-
-
 class TestMap:
 
     def test_names(self):
@@ -258,22 +168,6 @@ class TestMap:
 
         for src, input_name, mapped_name in tests:
             m = urlmap.Map(src, platform='linux')
-            assert m.input_name == input_name
-            assert m.mapped_name == mapped_name
-
-
-class TestMapOnWindows:
-
-    def test_names(self):
-
-        tests = (
-            ('http://a/b',      'http://a/b',       r'a\b\_'),
-            ('file:///c:a/b',   r'c:a\b',           r'c\a\b'),
-            (r'c:a\b',          r'c:a\b',           r'c\a\b'),
-        )
-
-        for src, input_name, mapped_name in tests:
-            m = urlmap.Map(src, platform='win32')
             assert m.input_name == input_name
             assert m.mapped_name == mapped_name
 
