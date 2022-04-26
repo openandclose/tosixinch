@@ -222,7 +222,7 @@ class FileURL(object):
 class Path(object):
     """Unroot paths."""
 
-    ROOTPATH = re.compile('^//?(/*)')
+    ROOTPATH = re.compile('^/(/*)(?=[^/]*)')
     WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?(?=[^/\\])')
 
     def __init__(self, path, platform=sys.platform):
