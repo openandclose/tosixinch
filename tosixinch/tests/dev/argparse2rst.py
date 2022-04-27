@@ -19,10 +19,11 @@ def print_args(print=print):
     _, parser = tosixinch.main._get_parser()
     formatter = parser._get_formatter()
     for g in parser._action_groups:
-        # if g.title in ('general', 'actions', 'programs'):
-        if g.title in ('positional arguments', 'optional arguments'):
+        # if g.title in ('positional arguments', 'optional arguments', 'options'):
+        #     continue
+        if not g._group_actions:
             continue
-        # print('**%s**:\n' % g.title.upper())
+
         t = g.title.title()
         underline = '-' * len(t)
         print('%s\n%s\n' % (t, underline))
