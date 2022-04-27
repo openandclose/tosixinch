@@ -196,7 +196,7 @@ guess=              : if there is no matched url, use this xpath for content sel
 *full_image=        : pixel size to add special class attributes to images (default: 200)
                     200
 
-*add_binary_extensions= : add or subtract to-skip-binaries-extension list (f: plus_binaries)
+add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: plus_binaries)
                         :: f: plus_binaries
 
 *add_clean_tags=    : add or subtract to-delete-tag list (f: plus)
