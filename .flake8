@@ -2,7 +2,7 @@
 [flake8]
 count = True
 exclude =   .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.nox,.eggs,*.egg,
-            docs,tests,.nonpubfiles,temp
+            docs,tests,.nonpubfiles,temp,templite.py
 # max-complexity = 10
 max-complexity = 25
 # hang-closing = True

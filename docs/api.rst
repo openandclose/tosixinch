@@ -23,8 +23,5 @@ templite
     including docstrings here.
     see `templite.py <topics.html#script-templite.py>`__
 
-    Small changes are made to work independently.
-
-
 .. automodule:: tosixinch.templite
     :members:

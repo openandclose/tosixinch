@@ -1,21 +1,3 @@
-
-# -------------------------------------------------------------------
-# This section is by openandclose (https://github.com/openandclose).
-#
-# This module is copied from Ned Batchelder's Coverage.py.
-# https://github.com/nedbat/coveragepy/blob/master/coverage/templite.py
-# 2de1c8f03fea7d234092508622ed84b7d03a079d
-
-# Small changes are made to work independently.
-#
-# - Add this section
-# - Cut Python2 code
-# - Reformat a few blank or long lines (to suit my PEP8 settings)
-#
-# -------------------------------------------------------------------
-# End of section by openandclose
-
-
 # Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
 # For details: https://github.com/nedbat/coveragepy/blob/master/NOTICE.txt
 
@@ -33,13 +15,15 @@ import re
 
 class TempliteSyntaxError(ValueError):
     """Raised when a template has a syntax error."""
+    pass
 
 
 class TempliteValueError(ValueError):
     """Raised when an expression won't evaluate in a template."""
+    pass
 
 
-class CodeBuilder(object):
+class CodeBuilder:
     """Build source code conveniently."""
 
     def __init__(self, indent=0):
@@ -85,7 +69,7 @@ class CodeBuilder(object):
         return global_namespace
 
 
-class Templite(object):
+class Templite:
     """A simple template renderer, for a nano-subset of Django syntax.
 
     Supported constructs are extended variable access::
@@ -127,7 +111,6 @@ class Templite(object):
         })
 
     """
-
     def __init__(self, text, *contexts):
         """Construct a Templite with the given `text`.
 
@@ -192,7 +175,7 @@ class Templite(object):
 
                     words = token[start:end].strip().split()
                     if words[0] == 'if':
-                        # An if statement: evaluate the expression to determine if.  # noqa: E501
+                        # An if statement: evaluate the expression to determine if.
                         if len(words) != 2:
                             self._syntax_error("Don't understand if", token)
                         ops_stack.append('if')
@@ -205,7 +188,7 @@ class Templite(object):
                         ops_stack.append('for')
                         self._variable(words[1], self.loop_vars)
                         code.add_line(
-                            "for c_%s in %s:" % (
+                            "for c_{} in {}:".format(
                                 words[1],
                                 self._expr_code(words[3])
                             )
@@ -245,7 +228,7 @@ class Templite(object):
         flush_output()
 
         for var_name in self.all_vars - self.loop_vars:
-            vars_code.add_line("c_%s = context[%r]" % (var_name, var_name))
+            vars_code.add_line(f"c_{var_name} = context[{var_name!r}]")
 
         code.add_line('return "".join(result)')
         code.dedent()
@@ -258,12 +241,12 @@ class Templite(object):
             code = self._expr_code(pipes[0])
             for func in pipes[1:]:
                 self._variable(func, self.all_vars)
-                code = "c_%s(%s)" % (func, code)
+                code = f"c_{func}({code})"
         elif "." in expr:
             dots = expr.split(".")
             code = self._expr_code(dots[0])
             args = ", ".join(repr(d) for d in dots[1:])
-            code = "do_dots(%s, %s)" % (code, args)
+            code = f"do_dots({code}, {args})"
         else:
             self._variable(expr, self.all_vars)
             code = "c_%s" % expr
@@ -271,7 +254,7 @@ class Templite(object):
 
     def _syntax_error(self, msg, thing):
         """Raise a syntax error using `msg`, and showing `thing`."""
-        raise TempliteSyntaxError("%s: %r" % (msg, thing))
+        raise TempliteSyntaxError(f"{msg}: {thing!r}")
 
     def _variable(self, name, vars_set):
         """Track that `name` is used as a variable.
@@ -305,10 +288,10 @@ class Templite(object):
             except AttributeError:
                 try:
                     value = value[dot]
-                except (TypeError, KeyError):
+                except (TypeError, KeyError) as exc:
                     raise TempliteValueError(
-                        "Couldn't evaluate %r.%s" % (value, dot)
-                    )
+                        f"Couldn't evaluate {value!r}.{dot}"
+                    ) from exc
             if callable(value):
                 value = value()
         return value
