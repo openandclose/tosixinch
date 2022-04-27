@@ -11,7 +11,7 @@ class TestParse:
             '--nouserdir', '--input', 'http://example.com',
             '--add-binary-extensions']
 
-        num = 238  # number of items in the extension list
+        num = 258  # number of items in the extension list
 
         args = base_args + ['aaa']
         conf = tosixinch.main._main(args=args)
