@@ -118,6 +118,13 @@ def _add_fragment(url, fragment):
     return url
 
 
+def _get_relative_reference(path, basepath, url):
+    """Create from path and basepath, relative URL reference."""
+    url, fragment = _split_fragment(url)
+    ref = _path2ref(path, basepath)
+    return _add_fragment(ref, fragment)
+
+
 class URL(object):
     """Unroot URLs."""
 
@@ -334,17 +341,6 @@ class Map(object):
         else:
             return self.mapped_name
 
-    def get_relative_reference(self, other):
-        return self._get_relative_reference(other, name='fname')
-
-    def _get_relative_reference(self, other, name):
-        # other is a url class with .url and .<name>
-        url, fragment = _split_fragment(other.url)
-        path = getattr(other, name)
-        basepath = getattr(self, name)
-        ref = _path2ref(path, basepath)
-        return _add_fragment(ref, fragment)
-
 
 class Ref(object):
     """Create relative reference from url and parent_url.
@@ -385,4 +381,5 @@ class Ref(object):
 
     @property
     def relative_reference(self):
-        return self._parent_cls.get_relative_reference(self)
+        path, basepath, url = self.fname, self._parent_cls.fname, self.url
+        return _get_relative_reference(path, basepath, url)

@@ -34,8 +34,9 @@ DOWNLOAD_DIR = '_htmls'
 PUNCTUATION_RE = re.compile(r'[!"#$%&\'()*+,./:;<=>?@[\\\]^`{|}~]')
 
 
-def path2ref(path, basepath):
-    return urlmap._path2ref(path, basepath)
+# Wrap urlmap functions for higher modules to not call them directly.
+path2ref = urlmap._path2ref
+get_relative_reference = urlmap._get_relative_reference
 
 
 # based from: django/django/utils/text.py
@@ -212,6 +213,11 @@ class Component(urlmap.Ref):
     @property
     def idna_url(self):
         return self.url
+
+    @property
+    def relative_reference(self):
+        path, basepath, url = self.fname, self._parent_cls.fnew, self.url
+        return urlmap._get_relative_reference(path, basepath, url)
 
 
 class ReplacementParser(object):

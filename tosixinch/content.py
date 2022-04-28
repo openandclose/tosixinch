@@ -157,7 +157,8 @@ class BaseResolver(object):
 
     def _build_sibling_urls(self, locs):
         for loc in locs:
-            ref = self.loc._get_relative_reference(loc, name='fnew')
+            path, basepath, url = loc.fnew, self.loc.fnew, loc.url
+            ref = location.get_relative_reference(path, basepath, url)
             yield loc.url, ref
 
     def _get_comp_cache(self, url):
