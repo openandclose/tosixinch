@@ -501,7 +501,7 @@ class Conf(object):
 
         blankline = None
         for site in self.sites:
-            if site.is_local:
+            if site.is_local():
                 if not blankline:
                     print()
                     print('local files:')
