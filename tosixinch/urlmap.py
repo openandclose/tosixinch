@@ -295,11 +295,11 @@ class Map(object):
                 return hashlib.sha1(name.encode('utf-8')).hexdigest()
         return name
 
-    def is_url(self):
+    def is_remote(self):
         return isinstance(self._cls, URL)
 
     def is_local(self):
-        return not self.is_url()
+        return not self.is_remote()
 
     @property
     def url(self):
@@ -374,7 +374,7 @@ class Ref(object):
 
     def _detect(self, url):
         base = self._parent_cls
-        if base.is_url():
+        if base.is_remote():
             input_type = 'url'
         else:
             input_type = None
