@@ -295,11 +295,13 @@ class Map(object):
                 return hashlib.sha1(name.encode('utf-8')).hexdigest()
         return name
 
+    @property
     def is_remote(self):
         return isinstance(self._cls, URL)
 
+    @property
     def is_local(self):
-        return not self.is_remote()
+        return not self.is_remote
 
     @property
     def url(self):
@@ -308,7 +310,7 @@ class Map(object):
 
     @property
     def input_name(self):
-        if self.is_local():
+        if self.is_local:
             # Note: FileURL returns system path.
             return self._cls.path
         else:
@@ -327,7 +329,7 @@ class Map(object):
         When c.f. retrieving files, it is convenient
         if local resources (fileurl and path) skip to create new names.
         """
-        if self.is_local():
+        if self.is_local:
             return self.input_name
         else:
             return self.mapped_name
@@ -374,7 +376,7 @@ class Ref(object):
 
     def _detect(self, url):
         base = self._parent_cls
-        if base.is_remote():
+        if base.is_remote:
             input_type = 'url'
         else:
             input_type = None

@@ -377,7 +377,7 @@ class Site(location.Location):
 
     @property
     def shortname(self):
-        if self.is_local():
+        if self.is_local:
             num = int(self.general.trimdirs)
             sep = os.sep
         else:
@@ -501,7 +501,7 @@ class Conf(object):
 
         blankline = None
         for site in self.sites:
-            if site.is_local():
+            if site.is_local:
                 if not blankline:
                     print()
                     print('local files:')

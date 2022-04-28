@@ -166,7 +166,7 @@ class Location(urlmap.Map):
             return url
 
     def check_url(self):
-        if self.is_local():
+        if self.is_local:
             url = self.url
             if not os.path.exists(url):
                 raise FileNotFoundError('[url] File not found: %r' % url)
