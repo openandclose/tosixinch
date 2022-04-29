@@ -160,6 +160,10 @@ Programs
 
     specify css files, for converter commandline css option
 
+.. option:: --cnvopts CNVOPTS
+
+    specify converter commandline options
+
 Configs
 -------
 

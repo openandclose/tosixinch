@@ -125,6 +125,9 @@ cnvpath=            : specify converter executable path. also need to set conver
 css2=               : specify css files, for converter commandline css option
                     :: f: comma
 
+cnvopts=            : specify converter commandline options
+                    :: f: cmd
+
 
 [general]
 
