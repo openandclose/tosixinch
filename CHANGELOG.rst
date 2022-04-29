@@ -22,6 +22,8 @@ Unreleased
 
 * Update and Change slugify, add more word separation ('-')
 
+* Add minus number feature to --trimdirs option
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

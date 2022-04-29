@@ -104,7 +104,8 @@ def _get_conf(args, conf=None):
     if not args:
         usage(parser)
 
-    _args = configfetch.minusadapter(parser, matcher='--add-.+', args=args)
+    _args = configfetch.minusadapter(
+        parser, matcher='(--add-.+|--trimdirs)', args=args)
     args = parser.parse_args(_args)
 
     conf_parser = _build_conf_parser(conf)

@@ -381,10 +381,13 @@ class Site(location.Location):
             num = int(self.general.trimdirs)
             sep = os.sep
         else:
-            num = 2  # remove '_htmls' and host
+            num = 2  # remove scheme ('https://')
             sep = '/'
         parts = self.url.split(sep)
-        num = min(num, len(parts) - 1)
+        if num > -1:
+            num = min(num, len(parts) - 1)
+        else:
+            num = max(len(parts) - abs(num), 0)
         return sep.join(parts[num:])
 
     @cached_property

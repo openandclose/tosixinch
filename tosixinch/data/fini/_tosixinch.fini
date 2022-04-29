@@ -222,7 +222,9 @@ textwidth=          : width (character numbers) for rendering non-prose text
 textindent=         : line continuation marker for rendering non-prose text
                     '                    --> '
 
-*trimdirs=          : remove leading directories from local text name to shorten title
+*trimdirs=          : if plus, remove leading directories from PDF title of local text name.
+                    : if minus, remove leading directories to reduce path segments to that abs number.
+                    : (default: 3)
                     3
 
 raw=                : use input paths as is (no url transformation, and only for local files)

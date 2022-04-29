@@ -253,7 +253,7 @@ Configs
 
 .. option:: --trimdirs TRIMDIRS
 
-    remove leading directories from local text name to shorten title
+    if plus, remove leading directories from PDF title of local text name. if minus, remove leading directories to reduce path segments to that abs number. (default: 3)
 
 .. option:: --raw
 

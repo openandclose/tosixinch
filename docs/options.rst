@@ -328,17 +328,34 @@ General Section
 
     | (``3``)
 
-    Specify the number of directories to remove local text filename.
-    Since text files don't have titles or h1 to put them in pdf bookmarks,
-    the script passes on full filepaths as their names.
-    They tend to be very long, so some means to shorten them is desirable.
+    Shorten PDF table of contents title, if it is a local text file.
 
-    This option is only for local text files.
-    Remote text files' names are just urls (schemes are removed).
+    PDF toc titles for Local text files are made from their full path.
+    If this trimdirs option value is plus,
+    remove that number from leading path segments.
+    If it is minus, remove leading path segments to that number.
+
+    .. code-block:: none
+
+        --trimdirs 0
+        aaa/bbb/ccc/ddd/eee/fff
+        --trimdirs 2  # remove two segments
+        ccc/ddd/eee/fff
+        --trimdirs -2  # reduce to two segments
+        eee/fff
+
+        # c.f. no bounding errors
+        --trimdirs 100
+        fff
+        --trimdirs -100
+        aaa/bbb/ccc/ddd/eee/fff
+
+    Note html files always use html title (actual, or placeholder ``notitle``).
+    Remote text (non-html) files use the URL with scheme ('https://') stripped. 
 
     C.f. `--check <commandline.html#cmdoption-c>`__ commandline option
-    prints out local files.
-    They include *html* files, so it is not perfect,
+    prints out this shortened names for local files.
+    They include URLs, so it is not perfect,
     but it can be useful for
     checking and adjusting this ``trimdirs`` option.
 
