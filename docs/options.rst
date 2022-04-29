@@ -639,8 +639,6 @@ commandline has the same options, to override.
     The name or full path for the command as you type it in the shell.
     For ordinary installed ones, only the name would suffice.
 
-    Currently ``'~'`` is not expanded.
-
 .. confopt:: css2
 
     | (None)
