@@ -12,6 +12,8 @@ Unreleased
 
 * Change @page and <body> margin slightly (for weasyprint)
 
+* Add --inspect action, cutting --link and --news
+
 **Add:**
 
 * Add github discussions to sample

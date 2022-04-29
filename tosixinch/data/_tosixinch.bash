@@ -25,10 +25,6 @@ _tosixinch()
             COMPREPLY=( $( compgen -W 'html prose nonprose python' -- "$cur" ) )
             return
             ;;
-        --news)
-            COMPREPLY=( $( compgen -W 'hackernews' -- "$cur" ) )
-            return
-            ;;
         --orientation)
             COMPREPLY=( $( compgen -W 'portrait landscape' -- "$cur" ) )
             return
@@ -49,7 +45,7 @@ _tosixinch()
 
     $split && return
 
-    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --browser-engine --check --cnvpath --convert --css2 --download --elements-to-keep-attrs --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --ftype --full-image --guess --help --input --javascript --landscape-size --line-height --link --lxml --news --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --quiet --raw --readability --readability-only --selenium-chrome-path --selenium-firefox-path --textindent --textwidth --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
+    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --browser-engine --check --cnvpath --convert --css2 --download --elements-to-keep-attrs --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --ftype --full-image --guess --help --input --inspect --javascript --landscape-size --line-height --lxml --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --quiet --raw --readability --readability-only --selenium-chrome-path --selenium-firefox-path --textindent --textwidth --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
 
 } &&

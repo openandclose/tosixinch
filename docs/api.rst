@@ -14,6 +14,13 @@ process.sample
     :members:
 
 
+process.inspect_sample
+----------------------
+
+.. automodule:: tosixinch.process.inspect_sample
+    :members:
+
+
 templite
 --------
 

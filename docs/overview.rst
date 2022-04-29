@@ -38,11 +38,10 @@ So, the three invocations below make no difference. ::
 
 ``single actions`` are:
     * `appcheck <commandline.html#cmdoption-a>`__
-    * `news  <commandline.html#cmdoption-news>`__
     * `browser <commandline.html#cmdoption-b>`__
     * `check <commandline.html#cmdoption-c>`__
     * `printout  <commandline.html#cmdoption-printout>`__
-    * `link  <commandline.html#cmdoption-link>`__
+    * `inspect  <commandline.html#cmdoption-inspect>`__
 
 The script executes only the first ``single action``
 (if there are many, or mixed with sequential ones),

@@ -75,11 +75,8 @@ check=              : print matched url settings and exit (so you have to supply
 toc=                : create toc htmls and a toc url list. conflicts with '--input'.
                     :: action: store_true
 
-link=               : get links in documents from urls (experimental)
+inspect=            : parse downloaded htmls, and do arbitrary things user specified
                     :: action: store_true
-
-news=               : fetch urls from socialnews site (experimental)
-                    :: choices: hackernews
 
 printout=           : print filenames the scripts' actions would create
                     : (0=url, 1=Downloaded_Files, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)

@@ -920,13 +920,24 @@ So section names themselves can be arbitrary.
                 element.click()
                 time.sleep(1)
 
-.. confopt:: link
+.. confopt:: inspect
 
-    | (``//a/@href``)
+    | (``get_links``)
     | ``[LINE]``
 
     (Experimental)
 
-    When action is ``link``,
-    the script prints some xpath content (must be strings) for each url,
-    reading from this option.
+    When action is ``inspect``,
+    the script runs functions this option specifies.
+
+    This is similar to ``extract`` action's ``process``,
+    but ``inspect`` does not do anything before and after
+    (select, exclude ..., write to file).
+    
+    Create Python functions in the same folder as ``process``,
+    original non-extracted html object is provided,
+    as the first argument ``doc``, and user do something,
+    mostly print something.
+
+    See `process.inspect_sample <api.html#module-tosixinch.process.inspect_sample>`__
+    for a few sample functions.

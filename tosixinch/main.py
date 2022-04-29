@@ -145,11 +145,6 @@ def _main(args=sys.argv[1:], conf=None):
     if args.appcheck:
         conf.print_appconf()
         return
-    elif args.news:
-        from tosixinch import news
-        ret = news.socialnews(args.news)
-        print(ret)
-        return
 
     if not conf.sites.urls:
         if ufile == DEFAULT_UFILE:
@@ -168,9 +163,9 @@ def _main(args=sys.argv[1:], conf=None):
     if args.printout:
         conf.print_files(args.printout)
         return
-    if args.link:
-        from tosixinch import link
-        link.print_links(conf)
+    if args.inspect:
+        from tosixinch import inspect
+        inspect.run(conf, conf.sites)
         return
 
     action.main_dispatch(conf, args)

@@ -111,15 +111,9 @@ Actions
 
     create toc htmls and a toc url list. conflicts with '--input'.
 
-.. option:: --link
+.. option:: --inspect
 
-    get links in documents from urls (experimental)
-
-.. option:: --news {hackernews}
-
-    fetch urls from socialnews site (experimental)
-
-        choices=hackernews
+    parse downloaded htmls, and do arbitrary things user specified
 
 .. option:: --printout {0,1,2,3,all}
 

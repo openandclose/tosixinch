@@ -20,8 +20,8 @@ cookie=             :: f: line
 
 dprocess=           :: f: line
 
-link=               //a/@href
-                    # //iframe/@src[contains(., "youtube.com")]
+inspect=            :: f: line
+                    get_links
 
 
 [scriptdefault]
