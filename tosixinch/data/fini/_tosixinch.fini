@@ -120,9 +120,9 @@ wkhtmltopdf=        : convert by wkhtmltopdf
                     :: const: wkhtmltopdf
                     :: dest: converter
 
-cnvpath=            : override converter executable path. also need to set converter itself
+cnvpath=            : specify converter executable path. also need to set converter itself
 
-css2=               : add converter specific css
+css2=               : specify css files, for converter commandline css option
                     :: f: comma
 
 

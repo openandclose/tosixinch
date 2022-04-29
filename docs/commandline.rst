@@ -154,11 +154,11 @@ Programs
 
 .. option:: --cnvpath CNVPATH
 
-    override converter executable path. also need to set converter itself
+    specify converter executable path. also need to set converter itself
 
 .. option:: --css2 CSS2
 
-    add converter specific css
+    specify css files, for converter commandline css option
 
 Configs
 -------

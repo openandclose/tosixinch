@@ -620,14 +620,15 @@ are converters sections.
 They have common options.
 
 When ``convert``, only one converter is active,
-and only the options of that converter's section are used.
+and only the options of that converter's section are looked-up.
+
+commandline has the same options, to override.
 
 .. note ::
 
-    For ``Default Value``, only ones of ``prince`` section are provided here.
+    To see the current values for each converter::
 
-    You can see defaults of other converters e.g. ::
-
+        $ tosixinch -a --prince
         $ tosixinch -a --weasyprint
         $ tosixinch -a --wkhtmltopdf
 
