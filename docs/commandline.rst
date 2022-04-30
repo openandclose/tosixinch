@@ -101,11 +101,11 @@ Actions
 
 .. option:: -b, --browser
 
-    open (first) extracted html in browser and exit
+    open (first) extracted html in browser, and exit
 
 .. option:: -c, --check
 
-    print matched url settings and exit (so you have to supply url some way)
+    print matched url settings, and exit (so you have to supply url some way)
 
 .. option:: --toc
 

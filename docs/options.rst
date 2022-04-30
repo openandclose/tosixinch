@@ -926,7 +926,7 @@ So section names themselves can be arbitrary.
 
     (Experimental)
 
-    When action is ``inspect``,
+    When action is ``inspect`` (``--inspect`` is in commandline),
     the script runs functions this option specifies.
 
     This is similar to ``extract`` action's ``process``,

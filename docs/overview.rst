@@ -10,11 +10,11 @@ The script consists of several, independent actions (subcommands).
 An action is either a ``sequential action`` or a ``single action``.
 
 ``sequential actions`` are:
-    * `download <#cmdoption-arg-download>`__
-    * `extract <#cmdoption-arg-extract>`__
+    * `download <#download>`__
+    * `extract <#extract>`__
     * `toc <topics.html#toc>`__ (make better table of contents)
-    * `convert <#cmdoption-arg-convert>`__
-    * `view <options.html#cmdoption-arg-viewcmd>`__ (open pdf viewer)
+    * `convert <#convert>`__
+    * `view <topics.html#viewcmd>`__ (open pdf viewer)
 
 .. note::
 
@@ -38,10 +38,28 @@ So, the three invocations below make no difference. ::
 
 ``single actions`` are:
     * `appcheck <commandline.html#cmdoption-a>`__
+
+      Print application settings, and exit.
+
+      They are global, with commandline evaluation,
+      but without site-specific option evaluation.
+      
     * `browser <commandline.html#cmdoption-b>`__
+
     * `check <commandline.html#cmdoption-c>`__
-    * `printout  <commandline.html#cmdoption-printout>`__
-    * `inspect  <commandline.html#cmdoption-inspect>`__
+
+      Print matched url settings and, exit.
+      
+      You have to supply url some way (``-i`` or ``-f``).
+      If input url is only one,
+      print all the option values.
+      Otherwise, print just section name and ``match`` option.
+
+    * `printout <commandline.html#cmdoption-printout>`__
+    * `inspect <commandline.html#cmdoption-inspect>`__
+      
+      Do something, according to site config option
+      `inspect <options.html#confopt-inspect>`__
 
 The script executes only the first ``single action``
 (if there are many, or mixed with sequential ones),
