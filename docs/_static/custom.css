@@ -19,6 +19,6 @@ ul li {
   list-style-type: disc;
 }
 
-li > p:last-child {
+li > p:last-child, .confopt, .dword {
   margin-bottom: 1em;
 }
