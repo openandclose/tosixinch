@@ -522,10 +522,6 @@ def convert_permalink_sign(doc, repl=''):
 
 def hackernews_indent(doc):
     """Narrow default indent widths, they are too wide for e-readers."""
-    for t in doc.xpath('//*[@width]'):
-        if not t.xpath('../img[@src="s.gif"]'):
-            t.attrib.pop('width')
-
     for d in doc.xpath('//td[@class="ind"]'):
         width = d.xpath('./img/@width')
         width = width[0] if width else '0'
@@ -581,11 +577,6 @@ def hackernews_indent(doc):
 
         body = tr.getparent()
         body.replace(tr, block)
-
-    # /item? and /threads? urls are different
-    if doc.xpath('./body/table[1]'):
-        table = doc.xpath('./body/table[1]')[0]
-        wrap_tag(table, 'p')
 
     # Add sitename hint to h1
     replace_h1(doc, r'(^.+?) \| .*', r'hn - \1')
