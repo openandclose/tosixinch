@@ -529,11 +529,20 @@ def hackernews_indent(doc):
     for d in doc.xpath('//td[@class="ind"]'):
         width = d.xpath('./img/@width')
         width = width[0] if width else '0'
-        dd = d.getparent()
-        comhead = dd.xpath('.//span[@class="comhead"]')[0]
-        comhead.classes.add(KEEP_STYLE)
-        comhead.set('style', 'font-weight:bold;')
+        tr = d.getparent()
 
+        # changing image width (px) to padding-left (px),
+        # reducing number arbitrarily.
+        block = fromstring(
+            '<div style="margin-bottom:1em;padding-left:%dpx;"></div>' % (
+                int(int(width) / 4)))
+        block.classes.add(KEEP_STYLE)
+
+        comhead = tr.xpath('.//span[@class="comhead"]')[0]
+        comhead.set('style', 'font-weight:bold;')
+        comhead.classes.add(KEEP_STYLE)
+
+        # removing unnecessary links
         user = comhead.xpath('./a[@class="hnuser"]')
         if user:
             user = user[0]
@@ -563,21 +572,15 @@ def hackernews_indent(doc):
                 onstory.text += a.text
                 onstory.remove(a)
 
-        comment = dd.xpath('.//div[@class="comment"]')
-        # sometimes comment is '[]' (javascript folded)
-        if comment != []:
-            comment = comment[0]
-        # changing image width (px) to padding-left (px),
-        # dividing number arbitrarily.
-        block = fromstring(
-            # '<div class="%s" style="padding-left:%dpx;"></div>' % (
-            '<div class="%s" style="margin-bottom:1em;padding-left:%dpx;"></div>' % (  # noqa: E501
-                KEEP_STYLE, int(int(width) / 4)))
         block.append(comhead)
-        if comment != []:
-            block.append(comment)
-        ddd = dd.getparent()
-        ddd.replace(dd, block)
+
+        comment = tr.xpath('.//div[@class="comment"]')
+        if comment:  # sometimes comment is folded
+            for c in comment:
+                block.append(c)
+
+        body = tr.getparent()
+        body.replace(tr, block)
 
     # /item? and /threads? urls are different
     if doc.xpath('./body/table[1]'):
@@ -585,8 +588,7 @@ def hackernews_indent(doc):
         wrap_tag(table, 'p')
 
     # Add sitename hint to h1
-    h1 = doc.xpath('./body/h1')[0]
-    h1.text = 'hn - ' + h1.text.split(' | ')[0]
+    replace_h1(doc, r'(^.+?) \| .*', r'hn - \1')
 
 
 def reddit_indent(doc):
