@@ -179,7 +179,7 @@ General Section
 
 .. confopt:: defaultprocess \*
 
-    | (``add_h1, youtube_video_to_thumbnail``)
+    | (``add_h1, youtube_video_to_thumbnail, convert_permalink_sign``)
     | ``[LINE]``
 
     Before site specific ``process`` functions,
@@ -192,9 +192,16 @@ General Section
 
         * ``add_h1``: If there is no ``<h1>``,
           make ``<h1>`` tag from ``<title>`` tag text.
-          It is to help make pdf bookmarks (TOC).
+          It is to make better pdf bookmarks (TOC).
         * ``youtube_video_to_thumbnail``: Change embedded youtube video object
           to thumbnail image.
+        * ``convert_permalink_sign``: Remove permalink sign ('¶'),
+          for a few class ('headerlink' etc.).
+          Python documents tend to use them,
+          and On pdf, they are always visible, rather noisy.
+
+    When the default functions is undesirable in some site,
+    please override this option in user ``site.ini``.
 
 .. confopt:: full_image \*
 
