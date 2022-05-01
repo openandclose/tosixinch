@@ -533,6 +533,36 @@ def hackernews_indent(doc):
         comhead = dd.xpath('.//span[@class="comhead"]')[0]
         comhead.classes.add(KEEP_STYLE)
         comhead.set('style', 'font-weight:bold;')
+
+        user = comhead.xpath('./a[@class="hnuser"]')
+        if user:
+            user = user[0]
+            del user.attrib['href']
+            user.tag = 'span'
+        date = comhead.xpath('./span[@class="age"]')
+        if date:
+            date = date[0]
+            a = date.xpath('./a')
+            if a:
+                a = a[0]
+                date.text = a.text
+                date.remove(a)
+        togg = comhead.xpath('./a[@class=="togg"]')
+        if togg:
+            # simply removing 'togg' breaks tag structures,
+            # maybe shouldn't touch direct child
+            # comhead.remove(togg[0])  # NG
+            togg[0].text = ''
+        # '/threads?id=username' pattern
+        onstory = comhead.xpath('./span[@class="onstory"]')
+        if onstory:
+            onstory = onstory[0]
+            a = onstory.xpath('./a')
+            if a:
+                a = a[0]
+                onstory.text += a.text
+                onstory.remove(a)
+
         comment = dd.xpath('.//div[@class="comment"]')
         # sometimes comment is '[]' (javascript folded)
         if comment != []:
