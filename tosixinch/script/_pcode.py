@@ -76,6 +76,8 @@ class PCode(object):
             lexer = _pygments._get_lexer(fname, text)
             if lexer:
                 name = lexer.name
+                if name == 'HTML':
+                    continue
                 fmt = 'Pygments lexer: %r (%s)'
                 logger.debug(fmt % (name, fname))
                 ftype = self.p2ftype.get(name)
