@@ -2,8 +2,6 @@
 import re
 import urllib.parse
 
-import pytest
-
 from tosixinch import urlno
 
 rfc3986_baseurl = 'http://a/b/c/d;p?q'

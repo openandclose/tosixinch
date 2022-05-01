@@ -1,6 +1,4 @@
 
-import pytest
-
 from tosixinch import content
 from tosixinch import location
 from tosixinch import lxml_html

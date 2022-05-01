@@ -1,6 +1,4 @@
 
-import pytest
-
 from tosixinch import extract
 from tosixinch import settings
 

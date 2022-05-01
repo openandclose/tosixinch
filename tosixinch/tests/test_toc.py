@@ -2,8 +2,6 @@
 import os
 import textwrap
 
-import pytest
-
 from tosixinch import toc
 
 

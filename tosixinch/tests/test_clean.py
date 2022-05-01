@@ -1,6 +1,5 @@
 
 import lxml.html
-import pytest
 
 from tosixinch import clean
 from tosixinch import lxml_html
