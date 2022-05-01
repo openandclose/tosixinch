@@ -719,12 +719,15 @@ and ``ctags``
 or `Exuberant Ctags <http://ctags.sourceforge.net/>`__).
 
 By default, for some common languages,
-it wraps Ctags kinds ``cf`` to ``<h2>``, ``m`` to ``<h3>>``.
-(But since Ctags kinds are greatly differ for each languages,
-you have to customize them for each of your languages).
+it wraps Ctags kinds ``cf`` (class and function) to ``<h2>``,
+``m`` (method) to ``<h3>>``.
+But since Ctags kinds are greatly differ for each languages,
+you have to customize them for each of your languages.
 
 It creates working files ``tsi.tags`` and ``tsi.tags.checksum``
-in current directory.
+in current directory
+(The script skips tag creation,
+if files and (max) mtime are the same as the previous run).
 
 **Language Names:**
 
