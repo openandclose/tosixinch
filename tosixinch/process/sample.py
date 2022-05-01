@@ -509,9 +509,15 @@ def convert_permalink_sign(doc, repl=''):
     >>> tostring(el)
     '<div><h1>tosixinch<a class="headerlink">…</a></h1></div>'
     """
-    for el in doc.xpath('//a[@class="headerlink"]'):
+    perms = (
+        'anchor-link',
+        'headerlink',
+    )
+    for el in doc.xpath('//a'):
         if el.text == '\u00B6':
-            el.text = repl
+            for p in perms:
+                if p in el.get('class'):
+                    el.text = repl
 
 
 def hackernews_indent(doc):
