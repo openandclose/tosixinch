@@ -83,7 +83,7 @@ def _is_html(fname, text, max_chars=4096):
     return False
 
 
-def _get_ftypes(conf):
+def _set_ftypes(conf):
     for site in conf.sites:
         site.ftype = site.general.ftype.lower()
         if site.ftype:
@@ -94,7 +94,7 @@ def _get_ftypes(conf):
 
 
 def _extract(conf):
-    _get_ftypes(conf)
+    _set_ftypes(conf)
 
     _action_dispatch(conf, _get_extractor(conf),
         conf.general.precmd2, conf.general.postcmd2,

@@ -31,7 +31,7 @@ class PCode(object):
 
         self._lexer_cache = {}
         self._class_cache = {}
-        self._get_ftypes()
+        self._set_ftypes()
 
         if self._lexer_cache:
             logger.debug('[p2ftype]\n%s' % self.p2ftype)
@@ -67,7 +67,7 @@ class PCode(object):
                 c2ftype[k] = v
         return p2ftype, c2ftype
 
-    def _get_ftypes(self):
+    def _set_ftypes(self):
         for site in self.conf.sites:
             if site.ftype:
                 continue
