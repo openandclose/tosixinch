@@ -675,8 +675,8 @@ Use it like ``{{ font_serif|scale }}``.
 Use it like ``{{ height|percent98 }}`` (98 % of the height length).
 It is OK if the previous value, here ``height``, includes units like ``px`` or ``mm``.
 
-Bool variables ``prince``, ``weasyprint`` and ``wkhtmltopdf``
-are added.
+Bool variables ``prince``, ``weasyprint``, ``wkhtmltopdf``
+and ``prince_or_weasyprint`` are added.
 They are ``True`` or ``False``
 according to the currently selected converter.
 

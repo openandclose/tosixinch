@@ -115,6 +115,7 @@ class StyleSheet(object):
             'prince': using('prince'),
             'weasyprint': using('weasyprint'),
             'wkhtmltopdf': using('wkhtmltopdf'),
+            'prince_or_weasyprint': using('prince') or using('weasyprint'),
         }
         context.update(conv_dict)
 
