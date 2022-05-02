@@ -337,22 +337,24 @@ pre.tsi-text {
     border: none;
 }
 
-h1.tsi-text, h2.tsi-text, h3.tsi-text, h4.tsi-text {
-    font: inherit;
-    font-weight: bold;
-}
-
-h2.tsi-text, h3.tsi-text, h4.tsi-text, h5.tsi-text, h6.tsi-text {
-    display: inline;
-}
-
-span.tsi-text {
-    font-weight: bold;
-}
-
 /* When '--toc' */
 div.tsi-body-merged > h2.tsi-text {
     display: block;
     page-break-before: always;
     font-size: larger;
+}
+
+/* css for code --------------------------------------------------- */
+
+h1.tsi-code, h2.tsi-code, h3.tsi-code, h4.tsi-code {
+    font: inherit;
+    font-weight: bold;
+}
+
+h2.tsi-code, h3.tsi-code, h4.tsi-code, h5.tsi-code, h6.tsi-code {
+    display: inline;
+}
+
+span.tsi-code {
+    font-weight: bold;
 }
