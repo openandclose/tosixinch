@@ -13,10 +13,11 @@ class TestParse:
     @pytest.fixture(scope='class')
     def conf(self):
         test_dir = os.path.dirname(__file__)
-        test_dir = os.path.join(test_dir, 'res', 'config')
+        config_dir = os.path.join(test_dir, 'res', 'config')
         # os.environ['TOSIXINCH_USERDIR'] = test_dir
         args = argparse.Namespace()
-        args.userdir = test_dir
+        args.nouserdir = None
+        args.userdir = config_dir
         urls = (
             'http://bbb.com/ttt/xxx#yyy',
         )

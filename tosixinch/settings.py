@@ -243,22 +243,28 @@ def _read_configs(appconfig, siteconfig, fmts, args, envs):
     return appconf, siteconf
 
 
-def _get_user_configs(args, appconf, siteconf):
-    if getattr(args, 'nouserdir', None):
-        userdir = None
-    elif getattr(args, 'userdir', None):
+def _get_user_configs(args, envs, appconf, siteconf):
+    if args.nouserdir:
+        logger.debug('[userdir] (none)')
+        return
+
+    if args.userdir:
         userdir = args.userdir
+    elif envs.get('userdir'):
+        userdir = os.environ.get(envs['userdir'])
+
+    if userdir:
         userdir = os.path.expanduser(userdir).rstrip(os.sep)
         if not os.path.isdir(userdir):
             msg = ('userdir: %r is not an existing directory. '
                 "It must be full path. '~' and '~user' are expanded.")
             logger.error(msg, userdir)
             raise NotADirectoryError(userdir)
-        logger.debug("[userdir] '%s'", userdir)
     else:
         userdir = _check_platform_dirs()
 
     if userdir:
+        logger.debug("[userdir] '%s'", userdir)
         appconfigs = sorted(glob.glob(userdir + os.sep + 'tosixinch*.ini'))
         siteconfigs = sorted(glob.glob(userdir + os.sep + 'site*.ini'))
         for appconfig in appconfigs:
@@ -270,6 +276,8 @@ def _get_user_configs(args, appconf, siteconf):
             logger.debug('reading user site config: %r', siteconfig)
             with open(siteconfig) as f:
                 siteconf.read_file(f)
+    else:
+        logger.debug('[userdir] (none)')
 
     return userdir
 
@@ -442,7 +450,7 @@ class Conf(object):
 
     def user_init(self, args):
         self._userdir = _get_user_configs(
-            args, self._appconf, self._siteconf)
+            args, self._appconf._envs, self._appconf, self._siteconf)
 
         if self._userdir:
             self._user_scriptdir = os.path.join(self._userdir, self.SCRIPTDIR)
