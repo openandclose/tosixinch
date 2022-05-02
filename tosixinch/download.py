@@ -41,8 +41,7 @@ def start_qt_webkit():
     try:
         from PyQt5.QtWidgets import QApplication
     except ImportError:
-        msg = ('Error occured while loading pyqt5 modules.'
-                "This script uses Qt5 libraries when set 'javascript=yes'")
+        msg = ('Error occured while loading pyqt5 modules.')
         logger.critical(msg)
         raise
 
