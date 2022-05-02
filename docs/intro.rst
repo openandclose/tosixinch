@@ -330,7 +330,7 @@ The script has vary basic headless browser downloading functions.
 Either ``PyQt`` or ``Selenium``.
 So if you are lucky,
 you may get javascript generated html contents.
-`option: javascript <options.html#confopt-javascript>`__.
+`option: headless <options.html#confopt-headless>`__.
 (Note ``PyQt`` requires
 `pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
 and `Qt5 <https://www.qt.io>`__.

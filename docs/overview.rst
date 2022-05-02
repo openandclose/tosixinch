@@ -82,9 +82,9 @@ For the actual downloading, it just uses
 with `user-agent <options.html#confopt-user_agent>`__ and
 `encoding <options.html#confopt-encoding>`__ configurable.
 
-If `javascript <options.html#javascript>`__ option is ``True``,
-The script uses `pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
-instead of ``urllib``.
+If `headless <options.html#javascript>`__ option is ``True``,
+The script uses ``pyqt5`` or ``selenium``, instead of ``urllib``
+(See `Features <intro.html#features>`__).
 
 extract
 ^^^^^^^

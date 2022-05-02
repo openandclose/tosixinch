@@ -85,9 +85,15 @@ printout=           : print filenames the scripts' actions would create
 
 [_program]
 
-urllib=             : download by urllib (default, and no other option)
+urllib=             : download by urllib (default)
                     :: action: store_const
                     :: const: urllib
+                    :: dest: downloader
+
+headless=           : download by one of headless browser engines
+                    : (see --browser-engine)
+                    :: action: store_const
+                    :: const: headless
                     :: dest: downloader
 
 lxml=               : extract by lxml (default)
@@ -132,7 +138,7 @@ cnvopts=            : specify converter commandline options
 [general]
 
 *downloader=        : argparse.SUPPRESS
-                    :: choices: urllib
+                    :: choices: urllib, headless
                     urllib
 
 *extractor=         : argparse.SUPPRESS
@@ -147,11 +153,7 @@ converter=          : argparse.SUPPRESS
                     : (to see the default, run --appcheck)
                     Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0
 
-*javascript=        : download by one of headless browsers
-                    :: f: bool
-                    no
-
-*browser_engine=    : specify the browser when javascript option is True
+*browser_engine=    : specify the browser library when downloader is 'headless'
                     :: choices: webkit, webengine, selenium-chrome, selenium-firefox
                     selenium-firefox
 

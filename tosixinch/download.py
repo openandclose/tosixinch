@@ -241,10 +241,10 @@ class SeleniumDownloader(action.Downloader):
 
 
 def run(conf, site):
-    javascript = site.general.javascript
+    downloader = site.general.downloader
     browser_engine = site.general.browser_engine
 
-    if javascript:
+    if downloader == 'headless':
         if browser_engine == 'webkit':
             QtWebKitDownloader(conf, site).download()
         elif browser_engine == 'webengine':

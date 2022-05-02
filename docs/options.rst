@@ -24,7 +24,8 @@ General Section
 
     (``urllib``)
 
-    Specify default downloader. Currently only ``urllib``.
+    Specify default downloader.
+    Either ``urllib`` (recommended) or ``headless``.
 
 .. confopt:: extractor \*
 
@@ -52,18 +53,11 @@ General Section
 
     Specify user agent for downloader (only for ``urllib``).
 
-.. confopt:: javascript \*
-
-    | (``False``)
-    | ``[BOOL]``
-
-    If this value is ``True``, downloading is done by one of headless browsers.
-
 .. confopt:: browser_engine \*
 
     (``selenium-firefox``)
 
-    Specify browser engine when ``javascript`` option is True.
+    Specify browser engine when ``headless`` option is True.
     ``webkit``, ``webengine``, ``selenium-chrome`` or ``selenium-firefox``.
 
 .. confopt:: encoding \*

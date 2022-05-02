@@ -126,7 +126,11 @@ Programs
 
 .. option:: --urllib
 
-    download by urllib (default, and no other option)
+    download by urllib (default)
+
+.. option:: --headless
+
+    download by one of headless browser engines (see --browser-engine)
 
 .. option:: --lxml
 
@@ -171,13 +175,9 @@ Configs
 
     set http header user-agent when downloading by urllib (to see the default, run --appcheck)
 
-.. option:: --javascript
-
-    download by one of headless browsers
-
 .. option:: --browser-engine {webkit,webengine,selenium-chrome,selenium-firefox}
 
-    specify the browser when javascript option is True
+    specify the browser library when downloader is 'headless'
 
         choices=webkit, webengine, selenium-chrome, selenium-firefox
 

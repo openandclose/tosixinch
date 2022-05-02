@@ -14,6 +14,8 @@ Unreleased
 
 * Add --inspect action, cutting --link and --news
 
+* Add --headless option, cutting --javascript
+
 **Add:**
 
 * Add github discussions to sample
