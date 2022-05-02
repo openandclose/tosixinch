@@ -457,10 +457,10 @@ def add_style(doc, path, style):
     """Add inline style strings ('style') to each xpath element ('path').
 
     >>> el = fromstring('<div><p>aaa</p></div>')
-    >>> add_style(el, '//p', 'text-decoration:line-through;')
+    >>> add_style(el, '//p', 'font-size: larger;')
     >>> tostring(el)
-    '<div><p class="tsi-keep-style" style="text-decoration:line-through;">aaa</p></div>'
-    """  # noqa: E501
+    '<div><p class="tsi-keep-style" style="font-size: larger;">aaa</p></div>'
+    """
     for el in doc.xpath(path):
         el.classes |= (KEEP_STYLE,)
         el.set('style', style)
@@ -579,15 +579,11 @@ def hackernews_indent(doc):
         body.replace(tr, block)
 
     # Add sitename hint to h1
-    replace_h1(doc, r'(^.+?) \| .*', r'hn - \1')
+    replace_h1(doc, r'^(.+?) \| .*', r'hn - \1')
 
 
 def reddit_indent(doc):
-    """Render reddit.com's comment indent styles.
-
-    They are in the site's external css.
-    So we have to insert inline css made from it.
-    """
+    """Narrow default indent widths, they are too wide for e-readers."""
     for el in doc.xpath('//div[@class=="comment"]'):
         el.set('style', 'margin-left:8px;')
         el.classes.add(KEEP_STYLE)
@@ -596,9 +592,8 @@ def reddit_indent(doc):
             e.set('style', 'font-weight:bold;')
             e.classes.add(KEEP_STYLE)
 
-    # Add sitename to h1
-    h1 = doc.xpath('./body/h1')[0]
-    h1.text = 'reddit - ' + h1.text
+    # Add sitename hint to h1
+    replace_h1(doc, r'^(.+)$', r'reddit - \1')
 
 
 def github_self_anchor(doc):
