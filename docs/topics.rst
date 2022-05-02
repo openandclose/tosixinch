@@ -600,27 +600,6 @@ Also, the following environment variables are exposed
     TOSIXINCH_FNAME:   Downloaded_File
     TOSIXINCH_FNEW:    Extracted_File
 
-.. note::
-
-    The usage is a bit complex, though.
-    Python runs subprocess without shell by default,
-    so the variables in the commandline itself are not expanded. That is:
-
-    .. code-block:: none
-
-        post_each_cmd1=   echo $TOSIXINCH_FNAME
-
-    doesn't work;
-
-    .. code-block:: none
-
-        post_each_cmd1=   foo.sh
-
-        # in foo.sh
-        echo $TOSIXINCH_FNAME
-
-    will work.
-
 
 Scripts
 -------

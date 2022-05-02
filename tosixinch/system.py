@@ -6,6 +6,7 @@ import gzip
 import importlib
 import logging
 import os
+import shlex
 import sys
 import subprocess
 import time
@@ -240,7 +241,8 @@ def run_cmd(command, user_scriptdir, scriptdir, conf, site=None):
         return
 
     cmd = [_eval_obj(conf, 'conf', word) for word in command]
-    cmd = [_eval_obj(site, 'site', word) for word in cmd]
+    if site:
+        cmd = [_eval_obj(site, 'site', word) for word in cmd]
 
     paths = _add_path_env(user_scriptdir, scriptdir)
     files = _add_files_env(site) if site else {}
@@ -248,7 +250,7 @@ def run_cmd(command, user_scriptdir, scriptdir, conf, site=None):
     env = os.environ
     env.update(paths)
     env.update(files)
-    ret = subprocess.run(cmd, env=env)
+    ret = subprocess.run(shlex.join(cmd), env=env, shell=True)
     returncode = ret.returncode
 
     if returncode not in (0, 100, 101, 102):
