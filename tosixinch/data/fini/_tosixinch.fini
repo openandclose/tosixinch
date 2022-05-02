@@ -184,6 +184,7 @@ converter=          : argparse.SUPPRESS
 guess=              : if there is no matched url, use this xpath for content selection (f: line)
                     :: f: line
                     //div[@itemprop="articleBody"]
+                    //div[@role="main"]
                     //div[@id="main"]
                     //div[@id="content"]
                     //div[@class=="body"]
