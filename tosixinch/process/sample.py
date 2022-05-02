@@ -453,6 +453,18 @@ def add_description(doc):
     doc.body.insert(0, desc)
 
 
+def _add_style(el, style):
+    """Add inline style strings ('style') to element (Note: no doc).
+
+    >>> el = fromstring('<p>aaa</p>')
+    >>> _add_style(el, 'font-size: larger;')
+    >>> tostring(el)
+    '<p class="tsi-keep-style" style="font-size: larger;">aaa</p>'
+    """
+    el.classes |= (KEEP_STYLE,)
+    el.set('style', style)
+
+
 def add_style(doc, path, style):
     """Add inline style strings ('style') to each xpath element ('path').
 
@@ -462,8 +474,7 @@ def add_style(doc, path, style):
     '<div><p class="tsi-keep-style" style="font-size: larger;">aaa</p></div>'
     """
     for el in doc.xpath(path):
-        el.classes |= (KEEP_STYLE,)
-        el.set('style', style)
+        _add_style(el, style)
 
 
 def replace_tags(doc, path, tag='div'):
@@ -529,14 +540,12 @@ def hackernews_indent(doc):
 
         # changing image width (px) to padding-left (px),
         # reducing number arbitrarily.
-        block = fromstring(
-            '<div style="margin-bottom:1em;padding-left:%dpx;"></div>' % (
-                int(int(width) / 4)))
-        block.classes.add(KEEP_STYLE)
+        block = make_tag('div')
+        style = 'margin-bottom:1em;padding-left:%dpx;' % int(int(width) / 4)
+        _add_style(block, style)
 
         comhead = tr.xpath('.//span[@class="comhead"]')[0]
-        comhead.set('style', 'font-weight:bold;')
-        comhead.classes.add(KEEP_STYLE)
+        _add_style(comhead, 'font-weight:bold;')
 
         # removing unnecessary links
         user = comhead.xpath('./a[@class="hnuser"]')
@@ -585,12 +594,10 @@ def hackernews_indent(doc):
 def reddit_indent(doc):
     """Narrow default indent widths, they are too wide for e-readers."""
     for el in doc.xpath('//div[@class=="comment"]'):
-        el.set('style', 'margin-left:8px;')
-        el.classes.add(KEEP_STYLE)
+        _add_style(el, 'margin-left:8px;')
         path = './/p[@class="tagline"]/a[@class=="author"]'
         for e in el.xpath(path):
-            e.set('style', 'font-weight:bold;')
-            e.classes.add(KEEP_STYLE)
+            _add_style(e, 'font-weight:bold;')
 
     # Add sitename hint to h1
     replace_h1(doc, r'^(.+)$', r'reddit - \1')

@@ -12,6 +12,7 @@ process.sample
 
 .. automodule:: tosixinch.process.sample
     :members:
+    :private-members: _add_style
 
 
 process.inspect_sample
