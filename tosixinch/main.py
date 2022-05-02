@@ -108,6 +108,13 @@ def _get_conf(args, conf=None):
         parser, matcher='(--add-.+|--trimdirs)', args=args)
     args = parser.parse_args(_args)
 
+    if args.verbose:
+        _set_logger('debug')
+    elif args.quiet:
+        _set_logger('warning')
+    else:
+        _set_logger('info')
+
     conf_parser = _build_conf_parser(conf)
     confargs, _ = conf_parser.parse_known_args(_args)
     conf._appconf.set_arguments(confargs)
@@ -124,13 +131,6 @@ def _main(args=sys.argv[1:], conf=None):
 
     if args.help:
         usage(parser)
-
-    if args.verbose:
-        _set_logger('debug')
-    elif args.quiet:
-        _set_logger('warning')
-    else:
-        _set_logger('info')
 
     # (to debug logging messages)
     # import logging_tree
