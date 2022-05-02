@@ -105,6 +105,19 @@ table img.tsi-wide, table img.tsi-tall {
 /* } */
 
 
+/* bordering confusing side-contents */
+
+aside::before {
+    content: "(aside) \a";
+    white-space: pre;
+}
+
+aside, blockquote {
+    border: 1px dotted;
+    border-color: lightgray;
+    page-break-inside: avoid;
+}
+
 /* Reduce margins as much as reasonable.*/
 /* cf. prince has 'li::marker' */
 
