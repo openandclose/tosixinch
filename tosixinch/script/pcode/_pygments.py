@@ -17,6 +17,8 @@ from tosixinch import textformat
 
 WORDSEP = re.compile(r'([\v\f ]+)')  # '\n\r\t' are already processed.
 
+PCODECLASS_PREFIX = 'tsi-text tsi-code tsi-pcode tsi-'
+
 
 class _PygmentsCode(textformat.Prose):
     """Collect non-exposed methods for PygmentsCode."""
@@ -34,8 +36,7 @@ class _PygmentsCode(textformat.Prose):
         self.debug = debug
 
     def _get_textclass(self):
-        # e.g. 'tsi-text tsi-pcode tsi-python'
-        return textformat.TEXTCLASS_PREFIX + 'pcode tsi-' + self.ftype
+        return PCODECLASS_PREFIX + self.ftype
 
     def _preprocess(self):
         """Simulate what``pygments.Lexer.get_tokens()`` does.

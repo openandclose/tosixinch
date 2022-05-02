@@ -26,6 +26,7 @@ HTML_TEXT_TEMPLATE = """<!DOCTYPE html>
 </html>"""
 
 TEXTCLASS_PREFIX = 'tsi-text tsi-'
+CODECLASS_PREFIX = 'tsi-text tsi-code tsi-'
 
 PYTHONEXT = ('py',)
 PYTHONFILE = re.compile((
@@ -140,6 +141,13 @@ class NonProse(Prose):
 
 class Code(NonProse):
     """Source code, a subclass of `NonProse`."""
+
+    def _get_textclass(self):
+        name = self.__class__.__name__.lower()
+        if name == 'code':  # this base class
+            return TEXTCLASS_PREFIX + name
+        else:  # subclasses
+            return CODECLASS_PREFIX + name[:-4]
 
 
 class PythonCode(Code):
