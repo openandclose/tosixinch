@@ -110,7 +110,20 @@ class Nodes(object):
         self.urls = urls
         self.ufile = ufile
         self.tocfile = tocfile
+        self.cache = set()  # title cache
         self.nodes = self.parse()
+
+    def _create_toc_url(self, title):
+        num = 0
+        while True:
+            new = title if num == 0 else '%s-%d' % (title, num)
+            if new in self.cache:
+                num += 1
+            else:
+                self.cache.add(new)
+                break
+
+        return _create_toc_url(new)
 
     def _parse_line(self, url):
         m = self._DIRECTIVE_RE.match(url)
@@ -122,7 +135,7 @@ class Nodes(object):
         if cnt:
             if line:
                 title = line
-                url = _create_toc_url(title)
+                url = self._create_toc_url(title)
             else:
                 title = None
                 url = None
