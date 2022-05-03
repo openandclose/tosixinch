@@ -31,9 +31,12 @@ def _extend(obj, args):
     raise ValueError(msg)
 
 
-def _is_newer(oldfile, newfile):
-    if os.path.getmtime(oldfile) < os.path.getmtime(newfile):
-        return True
+def _is_newer(ufile, tocfile):
+    if os.path.getmtime(ufile) < os.path.getmtime(tocfile):
+        with open(tocfile) as f:
+            ufile_line = f.readline()[1:].strip()
+        if os.path.abspath(ufile) == ufile_line:
+            return True
     return False
 
 

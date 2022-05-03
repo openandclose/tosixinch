@@ -5,6 +5,7 @@ Use comment structure in 'urls.txt' as directive.
 """
 
 import logging
+import os
 import re
 import urllib.parse
 
@@ -18,6 +19,7 @@ import tosixinch.process.sample as process_sample
 logger = logging.getLogger(__name__)
 
 DIRECTIVE_PREFIX = '#'
+COMMENT_PREFIX = ';'
 
 TOCDOMAIN = 'http://tosixinch.example.com'
 
@@ -96,8 +98,7 @@ class Nodes(location.Locations):
 
         super().__init__(urls, ufile)
 
-        # (';',)
-        self._comment = tuple(set(self._comment) - set(DIRECTIVE_PREFIX))
+        self._comment = COMMENT_PREFIX
         self._directive_re = re.compile(
             r'^\s*(%s+)?\s*(.+)?\s*$' % DIRECTIVE_PREFIX)
 
@@ -156,8 +157,10 @@ class Nodes(location.Locations):
         for node in self:
             node.write()
 
+        ufile = '%s %s\n' % (COMMENT_PREFIX, os.path.abspath(self._ufile))
         urls = '\n'.join([node.url for node in self if node.root is node])
         with open(self.get_tocfile(), 'w') as f:
+            f.write(ufile)
             f.write(urls)
 
 
