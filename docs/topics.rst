@@ -209,10 +209,10 @@ To do that, ``--toc`` action creates
 
 * new ``ufile`` (``tocfile``)
 
-  * made to refer to newly created htmls instead of now duplicate children htmls.
+  * made to refer to newly created htmls instead of now redundant children htmls.
 
-``--convert`` action in turn read ``tocfile`` instead of the original ``ufile``,
-if ``tocfile`` exists, and it's mtime is newer.
+``--convert`` action, in turn, read ``tocfile`` instead of the original ``ufile``,
+if ``tocfile`` exists, and *it's mtime is newer*.
 
 So that if you run
 
@@ -222,48 +222,44 @@ So that if you run
     $ tosixinch --toc
     $ tosixinch -3
 
+or
+
+.. code-block:: bash
+
+    $ tosixinch -123 --toc
+
 The script creates a more structured version of pdf file.
-
-.. Note::
-
-    In practice, you are likely to first try to create
-    an ordinary pdf if it is going well at all.
-    After that, you may want to create the toc version. ::
-
-        $ tosixinch -12
-        $ tosixinch -3     # ordinary pdf
-        $ tosixinch --toc
-        $ tosixinch -3     # toc version pdf, overwrites the above
-
 
 rules
 ^^^^^
 
-Action ``toc`` can be called if ``ufile`` is provided
+The ``toc`` action treats ``'#'`` as special chapter directive.
+So comments in ``ufile`` are lines only beginning ``';'``.
+(In other ``actions``, both ``'#'`` and ``';'`` are comments).
+
+The ``toc`` action creates `tocfile <overview.html#dword-tocfile>`__
+in current directory, adding ``'-toc'`` to ``ufile``.
+(When ``--file`` is ``'urls.txt'`` (default),
+the name of ``tocfile`` is ``'urls-toc.txt'``).
+
+So it is Error when ``ufile`` is not provided.
 (``--file`` or implicit ``urls.txt``. No ``--input``).
-And it can be called only after ``extract`` has been done.
 
-The action bundles ``Extracted_Files``,
-writes to a single html, and creates a new ``url`` list
-(`tocfile <overview.html#dword-tocfile>`__).
+The ``toc`` action processes ``Extracted_Files``,
+bundling some of them, and creating new htmls.
 
-When ``--file`` is ``'urls.txt'`` (default),
-the name of ``tocfile`` is ``'urls-toc.txt'``
-(it can be other names).
+So it is Error when you didn't run ``extract`` before,
+with the same ``ufile``.
 
 Table of Contents adjustments are done
 simply by decreasing ``heading`` numbers.
-PDF converters will do the rest.
-(So, some PDF converters can choose
-other elements than ``heading`` tags for Table of Contents nodes,
-the script only concerns ``headings``).
 
 It first reads ``urls.txt``.
 If there is a line starting with ``'#'``,
-it is interpreted as a new chapter (new ``'<h1>'`` text).
-Following lines are sections of the chapter,
+it is interpreted as a new chapter
+(new html ``<title>`` and new ``'<h1>'`` text).
+Following lines become sections of the chapter,
 until next ``'#'`` line begins.
-(In other ``actions``, ``'#'`` lines are comments).
 
 To use the same example:
 
@@ -282,15 +278,12 @@ To use the same example:
 
 .. code-block:: none
 
-    (in './_htmls/somesite.com/')
-        index~.html                                 (11)
-    (in './_htmls/tosixinch.example.com/')
-        alices-articles/_~.html                     (12)
-        bobs-articles/_~.html                       (13)
+    _htmls/somesite.com/index~.html                         (11)
+    _htmls/tosixinch.example.com/alices-articles/_~.html    (12)
+    _htmls/tosixinch.example.com/bobs-articles/_~.html      (13)
 
-``tosixinch.example.com`` is an imaginary placeholder host.
-Verbose path names are ``Extracted_Files`` names
-corresponding to ``urls``.
+``tosixinch.example.com`` is an imaginary placeholder host,
+strange path names (``'_~'``) are names ``Extracted_Files`` created from ``urls``.
 
 ``(11)``
     (1) is outside of new chapters structure,
