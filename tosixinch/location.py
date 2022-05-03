@@ -234,9 +234,9 @@ class ReplacementParser(object):
     """
 
     def __init__(self, replacefile, urls=None, ufile=None):
-        loc = Locations(urls=urls, ufile=ufile)
-        self.urls, self.ufile = loc.urls, loc._ufile
         self.replacefile = replacefile
+        self.urls = urls
+        self.ufile = ufile
         self.state = None
         self.result = None
 

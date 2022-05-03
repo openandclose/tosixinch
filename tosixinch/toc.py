@@ -125,7 +125,7 @@ class Nodes(location.Locations):
         level = 0
         node = None
         root = None
-        for url in self.urls:
+        for url in self._urls:
             cnt, url, title = self._parse_toc_url(url)
             if cnt:
                 if url is None:
@@ -162,6 +162,6 @@ class Nodes(location.Locations):
 
 
 def run(conf):
-    ufile = conf._ufile
-    nodes = Nodes(urls=None, ufile=ufile)
+    urls, ufile = conf.sites._urls, conf._ufile
+    nodes = Nodes(urls=urls, ufile=ufile)
     nodes.write()

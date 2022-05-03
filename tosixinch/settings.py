@@ -104,7 +104,16 @@ class ReplaceURLLoader(URLLoader):
         if not userdir:
             return self.urls
         replacefile = os.path.join(userdir, self.REPLACEFILE)
-        urls = location.ReplacementParser(replacefile, self.urls, self.ufile)()
+
+        urls = self.urls
+        if not self.urls:
+            try:
+                with open(self.ufile) as f:
+                    urls = f.readlines()
+            except FileNotFoundError:
+                urls = []
+
+        urls = location.ReplacementParser(replacefile, urls, self.ufile)()
         return urls
 
     def build(self):
