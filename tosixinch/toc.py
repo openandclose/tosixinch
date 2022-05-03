@@ -112,19 +112,20 @@ class Nodes(object):
         self.tocfile = tocfile
         self.nodes = self.parse()
 
-    def _parse_toc_url(self, url):
+    def _parse_line(self, url):
         m = self._DIRECTIVE_RE.match(url)
         if m.group(1):
-            cnt = len(m.group(1))
+            cnt = 1
         else:
             cnt = 0
         line = m.group(2)
-        if cnt and line:
-            title = line
-            url = _create_toc_url(title)
-        elif cnt and not line:
-            title = None
-            url = None
+        if cnt:
+            if line:
+                title = line
+                url = _create_toc_url(title)
+            else:
+                title = None
+                url = None
         else:
             title = None
             url = line
@@ -139,14 +140,15 @@ class Nodes(object):
         for url in self.urls:
             if url.startswith(self._COMMENT):
                 continue
-            cnt, url, title = self._parse_toc_url(url)
+            cnt, url, title = self._parse_line(url)
             if cnt:
                 if url is None:
-                    level -= 1
+                    level = 0
                     continue
-                if cnt == 1:
-                    if node:
-                        node.last = True
+
+                if node:
+                    node.last = True
+
                 level = cnt
             else:
                 if level == 0:
