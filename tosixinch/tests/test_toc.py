@@ -8,8 +8,8 @@ from tosixinch import toc
 def check(ulist, expected):
     ulist = [u.strip() for u in ulist.strip().split('\n')]
     expected = textwrap.dedent(expected).split('\n')[1:-1]
-    nodes = toc.Nodes(ulist, 'url-toc.txt')
-    for node, ref_line in zip(nodes, expected):
+    nodes = toc.Nodes(ulist, 'dummy-toc.txt', None)
+    for node, ref_line in zip(nodes.nodes, expected):
         url = node.url.replace(os.path.abspath('.') + os.sep, '')
         data = (_get_indent(node), url)
         line = '%s%s' % data

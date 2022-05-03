@@ -87,23 +87,21 @@ class Node(location.Location):
             lxml_html.write(self.root.fnew, doc=self.root.doc)
 
 
-class Nodes(location.Locations):
+class Nodes(object):
     """Represent ufile."""
 
-    def __init__(self, urls, ufile):
-        if not ufile:
-            msg = ("To run '--toc', you can not use '--input'. "
-                "Use either '--file', or implicit 'urls.txt'.")
-            raise ValueError(msg)
+    _COMMENT = COMMENT_PREFIX
+    _DIRECTIVE_RE = re.compile(
+        r'^\s*(%s+?)?\s*(.+)?\s*$' % DIRECTIVE_PREFIX)
 
-        super().__init__(urls, ufile)
-
-        self._comment = COMMENT_PREFIX
-        self._directive_re = re.compile(
-            r'^\s*(%s+)?\s*(.+)?\s*$' % DIRECTIVE_PREFIX)
+    def __init__(self, urls, ufile, tocfile):
+        self.urls = urls
+        self.ufile = ufile
+        self.tocfile = tocfile
+        self.nodes = self.parse()
 
     def _parse_toc_url(self, url):
-        m = self._directive_re.match(url)
+        m = self._DIRECTIVE_RE.match(url)
         if m.group(1):
             cnt = len(m.group(1))
         else:
@@ -121,12 +119,14 @@ class Nodes(location.Locations):
 
         return cnt, url, title
 
-    def _iterate(self):
+    def parse(self):
         nodes = []
         level = 0
         node = None
         root = None
-        for url in self._urls:
+        for url in self.urls:
+            if url.startswith(self._COMMENT):
+                continue
             cnt, url, title = self._parse_toc_url(url)
             if cnt:
                 if url is None:
@@ -150,21 +150,26 @@ class Nodes(location.Locations):
         node.last = True
         return nodes
 
-    def __iter__(self):
-        return self._iterate().__iter__()
-
     def write(self):
-        for node in self:
+        for node in self.nodes:
             node.write()
 
-        ufile = '%s %s\n' % (COMMENT_PREFIX, os.path.abspath(self._ufile))
-        urls = '\n'.join([node.url for node in self if node.root is node])
-        with open(self.get_tocfile(), 'w') as f:
+        ufile = '%s %s\n' % (COMMENT_PREFIX, os.path.abspath(self.ufile))
+        urls = '\n'.join([node.url for node in self.nodes
+            if node.root is node])
+        with open(self.tocfile, 'w') as f:
             f.write(ufile)
             f.write(urls)
 
 
 def run(conf):
-    urls, ufile = conf.sites._urls, conf._ufile
-    nodes = Nodes(urls=urls, ufile=ufile)
+    urls = conf.sites._urls
+    ufile = conf._ufile
+    if not ufile:
+        msg = ("To run '--toc', you can not use '--input'. "
+            "Use either '--file', or implicit 'urls.txt'.")
+        raise ValueError(msg)
+    tocfile = conf.sites.get_tocfile()
+
+    nodes = Nodes(urls=urls, ufile=ufile, tocfile=tocfile)
     nodes.write()
