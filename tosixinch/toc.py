@@ -30,14 +30,20 @@ def _create_toc_url(title):
     return '%s/%s' % (TOCDOMAIN, urllib.parse.quote(t))
 
 
-class Node(location.Location):
+class Node(object):
     """Represent one non-blank line in ufile."""
 
     def __init__(self, level, url, title, root=None):
-        super().__init__(url)
+        self._loc = location.Location(url)
+
+        self.url = self._loc.url
+        self.fnew = self._loc.fnew
+        self.slash_fnew = self._loc.slash_fnew
+
         self.level = level
         self.title = title
         self.root = root or self
+
         self.last = False
         self._doc = None
         self.cssfiles = []
