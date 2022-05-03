@@ -70,6 +70,7 @@ import time
 
 import tosixinch.main
 import tosixinch.settings
+import tosixinch.toc
 
 from tosixinch import location
 
@@ -180,20 +181,16 @@ class _URLData(object):
         urls, ufile = tosixinch.settings.SampleURLLoader().get_data()
         self.urls = urls
         self.ufile = ufile
-        self.tocfile = self._get_tocfile()
 
-    def _get_tocfile(self):
-        return location.Locations(ufile=self.ufile).get_tocfile()
-
-    def _get_toc_urls(self):
-        tocfile = self.tocfile
-        if not os.path.isfile(tocfile):
-            raise ValueError('tocfile is not created.')
-        return location.Locations(ufile=tocfile).urls
+    @property
+    def tocfile(self):
+        return tosixinch.toc.get_tocfile(self.ufile)
 
     @property
     def toc_urls(self):
-        return self._get_toc_urls()
+        if not os.path.isfile(self.tocfile):
+            raise ValueError('tocfile is not created.')
+        return location.Locations(ufile=self.tocfile).urls
 
 
 URLData = _URLData()

@@ -9,6 +9,7 @@ import subprocess
 
 from tosixinch import location
 from tosixinch import stylesheet
+from tosixinch import toc
 
 from tosixinch.content import merge_htmls
 
@@ -53,7 +54,7 @@ class Convert(object):
         self._encoding = conf.general.encoding
 
         ufile = conf._ufile
-        tocfile = self._get_tocfile()
+        tocfile = self._get_tocfile(ufile)
         if conf.general.raw:
             files = [site.url for site in conf.sites]
         elif ufile and tocfile and _is_newer(ufile, tocfile):
@@ -65,8 +66,8 @@ class Convert(object):
 
         self.cmd = [self.path]
 
-    def _get_tocfile(self):
-        tocfile = self._conf.sites.get_tocfile()
+    def _get_tocfile(self, ufile):
+        tocfile = toc.get_tocfile(ufile)
         if tocfile:
             if os.path.isfile(tocfile):
                 return tocfile

@@ -24,6 +24,12 @@ COMMENT_PREFIX = ';'
 TOCDOMAIN = 'http://tosixinch.example.com'
 
 
+def get_tocfile(ufile):
+    if ufile:
+        root, ext = os.path.splitext(os.path.basename(ufile))
+        return root + '-toc' + ext
+
+
 def _create_toc_url(title):
     """Create toc root url, from html title string."""
     t = location.slugify(title, allow_unicode=True)
@@ -175,7 +181,7 @@ def run(conf):
         msg = ("To run '--toc', you can not use '--input'. "
             "Use either '--file', or implicit 'urls.txt'.")
         raise ValueError(msg)
-    tocfile = conf.sites.get_tocfile()
+    tocfile = get_tocfile(ufile)
 
     nodes = Nodes(urls=urls, ufile=ufile, tocfile=tocfile)
     nodes.write()
