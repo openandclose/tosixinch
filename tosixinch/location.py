@@ -116,9 +116,10 @@ class Location(urlmap.Map):
         return root + ext
 
     def _map_name(self, name):
+        name = super()._map_name(name)  # may modify self._hashed
         if self._hashed:
             return self.sep.join(
-                (self.PREFIX, self.HASH_DIR, super()._map_name(name)))
+                (self.PREFIX, self.HASH_DIR, name))
         else:
             return self.sep.join((self.PREFIX, name))
 
