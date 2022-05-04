@@ -115,7 +115,7 @@ class Prose(action.TextFormatter):
         self.highlighted = self.built
 
     def write(self):
-        return self._write(self.fnew, text=self.highlighted)
+        return super().write(self.fnew, text=self.highlighted)
 
     def run(self):
         self.wrap()

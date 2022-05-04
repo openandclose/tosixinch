@@ -167,7 +167,7 @@ class Action(object):
         return lxml_html.read(
             name, text, codings=self.codings, errors=self.errors)
 
-    def _write(self, name, text):
+    def write(self, name, text):
         return system.write(name, text)
 
 
@@ -204,7 +204,7 @@ class Downloader(Action):
         self.request(self._site)
         self.process()
         self.retrieve()
-        self._write(self.fname, self.text)
+        self.write(self.fname, self.text)
 
 
 class CompDownloader(Downloader):
@@ -219,7 +219,7 @@ class CompDownloader(Downloader):
             return
         self.retrieve(on_error_exit=False)
         if self.text:
-            self._write(comp.fname, self.text)
+            self.write(comp.fname, self.text)
 
 
 class TextFormatter(Action):
