@@ -103,6 +103,18 @@ class Func(object):
         return _parse_bool(value)
 
     @register
+    def int(self, value):
+        if value == '':
+            return None
+        return int(value)
+
+    @register
+    def float(self, value):
+        if value == '':
+            return None
+        return float(value)
+
+    @register
     def comma(self, value):
         return _parse_comma(value)
 
@@ -481,7 +493,7 @@ class ConfigFetch(object):
     """
 
     def __init__(self, *, fmts=None, args=None, envs=None,
-            Func=Func, option_builder=DictOptionBuilder,
+            Func=Func, option_builder=FiniOptionBuilder,
             parser=configparser.ConfigParser, **kwargs):
         self._fmts = fmts or {}
         self._args = args or argparse.Namespace()
@@ -526,14 +538,6 @@ class ConfigFetch(object):
             to filter sections, default (``None``) is for all sections
 
         :returns: argument_parser
-
-        The usage is a bit complex, though. Normally:
-
-        1. Instantiate ``ConfigFetch`` with blank ``arg``.
-        2. Create ``ArgumentParser``, edit as necessary.
-        3. ``.build_arguments`` (populate ``ArgumentParser`` with arguments).
-        4. Parse commandline (``ArgumentParser.parse_args``).
-        5. ``.set_arguments`` below with the new ``args``.
         """
         ArgumentBuilder(self).build(argument_parser, sections)
         return argument_parser
@@ -728,7 +732,7 @@ class Double(object):
 
 def fetch(input_, *, encoding=None,
         fmts=None, args=None, envs=None, Func=Func,
-        parser=configparser.ConfigParser, option_builder=DictOptionBuilder,
+        parser=configparser.ConfigParser, option_builder=FiniOptionBuilder,
         **kwargs):
     """Fetch ``ConfigFetch`` object.
 
