@@ -86,7 +86,7 @@ class Prose(action.TextFormatter):
         super().__init__(conf, site)
 
         self.shortname = site.shortname
-        self.width = int(conf.general.textwidth)
+        self.width = conf.general.textwidth
         self.indent = conf.general.textindent.strip('"\'')
         self.ftype = self._site.ftype
         self.textclass = self._get_textclass()

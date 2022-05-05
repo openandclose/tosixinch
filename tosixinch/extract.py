@@ -158,7 +158,7 @@ class Resolver(content.BaseResolver):
         downloader.download(comp)
 
     def _add_component_attributes(self, el, fname):
-        full = int(self.loc.general.full_image)
+        full = self.loc.general.full_image
         w, h = content.get_component_size(el, fname)
         if w and h:
             length = max(w, h)

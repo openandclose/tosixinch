@@ -197,6 +197,7 @@ guess=              : if there is no matched url, use this xpath for content sel
                     convert_permalink_sign
 
 *full_image=        : pixel size to add special class attributes to images (default: 200)
+                    :: f: int
                     200
 
 add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: plus_binaries)
@@ -220,6 +221,7 @@ add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: pl
                     :: choices: html, prose, nonprose, python
 
 textwidth=          : width (character numbers) for rendering non-prose text
+                    :: f: int
                     65
 
 textindent=         : line continuation marker for rendering non-prose text
@@ -228,6 +230,7 @@ textindent=         : line continuation marker for rendering non-prose text
 *trimdirs=          : if plus, remove leading directories from PDF title of local text name.
                     : if minus, remove leading directories to reduce path segments to that abs number.
                     : (default: 3)
+                    :: f: int
                     3
 
 raw=                : use input paths as is (no url transformation, and only for local files)
@@ -284,6 +287,7 @@ landscape_size=     : landscape size for css, e.g. '118mm 90mm'
                     118mm 90mm
 
 toc_depth=          : specify depth of table of contents
+                    :: f: int
                     3
 
 font_family=        : main font for css, e.g. '"DejaVu Sans", sans-serif'

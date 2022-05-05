@@ -555,6 +555,14 @@ Users have to fill the value accordingly, if setting.
 
     It accepts only one of the nine (case insensitive).
 
+.. dword:: INT
+
+    Integer number string, no dot
+
+.. dword:: FLOAT
+
+    Float number string
+
 .. dword:: COMMA
 
     Values are comma separated list. For example::

@@ -120,7 +120,7 @@ class StyleSheet(object):
         context.update(conv_dict)
 
         bookmarks_levels = ['none'] * 6
-        for i in range(int(context['toc_depth'])):
+        for i in range(context['toc_depth']):
             bookmarks_levels[i] = str(i + 1)
         bm_dict = {
             'bm1': bookmarks_levels[0],

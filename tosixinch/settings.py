@@ -395,7 +395,7 @@ class Site(location.Location):
     @property
     def shortname(self):
         if self.is_local:
-            num = int(self.general.trimdirs)
+            num = self.general.trimdirs
             sep = os.sep
         else:
             num = 2  # remove scheme ('https://')
