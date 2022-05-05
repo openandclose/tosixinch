@@ -41,7 +41,6 @@ class Extract(action.Extractor):
 
         self._parts_download = site.general.parts_download
         self._guess = conf.general.guess
-        self._full_image = site.general.full_image
 
     def load(self):
         self.root = self.parse()
