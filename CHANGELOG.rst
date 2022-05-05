@@ -28,6 +28,8 @@ Unreleased
 
 * Add minus number feature to --trimdirs option
 
+* Add --timeout option
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

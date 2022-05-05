@@ -149,9 +149,12 @@ converter=          : argparse.SUPPRESS
                     :: choices: prince, weasyprint, wkhtmltopdf
                     prince
 
-*user_agent=        : set http header user-agent when downloading by urllib
-                    : (to see the default, run --appcheck)
+*user_agent=        : set http request user-agent (only for urllib)
                     Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0
+
+*timeout=           : set http request timeout (only for urllib)
+                    :: f: float
+                    5
 
 *browser_engine=    : specify the browser library when downloader is 'headless'
                     :: choices: webkit, webengine, selenium-chrome, selenium-firefox

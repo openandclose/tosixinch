@@ -21,7 +21,8 @@ logger = logging.getLogger(__name__)
 
 # download  --------------------------------------
 
-def request(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
+def request(url, user_agent='Mozilla/5.0',
+        cookies=None, timeout=5, on_error_exit=True):
     headers = {
         'User-Agent': user_agent,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # noqa: E501
@@ -48,7 +49,7 @@ def request(url, user_agent='Mozilla/5.0', cookies=None, on_error_exit=True):
         urllib.request.HTTPCookieProcessor(cj))
 
     try:
-        return opener.open(req, timeout=5)
+        return opener.open(req, timeout=timeout)
 
     except urllib.request.HTTPError as e:
         if on_error_exit:

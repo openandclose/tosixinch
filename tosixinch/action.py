@@ -181,14 +181,14 @@ class Downloader(Action):
         return site.check_fname(force=force, cache=cache)
 
     def request(self, site, on_error_exit=True):
+        url = site.idna_url
         user_agent = self._site.general.user_agent
         cookies = self._site.cookie
-
-        url = site.idna_url
+        timeout = self._site.general.timeout
 
         self.agent = system.request(
             url, user_agent=user_agent, cookies=cookies,
-            on_error_exit=on_error_exit)
+            timeout=timeout, on_error_exit=on_error_exit)
 
     def process(self):
         for p in self._site.general.dprocess:

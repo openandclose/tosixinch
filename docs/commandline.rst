@@ -173,7 +173,11 @@ Configs
 
 .. option:: --user-agent USER_AGENT
 
-    set http header user-agent when downloading by urllib (to see the default, run --appcheck)
+    set http request user-agent (only for urllib)
+
+.. option:: --timeout TIMEOUT
+
+    set http request timeout (only for urllib)
 
 .. option:: --browser-engine {webkit,webengine,selenium-chrome,selenium-firefox}
 
