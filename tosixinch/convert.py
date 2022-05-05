@@ -167,7 +167,7 @@ class WkhtmltopdfConvert(Convert):
     def run(self):
         self._add_css_arguments('--user-style-sheet')
         self._add_arguments()
-        self._add_args(['--outline-depth', self.style.toc_depth or '3'])
+        self._add_args(['--outline-depth', self.style.toc_depth])
         self._add_files()
         self._add_pdfname()
         self._run()
