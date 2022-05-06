@@ -60,6 +60,20 @@ General Section
     Specify browser engine when ``headless`` option is True.
     ``webkit``, ``webengine``, ``selenium-chrome`` or ``selenium-firefox``.
 
+.. confopt:: selenium_chrome_path \*
+
+    | (None)
+
+    Specify the path of chromedriver for selenium
+    (passed to ``executable_path`` argument).
+
+.. confopt:: selenium_firefox_path \*
+
+    | (None)
+
+    Specify the path of geckodriver for selenium
+    (passed to ``executable_path`` argument).
+
 .. confopt:: encoding \*
 
     | (``utf-8, cp1252, latin_1``)
