@@ -866,7 +866,7 @@ So section names themselves can be arbitrary.
 
 .. confopt:: cookie
 
-    | (``None``)
+    | (None)
     | ``[LINE]``
 
     Some sites require confirmation before providing the documents.

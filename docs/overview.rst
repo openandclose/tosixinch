@@ -538,7 +538,7 @@ Value Functions
 Each option value field has predetermined transformation rules.
 Users have to fill the value accordingly, if setting.
 
-.. dword:: None
+.. dword:: (Nothing)
 
     If nothing is specified, it is an ordinary ``ConfigParser`` value.
     String value as you write it. Leading and ending spaces are stripped.
