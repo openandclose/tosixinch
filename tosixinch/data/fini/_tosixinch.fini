@@ -156,6 +156,10 @@ converter=          : argparse.SUPPRESS
                     :: f: float
                     5
 
+*interval=          : interval for each download
+                    :: f: float
+                    0.2
+
 *browser_engine=    : specify the browser library when downloader is 'headless'
                     :: choices: webkit, webengine, selenium-chrome, selenium-firefox
                     selenium-firefox

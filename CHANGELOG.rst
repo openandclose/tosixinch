@@ -30,6 +30,8 @@ Unreleased
 
 * Add --timeout option
 
+* Add --interval option
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

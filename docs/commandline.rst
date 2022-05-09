@@ -179,6 +179,10 @@ Configs
 
     set http request timeout (only for urllib)
 
+.. option:: --interval INTERVAL
+
+    interval for each download
+
 .. option:: --browser-engine {webkit,webengine,selenium-chrome,selenium-firefox}
 
     specify the browser library when downloader is 'headless'

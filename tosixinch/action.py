@@ -2,7 +2,9 @@
 """Provide abstract action processes and classes."""
 
 import logging
+import random
 import re
+import time
 
 from tosixinch import cached_property
 from tosixinch import location
@@ -197,6 +199,11 @@ class Downloader(Action):
     def retrieve(self, on_error_exit=True):
         self.text = system.retrieve(self.agent, on_error_exit=on_error_exit)
 
+    def sleep(self, site):
+        i = site.general.interval
+        i = i * (1 + 0.5 * random.random() ** 2)
+        time.sleep(i)
+
     def download(self):
         if self._check_fname(self._site):
             return
@@ -205,6 +212,7 @@ class Downloader(Action):
         self.process()
         self.retrieve()
         self.write(self.fname, self.text)
+        self.sleep(self._site)
 
 
 class CompDownloader(Downloader):
@@ -220,6 +228,7 @@ class CompDownloader(Downloader):
         self.retrieve(on_error_exit=False)
         if self.text:
             self.write(comp.fname, self.text)
+            self.sleep(comp._parent_cls)
 
 
 class TextFormatter(Action):

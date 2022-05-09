@@ -153,9 +153,9 @@ class Resolver(content.BaseResolver):
         url = comp.url
         if url.startswith('data:image/'):
             return
-        logger.info('[img] %s', url)
         downloader = action.CompDownloader(self._conf, self.loc)
         downloader.download(comp)
+        logger.info('[img] %s', url)
 
     def _add_component_attributes(self, el, fname):
         full = self.loc.general.full_image
