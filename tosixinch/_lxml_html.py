@@ -157,13 +157,6 @@ class HtmlWriter(system.Writer):
         system.make_directories(self.fname)
 
 
-def read_text(fname, text=None, codings=None, errors='strict'):
-    """Return raw html text. Just exposing system.Reader.read()."""
-    reader = HtmlReader(fname, text, codings, errors)
-    reader._prepare()
-    return reader.text
-
-
 def read(fname, text=None, codings=None,
         errors='strict'):
     return HtmlReader(fname, text, codings, errors).read()
