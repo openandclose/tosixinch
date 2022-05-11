@@ -25,8 +25,6 @@ HTML_TEMPLATE = """{doctype}
 </html>
 """
 
-BLANK_HTML = '%s<html><head><meta charset="utf-8"></head><body></body></html>'
-
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
@@ -39,13 +37,6 @@ def build_new_html(doctype=None, title=None, content=None):
         'content': content or ''
     }
     html = HTML_TEMPLATE.format(**fdict)
-    root = lxml_html.document_fromstring(html)
-    return root
-
-
-def build_blank_html(doctype=None):
-    """Build 'more' minimal html."""
-    html = BLANK_HTML % (doctype or DEFAULT_DOCTYPE)
     root = lxml_html.document_fromstring(html)
     return root
 
@@ -113,7 +104,7 @@ def merge_htmls(paths, pdfname, codings=None, errors='strict'):
             hname = pdfname[:-4] + '.html'
         else:
             hname = pdfname + '.html'
-        root = build_blank_html()
+        root = build_new_html()
         _append_bodies(root, hname, paths, codings, errors)
         lxml_html.write(hname, doc=root)
         return hname

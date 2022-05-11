@@ -19,9 +19,19 @@ def compare_html(doc1, doc2):
 class TestBlankHtml:
 
     def test(self):
-        expected = """<!DOCTYPE html>
-<html><head><meta charset="utf-8"></head><body></body></html>"""
-        html = content.build_blank_html()
+        expected = """
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>notitle</title>
+  </head>
+  <body>
+
+  </body>
+</html>
+""".strip()
+        html = content.build_new_html()
         assert tostring(html.getroottree()) == expected
 
 
