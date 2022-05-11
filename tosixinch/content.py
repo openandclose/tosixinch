@@ -109,7 +109,10 @@ def get_component_size(el, fname, stream=None):
 # TODO: Links to merged htmls should be rewritten to fragment links.
 def merge_htmls(paths, pdfname, codings=None, errors='strict'):
     if len(paths) > 1:
-        hname = pdfname.replace('.pdf', '.html')
+        if pdfname[-4:].lower() == '.pdf':
+            hname = pdfname[:-4] + '.html'
+        else:
+            hname = pdfname + '.html'
         root = build_blank_html()
         _append_bodies(root, hname, paths, codings, errors)
         lxml_html.write(hname, doc=root)
