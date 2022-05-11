@@ -47,7 +47,6 @@ class Convert(object):
     def __init__(self, conf):
         self._conf = conf
         self.path = os.path.expanduser(conf.converter.cnvpath)
-        self.css2 = conf.converter.css2
         self.arguments = conf.converter.cnvopts
         self.pdfname = conf.pdfname
         self.style = conf.style
@@ -75,7 +74,7 @@ class Convert(object):
     def _add_css_arguments(self, optstr=None):
         # Add css file arguments to commnad.
         opts = []
-        for css in stylesheet.StyleSheet(self._conf).stylesheets:
+        for css in stylesheet.StyleSheet(self._conf).stylesheets2:
             if optstr:
                 opts.append(optstr)
             opts.append(css)

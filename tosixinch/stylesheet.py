@@ -37,8 +37,7 @@ class StyleSheet(object):
     def __init__(self, conf, site=None):
         if site:
             self.css = site.general.css
-        else:
-            self.css = conf.converter.css2
+        self.css2 = conf.converter.css2
         self.style = conf.style
         self.pdfsize = conf.pdfsize
         self._cssdir = conf._cssdir
@@ -48,15 +47,19 @@ class StyleSheet(object):
 
     @property
     def stylesheets(self):
-        yield from self._get_paths()
+        yield from self._get_paths(self.css)
+
+    @property
+    def stylesheets2(self):
+        yield from self._get_paths(self.css2)
 
     @cached_property
     def context(self):
         return self._build_context()
 
-    def _get_paths(self):
+    def _get_paths(self, css):
         # build css files if necessary, and yield filepaths
-        for name in self.css:
+        for name in css:
             if name == SAMPLE:
                 name = SAMPLE + TEMPLATE_EXT
 
