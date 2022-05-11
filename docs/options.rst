@@ -170,7 +170,8 @@ General Section
     | (``//div[@itemprop="articleBody"]``
     | ``//div[@id="main"]``
     | ``//div[@id="content"]``
-    | ``//div[@class=="body"]``)
+    | ``//div[@class=="body"]``
+    | ``//article``)
 
     ``[LINE]``
 

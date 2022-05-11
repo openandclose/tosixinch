@@ -197,6 +197,7 @@ guess=              : if there is no matched url, use this xpath for content sel
                     //div[@id="main"]
                     //div[@id="content"]
                     //div[@class=="body"]
+                    //article
 
 *defaultprocess=    :: f: line
                     add_h1

@@ -16,6 +16,8 @@ Unreleased
 
 * Add --headless option, cutting --javascript
 
+* Add '//article' to guess option defaults
+
 **Add:**
 
 * Add github discussions to sample
