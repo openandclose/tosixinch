@@ -8,9 +8,12 @@ from tosixinch import system
 
 import lxml.etree as etree
 import lxml.html
-import lxml.html.clean as clean  # noqa: F401 (imported but unused)
+import lxml.html.clean
+import lxml.html.defs
 
 tostring = lxml.html.tostring
+clean = lxml.html.clean
+link_attrs = lxml.html.defs.link_attrs
 
 logger = logging.getLogger(__name__)
 

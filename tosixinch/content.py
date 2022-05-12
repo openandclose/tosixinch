@@ -139,7 +139,7 @@ def _relink(url, prev_base, new_base):
 class BaseResolver(object):
     """Rewrite relative references in html doc."""
 
-    LINK_ATTRS = ('cite', 'href', 'src')
+    LINK_ATTRS = lxml_html.link_attrs
     COMP_ATTRS = (('img', 'src'),)  # tuple of tag-attribute tuples
 
     def __init__(self, doc, loc, locs, baseurl=None):
