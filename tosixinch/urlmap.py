@@ -366,8 +366,16 @@ class Ref(object):
         self.fname = self._cls.fname
 
     def _resolve(self, url):
-        baseurl = self.baseurl or self._parent_cls.url
-        return urllib.parse.urljoin(baseurl, url)
+        if self.baseurl:
+            return urllib.parse.urljoin(self.baseurl, url)
+
+        base = self._parent_cls
+        if base.is_remote:
+            return urllib.parse.urljoin(base.url, url)
+        else:
+            path = _url2path(url)
+            mod = ntpath if PLATFORM == 'win32' else posixpath
+            return mod.join(mod.dirname(base._cls.path), path)
 
     def _detect(self, url):
         base = self._parent_cls
