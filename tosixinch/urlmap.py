@@ -115,7 +115,7 @@ def _add_fragment(url, fragment):
         return url + '#' + fragment
     if fragment == '':
         return url + '#'
-    return url
+    return url  # when fragment=None
 
 
 def _get_relative_reference(path, basepath, url):
@@ -269,8 +269,7 @@ class Map(object):
 
     INDEX = URL.INDEX
 
-    def __init__(self, input_name,
-            input_type=None):
+    def __init__(self, input_name, input_type=None):
         self._input_name = input_name
         self.sep = '\\' if PLATFORM == 'win32' else '/'
         self._cls = self._detect(input_name, input_type)
@@ -353,11 +352,11 @@ class Ref(object):
 
     _CLS = Map
 
-    def __init__(self, url, parent_url, baseurl=None):
-        if isinstance(parent_url, str):
-            self._parent_cls = self._CLS(parent_url, input_type=None)
+    def __init__(self, url, parent, baseurl=None):
+        if isinstance(parent, str):
+            self._parent_cls = self._CLS(parent, input_type=None)
         else:
-            self._parent_cls = parent_url
+            self._parent_cls = parent
 
         self.baseurl = baseurl
         self._url = self._resolve(url)
