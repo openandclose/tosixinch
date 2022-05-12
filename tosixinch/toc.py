@@ -71,7 +71,7 @@ class Node(object):
             self._doc = lxml_html.read(self.fnew)
 
     def _append_css(self):
-        for el in self.doc.xpath('//head/link[@class="tsi-css"]'):
+        for el in self.doc.xpath('//head/link[@rel="stylesheet"]'):
             href = el.get('href') or ''
             if href:
                 if href in self.root.cssfiles:
