@@ -16,6 +16,8 @@ import urllib.parse
 from tosixinch import PLATFORM
 from tosixinch import urlno
 
+OSPATH = ntpath if PLATFORM == 'win32' else posixpath
+
 
 # query and fragment can have '/' character.
 # So when creating system path from url strings,
@@ -99,8 +101,7 @@ def _path2ref(path, basepath):
     if path == basepath:
         path = ''
     else:
-        mod = ntpath if PLATFORM == 'win32' else posixpath
-        path = mod.relpath(path, mod.dirname(basepath))
+        path = OSPATH.relpath(path, OSPATH.dirname(basepath))
     return _path2url(path)
 
 
@@ -215,7 +216,6 @@ class Path(object):
 
     def __init__(self, path):
         self._path = path
-        self._pathmodule = ntpath if PLATFORM == 'win32' else posixpath
 
     def _normalize(self, path):
         if PLATFORM == sys.platform:
@@ -223,12 +223,12 @@ class Path(object):
             path = os.path.expandvars(path)
 
         if PLATFORM == 'win32':
-            return self._pathmodule.normcase(path)
+            return ntpath.normcase(path)
         else:
             return path
 
     def _resolve(self, path):
-        return self._pathmodule.abspath(path)
+        return OSPATH.abspath(path)
 
     def _split_windows_drive(self, name):
         drive = None
@@ -374,8 +374,7 @@ class Ref(object):
             return urllib.parse.urljoin(base.url, url)
         else:
             path = _url2path(url)
-            mod = ntpath if PLATFORM == 'win32' else posixpath
-            return mod.join(mod.dirname(base._cls.path), path)
+            return OSPATH.join(OSPATH.dirname(base._cls.path), path)
 
     def _detect(self, url):
         base = self._parent_cls
