@@ -44,38 +44,6 @@ def build_new_html(doctype=None, title=None, content=None):
     return root
 
 
-def iter_component(doc):
-    """Get inner links needed to download or modify in a html.
-
-    Used in extract.py and toc.py.
-    """
-    for el in doc.xpath('//img'):
-        urls = el.xpath('./@src')
-        if not urls:
-            continue
-        url = urls[0]
-
-        # For data url (e.g. '<img src=data:image/png;base64,iVBORw0K...'),
-        # just pass it on to pdf conversion libraries.
-        if url.startswith('data:image/'):
-            continue
-
-        if _skip_sites(url):
-            continue
-
-        yield el, url
-
-
-# experimental
-def _skip_sites(url):
-    sites = ()
-    # sites = ('gravatar.com/', )
-    for site in sites:
-        if site in url:
-            return True
-    return False
-
-
 def get_component_size(el, fname, stream=None):
     # Get size from html attributes (if any and the unit is no unit or 'px').
     w = el.get('width')
@@ -127,9 +95,12 @@ def _append_bodies(root, rootname, fnames, codings, errors):
 
 
 def _relink_component(doc, rootname, fname):
-    for el, url in iter_component(doc):
-        url = _relink(url, fname, rootname)
-        el.attrib['src'] = url
+    for el in doc.iter(lxml_html.etree.Element):
+        for tag, attr in COMP_ATTRS:
+            if el.tag == tag and attr in el.attrib:
+                url = el.attrib[attr].strip()
+                url = _relink(url, fname, rootname)
+                el.attrib['src'] = url
 
 
 def _relink(url, prev_base, new_base):
