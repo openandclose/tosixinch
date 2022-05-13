@@ -28,6 +28,9 @@ HTML_TEMPLATE = """{doctype}
 DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
+LINK_ATTRS = lxml_html.link_attrs
+COMP_ATTRS = (('img', 'src'),)  # tuple of tag-attribute tuples
+
 
 def build_new_html(doctype=None, title=None, content=None):
     """Build minimal html to further edit."""
@@ -139,9 +142,6 @@ def _relink(url, prev_base, new_base):
 class BaseResolver(object):
     """Rewrite relative references in html doc."""
 
-    LINK_ATTRS = lxml_html.link_attrs
-    COMP_ATTRS = (('img', 'src'),)  # tuple of tag-attribute tuples
-
     def __init__(self, doc, loc, locs, baseurl=None):
         self.doc = doc
         self.loc = loc
@@ -173,7 +173,7 @@ class BaseResolver(object):
             self._resolve(el)
 
     def get_component(self, el):
-        for tag, attr in self.COMP_ATTRS:
+        for tag, attr in COMP_ATTRS:
             if el.tag == tag and attr in el.attrib:
                 comp, url, fragment = self._get_url_data(el, attr)
                 self._get_component(el, comp)
@@ -186,7 +186,7 @@ class BaseResolver(object):
         self.sibling_urls[comp.url] = comp.relative_reference
 
     def _resolve(self, el):
-        for attr in self.LINK_ATTRS:
+        for attr in LINK_ATTRS:
             if attr in el.attrib:
                 comp, url, fragment = self._get_url_data(el, attr)
                 url = comp.url
