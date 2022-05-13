@@ -205,15 +205,9 @@ class SeleniumDownloader(action.Downloader):
 
     def __init__(self, conf, site):
         super().__init__(conf, site)
+        self.driver, self.driver_path = self.get_driver()
 
-        global SELENIUM_DRIVER
-        if not SELENIUM_DRIVER:
-            SELENIUM_DRIVER = self.start()
-
-        self.agent = SELENIUM_DRIVER
-        action.add_cleanup(self.cleanup)
-
-    def start(self):
+    def get_driver(self):
         driver_paths = {
             'chrome': self._site.general.selenium_chrome_path,
             'firefox': self._site.general.selenium_firefox_path,
@@ -221,18 +215,24 @@ class SeleniumDownloader(action.Downloader):
 
         driver = self._site.general.browser_engine[9:]
         driver_path = driver_paths[driver]
+        return driver, driver_path
 
-        logger.info('using selenium (%s)...', driver)
-        return start_selenium(driver, driver_path)
+    def start(self):
+        global SELENIUM_DRIVER
+        if not SELENIUM_DRIVER:
+            SELENIUM_DRIVER = start_selenium(self.driver, self.driver_path)
+            self.agent = SELENIUM_DRIVER
+            action.add_cleanup(self.cleanup)
 
     def cleanup(self):
         global SELENIUM_DRIVER
-
         if SELENIUM_DRIVER:
             end_selenium(SELENIUM_DRIVER)
             SELENIUM_DRIVER = None
 
     def request(self, site):
+        self.start()
+        logger.info('using selenium (%s)...', self.driver)
         url = site.idna_url
         self.agent.get(url)
 
