@@ -51,14 +51,17 @@ class Extract(action.Extractor):
     def build(self):
         title = self.root.xpath('//title/text()')
         title = title[0] if title else content.DEFAULT_TITLE
-        baseurl = self.root.base  # may be None
-        logger.debug('[base url] %s', baseurl)
-
-        doc = content.build_new_html(doctype=self.doctype, title=title)
-
         self.title = title
-        self.baseurl = baseurl
-        self.doc = doc
+
+        self.baseurl = self.get_baseurl()
+        self.doc = content.build_new_html(doctype=self.doctype, title=title)
+
+    def get_baseurl(self):
+        base = self.root.xpath('//base[@href]')
+        if base:
+            baseurl = base[0].get('href')
+            logger.debug('[base url] %s', baseurl)
+            return baseurl
 
     def guess_selection(self):
         for guess in self._guess:
