@@ -84,17 +84,6 @@ def merge_htmls(paths, pdfname, codings=None, errors='strict'):
         return paths[0]
 
 
-def _append_bodies(root, rootname, fnames, codings, errors):
-    for fname in fnames:
-        doc = lxml_html.read(fname, codings=codings, errors=errors)
-        bodies = doc.xpath('//body')
-        for b in bodies:
-            _relink_component(b, rootname, fname)
-            b.tag = 'div'
-            b.set('class', 'tsi-body-merged')
-            root.body.append(b)
-
-
 def _relink_component(doc, rootname, fname):
     for el in doc.iter(lxml_html.etree.Element):
         for tag, attr in COMP_ATTRS:

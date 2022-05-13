@@ -9,12 +9,8 @@ import os
 import re
 import urllib.parse
 
+from tosixinch import content
 from tosixinch import location
-from tosixinch import lxml_html
-from tosixinch.content import (
-    build_new_html, _relink_component, _relink)
-
-import tosixinch.process.sample as process_sample
 
 logger = logging.getLogger(__name__)
 
@@ -39,64 +35,26 @@ def _create_toc_url(title):
 class Node(object):
     """Represent one non-blank line in ufile."""
 
-    def __init__(self, level, url, title, root=None):
-        self._loc = location.Location(url)
-
-        self.url = self._loc.url
-        self.fnew = self._loc.fnew
-        self.slash_fnew = self._loc.slash_fnew
-
-        self.level = level
+    def __init__(self, root, children, title):
+        self._root = root
+        self._children = children
         self.title = title
-        self.root = root or self
 
-        self.last = False
-        self._doc = None
-        self.cssfiles = []
-
-    @property
-    def doc(self):
-        if self._doc is None:
-            self._create_doc()
-        return self._doc
+        self.doc = self._make_toc_html()
+        self._loc = location.Location(root)
+        self.url = self._loc.url
+        self.root = self._loc.fnew
+        self.children = [location.Location(child).fnew for child in children]
 
     def _make_toc_html(self):
-        content = '<h1>%s</h1>' % self.title
-        return build_new_html(title=self.title, content=content)
+        title = self.title or content.DEFAULT_TITLE
+        content_ = '<h1>%s</h1>' % title
+        return content.build_new_html(title=title, content=content_)
 
-    def _create_doc(self):
-        if self.title:
-            self._doc = self._make_toc_html()
-        else:
-            self._doc = lxml_html.read(self.fnew)
-
-    def _append_css(self):
-        for el in self.doc.xpath('//head/link[@rel="stylesheet"]'):
-            href = el.get('href') or ''
-            if href:
-                if href in self.root.cssfiles:
-                    continue
-                href = _relink(href, self.slash_fnew, self.root.slash_fnew)
-                el.set('href', href)
-                self.root.doc.head.append(el)
-                self.root.cssfiles.append(href)
-
-    # TODO: consider using content.merge_htmls().
-    def _append_body(self):
-        for t in self.doc.xpath('//body'):
-            process_sample.lower_heading(t)
-            _relink_component(t, self.root.fnew, self.fnew)
-            t.tag = 'div'
-            t.set('class', 'tsi-body-merged')
-            self.root.doc.body.append(t)
-
-    def write(self):
-        if self.root is not self:
-            self._append_css()
-            self._append_body()
-
-        if self.last:
-            lxml_html.write(self.root.fnew, doc=self.root.doc)
+    def merge(self):
+        if not self.children:
+            return
+        content.Merger(self.doc, self.root, self.children).merge()
 
 
 class Nodes(object):
@@ -148,42 +106,40 @@ class Nodes(object):
     def parse(self):
         nodes = []
         level = 0
-        node = None
-        root = None
-        for url in self.urls:
+        queue = []
+        # adding one extra ('# aaa') for handling the last node
+        for url in self.urls + ['# aaa']:
             if url.startswith(self._COMMENT):
                 continue
+            first = False
             cnt, url, title = self._parse_line(url)
             if cnt:
                 if url is None:
                     level = 0
                     continue
 
-                if node:
-                    node.last = True
-
+                first = True
                 level = cnt
             else:
                 if level == 0:
-                    if node:
-                        node.last = True
+                    first = True
 
-            if not node or node.last:
-                root = node = Node(level, url, title, None)
-            else:
-                node = Node(level, url, title, root)
-            nodes.append(node)
+            if first and queue:
+                root, title_ = queue[0]
+                children = [q[0] for q in queue[1:]]
+                nodes.append(Node(root, children, title_))
+                queue = []
 
-        node.last = True
+            queue.append((url, title))
+
         return nodes
 
-    def write(self):
+    def merge(self):
         for node in self.nodes:
-            node.write()
+            node.merge()
 
         ufile = '%s %s\n' % (COMMENT_PREFIX, os.path.abspath(self.ufile))
-        urls = '\n'.join([node.url for node in self.nodes
-            if node.root is node])
+        urls = '\n'.join([node.url for node in self.nodes])
         with open(self.tocfile, 'w') as f:
             f.write(ufile)
             f.write(urls)
@@ -199,4 +155,4 @@ def run(conf):
     tocfile = get_tocfile(ufile)
 
     nodes = Nodes(urls=urls, ufile=ufile, tocfile=tocfile)
-    nodes.write()
+    nodes.merge()

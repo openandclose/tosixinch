@@ -9,20 +9,18 @@ def check(ulist, expected):
     ulist = [u.strip() for u in ulist.strip().split('\n')]
     expected = textwrap.dedent(expected).split('\n')[1:-1]
     nodes = toc.Nodes(ulist, 'dummy-toc.txt', None)
-    for node, ref_line in zip(nodes.nodes, expected):
-        url = node.url.replace(os.path.abspath('.') + os.sep, '')
-        data = (_get_indent(node), url)
-        line = '%s%s' % data
-        if node.last:
-            line += ' ]'
-        assert line == ref_line
+    result = []
+    append = result.append
+    for node in nodes.nodes:
+        append(_get_simplename(node._root))
+        for child in node._children:
+            append('    %s' % _get_simplename(child))
+        for r, e in zip(result, expected):
+            assert r == e
 
 
-def _get_indent(node):
-    if node.title:
-        return '    ' * (node.level - 1)
-    else:
-        return '    ' * node.level 
+def _get_simplename(name):
+    return name.replace(os.path.abspath('.') + os.sep, '')
 
 
 class TestNodes:
@@ -30,7 +28,7 @@ class TestNodes:
     def test_parse(self):
         """
         Format:
-            <'    ' *  DOC_LEVEL> <node.url> <' ]' if node.last>
+            <'    ' * DOC_LEVEL> <URL>
         """
         ulist = """
             # aaa
@@ -39,10 +37,10 @@ class TestNodes:
             ddd
         """
         expected = """
-            http://tosixinch.example.com/aaa ]
+            http://tosixinch.example.com/aaa
             http://tosixinch.example.com/bbb
                 ccc
-                ddd ]
+                ddd
         """
         check(ulist, expected)
 
@@ -53,10 +51,10 @@ class TestNodes:
             ddd
         """
         expected = """
-            aaa ]
-            http://tosixinch.example.com/bbb ]
+            aaa
+            http://tosixinch.example.com/bbb
             http://tosixinch.example.com/ccc
-                ddd ]
+                ddd
         """
         check(ulist, expected)
 
@@ -67,10 +65,10 @@ class TestNodes:
             # ddd
         """
         expected = """
-            aaa ]
-            bbb ]
-            http://tosixinch.example.com/ccc ]
-            http://tosixinch.example.com/ddd ]
+            aaa
+            bbb
+            http://tosixinch.example.com/ccc
+            http://tosixinch.example.com/ddd
         """
         check(ulist, expected)
 
@@ -81,10 +79,10 @@ class TestNodes:
             # ddd
         """
         expected = """
-            aaa ]
+            aaa
             http://tosixinch.example.com/bbb
-                ccc ]
-            http://tosixinch.example.com/ddd ]
+                ccc
+            http://tosixinch.example.com/ddd
         """
         check(ulist, expected)
 
@@ -96,8 +94,8 @@ class TestNodes:
         """
         expected = """
             http://tosixinch.example.com/aaa
-                bbb ]
+                bbb
             http://tosixinch.example.com/ccc
-                ddd ]
+                ddd
         """
         check(ulist, expected)
