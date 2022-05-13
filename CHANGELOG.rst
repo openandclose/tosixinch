@@ -42,6 +42,8 @@ Unreleased
 
 * Fix link when baseurl (<base> tag) is provided
 
+* Fix merge_htmls (no css references for weasyprint)
+
 
 v0.6.0 (2021-10-29)
 -------------------

@@ -11,6 +11,8 @@ from tosixinch import imagesize
 
 from tosixinch.urlmap import _split_fragment, _add_fragment
 
+import tosixinch.process.sample as process_sample
+
 logger = logging.getLogger(__name__)
 
 HTML_TEMPLATE = """{doctype}
@@ -76,8 +78,7 @@ def merge_htmls(paths, pdfname, codings=None, errors='strict'):
         else:
             hname = pdfname + '.html'
         root = build_new_html()
-        _append_bodies(root, hname, paths, codings, errors)
-        lxml_html.write(hname, doc=root)
+        Merger(root, hname, paths, codings, errors).merge()
         return hname
     else:
         return paths[0]
@@ -166,3 +167,55 @@ class BaseResolver(object):
                 else:
                     ref = _add_fragment(url, fragment)
                 el.attrib[attr] = ref
+
+
+class Merger(object):
+    """Merge htmls (toc, and weasyprint)."""
+
+    def __init__(self, doc, root, children, codings=None, errors='strict'):
+        self.doc = doc
+        self.root = root  # root file name
+        self.children = children  # list of child file names
+        self.codings = codings
+        self.errors = errors
+
+        self._h1 = self.check_heading()
+        self._css_cache = []
+
+    def check_heading(self):
+        if self.doc.xpath('//h1'):
+            return True
+        return False
+
+    def merge(self):
+        for child in self.children:
+            codings, errors = self.codings, self.errors
+            doc = lxml_html.read(child, codings=codings, errors=errors)
+            self.append_css(child, doc)
+            self.append_body(child, doc)
+
+        self.write()
+
+    # Note: omitting 'ref -> path ->ref' transformations below
+
+    def append_css(self, child, doc):
+        for el in doc.xpath('//head/link[@rel="stylesheet"]'):
+            href = el.get('href') or ''
+            if href and href not in self._css_cache:
+                self._css_cache.append(href)
+
+                href = _relink(href, child, self.root)
+                el.set('href', href)
+                self.doc.head.append(el)
+
+    def append_body(self, child, doc):
+        for b in doc.xpath('//body'):
+            if self._h1:
+                process_sample.lower_heading(b)
+            _relink_component(b, self.root, child)
+            b.tag = 'div'
+            b.set('class', 'tsi-body-merged')
+            self.doc.body.append(b)
+
+    def write(self):
+        lxml_html.write(self.root, doc=self.doc)
