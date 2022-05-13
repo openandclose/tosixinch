@@ -61,6 +61,8 @@ class Extract(action.Extractor):
         if base:
             baseurl = base[0].get('href')
             logger.debug('[base url] %s', baseurl)
+            for b in base:
+                b.drop_tree()
             return baseurl
 
     def guess_selection(self):
