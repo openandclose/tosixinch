@@ -385,8 +385,10 @@ General Section
     | ``[BOOL]``
 
     If ``True``,
-    ``url`` is used as input *as is* when ``convert``.
-    In this case, ``url`` must be local filepath.
+    when ``convert``, the program processes ``urls``.
+    Normally (if it is ``False``), it processes ``Extracted_File``.
+
+    I don't have much clear idea when and how it is used now.
 
 .. confopt:: css \*
 
