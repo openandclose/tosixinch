@@ -177,8 +177,8 @@ class Merger(object):
         return False
 
     def merge(self):
+        codings, errors = self.codings, self.errors
         for child in self.children:
-            codings, errors = self.codings, self.errors
             doc = lxml_html.read(child, codings=codings, errors=errors)
             self.append_css(child, doc)
             self.append_body(child, doc)
