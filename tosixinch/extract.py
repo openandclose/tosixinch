@@ -47,14 +47,7 @@ class Extract(action.Extractor):
 
         doctype = self.root.getroottree().docinfo.doctype
         self.doctype = doctype or content.DEFAULT_DOCTYPE
-
-    def build(self):
-        title = self.root.xpath('//title/text()')
-        title = title[0] if title else content.DEFAULT_TITLE
-        self.title = title
-
         self.baseurl = self.get_baseurl()
-        self.doc = content.build_new_html(doctype=self.doctype, title=title)
 
     def get_baseurl(self):
         base = self.root.xpath('//base[@href]')
@@ -64,6 +57,13 @@ class Extract(action.Extractor):
             for b in base:
                 b.drop_tree()
             return baseurl
+
+    def build(self):
+        title = self.root.xpath('//title/text()')
+        title = title[0] if title else content.DEFAULT_TITLE
+        self.title = title
+
+        self.doc = content.build_new_html(doctype=self.doctype, title=title)
 
     def guess_selection(self):
         for guess in self._guess:
