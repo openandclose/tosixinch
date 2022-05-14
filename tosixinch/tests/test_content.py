@@ -55,7 +55,7 @@ class TestRelinkComponent:
         assert doc.get('src') == '../sss/tt/uu'
 
 
-class TestBaseResolver:
+class TestResolver:
 
     urls = (
         'http://h/a/b/c.html',
@@ -72,7 +72,7 @@ class TestBaseResolver:
 
     def resolve(self, doc):
         doc = fromstring(doc)
-        resolver = content.BaseResolver(doc, self.locs[0], self.locs)
+        resolver = content.Resolver(doc, self.locs[0], self.locs)
         resolver.resolve()
         return resolver.doc
 

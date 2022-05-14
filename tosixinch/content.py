@@ -100,7 +100,7 @@ def _relink(url, prev_base, new_base):
     return url
 
 
-class BaseResolver(object):
+class Resolver(object):
     """Rewrite relative references in html doc."""
 
     def __init__(self, doc, loc, locs, baseurl=None):

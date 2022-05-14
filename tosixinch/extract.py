@@ -156,7 +156,7 @@ class ReadabilityExtract(Extract):
         self.write()
 
 
-class Resolver(content.BaseResolver):
+class Resolver(content.Resolver):
     """Download components and rewrite links."""
 
     def __init__(self, doc, loc, locs, baseurl, conf):
