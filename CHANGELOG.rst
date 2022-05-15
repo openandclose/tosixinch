@@ -36,6 +36,8 @@ Unreleased
 
 * Add KeepExtract (no-selection extractor, '--keep-html')
 
+* Add IDTable (fragment link re-resolution when merging htmls)
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

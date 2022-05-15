@@ -4,6 +4,7 @@
 import logging
 import posixpath
 import re
+import zlib
 
 from tosixinch import location
 from tosixinch import lxml_html
@@ -14,6 +15,8 @@ from tosixinch.urlmap import _split_fragment, _add_fragment
 import tosixinch.process.sample as process_sample
 
 logger = logging.getLogger(__name__)
+
+ABS_URL_RE = re.compile('^https?://', flags=re.IGNORECASE)
 
 HTML_TEMPLATE = """{doctype}
 <html>
@@ -70,34 +73,45 @@ def get_component_size(el, fname, stream=None):
         return None, None
 
 
+def is_abs_url(path):
+    if ABS_URL_RE.match(path):
+        return True
+    return False
+
+
+def rel2cur(basepath, path):
+    # transform 'path' against base path directory,
+    # to 'path' against current directory.
+    if is_abs_url(path):
+        return path
+    po = posixpath
+    return po.normpath(po.join(po.dirname(basepath), path))
+
+
+def cur2rel(basepath, path):
+    # transform 'path' against current directory,
+    # to 'path' against base path directory.
+    if is_abs_url(path):
+        return path
+    if path == basepath:
+        return ''
+    po = posixpath
+    return po.normpath(po.relpath(path, start=po.dirname(basepath)))
+
+
 # TODO: Links to merged htmls should be rewritten to fragment links.
-def merge_htmls(paths, pdfname, codings=None, errors='strict'):
+def merge_htmls(paths, pdfname, hashid=False, codings=None, errors='strict'):
     if len(paths) > 1:
         if pdfname[-4:].lower() == '.pdf':
             hname = pdfname[:-4] + '.html'
         else:
             hname = pdfname + '.html'
         root = build_new_html()
-        Merger(root, hname, paths, codings, errors).merge()
+        table = ((hname, paths),)
+        Merger(root, hname, paths, table, hashid, codings, errors).merge()
         return hname
     else:
         return paths[0]
-
-
-def _relink_component(doc, rootname, fname):
-    for el in doc.iter(lxml_html.etree.Element):
-        for tag, attr in COMP_ATTRS:
-            if el.tag == tag and attr in el.attrib:
-                url = el.attrib[attr].strip()
-                url = _relink(url, fname, rootname)
-                el.attrib['src'] = url
-
-
-def _relink(url, prev_base, new_base):
-    url = posixpath.join(posixpath.dirname(prev_base), url)
-    url = posixpath.relpath(url, start=posixpath.dirname(new_base))
-    url = posixpath.normpath(url)
-    return url
 
 
 class Resolver(object):
@@ -161,10 +175,13 @@ class Resolver(object):
 class Merger(object):
     """Merge htmls (toc, and weasyprint)."""
 
-    def __init__(self, doc, root, children, codings=None, errors='strict'):
+    def __init__(self, doc, root, children, table=None,
+            hashid=False, codings=None, errors='strict'):
         self.doc = doc
         self.root = root  # root file name
         self.children = children  # list of child file names
+        self.table = IDTable(table, hashid=hashid)
+        self.hashid = hashid
         self.codings = codings
         self.errors = errors
 
@@ -176,35 +193,133 @@ class Merger(object):
             return True
         return False
 
+    def iterate_doc(self, doc):
+        for el in doc.iter(lxml_html.etree.Element):
+            yield el
+
     def merge(self):
+        self.table.id_cache = {}  # intialization
         codings, errors = self.codings, self.errors
+        docs = []
         for child in self.children:
             doc = lxml_html.read(child, codings=codings, errors=errors)
+            for el in self.iterate_doc(doc):
+                self.relink_id_ref(child, el)
+            docs.append(doc)
+
+        for child, doc in zip(self.children, docs):
             self.append_css(child, doc)
             self.append_body(child, doc)
 
         self.write()
 
-    # Note: omitting 'ref -> path ->ref' transformations below
-
     def append_css(self, child, doc):
         for el in doc.xpath('//head/link[@rel="stylesheet"]'):
             href = el.get('href') or ''
-            if href and href not in self._css_cache:
-                self._css_cache.append(href)
+            if href:
+                href = rel2cur(child, href)
+                if href not in self._css_cache:
+                    self._css_cache.append(href)
 
-                href = _relink(href, child, self.root)
-                el.set('href', href)
-                self.doc.head.append(el)
+                    href = cur2rel(self.root, href)
+                    el.set('href', href)
+                    self.doc.head.append(el)
 
     def append_body(self, child, doc):
         for b in doc.xpath('//body'):
             if self._h1:
                 process_sample.lower_heading(b)
-            _relink_component(b, self.root, child)
+            for el in self.iterate_doc(b):
+                self.relink_component(el, self.root, child)
+                self.relink_id(child, el)
             b.tag = 'div'
+            b.set('id', self.table.path2id(child))
             b.set('class', 'tsi-body-merged')
             self.doc.body.append(b)
 
+    def relink_component(self, el, root, child):
+        for tag, attr in COMP_ATTRS:
+            if el.tag == tag and attr in el.attrib:
+                url = el.attrib[attr].strip()
+                url = rel2cur(child, url)
+                url = cur2rel(root, url)
+                el.attrib['src'] = url
+
+    def relink_id_ref(self, child, el):
+        for attr in LINK_ATTRS:
+            if attr in el.attrib:
+                url = el.attrib[attr].strip()
+                new = self.table.get(child, url)  # filling id_cache
+                el.attrib[attr] = new
+
+    def relink_id(self, child, el):
+        if not self.table.id_cache:
+            return
+        id_ = el.get('id')
+        if not id_:
+            return
+        new = self.table.id_cache.get((child, id_.strip()))
+        if new:
+            el['id'] = new
+
     def write(self):
         lxml_html.write(self.root, doc=self.doc)
+
+
+class IDTable(object):
+    """Process id attributes (fragment links) for merged htmls.
+
+    Receive ``table`` argument,
+    which is actually a tuple of tuple (root, children).
+    """
+
+    def __init__(self, table, hashid=False):
+        self.udict = self.create_dict(table)
+        self.hashid = hashid
+        self.id_cache = {}
+
+    def create_dict(self, table):
+        t = {}
+        if table is None:
+            return t
+        for tup in table:
+            root, children = tup
+            t[root] = root
+            for child in children:
+                t[child] = root
+        return t
+
+    def get(self, child, url):
+        src, fragment = _split_fragment(url)
+        if src == '':
+            src = child
+        else:
+            src = rel2cur(child, src)
+
+        dest = self.udict.get(src)
+        if dest is None:
+            return url
+
+        if not fragment:
+            fragment = self.path2id(src)
+
+        child_dest = self.udict.get(child)
+        dest = cur2rel(child_dest, dest)
+
+        if not self.hashid or dest == src:
+            return _add_fragment(dest, fragment)
+
+        hash_ = self.get_checksum(src)
+        new = self.format_hash_frag(src, fragment, hash_)
+        self.id_cache[(src, fragment)] = new
+        return _add_fragment(dest, new)
+
+    def path2id(self, path):
+        return location.slugify(path.split('/')[-1])
+
+    def get_checksum(self, url):
+        data = url.encode('utf-8')
+        return '%08x' % (zlib.crc32(data) & 0xffffffff)
+
+    def format_hash_frag(self, src, fragment, hash_):
+        return '%s-%s' % (fragment, hash_)

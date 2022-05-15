@@ -35,7 +35,7 @@ class TestBlankHtml:
         assert tostring(html.getroottree()) == expected
 
 
-class TestRelinkComponent:
+class _TestRelinkComponent:
     fname = 'aaa/bb/cc'
     base = 'xxx/yy'
 
@@ -171,3 +171,35 @@ class TestResolver:
         self.compare(doc, '//div[@id="img-slash"]/img/@src',    '../x.jpg')
         self.compare(doc, '//div[@id="img-slash2"]/img/@src',   '../x.jpg')
         self.compare(doc, '//div[@id="img-rel"]/img/@src',      '../x.jpg')
+
+
+class TestIDTable:
+
+    def build(self, root, child, child2, root2, child3, child4):
+        table = (
+            (root, [child, child2]),
+            (root2, [child3, child4]),
+        )
+        return content.IDTable(table)
+
+    def check(self, t, child, url, expected):
+        ret = t.get(child, url)
+        assert ret == expected
+
+    def test_id(self):
+        t = self.build('x', 'a', 'b/bb', 'y/yy', 'c', 'd/dd/ddd')
+        self.check(t, 'a', '', '#a')
+        self.check(t, 'a', '#', '#a')
+        self.check(t, 'a', 'p#f', 'p#f')
+        self.check(t, 'a', '#f', '#f')
+        self.check(t, 'a', 'b/bb#f', '#f')
+        self.check(t, 'a', 'c#f', 'y/yy#f')
+        self.check(t, 'a', 'd/dd/ddd#f', 'y/yy#f')
+
+        self.check(t, 'b/bb', '', '#bb')
+        self.check(t, 'b/bb', '#', '#bb')
+        self.check(t, 'b/bb', 'p#f', 'p#f')
+        self.check(t, 'b/bb', '#f', '#f')
+        self.check(t, 'b/bb', '../a#f', '#f')
+        self.check(t, 'b/bb', '../c#f', 'y/yy#f')
+        self.check(t, 'b/bb', '../d/dd/ddd#f', 'y/yy#f')

@@ -51,10 +51,10 @@ class Node(object):
         content_ = '<h1>%s</h1>' % title
         return content.build_new_html(title=title, content=content_)
 
-    def merge(self):
+    def merge(self, table):
         if not self.children:
             return
-        content.Merger(self.doc, self.root, self.children).merge()
+        content.Merger(self.doc, self.root, self.children, table).merge()
 
 
 class Nodes(object):
@@ -134,9 +134,16 @@ class Nodes(object):
 
         return nodes
 
+    @property
+    def table(self):
+        t = []
+        for node in self.nodes:
+            t.append((node.root, node.children))
+        return tuple(t)
+
     def merge(self):
         for node in self.nodes:
-            node.merge()
+            node.merge(self.table)
 
         ufile = '%s %s\n' % (COMMENT_PREFIX, os.path.abspath(self.ufile))
         urls = '\n'.join([node.url for node in self.nodes])
