@@ -134,16 +134,16 @@ class Nodes(object):
 
         return nodes
 
-    @property
-    def table(self):
+    def create_table(self):
         t = []
         for node in self.nodes:
             t.append((node.root, node.children))
         return tuple(t)
 
     def merge(self):
+        table = self.create_table()
         for node in self.nodes:
-            node.merge(self.table)
+            node.merge(table)
 
         ufile = '%s %s\n' % (COMMENT_PREFIX, os.path.abspath(self.ufile))
         urls = '\n'.join([node.url for node in self.nodes])
