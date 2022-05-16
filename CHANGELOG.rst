@@ -34,6 +34,8 @@ Unreleased
 
 * Add --interval option
 
+* Add KeepExtract (no-selection extractor, '--keep-html')
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

@@ -273,6 +273,10 @@ Configs
 
     commandline string to open the pdf viewer (f: cmds)
 
+.. option:: --keep-html
+
+    do not extract, keep html as is, just component download to make complete local version
+
 Styles
 ------
 

@@ -93,13 +93,17 @@ class Extract(action.Extractor):
         cleaner = clean.Clean(self.doc, tags, attrs, paths)
         cleaner.run()
 
-    def resolve(self):
-        doc, loc, locs = self.doc, self._site, self._conf.sites
+    def resolve(self, doc=None):
+        if doc is None:
+            doc = self.doc
+        loc, locs = self._site, self._conf.sites
         baseurl, conf = self.baseurl, self._conf
         Resolver(doc, loc, locs, baseurl, conf).resolve()
 
-    def write(self):
-        super().write(self.doc)
+    def write(self, doc=None):
+        if doc is None:
+            doc = self.doc
+        super().write(doc)
 
     def run(self):
         self.load()
@@ -111,6 +115,19 @@ class Extract(action.Extractor):
         self.resolve()
         self.add_css_elememnt()
         self.write()
+
+
+class KeepExtract(Extract):
+    """Provide superficial extractor.
+
+    Use input html as is, without select, clean, css-add etc.
+    Only do comp-download and resolve, to make local html (fname) complete.
+    """
+
+    def run(self):
+        self.load()
+        self.resolve(self.root)
+        self.write(self.root)
 
 
 class ReadabilityExtract(Extract):
@@ -179,7 +196,10 @@ def run(conf, site):
     extractor = site.general.extractor
 
     if extractor == 'lxml':
-        runner = Extract
+        if conf.general.keep_html:
+            runner = KeepExtract
+        else:
+            runner = Extract
     elif extractor == 'readability':
         if site.section == 'scriptdefault':
             runner = ReadabilityExtract
