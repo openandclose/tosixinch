@@ -225,6 +225,9 @@ add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: pl
                             self::svg
                             self::node()[starts-with(@class, "MathJax")]
 
+hashid=             :: f: bool
+                    yes
+
 *ftype=             : specify file type
                     :: choices: html, prose, nonprose, python
 
