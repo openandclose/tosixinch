@@ -7,11 +7,10 @@ import os
 import shlex
 import subprocess
 
+from tosixinch import content
 from tosixinch import location
 from tosixinch import stylesheet
 from tosixinch import toc
-
-from tosixinch.content import merge_htmls
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +38,21 @@ def _is_newer(ufile, tocfile):
         if os.path.abspath(ufile) == ufile_line:
             return True
     return False
+
+
+def merge_htmls(paths, pdfname, hashid=False, codings=None, errors='strict'):
+    if len(paths) > 1:
+        if pdfname[-4:].lower() == '.pdf':
+            hname = pdfname[:-4] + '.html'
+        else:
+            hname = pdfname + '.html'
+        root = content.build_new_html()
+        table = ((hname, paths),)
+        content.Merger(
+            root, hname, paths, table, hashid, codings, errors).merge()
+        return hname
+    else:
+        return paths[0]
 
 
 class Convert(object):

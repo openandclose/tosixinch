@@ -99,21 +99,6 @@ def cur2rel(basepath, path):
     return po.normpath(po.relpath(path, start=po.dirname(basepath)))
 
 
-# TODO: Links to merged htmls should be rewritten to fragment links.
-def merge_htmls(paths, pdfname, hashid=False, codings=None, errors='strict'):
-    if len(paths) > 1:
-        if pdfname[-4:].lower() == '.pdf':
-            hname = pdfname[:-4] + '.html'
-        else:
-            hname = pdfname + '.html'
-        root = build_new_html()
-        table = ((hname, paths),)
-        Merger(root, hname, paths, table, hashid, codings, errors).merge()
-        return hname
-    else:
-        return paths[0]
-
-
 class Resolver(object):
     """Rewrite relative references in html doc."""
 
