@@ -26,10 +26,8 @@ def _get_simplename(name):
 class TestNodes:
 
     def test_parse(self):
-        """
-        Format:
-            <'    ' * DOC_LEVEL> <URL>
-        """
+    # expected: children files are indented.
+
         ulist = """
             # aaa
             # bbb
