@@ -60,8 +60,8 @@ class Node(object):
 class Nodes(object):
     """Represent ufile."""
 
-    _COMMENT = COMMENT_PREFIX
-    _DIRECTIVE_RE = re.compile(
+    COMMENT = COMMENT_PREFIX
+    DIRECTIVE_RE = re.compile(
         r'^\s*(%s+?)?\s*(.+)?\s*$' % DIRECTIVE_PREFIX)
 
     def __init__(self, urls, ufile, tocfile):
@@ -84,7 +84,7 @@ class Nodes(object):
         return _create_toc_url(new)
 
     def _parse_line(self, url):
-        m = self._DIRECTIVE_RE.match(url)
+        m = self.DIRECTIVE_RE.match(url)
         if m.group(1):
             cnt = 1
         else:
@@ -107,9 +107,9 @@ class Nodes(object):
         nodes = []
         level = 0
         queue = []
-        # adding one extra ('# aaa') for handling the last node
+        # adding one extra ('# aaa') to handle the last node
         for url in self.urls + ['# aaa']:
-            if url.startswith(self._COMMENT):
+            if url.startswith(self.COMMENT):
                 continue
             first = False
             cnt, url, title = self._parse_line(url)
@@ -145,7 +145,7 @@ class Nodes(object):
         for node in self.nodes:
             node.merge(table)
 
-        ufile = '%s %s\n' % (COMMENT_PREFIX, os.path.abspath(self.ufile))
+        ufile = '%s %s\n' % (self.COMMENT, os.path.abspath(self.ufile))
         urls = '\n'.join([node.url for node in self.nodes])
         with open(self.tocfile, 'w') as f:
             f.write(ufile)
