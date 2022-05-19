@@ -41,18 +41,20 @@ def _is_newer(ufile, tocfile):
 
 
 def merge_htmls(paths, pdfname, hashid=False, codings=None, errors='strict'):
-    if len(paths) > 1:
-        if pdfname[-4:].lower() == '.pdf':
-            hname = pdfname[:-4] + '.html'
-        else:
-            hname = pdfname + '.html'
-        root = content.build_new_html()
-        table = ((hname, paths),)
-        content.Merger(
-            root, hname, paths, table, hashid, codings, errors).merge()
-        return hname
-    else:
+    if len(paths) == 1:
         return paths[0]
+
+    if pdfname.lower().endswith('.pdf'):
+        rootname = pdfname[:-4]
+    else:
+        rootname = pdfname
+    root = content.build_new_html()
+
+    hname = rootname + '.html'
+    table = ((hname, paths),)
+    content.Merger(
+        root, hname, paths, table, hashid, codings, errors).merge()
+    return hname
 
 
 class Convert(object):
