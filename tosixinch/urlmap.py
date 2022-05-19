@@ -373,6 +373,8 @@ class Ref(object):
         if base.is_remote:
             return urllib.parse.urljoin(base.url, url)
         else:
+            if URL.detect(url):
+                return url
             path = _url2path(url)
             return OSPATH.join(OSPATH.dirname(base._cls.path), path)
 
