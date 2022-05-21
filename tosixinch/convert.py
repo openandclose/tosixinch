@@ -48,7 +48,7 @@ def merge_htmls(paths, pdfname, hashid=False, codings=None, errors='strict'):
         rootname = pdfname[:-4]
     else:
         rootname = pdfname
-    root = content.build_new_html()
+    root = content.build_new_html(title=rootname)
 
     hname = rootname + '.html'
     table = ((hname, paths),)
