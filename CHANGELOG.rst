@@ -40,6 +40,8 @@ Unreleased
 
 * Add expose loc_index and loc_appendix to commandline
 
+* Add reading tosixinch.ini and site.ini from current dir
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

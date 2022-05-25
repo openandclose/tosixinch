@@ -291,6 +291,18 @@ def _get_user_configs(args, envs, appconf, siteconf):
     return userdir
 
 
+def _read_cur_config(appconf, siteconf):  # read from current directory
+    if os.path.isfile('tosixinch.ini'):
+        logger.debug('reading application config from current directory')
+        with open('tosixinch.ini') as f:
+            appconf.read_file(f)
+
+    if os.path.isfile('site.ini'):
+        logger.debug('reading site config from current directory')
+        with open('site.ini') as f:
+            siteconf.read_file(f)
+
+
 def _check_platform_dirs():
     """Search platform user config directories.
 
@@ -467,6 +479,8 @@ class Conf(object):
         else:
             self._user_scriptdir = None
             self._user_cssdir = None
+
+        _read_cur_config(self._appconf, self._siteconf)
 
     def sites_init(self, urls=None, ufile=None):
         sites = Sites(urls, ufile, self._appconf, self._siteconf)
