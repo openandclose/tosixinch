@@ -519,8 +519,8 @@ General Section
 
     | (None)
 
-    Specifies the placeholder name when the last url path is changed to directory.
-    Application default is ``'_'``.
+    Specify the suffix of ``Downloaded_File`` with no extension
+    (default: ``'_'``).
 
     (See `Downloaded_File <overview.html#dword-Downloaded_File>`__ for details.
 
@@ -528,8 +528,8 @@ General Section
 
     | (None)
 
-    Specifies the suffix for the name of ``Extracted_File``.
-    Application default is ``'~'``.
+    Specify the suffix of ``Extracted_File``
+    (default: ``'~'``).
 
     (See `Extracted_File <overview.html#dword-Extracted_File>`__ for details.
 
