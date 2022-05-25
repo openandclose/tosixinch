@@ -142,9 +142,16 @@ class URL(object):
             return True
         return False
 
+    def _is_authority_only(self, url):
+        seg = url.split('/')
+        if len(seg) == 1 or (len(seg) == 2 and seg[1] == ''):
+            return True
+        return False
+
     def _add_index(self, url):
-        if '/' not in url:
-            url += '/'
+        if self._is_authority_only(url):
+            return posixpath.join(url, self.INDEX)
+
         root, ext = posixpath.splitext(url)
         if ext:
             pass
