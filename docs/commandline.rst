@@ -273,6 +273,10 @@ Configs
 
     commandline string to open the pdf viewer (f: cmds)
 
+.. option:: --download-dir DOWNLOAD_DIR
+
+    specify root directory for download and extract (default: '_htmls')
+
 .. option:: --loc-index LOC_INDEX
 
     specify the suffix of 'Downloaded_File' with no extension (default: '_')

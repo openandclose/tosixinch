@@ -386,6 +386,7 @@ class Site(location.Location):
         self._siteconf = siteconf
         self._config = siteconf._config
 
+        self.PREFIX = conf.general.download_dir  # may be blank string ''
         self.INDEX = conf.general.loc_index or self.INDEX
         self.APPENDIX = conf.general.loc_appendix or self.APPENDIX
 

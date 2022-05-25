@@ -278,6 +278,10 @@ viewcmd=            : commandline string to open the pdf viewer (f: cmds)
 
 browsercmd=         :: f: cmd
 
+download_dir=       : specify root directory for download and extract
+                    : (default: '_htmls')
+                    _htmls
+
 loc_index=          : specify the suffix of 'Downloaded_File' with no extension
                     : (default: '_')
                     _

@@ -42,6 +42,8 @@ Unreleased
 
 * Add reading tosixinch.ini and site.ini from current dir
 
+* Add download_dir option
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)
