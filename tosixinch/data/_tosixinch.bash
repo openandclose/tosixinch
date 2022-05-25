@@ -6,7 +6,7 @@ _tosixinch()
     _init_completion -s || return
 
     case $prev in
-        --add-binary-extensions|--add-clean-attrs|--add-clean-tags|--cnvopts|--css2|--elements-to-keep-attrs|--font-family|--font-mono|--font-sans|--font-scale|--font-serif|--font-size|--font-size-mono|--full-image|--guess|--interval|--landscape-size|--line-height|--pdfname|--portrait-size|--selenium-chrome-path|--selenium-firefox-path|--textindent|--textwidth|--timeout|--toc-depth|--trimdirs|--user-agent|--viewcmd)
+        --add-binary-extensions|--add-clean-attrs|--add-clean-tags|--cnvopts|--css2|--elements-to-keep-attrs|--font-family|--font-mono|--font-sans|--font-scale|--font-serif|--font-size|--font-size-mono|--full-image|--guess|--interval|--landscape-size|--line-height|--loc-appendix|--loc-index|--pdfname|--portrait-size|--selenium-chrome-path|--selenium-firefox-path|--textindent|--textwidth|--timeout|--toc-depth|--trimdirs|--user-agent|--viewcmd)
             return
             ;;
         --browser-engine)
@@ -45,7 +45,7 @@ _tosixinch()
 
     $split && return
 
-    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --browser-engine --check --cnvopts --cnvpath --convert --css2 --download --elements-to-keep-attrs --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --ftype --full-image --guess --headless --help --input --inspect --interval --keep-html --landscape-size --line-height --lxml --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --quiet --raw --readability --readability-only --selenium-chrome-path --selenium-firefox-path --textindent --textwidth --timeout --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
+    COMPREPLY=( $( compgen -W '--add-binary-extensions --add-clean-attrs --add-clean-tags --appcheck --browser --browser-engine --check --cnvopts --cnvpath --convert --css2 --download --elements-to-keep-attrs --encoding --encoding-errors --extract --file --font-family --font-mono --font-sans --font-scale --font-serif --font-size --font-size-mono --force-download --ftype --full-image --guess --headless --help --input --inspect --interval --keep-html --landscape-size --line-height --loc-appendix --loc-index --lxml --no-parts-download --nouserdir --orientation --parts-download --pdfname --portrait-size --prince --printout --quiet --raw --readability --readability-only --selenium-chrome-path --selenium-firefox-path --textindent --textwidth --timeout --toc --toc-depth --trimdirs --urllib --user-agent --userdir --verbose --version --view --viewcmd --weasyprint --wkhtmltopdf' -- "$cur" ) )
     [[ $COMPREPLY == *= ]] && compopt -o nospace
 
 } &&

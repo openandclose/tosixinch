@@ -273,6 +273,14 @@ Configs
 
     commandline string to open the pdf viewer (f: cmds)
 
+.. option:: --loc-index LOC_INDEX
+
+    specify the suffix of 'Downloaded_File' with no extension (default: '_')
+
+.. option:: --loc-appendix LOC_APPENDIX
+
+    specify the suffix of 'Extracted_File' (default: '~')
+
 .. option:: --keep-html
 
     do not extract, keep html as is, just component download to make complete local version

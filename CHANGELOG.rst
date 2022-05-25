@@ -38,6 +38,8 @@ Unreleased
 
 * Add IDTable (fragment link re-resolution when merging htmls)
 
+* Add expose loc_index and loc_appendix to commandline
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

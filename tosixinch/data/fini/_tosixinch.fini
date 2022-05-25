@@ -278,9 +278,13 @@ viewcmd=            : commandline string to open the pdf viewer (f: cmds)
 
 browsercmd=         :: f: cmd
 
-loc_index=
+loc_index=          : specify the suffix of 'Downloaded_File' with no extension
+                    : (default: '_')
+                    _
 
-loc_appendix=
+loc_appendix=       : specify the suffix of 'Extracted_File'
+                    : (default: '~')
+                    ~
 
 keep_html=          : do not extract, keep html as is, just component download
                     : to make complete local version
