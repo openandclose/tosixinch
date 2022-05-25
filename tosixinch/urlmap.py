@@ -149,9 +149,6 @@ class URL(object):
         return False
 
     def _add_index(self, url):
-        if self._is_authority_only(url):
-            return posixpath.join(url, self.INDEX)
-
         root, ext = posixpath.splitext(url)
         if ext:
             pass
@@ -165,6 +162,8 @@ class URL(object):
         url = self.url
         url, _ = _split_fragment(url)
         url = self.MATCHER.sub('', url)
+        if self._is_authority_only(url):
+            return posixpath.join(url, 'index.html')
         url = self._add_index(url)
         url = _url2path(url)
         return url

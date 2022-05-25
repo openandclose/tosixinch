@@ -101,6 +101,10 @@ class TestURL:
 
     def test_unroot(self):
         tests = (
+            ('http://h',            'h/index.html'),
+            ('http://h/',           'h/index.html'),
+            ('http://h.com',        'h.com/index.html'),
+            ('http://h.com/',       'h.com/index.html'),
             ('http://h/p.html',     'h/p.html'),
             ('http://h/p',          'h/p/_'),
             ('http://h/p?q',        'h/p?q'),
