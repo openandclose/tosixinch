@@ -18,6 +18,10 @@ Unreleased
 
 * Add '//article' to guess option defaults
 
+* Change '_add_index' from URL to Map class
+
+  Very slightly change the handling of '/' and '?' in Downloaded_File name
+
 **Add:**
 
 * Add github discussions to sample

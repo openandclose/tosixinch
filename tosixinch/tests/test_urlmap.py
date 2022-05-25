@@ -106,10 +106,9 @@ class TestURL:
             ('http://h.com',        'h.com/index.html'),
             ('http://h.com/',       'h.com/index.html'),
             ('http://h/p.html',     'h/p.html'),
-            ('http://h/p',          'h/p/_'),
-            ('http://h/p?q',        'h/p?q'),
-            ('http://h/p%3Fq',      'h/p?q/_'),
-            ('http://h/p#f',        'h/p/_'),
+            ('http://h/p',          'h/p'),
+            ('http://h/p/',         'h/p'),
+            ('http://h/p//',        'h/p'),
         )
 
         for url, expected in tests:
