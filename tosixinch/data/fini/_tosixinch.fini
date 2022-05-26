@@ -295,6 +295,10 @@ keep_html=          : do not extract, keep html as is, just component download
                     :: f: bool
                     no
 
+overwrite_html=     : do not create new 'Extracted_File' (overwrite 'Downloaded_Files')
+                    :: f: bool
+                    no
+
 xx=                 :: f: comma
 
 

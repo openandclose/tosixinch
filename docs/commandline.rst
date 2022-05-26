@@ -289,6 +289,10 @@ Configs
 
     do not extract, keep html as is, just component download to make complete local version
 
+.. option:: --overwrite-html
+
+    do not create new 'Extracted_File' (overwrite 'Downloaded_Files')
+
 Styles
 ------
 

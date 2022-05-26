@@ -387,6 +387,7 @@ class Site(location.Location):
         self._config = siteconf._config
 
         self.PREFIX = conf.general.download_dir  # may be blank string ''
+        self.OVERWRITE = conf.general.overwrite_html
         self.INDEX = conf.general.loc_index
         self.APPENDIX = conf.general.loc_appendix
 

@@ -100,6 +100,7 @@ class Location(urlmap.Map):
     """Implement concrete url and system path conversion."""
 
     PREFIX = DOWNLOAD_DIR
+    OVERWRITE = False
 
     APPENDIX = '~'
     EXTENSION = '.html'
@@ -133,6 +134,8 @@ class Location(urlmap.Map):
 
     @property
     def fnew(self):
+        if self.OVERWRITE:
+            return self.fname
         return self._add_appendix(self.mapped_name)
 
     @property

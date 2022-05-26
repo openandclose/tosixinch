@@ -48,6 +48,8 @@ Unreleased
 
 * Add download_dir option
 
+* Add overwrite_html option
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)
