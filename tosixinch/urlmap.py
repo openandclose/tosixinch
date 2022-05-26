@@ -283,13 +283,16 @@ class Map(object):
         return Path(input_name)
 
     def _add_index(self, url):
-        root, ext = posixpath.splitext(url)
+        if self.INDEX == '':
+            return url
+
+        root, ext = OSPATH.splitext(url)
         if ext:
             pass
         elif '?' in url:
             pass
         else:
-            url = posixpath.join(url, self.INDEX)
+            url = OSPATH.join(url, self.INDEX)
         return url
 
     def _map_name(self, name):

@@ -106,6 +106,9 @@ class Location(urlmap.Map):
     HASH_DIR = '_hash'
 
     def _add_appendix(self, name):
+        if self.APPENDIX == '':
+            return name
+
         mod = ntpath if PLATFORM == 'win32' else posixpath
         root, ext = mod.splitext(name)
         root += self.APPENDIX
