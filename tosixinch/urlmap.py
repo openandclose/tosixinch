@@ -141,18 +141,12 @@ class URL(object):
             return True
         return False
 
-    def _is_authority_only(self, url):
-        seg = url.split('/')
-        if len(seg) == 1 or (len(seg) == 2 and seg[1] == ''):
-            return True
-        return False
-
     def unroot(self):
         url = self.url
         url, _ = _split_fragment(url)
         url = self.MATCHER.sub('', url)
         url = url.rstrip('/')
-        if self._is_authority_only(url):
+        if '/' not in url:
             return posixpath.join(url, 'index.html')
         url = _url2path(url)
         return url
