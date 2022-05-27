@@ -356,6 +356,7 @@ class Ref(object):
     """
 
     _CLS = Map
+    _INHERIT = ('INDEX',)
 
     def __init__(self, url, parent, baseurl=None):
         if isinstance(parent, str):
@@ -390,7 +391,11 @@ class Ref(object):
         else:
             input_type = None
 
-        return self._CLS(url, input_type=input_type)
+        cls = self._CLS(url, input_type=input_type)
+        for attr in self._INHERIT:
+            setattr(cls, attr, getattr(self._parent_cls, attr))
+
+        return cls
 
     @property
     def relative_reference(self):

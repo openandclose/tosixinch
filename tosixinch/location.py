@@ -205,6 +205,7 @@ class Component(urlmap.Ref):
     """Create relative reference for class 'Location'."""
 
     _CLS = Location
+    _INHERIT = ('PREFIX', 'INDEX', 'APPENDIX')
 
     def check_fname(self, force=False, cache=None):
         return self._cls.check_fname(force, cache)
