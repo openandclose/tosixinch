@@ -240,6 +240,14 @@ class SeleniumDownloader(action.Downloader):
         self.text = self.agent.page_source
 
 
+class Downloader(action.Downloader):
+    """Add logging."""
+
+    def request(self, site):
+        logger.info('[url] %s', site.url)
+        super().request(site)
+
+
 def run(conf, site):
     downloader = site.general.downloader
     browser_engine = site.general.browser_engine
@@ -256,5 +264,4 @@ def run(conf, site):
             logger.critical(msg)
             raise ValueError(msg)
     else:
-        action.Downloader(conf, site).download()
-    logger.info('[url] %s', site.url)
+        Downloader(conf, site).download()

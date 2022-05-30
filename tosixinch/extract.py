@@ -175,9 +175,8 @@ class Resolver(content.Resolver):
         url = comp.url
         if url.startswith('data:image/'):
             return
-        downloader = action.CompDownloader(self._conf, self.loc)
+        downloader = CompDownloader(self._conf, self.loc)
         downloader.download(comp)
-        logger.info('[img] %s', url)
 
     def _add_component_attributes(self, el, fname):
         full = self.loc.general.full_image
@@ -190,6 +189,14 @@ class Resolver(content.Resolver):
                     el.classes.add('tsi-tall')
                 else:
                     el.classes.add('tsi-wide')
+
+
+class CompDownloader(action.CompDownloader):
+    """Add logging."""
+
+    def request(self, comp, on_error_exit=False):
+        logger.info('[img] %s', comp.url)
+        super().request(comp, on_error_exit)
 
 
 def run(conf, site):
