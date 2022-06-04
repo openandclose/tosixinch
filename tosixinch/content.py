@@ -34,7 +34,10 @@ DEFAULT_DOCTYPE = '<!DOCTYPE html>'
 DEFAULT_TITLE = 'notitle'
 
 LINK_ATTRS = lxml_html.link_attrs
-COMP_ATTRS = (('img', 'src'),)  # tuple of tag-attribute tuples
+COMP_ATTRS = (  # tuple of tag-attribute tuples
+    ('link', 'href'),
+    ('img', 'src'),
+)
 
 
 def build_new_html(doctype=None, title=None, content=None):
@@ -228,7 +231,7 @@ class Merger(object):
                 url = el.attrib[attr].strip()
                 url = rel2cur(child, url)
                 url = cur2rel(root, url)
-                el.attrib['src'] = url
+                el.attrib[attr] = url
 
     def relink_id_ref(self, child, el):
         for attr in LINK_ATTRS:

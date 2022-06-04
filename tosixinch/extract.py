@@ -179,6 +179,9 @@ class Resolver(content.Resolver):
         downloader.download(comp)
 
     def _add_component_attributes(self, el, fname):
+        if el.tag != 'img':
+            return
+
         full = self.loc.general.full_image
         w, h = content.get_component_size(el, fname)
         if w and h:
