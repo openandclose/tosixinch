@@ -369,7 +369,8 @@ Config Files
 
 .. dword:: css files
 
-    The script searches css files (``'*.css'``) in ``css directory`` when ``convert``.
+    The script searches css files (``'*.css'``)
+    in ``css directory`` (or current directory) when ``convert``.
     ``prince`` and ``weasyprint`` require css files.
     Other converters may not need them depending on the configuration.
 
@@ -388,7 +389,7 @@ Config Files
     (for the syntax and values, see `CSS Template Values <#css-template-values>`__).
 
     When ``convert``, the script always renders them,
-    and resultant ``css files`` are placed in ``css directory``,
+    and resultant ``css files`` are placed in ``css directory`` (or current directory),
     overwriting older one, if any.
 
     The css filenames are made by stripping ``'.t'`` from the template.

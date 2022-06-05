@@ -73,7 +73,7 @@ class StyleSheet(object):
                 yield _cache[name]
 
     def _get_file(self, name):
-        for d in (self._user_cssdir, self._cssdir):
+        for d in (self._user_cssdir, self._cssdir, '.'):
             if d:
                 path = os.path.join(d, name)
                 if os.path.isfile(path):

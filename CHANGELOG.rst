@@ -50,6 +50,8 @@ Unreleased
 
 * Add overwrite_html option
 
+* Add current directory search for css and css2 options
+
 **Fix:**
 
 * Fix Add charset for BLANK_HTML (for weasyprint)

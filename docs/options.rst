@@ -399,8 +399,8 @@ General Section
     The names are referenced, in order, in ``Extracted_Files``
     (``'<link ... rel="stylesheet">'``).
 
-    The files must be in ``css directory``,
-    just the filenames (not full path).
+    If the files are in ``css directory``,
+    you can only use the filenames (not full paths).
 
     The script includes sample css ``sample.t.css``,
     and as a special case, it can be abbreviated as ``sample``
@@ -673,8 +673,8 @@ commandline has the same options, to override.
     Although, normally, you can do that better
     with ``css`` option and the template.
 
-    The files must be in ``css directory``,
-    just the filenames (not full path).
+    If the files are in ``css directory``,
+    you can only use the filenames (not full paths).
 
 .. confopt:: cnvopts
 
