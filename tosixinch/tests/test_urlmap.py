@@ -253,16 +253,16 @@ class TestRef:
         tests = (
             ('',                    ''),
             ('#',                   ''),
-            # ('#f',                '#f'),
+            ('#f',                  '#f'),
             ('u.html',              ''),
             ('../t/u.html',         ''),
 
             ('a.html',              'a.html'),
-            # ('a.html#f',            'a.html#f'),
+            ('a.html#f',            'a.html#f'),
             ('../a.html',           '../a.html'),
 
             ('a.html?q',            'a.html%3Fq'),
-            # ('a.html?q#f',          'a.html%3Fq#f'),
+            ('a.html?q#f',          'a.html%3Fq#f'),
         )
         for url, expected in tests:
             compare(parent_url, baseurl, url, expected)

@@ -123,6 +123,8 @@ def _get_relative_reference(path, basepath, url):
     """Create from path and basepath, relative URL reference."""
     url, fragment = _split_fragment(url)
     ref = _path2ref(path, basepath)
+    # change '' to None (forbid blank fragment at this level)
+    fragment = fragment or None
     return _add_fragment(ref, fragment)
 
 
@@ -364,10 +366,12 @@ class Ref(object):
         else:
             self._parent_cls = parent
 
+        self._url = url
         self.baseurl = baseurl
-        self._url = self._resolve(url)
 
-        self._cls = self._detect(self._url)
+        url, _ = _split_fragment(url)
+        url = self._resolve(url)
+        self._cls = self._detect(url)
         self.url = self._cls.input_name
         self.fname = self._cls.fname
 
@@ -401,5 +405,5 @@ class Ref(object):
 
     @property
     def relative_reference(self):
-        path, basepath, url = self.fname, self._parent_cls.fname, self.url
+        path, basepath, url = self.fname, self._parent_cls.fname, self._url
         return _get_relative_reference(path, basepath, url)
