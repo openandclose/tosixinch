@@ -220,7 +220,7 @@ class Component(urlmap.Ref):
     @property
     def relative_reference(self):
         path, basepath, url = self.fname, self._parent_cls.fnew, self.url
-        return urlmap._get_relative_reference(path, basepath, url)
+        return get_relative_reference(path, basepath, url)
 
 
 class ReplacementParser(object):
