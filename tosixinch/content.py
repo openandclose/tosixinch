@@ -87,6 +87,8 @@ def rel2cur(basepath, path):
     # to 'path' against current directory.
     if is_abs_url(path):
         return path
+    if path == '':
+        return basepath
     po = posixpath
     return po.normpath(po.join(po.dirname(basepath), path))
 

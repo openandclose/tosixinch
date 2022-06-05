@@ -247,3 +247,22 @@ class TestRef:
         )
         for url, expected in tests:
             compare(parent_url, baseurl, url, expected)
+
+        baseurl = None
+        parent_url = 's/t/u.html'  # local system path
+        tests = (
+            ('',                    ''),
+            ('#',                   ''),
+            # ('#f',                '#f'),
+            ('u.html',              ''),
+            ('../t/u.html',         ''),
+
+            ('a.html',              'a.html'),
+            # ('a.html#f',            'a.html#f'),
+            ('../a.html',           '../a.html'),
+
+            ('a.html?q',            'a.html%3Fq'),
+            # ('a.html?q#f',          'a.html%3Fq#f'),
+        )
+        for url, expected in tests:
+            compare(parent_url, baseurl, url, expected)

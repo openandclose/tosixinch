@@ -382,6 +382,8 @@ class Ref(object):
             if URL.detect(url):
                 return url
             path = _url2path(url)
+            if path == '':
+                return base._cls.path
             return OSPATH.join(OSPATH.dirname(base._cls.path), path)
 
     def _detect(self, url):
