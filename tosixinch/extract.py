@@ -12,18 +12,10 @@
 import logging
 import os
 
-from tosixinch import _ImportError
 from tosixinch import action
 from tosixinch import clean
 from tosixinch import content
 from tosixinch import system
-
-import tosixinch.process.sample as process_sample
-
-try:
-    import readability
-except ImportError:
-    readability = _ImportError('readability')
 
 logger = logging.getLogger(__name__)
 
@@ -130,32 +122,6 @@ class KeepExtract(Extract):
         self.write(self.root)
 
 
-class ReadabilityExtract(Extract):
-    """Define methods for readability."""
-
-    def build(self):
-        title = readability.Document(self.text).title()
-        content_ = readability.Document(self.text).summary(html_partial=True)
-
-        # ``Readability`` generally does not care about main headings.
-        # So we manually insert a probable ``title``.
-        doc = content.build_new_html(title=title, content=content_)
-        heading = doc.xpath('//h1')
-        if len(heading) == 0:
-            process_sample.add_h1(doc)
-        if len(heading) > 1:
-            process_sample.lower_heading(doc)
-            process_sample.add_h1(doc)
-
-        self.doc = doc
-
-    def run(self):
-        self.build()
-        self.resolve()
-        self.add_css_elememnt()
-        self.write()
-
-
 class Resolver(content.Resolver):
     """Download components and rewrite links."""
 
@@ -210,12 +176,5 @@ def run(conf, site):
             runner = KeepExtract
         else:
             runner = Extract
-    elif extractor == 'readability':
-        if site.section == 'scriptdefault':
-            runner = ReadabilityExtract
-        else:
-            runner = Extract
-    elif extractor == 'readability_only':
-        runner = ReadabilityExtract
 
-    runner(conf, site).run()
+        runner(conf, site).run()

@@ -338,13 +338,6 @@ Users can define additional instructions for browsers.
 `option: dprocess <options.html#confopt-dprocess>`__,
 but I recommend you read `process <options.html#confopt-process>`__ first.
 
-Sometimes writing configurations for each site is too cumbersome.
-You can fallback to automatic article extraction by installing
-`readability <https://github.com/buriy/python-readability>`__.
-But the results may vary.
-`commandline: readability <commandline.html#cmdoption-readability>`__
-and `commandline: readability-only <commandline.html#cmdoption-readability-only>`__
-
 As already mentioned, you can manipulate html elements,
 by adding arbitrary functions.
 `option: process <options.html#confopt-process>`__.

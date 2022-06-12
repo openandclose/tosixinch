@@ -14,6 +14,8 @@ Unreleased
 
 * **!!** Cut lib: Qt (webkit and webengine options)
 
+* **!!** Cut lib: readability
+
 
 v0.7.0 (2022-06-12)
 -------------------

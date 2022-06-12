@@ -96,19 +96,9 @@ headless=           : download by one of headless browser engines
                     :: const: headless
                     :: dest: downloader
 
-lxml=               : extract by lxml (default)
+lxml=               : extract by lxml (default, and currently the only option)
                     :: action: store_const
                     :: const: lxml
-                    :: dest: extractor
-
-readability=        : extract by readability, if no settings matched
-                    :: action: store_const
-                    :: const: readability
-                    :: dest: extractor
-
-readability_only=   : extract by readability unconditionally
-                    :: action: store_const
-                    :: const: readability_only
                     :: dest: extractor
 
 prince=             : convert by princexml
@@ -142,7 +132,7 @@ cnvopts=            : specify converter commandline options
                     urllib
 
 *extractor=         : argparse.SUPPRESS
-                    :: choices: lxml, readability, readability_only
+                    :: choices: lxml
                     lxml
 
 converter=          : argparse.SUPPRESS

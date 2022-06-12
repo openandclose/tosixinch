@@ -32,12 +32,7 @@ General Section
     (``lxml``)
 
     Specify default extractor.
-    Either ``lxml`` (recommended) or ``readability``.
-
-    The intended use case of ``readability`` is
-    from commandline.
-    Either `--readability <commandline.html#cmdoption-readability>`__
-    or `--readability-only <commandline.html#cmdoption-readability-only>`__.
+    Currently the only option is ``lxml``.
 
 .. confopt:: converter
 

@@ -134,15 +134,7 @@ Programs
 
 .. option:: --lxml
 
-    extract by lxml (default)
-
-.. option:: --readability
-
-    extract by readability, if no settings matched
-
-.. option:: --readability-only
-
-    extract by readability unconditionally
+    extract by lxml (default, and currently the only option)
 
 .. option:: --prince
 
