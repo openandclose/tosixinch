@@ -100,7 +100,6 @@ Converters are:
 
 * `prince (or princexml) <https://www.princexml.com>`__
 * `weasyprint <http://weasyprint.org>`__
-* `wkhtmltopdf <https://wkhtmltopdf.org>`__
 
 ``prince`` recommended, it is one of the oldest and the most famous.
 (It is free of charge for non-commercial use).
@@ -112,25 +111,6 @@ and (a semblance of) software testing tends to be only concerned with ``prince``
 that a pdf consists of hundreds or thousands of pages).
 But it is written in python, by great authors.
 I want to keep it rather as a reference.
-
-These two treat ordinary css files as the main (or only) API for style options.
-And in general much care is taken to comply to the CSS standard.
-
-``wkhtmltopdf`` uses some old WebKit browser engine,
-so what it does is dependent on it, and in general harder to fathom.
-But precisely because it uses veritable browser engine,
-some things are done better.
-
-.. note::
-
-    The wkhtmltopdf official site provides compiled binaries
-    built with *patched* Qt.
-    Linux distributions sometimes install non-patched version of wkhtmltopdf,
-    which is limited in functionalities.
-    For example, it can not receive multiple htmls,
-    and it can not build pdf bookmarks.
-
-    The patched one is generally preferred, and the script presupposes it.
 
 Anyway, the script just helps to build conversion commandline.
 It only adds some useful shortcuts.
@@ -200,7 +180,7 @@ An example::
 
     .. code-block:: none
 
-        $ [...] --wkhtmltopdf
+        $ [...] --weasyprint
 
     * If you installed the converter in unusual places (not in PATH),
       you need to set the fullpath.
@@ -208,7 +188,7 @@ An example::
 
     .. code-block:: none
 
-        $ [...] --wkhtmltopdf --cnvpath /home/john/build/bin/wkhtmltopdf
+        $ [...] --weasyprint --cnvpath /home/john/build/bin/weasyprint
 
     * The sample css uses ``DejaVu Sans`` and ``Dejavu Sans Mono`` if installed,
       and is optimized for them.

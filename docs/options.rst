@@ -39,7 +39,7 @@ General Section
     (``prince``)
 
     Specify default converter.
-    One of ``prince``, ``weasyprint`` or ``wkhtmltopdf``.
+    ``prince`` or ``weasyprint``.
 
 .. confopt:: user_agent \*
 
@@ -629,8 +629,7 @@ In the following, the roles in the sample file
 Converter Sections
 ^^^^^^^^^^^^^^^^^^
 
-Section ``prince``, ``weasyprint``, and ``wkhtmltopdf``
-are converters sections.
+Section ``prince`` and ``weasyprint`` are converters sections.
 They have common options.
 
 When ``convert``, only one converter is active,
@@ -644,7 +643,6 @@ commandline has the same options, to override.
 
         $ tosixinch -a --prince
         $ tosixinch -a --weasyprint
-        $ tosixinch -a --wkhtmltopdf
 
 .. confopt:: cnvpath
 

@@ -111,11 +111,6 @@ weasyprint=         : convert by weasyprint
                     :: const: weasyprint
                     :: dest: converter
 
-wkhtmltopdf=        : convert by wkhtmltopdf
-                    :: action: store_const
-                    :: const: wkhtmltopdf
-                    :: dest: converter
-
 cnvpath=            : specify converter executable path. also need to set converter itself
 
 css2=               : specify css files, for converter commandline css option
@@ -136,7 +131,7 @@ cnvopts=            : specify converter commandline options
                     lxml
 
 converter=          : argparse.SUPPRESS
-                    :: choices: prince, weasyprint, wkhtmltopdf
+                    :: choices: prince, weasyprint
                     prince
 
 *user_agent=        : set http request user-agent (only for urllib)
@@ -352,22 +347,3 @@ cnvpath=            weasyprint
 css2=               :: f: comma
 
 cnvopts=            :: f: cmd
-
-
-[wkhtmltopdf]
-
-cnvpath=            wkhtmltopdf
-
-css2=               :: f: comma
-
-cnvopts=            :: f: cmd
-                    --disable-smart-shrinking
-                    --no-background
-                    --javascript-delay 1000
-
-                    --page-width 90mm --page-height 118mm
-                    -B 1 -L 1 -R 1 -T 1
-                    # --minimum-font-size 6
-                    # --orientation landscape
-
-                    --encoding utf-8

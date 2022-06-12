@@ -234,7 +234,6 @@ class CompDownloader(Downloader):
 class TextFormatter(Action):
     """Provide common extraction methods for html and non-html."""
 
-    # c.f. 'media="print"' does't work for wkhtmltopdf.
     CSS_REF = '<link class="tsi-css" href="%s" rel="stylesheet">'
 
     @property

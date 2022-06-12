@@ -23,8 +23,6 @@ div.pre1, div.pre2, div.pre3, div.pre4, div.pre5
     font-size: {{ font_size_mono|scale }};
 }
 
-/* to view Extracted Files in browser (only for prince and weasyprint */
-{% if prince_or_weasyprint %}
 @media screen {
     body {
         font-size: 16px;
@@ -35,7 +33,6 @@ div.pre1, div.pre2, div.pre3, div.pre4, div.pre5
         font-size: 13px;
     }
 }
-{% endif %}
 
 /* h1-h5 scaling is 1.2. */
 /* tabale scaling is 1.125. */
@@ -293,55 +290,6 @@ a:link {
 
 {% endif %}
 
-
-/* wkhtmltopdf ---------------------------------------------------- */
-{% if wkhtmltopdf %}
-
-/* Stable wkhtmltopdf(0.12.4) uses Qt4.8, which uses QtWebKit 2.1 */
-/* https://github.com/wkhtmltopdf/qt */
-/* http://doc.qt.io/qt-4.8/qtwebkit-guide.html */
-
-/* wkhtmltopdf (Qt4 versions) doesn't support '@page' rule. */
-/* So page size and margin should be proveided by commandline options. */
-/* (--page-width, --page-height, -B, -L, -R, -T) */
-
-
-/* NG */
-/* a:link { */
-/*     -webkit-text-decoration: underline solid #454545; */
-/* } */
-
-
-blockquote {
-    -webkit-margin-start: 2%;
-    -webkit-margin-end: 2%;
-}
-dd {
-    -webkit-margin-start: 2%;
-}
-ul, menu, dir, ol {
-    -webkit-padding-start: 2%;
-}
-
-
-/* Bug: images */
-/* With 'max-height', no images are rendered. */
-/* Halfway solution of setting to 'none' seems OK. */
-/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/2836 */
-/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1726 */
-img, figure {
-    max-height: none;
-}
-
-/* Bug: thead */
-/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1770 */
-/* thead { display: table-header-group } */
-tfoot { display: table-row-group }
-tr { page-break-inside: avoid }
-/* https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1524 */
-/* thead, tfoot { display: table-row-group } */
-
-{% endif %}
 
 
 /* css for text --------------------------------------------------- */

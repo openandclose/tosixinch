@@ -673,7 +673,7 @@ def parse_args(args=sys.argv[1:]):
     #     action='store_const', const='yes',
     #     help='turn on force_download flag')
     # parser.add_argument('--converter',
-    #     choices=['prince', 'weasyprint', 'wkhtmltopdf'],
+    #     choices=['prince', 'weasyprint'],
     #     help='select converters')
 
     args = parser.parse_args(args)

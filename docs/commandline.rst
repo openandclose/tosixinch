@@ -144,10 +144,6 @@ Programs
 
     convert by weasyprint
 
-.. option:: --wkhtmltopdf
-
-    convert by wkhtmltopdf
-
 .. option:: --cnvpath CNVPATH
 
     specify converter executable path. also need to set converter itself

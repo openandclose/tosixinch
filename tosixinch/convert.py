@@ -173,29 +173,12 @@ class WeasyPrintConvert(Convert):
         self._run()
 
 
-class WkhtmltopdfConvert(Convert):
-    """Run ``wkhtmltopdf``.
-
-    https://wkhtmltopdf.org/
-    """
-
-    def run(self):
-        self._add_css_arguments('--user-style-sheet')
-        self._add_arguments()
-        self._add_args(['--outline-depth', str(self.style.toc_depth)])
-        self._add_files()
-        self._add_pdfname()
-        self._run()
-
-
 def run(conf):
     converter = conf.general.converter
     if converter == 'prince':
         convert = PrinceConvert(conf)
     elif converter == 'weasyprint':
         convert = WeasyPrintConvert(conf)
-    elif converter == 'wkhtmltopdf':
-        convert = WkhtmltopdfConvert(conf)
     else:
         raise KeyError('unknown converter: %s' % converter)
 
