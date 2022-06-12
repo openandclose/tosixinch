@@ -19,7 +19,6 @@ suitable for actual reading in 6-inch e-readers.
     Topics <topics>
 
     API <api>
-    Development <development>
 
 .. API2 <api2>
 

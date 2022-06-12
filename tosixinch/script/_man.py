@@ -63,8 +63,6 @@ def run(conf, site):
 
 
 def _run(fname, fnew):
-    if sys.platform == 'win32':
-        return 0
     if match(fname):
         return man(fname, fnew)
     return 0

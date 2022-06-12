@@ -18,6 +18,8 @@ Unreleased
 
 * **!!** Cut lib: wkhtmltopdf
 
+* **!!** Cut support: Windows
+
 
 v0.7.0 (2022-06-12)
 -------------------

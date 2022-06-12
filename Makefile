@@ -41,8 +41,7 @@ flake8:
 
 test:
 	python -m doctest tosixinch/process/*.py
-	TSI_PLATFORM=linux pytest -x
-	TSI_PLATFORM=win32 pytest -x tosixinch/tests/_test_windows.py
+	pytest -x
 	python tosixinch/tests/_test_actualrun.py -x
 
 tox:

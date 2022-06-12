@@ -72,11 +72,10 @@ The command will only install ``tosixinch`` package.
 
 .. note::
 
-    * Mac and Windows environments are considered,
-      but it is likely to be more imperfect.
+    * Windows filesystems are not supported.
 
     * In some places in code,
-      Unicode encoding in system and files is presupposed.
+      utf-8 encoding in system and files is presupposed.
 
     * Until sometime later, I don't hesitate to change APIs.
       But please feel free to email me if changes break your configuration,

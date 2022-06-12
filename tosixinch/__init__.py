@@ -6,13 +6,6 @@ suitable for actual reading in 6-inch e-readers.
 """
 
 import logging
-import os
-import sys
-
-if os.environ.get('TSI_PLATFORM'):  # for test
-    PLATFORM = os.environ['TSI_PLATFORM']
-else:
-    PLATFORM = sys.platform
 
 
 # Default logging level for the script is changed to ``info``.

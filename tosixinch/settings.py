@@ -308,20 +308,14 @@ def _check_platform_dirs():
 
     Only the most typical ones.
     """
-    platform = sys.platform  # here, not using tosixinch.PLATFORM
+    platform = sys.platform
     home = os.path.expanduser('~')
-    if platform not in ('win32', 'darwin'):
+    if platform != 'darwin':
         platform = 'others'
         unix_config_home = os.getenv('XDG_CONFIG_HOME',
             os.path.expanduser('~/.config'))
 
     dirs = {
-        'win32': [
-            (home, 'AppData', 'Roaming', 'tosixinch'),
-            (home, 'AppData', 'Local', 'tosixinch'),
-            (home, 'Local Settings', 'Application Data', 'tosixinch'),
-            (home, 'Application Data', 'tosixinch'),
-        ],
         'darwin': [
             (home, 'Library', 'Application Support', 'tosixinch'),
         ],

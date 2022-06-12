@@ -14,14 +14,11 @@ component URL localizer:
 import functools
 import io
 import logging
-import ntpath
 import os
-import posixpath
 import re
 import unicodedata
 import urllib.parse
 
-from tosixinch import PLATFORM
 from tosixinch import urlmap
 
 logger = logging.getLogger(__name__)
@@ -110,8 +107,7 @@ class Location(urlmap.Map):
         if self.APPENDIX == '':
             return name
 
-        mod = ntpath if PLATFORM == 'win32' else posixpath
-        root, ext = mod.splitext(name)
+        root, ext = os.path.splitext(name)
         root += self.APPENDIX
         if ext and ext == self.EXTENSION:
             pass

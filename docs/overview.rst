@@ -218,11 +218,7 @@ But disposing of the files (deleting or moving) is users' job.
         the site would create ``'aaa.html/bbb'`` document.
 
 
-    In Windows, illegal filename characters (``':?*\"<>```) in ``url`` are
-    all changed to ``'_'``.
-    So name conflict may occur in rare cases.
-
-    In Unixes, these special characters are used in filenames as is.
+    Special characters are used in filenames as is.
 
     Example::
 
@@ -319,15 +315,6 @@ Config Files
     If the script cannot find the variable,
     a basic search is done for the most common configuration directories
     (in the same order below for each OS).
-
-    Windows:
-
-    .. code-block:: none
-
-        C:\Users\<username>\AppData\Roaming\tosixinch
-        C:\Users\<username>\AppData\Local\tosixinch
-        C:\Documents and Settings\<username>\Local Settings\Application Data\tosixinch
-        C:\Documents and Settings\<username>\Application Data\tosixinch
 
     Mac:
 

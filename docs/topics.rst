@@ -644,9 +644,6 @@ if the filename matches ``r'^.+\.[1-9]([a-z]+)?(\.gz)?$'``
 run man program with ``'man -Thtml'``,
 skipping the main extraction.
 
-Normally, windows users can't use it
-(as long as there is no ``man`` command).
-
 .. note ::
 
     * ``pre_each_cmd2`` is a ``LINE`` option,

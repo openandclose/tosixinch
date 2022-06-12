@@ -5,18 +5,12 @@ the process, in effect, makes them current directory paths.
 """
 
 import hashlib
-import ntpath
 import os
 import posixpath
 import re
-import string
-import sys
 import urllib.parse
 
-from tosixinch import PLATFORM
 from tosixinch import urlno
-
-OSPATH = ntpath if PLATFORM == 'win32' else posixpath
 
 
 # query and fragment can have '/' character.
@@ -29,18 +23,6 @@ _CHANGE_TO = {
     'path': {},
     'query': {'/': '_', },
     'fragment': {'/': '_', },
-}
-
-# When creating windows system path from url strings,
-# illegal filename characters must be changed (to some).
-_WIN_CHANGE_TO = {
-    ':': '_',
-    '?': '_',
-    '*': '_',
-    '"': '_',
-    '<': '_',
-    '>': '_',
-    '|': '_',
 }
 
 # When creating system path from url strings,
@@ -60,12 +42,6 @@ def _url2path(url):
             newparts.append(part)
         return urllib.parse.urlunsplit(newparts)
 
-    def _to_windows_filename(url):
-        for key, value in _WIN_CHANGE_TO.items():
-            url = url.replace(key, value)
-            url = url.replace(urllib.parse.quote(key), value)
-        return url.replace('/', '\\')
-
     def _replace_blank_seg(name):
         def _blank_seg(m):
             return _BLANK_SEG * len(m.group(1)) + '/'
@@ -73,21 +49,11 @@ def _url2path(url):
 
     name = _to_filename(url)
     name = _replace_blank_seg(name)
-    if PLATFORM == 'win32':
-        name = _to_windows_filename(name)
     return urllib.parse.unquote(name)
 
 
 def _path2url(path):
     """Convert normalized system path to url path."""
-    if PLATFORM == 'win32':
-        path = path.replace('\\', '/')
-        comp = path.split(':')
-        if len(comp) > 1:
-            if (len(comp) > 2
-                    or comp[0] not in string.ascii_letters):
-                raise ValueError('Invalid windows path: %r' % path)
-            path = '/%s:%s' % (comp[0], comp[1])
     # Before Python 3.7, '~' was not included in unreserved characters.
     # url = urllib.parse.quote(path)
     url = urllib.parse.quote(path, safe='/~')
@@ -101,7 +67,7 @@ def _path2ref(path, basepath):
     if path == basepath:
         path = ''
     else:
-        path = OSPATH.relpath(path, OSPATH.dirname(basepath))
+        path = os.path.relpath(path, os.path.dirname(basepath))
     return _path2url(path)
 
 
@@ -160,7 +126,6 @@ class FileURL(object):
     # Only for local files (no domain names or UNC).
     MATCHER = re.compile(
         '^file:/(/(localhost)?/)?(?=[^/])', flags=re.IGNORECASE)
-    WINROOTPATH = re.compile(r'^([a-zA-z]:)(/)(?=[^/])')
 
     def __init__(self, url):
         self._url = url
@@ -171,14 +136,6 @@ class FileURL(object):
         if url.lower().startswith('file:/'):
             return True
         return False
-
-    def _split_windows_drive(self, name):
-        m = self.WINROOTPATH.match(name)
-        if not m:
-            raise ValueError('invalid file scheme url: %r' % self._url)
-        drive = m.group(1).lower()
-        name = name[m.end():]
-        return drive, name
 
     def unroot(self):
         return Path(self.path).unroot()
@@ -192,55 +149,27 @@ class FileURL(object):
             raise ValueError('Not local file URL: %r' % url)
         url = url[m.end():]
 
-        if PLATFORM == 'win32':
-            drive, name = self._split_windows_drive(url)
-            return drive + '\\' + _url2path(name)
-        else:
-            return _url2path('/' + url)
+        return _url2path('/' + url)
 
 
 class Path(object):
     """Unroot paths."""
 
     ROOTPATH = re.compile('^/(/*)(?=[^/]*)')
-    WINROOTPATH = re.compile(r'^([a-zA-z]):[/\\]?(?=[^/\\])')
 
     def __init__(self, path):
         self._path = path
 
     def _normalize(self, path):
-        if PLATFORM == sys.platform:
-            path = os.path.expanduser(path)
-            path = os.path.expandvars(path)
-
-        if PLATFORM == 'win32':
-            return ntpath.normcase(path)
-        else:
-            return path
+        path = os.path.expanduser(path)
+        path = os.path.expandvars(path)
+        return path
 
     def _resolve(self, path):
-        return OSPATH.abspath(path)
-
-    def _split_windows_drive(self, name):
-        drive = None
-        fmt = 'Unsupported windows filename format: %r'
-        m = self.WINROOTPATH.match(name)
-        if not m:
-            raise ValueError(fmt % name)
-
-        if m.group(1):
-            drive = m.group(1).lower()
-        name = name[m.end():]
-        return drive, name
+        return os.path.abspath(path)
 
     def _strip_root(self, name):
-        if PLATFORM == 'win32':
-            drive, name = self._split_windows_drive(name)
-            if drive:
-                name = drive + '\\' + name
-        else:
-            name = self.ROOTPATH.sub('', name)
-        return name
+        return self.ROOTPATH.sub('', name)
 
     def unroot(self):
         return self._strip_root(self.path)
@@ -262,7 +191,7 @@ class Map(object):
 
     def __init__(self, input_name, input_type=None):
         self._input_name = input_name
-        self.sep = '\\' if PLATFORM == 'win32' else '/'
+        self.sep = '/'
         self._cls = self._detect(input_name, input_type)
         self._hashed = False
 
@@ -288,13 +217,13 @@ class Map(object):
         if self.INDEX == '':
             return url
 
-        root, ext = OSPATH.splitext(url)
+        root, ext = os.path.splitext(url)
         if ext:
             pass
         elif '?' in url:
             pass
         else:
-            url = OSPATH.join(url, self.INDEX)
+            url = os.path.join(url, self.INDEX)
         return url
 
     def _map_name(self, name):
@@ -388,7 +317,7 @@ class Ref(object):
             path = _url2path(url)
             if path == '':
                 return base._cls.path
-            return OSPATH.join(OSPATH.dirname(base._cls.path), path)
+            return os.path.join(os.path.dirname(base._cls.path), path)
 
     def _detect(self, url):
         base = self._parent_cls

@@ -5,7 +5,6 @@ import sys
 
 import pytest
 
-from tosixinch import PLATFORM
 from tosixinch import urlmap
 
 
@@ -65,9 +64,6 @@ def test_path2url():
 
 
 def test_path2ref():
-
-    if PLATFORM == 'win32':
-        return
 
     pwd = posixpath.abspath('.')
     climbs = len(pwd.split('/'))
