@@ -13,10 +13,6 @@ try:
 except ImportError:
     ftfy = _ImportError('ftfy')
 try:
-    import chardet
-except ImportError:
-    chardet = _ImportError('chardet')
-try:
     import html5prescan
 except ImportError:
     html5prescan = _ImportError('html5prescan')
@@ -38,12 +34,6 @@ def manuopen(fname, codings=None, errors='strict', length=1024):
 
         if coding == 'ftfy':
             pass
-        elif coding == 'chardet':
-            logger.debug('using chardet ... %s' % fname)
-            try:
-                text, encoding = use_chardet(fname)
-            except UnicodeDecodeError as e:
-                elist.append(e)
         elif coding == 'html5prescan':
             logger.debug('using html5prescan ... %s' % fname)
             try:
@@ -75,13 +65,6 @@ def try_encoding(fname, coding, errors):
 
 def use_ftfy(text):
     return ftfy.fixes.fix_encoding(text)
-
-
-def use_chardet(fname):
-    ret = chardet.detect(open(fname, 'rb').read())
-    logger.debug('chardet: %s, %s' % (ret["encoding"], ret["confidence"]))
-    text = open(fname, encoding=ret["encoding"]).read()
-    return text, ret["encoding"]
 
 
 def use_html5prescan(fname, errors, length):

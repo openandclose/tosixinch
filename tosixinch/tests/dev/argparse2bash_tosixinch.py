@@ -43,7 +43,7 @@ CODECS = """
     mac-iceland mac-latin2 mac-roman mac-turkish palmos ptcp154 shift-jis
     shift-jis-2004 shift-jisx0213 tis-620 utf-16 utf-16-be utf-16-le utf-32
     utf-32-be utf-32-le utf-7 utf-8 utf-8-sig mbcs oem
-    chardet ftfy html5prescan
+    ftfy html5prescan
 """.strip().split()
 
 OPTIONAL_CHOICES = {
