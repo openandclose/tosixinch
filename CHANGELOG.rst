@@ -8,6 +8,12 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+
+v0.7.0 (2022-06-12)
+-------------------
+
+Incremental Improvements
+
 **Change:**
 
 * Change @page and <body> margin slightly (for weasyprint)
