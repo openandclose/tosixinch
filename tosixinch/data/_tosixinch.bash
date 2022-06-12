@@ -10,7 +10,7 @@ _tosixinch()
             return
             ;;
         --browser-engine)
-            COMPREPLY=( $( compgen -W 'webkit webengine selenium-chrome selenium-firefox' -- "$cur" ) )
+            COMPREPLY=( $( compgen -W 'selenium-chrome selenium-firefox' -- "$cur" ) )
             return
             ;;
         --encoding)

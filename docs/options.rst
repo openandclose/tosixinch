@@ -57,8 +57,8 @@ General Section
 
     (``selenium-firefox``)
 
-    Specify browser engine when ``headless`` option is True.
-    ``webkit``, ``webengine``, ``selenium-chrome`` or ``selenium-firefox``.
+    Specify browser engine when ``headless`` option is True,
+    ``selenium-chrome`` or ``selenium-firefox``.
 
 .. confopt:: selenium_chrome_path \*
 
@@ -919,8 +919,6 @@ So section names themselves can be arbitrary.
     what is actually ``downloader`` now::
 
         urllib      http.client.HTTPResponse
-        webkit      PyQt5.QtWebKitWidgets.QWebPage
-        webengine   PyQt5.QtWebEngineWidgets.QWebEngineView
         selenium    selenium.webdriver.remote.webdriver.WebDriver
 
     So user should be careful.

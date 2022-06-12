@@ -183,11 +183,11 @@ Configs
 
     interval for each download
 
-.. option:: --browser-engine {webkit,webengine,selenium-chrome,selenium-firefox}
+.. option:: --browser-engine {selenium-chrome,selenium-firefox}
 
     specify the browser library when downloader is 'headless'
 
-        choices=webkit, webengine, selenium-chrome, selenium-firefox
+        choices=selenium-chrome, selenium-firefox
 
 .. option:: --selenium-chrome-path SELENIUM_CHROME_PATH
 

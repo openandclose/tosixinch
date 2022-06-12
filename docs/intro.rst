@@ -325,15 +325,12 @@ including ``html5prescan`` encoding declaration parser,
 and ``ftfy`` UTF-8 encoding fix.
 `option: encoding <options.html#confopt-encoding>`__.
 
-The script has vary basic headless browser downloading functions.
-Either ``PyQt`` or ``Selenium``.
+The script has vary basic headless browser downloading functions
+using ``Selenium``.
 So if you are lucky,
 you may get javascript generated html contents.
 `option: headless <options.html#confopt-headless>`__.
-(Note ``PyQt`` requires
-`pyqt5 <https://pypi.python.org/pypi/PyQt5>`__
-and `Qt5 <https://www.qt.io>`__.
-``Selenium`` requires
+(Note ``Selenium`` requires
 `selenium <https://selenium-python.readthedocs.io/installation.html#downloading-python-bindings-for-selenium>`__
 and `firefox or chrome webdrivers <https://selenium-python.readthedocs.io/installation.html#drivers>`__.)
 

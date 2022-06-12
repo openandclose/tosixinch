@@ -12,6 +12,8 @@ Unreleased
 
 * **!!** Cut lib: chardet
 
+* **!!** Cut lib: Qt (webkit and webengine options)
+
 
 v0.7.0 (2022-06-12)
 -------------------
