@@ -8,6 +8,12 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+
+v0.8.0 (2022-06-13)
+-------------------
+
+Cut dependencies I haven't used for years myself.
+
 **Change:**
 
 * **!!** Cut lib: chardet
