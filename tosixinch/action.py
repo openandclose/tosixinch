@@ -43,7 +43,7 @@ class Action(object):
 class Downloader(Action):
     """Provide basic downloading capability."""
 
-    def _check_fname(self, site):
+    def check_fname(self, site):
         force = self._site.general.force_download
         cache = self._conf._cache.download
 
@@ -72,7 +72,7 @@ class Downloader(Action):
         time.sleep(i)
 
     def download(self):
-        if self._check_fname(self._site):
+        if self.check_fname(self._site):
             return
 
         self.request(self._site)
@@ -86,7 +86,7 @@ class CompDownloader(Downloader):
     """Provide component downloading capability."""
 
     def download(self, comp):
-        if self._check_fname(comp):
+        if self.check_fname(comp):
             return
 
         self.request(comp, on_error_exit=False)
