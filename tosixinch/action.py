@@ -2,6 +2,7 @@
 """Provide abstract action processes and classes."""
 
 import logging
+import os
 import random
 import time
 
@@ -43,11 +44,39 @@ class Action(object):
 class Downloader(Action):
     """Provide basic downloading capability."""
 
+    def check_url(self, site):
+        if site.is_local:
+            url = site.url
+            if not os.path.exists(url):
+                raise FileNotFoundError('[url] File not found: %r' % url)
+            if os.path.isdir(url):
+                raise IsADirectoryError('[url] Got directory name: %r' % url)
+            return True
+        return False
+
     def check_fname(self, site):
+        """Check if downloading is necessary (done).
+
+        True:  not necessary
+        False: necessary
+        """
+        if self.check_url(site):
+            return True
+
+        fname = site.fname
         force = self._site.general.force_download
         cache = self._conf._cache.download
 
-        return site.check_fname(force=force, cache=cache)
+        if os.path.exists(fname):
+            if not force:
+                return True
+            else:
+                if cache and cache.get(fname):
+                    return True
+
+        if cache:
+            cache[fname] = 1
+        return False
 
     def request(self, site, on_error_exit=True):
         url = site.idna_url
@@ -86,7 +115,7 @@ class CompDownloader(Downloader):
     """Provide component downloading capability."""
 
     def download(self, comp):
-        if self.check_fname(comp):
+        if self.check_fname(comp._cls):
             return
 
         self.request(comp, on_error_exit=False)

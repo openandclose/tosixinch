@@ -168,46 +168,12 @@ class Location(urlmap.Map):
         else:
             return url
 
-    def check_url(self):
-        if self.is_local:
-            url = self.url
-            if not os.path.exists(url):
-                raise FileNotFoundError('[url] File not found: %r' % url)
-            if os.path.isdir(url):
-                raise IsADirectoryError('[url] Got directory name: %r' % url)
-            return True
-        return False
-
-    def check_fname(self, force=False, cache=None):
-        """Check if downloading is necessary (done).
-
-        True:  not necessary
-        False: necessary
-        """
-        if self.check_url():
-            return True
-
-        fname = self.fname
-        if os.path.exists(fname):
-            if not force:
-                return True
-            else:
-                if cache and cache.get(fname):
-                    return True
-
-        if cache:
-            cache[fname] = 1
-        return False
-
 
 class Component(urlmap.Ref):
     """Create relative reference for class 'Location'."""
 
     _CLS = Location
     _INHERIT = ('PREFIX', 'INDEX', 'APPENDIX')
-
-    def check_fname(self, force=False, cache=None):
-        return self._cls.check_fname(force, cache)
 
     @property
     def idna_url(self):
