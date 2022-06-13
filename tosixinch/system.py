@@ -126,7 +126,7 @@ def add_cookie(cj, cookie):
 
 # file read and write ----------------------------
 
-def make_directories(fname, on_error_exit=True):
+def makedirs(fname, on_error_exit=True):
     if not _in_current_dir(fname):
         if on_error_exit:
             msg = 'filename path is outside of current dir: %r' % fname
@@ -186,7 +186,7 @@ class Writer(_File):
         self.text = text
 
     def _prepare(self):
-        make_directories(self.fname)
+        makedirs(self.fname)
 
     def write(self):
         self._prepare()

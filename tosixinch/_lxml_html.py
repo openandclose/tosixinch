@@ -157,7 +157,7 @@ class HtmlWriter(system.Writer):
 
     def _prepare(self):
         self._serialize()
-        system.make_directories(self.fname)
+        system.makedirs(self.fname)
 
 
 def read(fname, text=None, codings=None,
