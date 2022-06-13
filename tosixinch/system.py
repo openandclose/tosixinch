@@ -126,28 +126,6 @@ def add_cookie(cj, cookie):
 
 # file read and write ----------------------------
 
-def makedirs(fname, on_error_exit=True):
-    if not _in_current_dir(fname):
-        if on_error_exit:
-            msg = 'filename path is outside of current dir: %r' % fname
-            logger.error(msg)
-            sys.exit(1)
-        else:
-            return
-    path = os.path.abspath(os.path.dirname(fname))
-    os.makedirs(path, exist_ok=True)
-
-
-def _in_current_dir(fname, base=os.curdir):
-    current = os.path.abspath(base)
-    path = os.path.abspath(fname)
-    # note: the same filepath is not 'in' current dir.
-    if path.startswith(current + os.sep):
-        return True
-    else:
-        return False
-
-
 class _File(object):
     """Common object for Reader and Writer."""
 
@@ -185,8 +163,28 @@ class Writer(_File):
         super().__init__(fname)
         self.text = text
 
+    def makedirs(self, fname, on_error_exit=True):
+        if not self._in_current_dir(fname):
+            if on_error_exit:
+                msg = 'filename path is outside of current dir: %r' % fname
+                logger.error(msg)
+                sys.exit(1)
+            else:
+                return
+        path = os.path.abspath(os.path.dirname(fname))
+        os.makedirs(path, exist_ok=True)
+
+    def _in_current_dir(self, fname, base=os.curdir):
+        current = os.path.abspath(base)
+        path = os.path.abspath(fname)
+        # note: the same filepath is not 'in' current dir.
+        if path.startswith(current + os.sep):
+            return True
+        else:
+            return False
+
     def _prepare(self):
-        makedirs(self.fname)
+        self.makedirs(self.fname)
 
     def write(self):
         self._prepare()
