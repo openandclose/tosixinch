@@ -4,6 +4,7 @@
 import logging
 
 from tosixinch import action
+from tosixinch import dispatch
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +65,7 @@ class SeleniumDownloader(action.Downloader):
         if not SELENIUM_DRIVER:
             SELENIUM_DRIVER = start_selenium(self.driver, self.driver_path)
             self.agent = SELENIUM_DRIVER
-            action.add_cleanup(self.cleanup)
+            dispatch.add_cleanup(self.cleanup)
 
     def cleanup(self):
         global SELENIUM_DRIVER

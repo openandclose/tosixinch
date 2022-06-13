@@ -20,8 +20,8 @@ import sys
 import webbrowser
 
 from tosixinch import _set_logger
-from tosixinch import action
 from tosixinch import configfetch
+from tosixinch import dispatch
 from tosixinch import settings
 from tosixinch.system import run_cmds
 
@@ -168,7 +168,7 @@ def _main(args=sys.argv[1:], conf=None):
         inspect.run(conf, conf.sites)
         return
 
-    action.main_dispatch(conf, args)
+    dispatch.main_dispatch(conf, args)
 
     return conf
 
