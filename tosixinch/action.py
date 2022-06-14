@@ -96,6 +96,9 @@ class Downloader(Action):
         i = i * (1 + 0.5 * random.random() ** 2)
         time.sleep(i)
 
+    def write(self, name, text):
+        return system.download_write(name, text)
+
     def download(self):
         if self.check_fname(self._site):
             return

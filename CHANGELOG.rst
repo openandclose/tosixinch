@@ -8,6 +8,10 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+**Add:**
+
+* Use temporary file when downloading (with suffix '.part')
+
 
 v0.8.0 (2022-06-13)
 -------------------

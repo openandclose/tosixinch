@@ -186,11 +186,27 @@ class Writer(_File):
     def _prepare(self):
         self.makedirs(self.fname)
 
-    def write(self):
+    def write(self, fname=None):
         self._prepare()
+        fname = fname or self.fname
         mode = 'wb' if isinstance(self.text, bytes) else 'w'
-        with open(self.fname, mode) as f:
+        with open(fname, mode) as f:
             f.write(self.text)
+
+
+class DownloadWriter(Writer):
+    """Write using temporary file."""
+
+    SUFFIX_PART = '.part'
+
+    def get_partfile(self, name):
+        return name + self.SUFFIX_PART
+
+    def write(self):
+        fname = self.fname
+        part = self.get_partname(fname)
+        super().write(part)
+        os.replace(part, fname)
 
 
 def read(fname, text=None, codings=None, errors='strict', length=None):
@@ -199,6 +215,10 @@ def read(fname, text=None, codings=None, errors='strict', length=None):
 
 def write(fname, text):
     return Writer(fname, text).write()
+
+
+def download_write(fname, text):
+    return DownloadWriter(fname, text).write()
 
 
 # shell invocation -------------------------------
