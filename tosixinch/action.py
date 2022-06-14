@@ -157,9 +157,7 @@ class Extractor(TextFormatter):
     """Provide basic extraction methods for html."""
 
     def parse(self):
-        return lxml_html.read(
-            self.fname, text=self.text,
-            codings=self.codings, errors=self.errors)
+        return self._parse(self.fname, text=self.text)
 
     def _add_css_elememnt(self, doc):
         for url in self.get_css_reference():
