@@ -129,13 +129,19 @@ def add_cookie(cj, cookie):
 class _File(object):
     """Common object for Reader and Writer."""
 
+    SUFFIX_FILE = '.f'
+
     def __init__(self, fname):
         self.fname = fname
         self.encoding = 'utf-8'
 
 
 class Reader(_File):
-    """Text reader object."""
+    """Text reader object.
+
+    Optionally route file (resolve file-directory collision),
+    which might happen when translating remote URL to system path.
+    """
 
     def __init__(self, fname, text=None, codings=None,
             errors='strict', length=None):
@@ -145,11 +151,17 @@ class Reader(_File):
         self.errors = errors
         self.buf_length = length or 102400
 
+    def get_filename(self, name):
+        if os.path.isdir(name):
+            return fname + self.SUFFIX_FILE
+        return name
+
     def _prepare(self):
         if self.text:
             return
+        fname = self.get_filename(self.fname)
         self.text, self.encoding = manuopen.manuopen(
-            self.fname, self.codings, self.errors, self.buf_length)
+            fname, self.codings, self.errors, self.buf_length)
 
     def read(self):
         self._prepare()
@@ -157,7 +169,11 @@ class Reader(_File):
 
 
 class Writer(_File):
-    """Text writer object."""
+    """Text writer object.
+
+    Optionally route file (resolve file-directory collision),
+    which might happen when translating remote URL to system path.
+    """
 
     def __init__(self, fname, text):
         super().__init__(fname)
@@ -171,8 +187,17 @@ class Writer(_File):
                 sys.exit(1)
             else:
                 return
-        path = os.path.abspath(os.path.dirname(fname))
-        os.makedirs(path, exist_ok=True)
+
+        dirname = os.path.dirname(fname)
+        if dirname in ('', '.', '/'):
+            return
+
+        while True:
+            try:
+                os.makedirs(dirname, exist_ok=True)
+                break
+            except FileExistsError:
+                self.route_file(dirname)
 
     def _in_current_dir(self, fname, base=os.curdir):
         current = os.path.abspath(base)
@@ -183,12 +208,24 @@ class Writer(_File):
         else:
             return False
 
+    def route_file(self, dirname):
+        while True:
+            if dirname in ('', '.', '/'):
+                break
+            elif os.path.isfile(dirname):
+                os.replace(dirname, dirname + self.SUFFIX_FILE)
+                break
+            else:
+                dirname = os.path.dirname(dirname)
+
     def _prepare(self):
         self.makedirs(self.fname)
 
     def write(self, fname=None):
         self._prepare()
         fname = fname or self.fname
+        if os.path.isdir(fname):
+            fname = fname + self.SUFFIX_FILE
         mode = 'wb' if isinstance(self.text, bytes) else 'w'
         with open(fname, mode) as f:
             f.write(self.text)
