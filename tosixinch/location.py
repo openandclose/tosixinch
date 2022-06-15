@@ -173,7 +173,7 @@ class Component(urlmap.Ref):
     """Create relative reference for class 'Location'."""
 
     _CLS = Location
-    _INHERIT = ('PREFIX', 'INDEX', 'APPENDIX')
+    _INHERIT = ('PREFIX', 'APPENDIX')
 
     @property
     def idna_url(self):

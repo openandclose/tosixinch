@@ -8,6 +8,30 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+**Change:**
+
+* **!!** Change name syntax of Downloaded_File, Using suffix '.f'
+
+  Given URL::
+
+    https://en.wikipedia.org/wiki/XPath
+
+  Old fname::
+
+    _htmls/en.wikipedia.org/wiki/XPath/_
+
+  Now::
+
+    _htmls/en.wikipedia.org/wiki/XPath
+
+  NOTE: you can no longer use old html cache in '_htmls' folder,
+  since names are different.
+
+  Especially, there should be many now-redundant directory,
+  which causes download Errors.
+
+  E.g. If there is a directory 'XPath', we can not write a file 'XPath'.
+
 **Add:**
 
 * Use temporary file when downloading (with suffix '.part')

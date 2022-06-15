@@ -187,8 +187,6 @@ class Map(object):
     'map' here means to change somewhat neutral paths to actual filepaths.
     """
 
-    INDEX = '_'
-
     def __init__(self, input_name, input_type=None):
         self._input_name = input_name
         self.sep = '/'
@@ -213,19 +211,6 @@ class Map(object):
             return FileURL(input_name)
         return Path(input_name)
 
-    def _add_index(self, url):
-        if self.INDEX == '':
-            return url
-
-        root, ext = os.path.splitext(url)
-        if ext:
-            pass
-        elif '?' in url:
-            pass
-        else:
-            url = os.path.join(url, self.INDEX)
-        return url
-
     def _map_name(self, name):
         # 'name' is always derived from a url, so it is ascii.
         for segment in name.split(self.sep):
@@ -233,8 +218,6 @@ class Map(object):
                 self._hashed = True
                 return hashlib.sha1(name.encode('utf-8')).hexdigest()
 
-        if self.is_remote:
-            return self._add_index(name)
         return name
 
     @property
@@ -287,7 +270,7 @@ class Ref(object):
     """
 
     _CLS = Map
-    _INHERIT = ('INDEX',)
+    _INHERIT = ()
 
     def __init__(self, url, parent, baseurl=None):
         if isinstance(parent, str):

@@ -161,7 +161,7 @@ class TestMap:
     def test_names(self):
 
         tests = (
-            ('http://a/b',      'http://a/b',       'a/b/_'),
+            ('http://a/b',      'http://a/b',       'a/b'),
             ('file:///a/b',     '/a/b',             'a/b'),
             ('/a/b',            '/a/b',             'a/b'),
         )
@@ -190,17 +190,15 @@ class TestRef:
             ('z',                   ''),
             ('../y/z',              ''),
 
-            # strange, but it is alright. fnames are: 'x/y/z/_' and 'x/y/a/_'
-            ('a',                   '../a/_'),
-            ('a/b',                 '../a/b/_'),
+            ('a',                   'a'),
+            ('a/b',                 'a/b'),
 
             ('http://x/y/z',        ''),
             ('http://x/y/z#f',      '#f'),
 
-            # strange, but it is alright. fnames are: 'x/y/z/_' and 'x/y/c/_'
-            ('http://x/y/c',        '../c/_'),
+            ('http://x/y/c',        'c'),
 
-            ('http://a/b/c',        '../../../a/b/c/_'),
+            ('http://a/b/c',        '../../a/b/c'),
         )
         for url, expected in tests:
             compare(parent_url, baseurl, url, expected)

@@ -506,15 +506,6 @@ General Section
     Here, you have to use the magic word ``site.slash_fnew``.
     It evaluates to the intended url version of ``Extracted_File``.
 
-.. confopt:: loc_index
-
-    | (None)
-
-    Specify the suffix of ``Downloaded_File`` with no extension
-    (default: ``'_'``).
-
-    (See `Downloaded_File <overview.html#dword-Downloaded_File>`__ for details.
-
 .. confopt:: loc_appendix
 
     | (None)

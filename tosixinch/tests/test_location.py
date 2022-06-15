@@ -52,8 +52,8 @@ class TestMakePath:
 
         url, fname, fnew = (
             'https://aaa.org/bbb',
-            '_htmls/aaa.org/bbb/_',
-            '_htmls/aaa.org/bbb/_~.html')
+            '_htmls/aaa.org/bbb',
+            '_htmls/aaa.org/bbb~.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
@@ -117,14 +117,14 @@ class TestLocalReference:
         # No extension
         url, fname, ref = (
             'https://aaa.org/bbb',
-            '_htmls/aaa.org/bbb/_',
-            'bbb/_')
+            '_htmls/aaa.org/bbb',
+            'bbb')
         self.compare(url, fname, ref)
 
         url, fname, ref = (
             'aaa/bbb',
-            '_htmls/aaa.org/aaa/bbb/_',
-            'aaa/bbb/_')
+            '_htmls/aaa.org/aaa/bbb',
+            'aaa/bbb')
         self.compare(url, fname, ref)
 
         # With extension
@@ -147,14 +147,11 @@ class TestLocalReference:
             'bbb%3Fcc')
         self.compare(url, fname, ref)
 
-        # 2022/05
-        # commented out following '_add_index' moving
-        # I plan to reintroduce them
-        # url, fname, ref = (
-        #     'https://aaa.org/bbb%3Fcc',
-        #     '_htmls/aaa.org/bbb?cc/_',
-        #     'bbb%3Fcc/_')
-        # self.compare(url, fname, ref)
+        url, fname, ref = (
+            'https://aaa.org/bbb%3Fcc',
+            '_htmls/aaa.org/bbb?cc',
+            'bbb%3Fcc')
+        self.compare(url, fname, ref)
 
         url, fname, ref = (
             'aaa/bbb?cc',
@@ -162,14 +159,11 @@ class TestLocalReference:
             'aaa/bbb%3Fcc')
         self.compare(url, fname, ref)
 
-        # 2022/05
-        # commented out following '_add_index' moving
-        # I plan to reintroduce them
-        # url, fname, ref = (
-        #     'aaa/bbb%3Fcc',
-        #     '_htmls/aaa.org/aaa/bbb?cc/_',
-        #     'aaa/bbb%3Fcc/_')
-        # self.compare(url, fname, ref)
+        url, fname, ref = (
+            'aaa/bbb%3Fcc',
+            '_htmls/aaa.org/aaa/bbb?cc',
+            'aaa/bbb%3Fcc')
+        self.compare(url, fname, ref)
 
         # With unquoted characters
         url, fname, ref = (
@@ -187,8 +181,8 @@ class TestLocalReference:
         # colon in relative reference
         url, fname, ref = (
             'https://aaa.org/bbb:cc',
-            '_htmls/aaa.org/bbb:cc/_',
-            'bbb%3Acc/_')
+            '_htmls/aaa.org/bbb:cc',
+            'bbb%3Acc')
         self.compare(url, fname, ref)
 
     def test_relative_reference(self):

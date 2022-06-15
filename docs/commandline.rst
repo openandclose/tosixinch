@@ -265,10 +265,6 @@ Configs
 
     specify root directory for download and extract (default: '_htmls')
 
-.. option:: --loc-index LOC_INDEX
-
-    specify the suffix of 'Downloaded_File' with no extension (default: '_')
-
 .. option:: --loc-appendix LOC_APPENDIX
 
     specify the suffix of 'Extracted_File' (default: '~')
