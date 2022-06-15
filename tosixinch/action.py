@@ -29,10 +29,6 @@ class Action(object):
         self.codings = site.general.encoding
         self.errors = site.general.encoding_errors
 
-    def _read(self, name, text=None):
-        return system.read(
-            name, text, codings=self.codings, errors=self.errors)
-
     def _parse(self, name, text=None):
         return lxml_html.read(
             name, text, codings=self.codings, errors=self.errors)
