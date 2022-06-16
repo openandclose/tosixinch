@@ -265,10 +265,6 @@ Configs
 
     specify root directory for download and extract (default: '_htmls')
 
-.. option:: --loc-appendix LOC_APPENDIX
-
-    specify the suffix of 'Extracted_File' (default: '~')
-
 .. option:: --keep-html
 
     do not extract, keep html as is, just component download to make complete local version

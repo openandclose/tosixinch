@@ -70,6 +70,7 @@ import time
 
 import tosixinch.main
 import tosixinch.settings
+import tosixinch.system
 import tosixinch.toc
 
 from tosixinch import location
@@ -456,7 +457,8 @@ def _clean_ref():
 
 def _get_downloaded_files(urls):
     for url in urls:
-        yield location.Location(url).fname
+        fname = location.Location(url).fname
+        yield tosixinch.system.ExtractReader(fname).get_filename()
 
 
 def _copy_downloaded_files(urls):

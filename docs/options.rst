@@ -506,15 +506,6 @@ General Section
     Here, you have to use the magic word ``site.slash_fnew``.
     It evaluates to the intended url version of ``Extracted_File``.
 
-.. confopt:: loc_appendix
-
-    | (None)
-
-    Specify the suffix of ``Extracted_File``
-    (default: ``'~'``).
-
-    (See `Extracted_File <overview.html#dword-Extracted_File>`__ for details.
-
 
 Style Section
 ^^^^^^^^^^^^^

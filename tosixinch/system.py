@@ -151,15 +151,16 @@ class Reader(_File):
         self.errors = errors
         self.buf_length = length or 102400
 
-    def get_filename(self, name):
-        if os.path.isdir(name):
+    def get_filename(self):
+        fname = self.fname
+        if os.path.isdir(fname):
             return fname + self.SUFFIX_FILE
-        return name
+        return fname
 
     def _prepare(self):
         if self.text:
             return
-        fname = self.get_filename(self.fname)
+        fname = self.get_filename()
         self.text, self.encoding = manuopen.manuopen(
             fname, self.codings, self.errors, self.buf_length)
 
@@ -197,7 +198,7 @@ class Writer(_File):
                 os.makedirs(dirname, exist_ok=True)
                 break
             except FileExistsError:
-                self.route_file(dirname)
+                self.move_file(dirname)
 
     def _in_current_dir(self, fname, base=os.curdir):
         current = os.path.abspath(base)
@@ -208,7 +209,7 @@ class Writer(_File):
         else:
             return False
 
-    def route_file(self, dirname):
+    def move_file(self, dirname):
         while True:
             if dirname in ('', '.', '/'):
                 break
@@ -239,9 +240,9 @@ class DownloadWriter(Writer):
     def get_partfile(self, name):
         return name + self.SUFFIX_PART
 
-    def write(self):
-        fname = self.fname
-        part = self.get_partname(fname)
+    def write(self, fname=None):
+        fname = fname or self.fname
+        part = self.get_partfile(fname)
         super().write(part)
         os.replace(part, fname)
 

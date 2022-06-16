@@ -99,21 +99,8 @@ class Location(urlmap.Map):
     PREFIX = DOWNLOAD_DIR
     OVERWRITE = False
 
-    APPENDIX = '~'
     EXTENSION = '.html'
     HASH_DIR = '_hash'
-
-    def _add_appendix(self, name):
-        if self.APPENDIX == '':
-            return name
-
-        root, ext = os.path.splitext(name)
-        root += self.APPENDIX
-        if ext and ext == self.EXTENSION:
-            pass
-        else:
-            ext = ext + self.EXTENSION
-        return root + ext
 
     def _map_name(self, name):
         name = super()._map_name(name)  # may modify self._hashed
@@ -132,7 +119,7 @@ class Location(urlmap.Map):
     def fnew(self):
         if self.OVERWRITE:
             return self.fname
-        return self._add_appendix(self.mapped_name)
+        return self.mapped_name
 
     @property
     def slash_fnew(self):
@@ -173,7 +160,7 @@ class Component(urlmap.Ref):
     """Create relative reference for class 'Location'."""
 
     _CLS = Location
-    _INHERIT = ('PREFIX', 'APPENDIX')
+    _INHERIT = ('PREFIX',)
 
     @property
     def idna_url(self):

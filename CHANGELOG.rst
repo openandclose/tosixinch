@@ -32,6 +32,25 @@ Unreleased
 
   E.g. If there is a directory 'XPath', we can not write a file 'XPath'.
 
+* **!!** Change name syntax of Extracted_File using suffix '.orig'
+
+  Reuse the same name as Downloaded_File,
+  but make sure to rename Downloaded_File with the suffix.
+
+  Given URL::
+
+    https://en.wikipedia.org/wiki/XPath
+
+  Old::
+
+    _htmls/en.wikipedia.org/wiki/XPath          (Downloaded_File)
+    _htmls/en.wikipedia.org/wiki/XPath~.html    (Extracted_File)
+
+  Now::
+
+    _htmls/en.wikipedia.org/wiki/XPath.orig     (Downloaded_File)
+    _htmls/en.wikipedia.org/wiki/XPath          (Extracted_File)
+
 **Add:**
 
 * Use temporary file when downloading (with suffix '.part')

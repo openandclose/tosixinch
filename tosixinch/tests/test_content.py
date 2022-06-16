@@ -95,7 +95,7 @@ class TestResolver:
         # self.compare(doc, '//div[@id="blank-query"]/a/@href',   'c.html%3F')
         self.compare(doc, '//div[@id="blank-frag"]/a/@href',    '#')
 
-        self.compare(doc, '//div[@id="query"]/a/@href',         'c~.html%3Fq.html')
+        self.compare(doc, '//div[@id="query"]/a/@href',         'c.html%3Fq')
         self.compare(doc, '//div[@id="query2"]/a/@href',        'http://h/a/b/c.html?q2')
         self.compare(doc, '//div[@id="frag"]/a/@href',          '#f')
 
@@ -118,7 +118,7 @@ class TestResolver:
         # self.compare(doc, '//div[@id="dot-query"]/a/@href',     'http://h/a/b/?')  # noqa: E501
         self.compare(doc, '//div[@id="dot-frag"]/a/@href',      'http://h/a/b/#')
 
-        self.compare(doc, '//div[@id="query"]/a/@href',         '%3Fq~.html')
+        self.compare(doc, '//div[@id="query"]/a/@href',         '%3Fq')
         self.compare(doc, '//div[@id="query2"]/a/@href',        'http://h/a/b/?q2')
         self.compare(doc, '//div[@id="frag"]/a/@href',          'http://h/a/b/#f')
 
@@ -140,7 +140,7 @@ class TestResolver:
         # self.compare(doc, '//div[@id="dot-query"]/a/@href',     'http://h/a/b/?')  # noqa: E501
         self.compare(doc, '//div[@id="dot-frag"]/a/@href',      'http://h/a/b/#')
 
-        self.compare(doc, '//div[@id="query"]/a/@href',         '%3Fq~.html')
+        self.compare(doc, '//div[@id="query"]/a/@href',         '%3Fq')
         self.compare(doc, '//div[@id="query2"]/a/@href',        'http://h/a/b/?q2')
         self.compare(doc, '//div[@id="frag"]/a/@href',          'http://h/a/b/#f')
 
@@ -161,11 +161,11 @@ class TestResolver:
         """
         doc = self.resolve(doc)
 
-        self.compare(doc, '//div[@id="sib"]/a/@href',           'd~.html')
+        self.compare(doc, '//div[@id="sib"]/a/@href',           'd.html')
         self.compare(doc, '//div[@id="sib-query"]/a/@href',     'http://h/a/b/d.html?q')
-        self.compare(doc, '//div[@id="sib-frag"]/a/@href',      'd~.html#f')
-        self.compare(doc, '//div[@id="sib-slash"]/a/@href',     'e~.html')
-        self.compare(doc, '//div[@id="sib-slash2"]/a/@href',    'e~.html')
+        self.compare(doc, '//div[@id="sib-frag"]/a/@href',      'd.html#f')
+        self.compare(doc, '//div[@id="sib-slash"]/a/@href',     'e.html')
+        self.compare(doc, '//div[@id="sib-slash2"]/a/@href',    'e.html')
 
         self.compare(doc, '//div[@id="img"]/img/@src',          '../x.jpg')
         self.compare(doc, '//div[@id="img-slash"]/img/@src',    '../x.jpg')

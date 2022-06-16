@@ -22,9 +22,10 @@ import urllib.parse
 from pkg_resources import resource_filename
 
 from tosixinch import cached_property
+
+from tosixinch import action
 from tosixinch import configfetch
 from tosixinch import location
-from tosixinch import system
 
 from tosixinch.zconfigparser import ZConfigParser
 
@@ -382,7 +383,6 @@ class Site(location.Location):
 
         self.PREFIX = conf.general.download_dir  # may be blank string ''
         self.OVERWRITE = conf.general.overwrite_html
-        self.APPENDIX = conf.general.loc_appendix
 
         self.section = _checkmacth(self.url, self._config)
 
@@ -419,7 +419,8 @@ class Site(location.Location):
         fname = self.fname
         codings = self.general.encoding
         errors = self.general.encoding_errors
-        return system.read(fname, codings=codings, errors=errors)
+        reader = action.ExtractReader(fname, codings=codings, errors=errors)
+        return reader.read()
 
 
 class Conf(object):

@@ -47,36 +47,36 @@ class TestMakePath:
         url, fname, fnew = (
             'https://aaa.org/bbb.html',
             '_htmls/aaa.org/bbb.html',
-            '_htmls/aaa.org/bbb~.html')
+            '_htmls/aaa.org/bbb.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
             'https://aaa.org/bbb',
             '_htmls/aaa.org/bbb',
-            '_htmls/aaa.org/bbb~.html')
+            '_htmls/aaa.org/bbb')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
             'aaa/bbb.html',
             abspath('.') + '/aaa/bbb.html',
-            '_htmls' + abspath('.') + '/aaa/bbb~.html')
+            '_htmls' + abspath('.') + '/aaa/bbb.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
             '../../aaa/bbb.html',
             abspath('../../') + '/aaa/bbb.html',
-            '_htmls' + abspath('../..') + '/aaa/bbb~.html')
+            '_htmls' + abspath('../..') + '/aaa/bbb.html')
         self.compare(url, fname, fnew)
 
         url, fname, fnew = (
             '/aaa/bbb.html',
             '/aaa/bbb.html',
-            '_htmls/aaa/bbb~.html')
+            '_htmls/aaa/bbb.html')
         self.compare(url, fname, fnew)
 
     def test_filescheme(self):
         fname = '/aaa/bbb.html'
-        fnew = '_htmls/aaa/bbb~.html'
+        fnew = '_htmls/aaa/bbb.html'
 
         url = 'file:/aaa/bbb.html'
         self.compare(url, fname, fnew)
@@ -95,7 +95,7 @@ class TestMakePath:
 
     def test_rootpath(self):
         fname = '/aaa/bbb.html'
-        fnew = '_htmls/aaa/bbb~.html'
+        fnew = '_htmls/aaa/bbb.html'
 
         url = '/aaa/bbb.html'
         self.compare(url, fname, fnew)

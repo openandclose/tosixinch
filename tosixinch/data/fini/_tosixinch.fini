@@ -267,10 +267,6 @@ download_dir=       : specify root directory for download and extract
                     : (default: '_htmls')
                     _htmls
 
-loc_appendix=       : specify the suffix of 'Extracted_File'
-                    : (default: '~')
-                    ~
-
 keep_html=          : do not extract, keep html as is, just component download
                     : to make complete local version
                     :: f: bool

@@ -15,6 +15,63 @@ from tosixinch import system
 logger = logging.getLogger(__name__)
 
 
+class _File(object):
+    """Common object for Reader and Writer."""
+
+    SUFFIX_ORIG = '.orig'
+
+
+class DownloadWriter(_File, system.DownloadWriter):
+    """Forward to Downloaded_File."""
+
+    def get_filename(self):
+        orig = self.fname + self.SUFFIX_ORIG
+        if os.path.isfile(orig):
+            return orig
+        return self.fname
+
+    def write(self):
+        fname = self.get_filename()
+        super().write(fname)
+
+
+class ExtractReader(_File, system.Reader):
+    """Forward to Downloaded_File."""
+
+    def get_filename(self):
+        fname = self.fname
+        orig = fname + self.SUFFIX_ORIG
+        if os.path.isfile(orig):
+            return orig
+        return super().get_filename()
+
+
+class _ExtractWriter(_File):
+    """Base class of ExtractWriter and HtmlExtractWriter."""
+
+    def set_filename(self):
+        fname = self.fname
+        orig = fname + self.SUFFIX_ORIG
+        if os.path.isfile(fname) and not os.path.isfile(orig):
+            os.replace(fname, orig)
+
+
+class ExtractWriter(_ExtractWriter, system.Writer):
+    """Move Downloaded_File, before writing."""
+
+    def _prepare(self):
+        super()._prepare()
+        self.set_filename()
+
+
+class HtmlExtractWriter(_ExtractWriter, lxml_html.HtmlWriter):
+    """Use lxml_html.Writer."""
+
+    def _prepare(self):
+        super()._prepare()
+        self.set_filename()
+
+
 class Action(object):
     """Provide basic attributes and methods for action type."""
 
@@ -32,9 +89,6 @@ class Action(object):
     def _parse(self, name, text=None):
         return lxml_html.read(
             name, text, codings=self.codings, errors=self.errors)
-
-    def write(self, name, text):
-        return system.write(name, text)
 
 
 class Downloader(Action):
@@ -97,7 +151,7 @@ class Downloader(Action):
         time.sleep(i)
 
     def write(self, name, text):
-        return system.download_write(name, text)
+        return DownloadWriter(name, text).write()
 
     def download(self):
         if self.check_fname(self._site):
@@ -112,6 +166,9 @@ class Downloader(Action):
 
 class CompDownloader(Downloader):
     """Provide component downloading capability."""
+
+    def write(self, name, text):
+        return system.DownloadWriter(name, text).write()  # no Forwarding
 
     def download(self, comp):
         if self.check_fname(comp._cls):
@@ -151,12 +208,16 @@ class TextFormatter(Action):
         for sheet in self.stylesheets:
             yield self.CSS_REF % sheet
 
+    def write(self, name, text):
+        return ExtractWriter(name, text).write()
+
 
 class Extractor(TextFormatter):
     """Provide basic extraction methods for html."""
 
     def parse(self):
-        return self._parse(self.fname, text=self.text)
+        return lxml_html.read(
+            self.fname, self.text, codings=self.codings, errors=self.errors)
 
     def _add_css_elememnt(self, doc):
         for url in self.get_css_reference():
@@ -167,7 +228,11 @@ class Extractor(TextFormatter):
         self._add_css_elememnt(self.doc)
 
     def write(self, doc):
-        return lxml_html.write(self.fnew, doc=doc)
+        overwrite = self._conf.general.overwrite_html
+        if overwrite:
+            return lxml_html.HtmlWriter(self.fnew, doc).write()
+        else:
+            return HtmlExtractWriter(self.fnew, doc).write()
 
 
 class CSSWriter(Extractor):
