@@ -245,7 +245,7 @@ the name of ``tocfile`` is ``'urls-toc.txt'``).
 So it is Error when ``ufile`` is not provided.
 (``--file`` or implicit ``urls.txt``. No ``--input``).
 
-The ``toc`` action processes ``Extracted_Files``,
+The ``toc`` action processes ``efiles``,
 bundling some of them, and creating new htmls.
 
 So it is Error when you didn't run ``extract`` before,
@@ -283,12 +283,12 @@ To use the same example:
     _htmls/tosixinch.example.com/bobs-articles/_~.html      (13)
 
 ``tosixinch.example.com`` is an imaginary placeholder host,
-strange path names (``'_~'``) are names ``Extracted_Files`` created from ``urls``.
+strange path names (``'_~'``) are names ``efiles`` created from ``urls``.
 
 ``(11)``
     (1) is outside of new chapters structure,
     so it doesn't create a file,
-    just keeps track of (1)'s ``Extracted_File``.
+    just keeps track of (1)'s ``efile``.
 
 ``(12)``
     it creates this new html,
@@ -353,7 +353,7 @@ and it creates ``urls-toc.txt``, which contains::
 
 
 (21)(22)(23) are the names of ``urls``,
-corresponding to (11)(12)(13) (``Extracted_Files``).
+corresponding to (11)(12)(13) (``efiles``).
 
 So, ``convert`` doesn't do anything special for ``urls-toc.txt``,
 just processes pre-built htmls.
@@ -582,7 +582,7 @@ it is evaluated as the object ``site``. For example::
 
     post_each_cmd1=   echo site.fnew site.match
 
-will print each ``Extracted_File`` and url glob pattern.
+will print each ``efile`` and url glob pattern.
 
 Also, the following environment variables are exposed
 (in running subprocess case).
@@ -591,7 +591,7 @@ Also, the following environment variables are exposed
 
     TOSIXINCH_URL:     url (or filepath)
     TOSIXINCH_FNAME:   dfile
-    TOSIXINCH_FNEW:    Extracted_File
+    TOSIXINCH_FNEW:    efile
 
 
 Scripts

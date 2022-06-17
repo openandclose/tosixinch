@@ -32,7 +32,7 @@ Unreleased
 
   E.g. If there is a directory 'XPath', we can not write a file 'XPath'.
 
-* **!!** Change name syntax of Extracted_File using suffix '.orig'
+* **!!** Change name syntax of efile using suffix '.orig'
 
   Reuse the same name as dfile,
   but make sure to rename dfile with the suffix.
@@ -44,12 +44,12 @@ Unreleased
   Old::
 
     _htmls/en.wikipedia.org/wiki/XPath          (dfile)
-    _htmls/en.wikipedia.org/wiki/XPath~.html    (Extracted_File)
+    _htmls/en.wikipedia.org/wiki/XPath~.html    (efile)
 
   Now::
 
     _htmls/en.wikipedia.org/wiki/XPath.orig     (dfile)
-    _htmls/en.wikipedia.org/wiki/XPath          (Extracted_File)
+    _htmls/en.wikipedia.org/wiki/XPath          (efile)
 
 **Add:**
 

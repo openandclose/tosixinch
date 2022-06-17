@@ -101,7 +101,7 @@ Actions
 
 .. option:: -b, --browser
 
-    open (first) extracted html in browser, and exit
+    open first extracted html (efile) in browser, and exit
 
 .. option:: -c, --check
 
@@ -117,7 +117,7 @@ Actions
 
 .. option:: --printout {0,1,2,3,all}
 
-    print filenames the program's actions would create (0=url, 1=dfiles, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
+    print filenames the program's actions would create (0=url, 1=dfiles, 2=efiles 3=pdfname, all=0<tab>1<tab>2)
 
         choices=0, 1, 2, 3, all
 
@@ -271,7 +271,7 @@ Configs
 
 .. option:: --overwrite-html
 
-    do not create new 'Extracted_File' (overwrite 'dfiles')
+    do not create new 'efile' (overwrite 'dfiles')
 
 Styles
 ------

@@ -193,7 +193,7 @@ def print_version():
 def open_browser(conf):
     site = list(conf.sites)[0]
     if not os.path.exists(site.fnew):
-        FileNotFoundError('No extracted html to open: %r' % site.fnew)
+        FileNotFoundError('No extracted html (efile) to open: %r' % site.fnew)
 
     url = site.slash_fnew
     cmd = conf.general.browsercmd

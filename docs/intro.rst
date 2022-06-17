@@ -132,7 +132,7 @@ The main comandline options of the program are:
 
 ``-2`` extracts these local ``dfiles``, and creates new files.
 
-``-3`` converts these local ``Extracted_Files``, and creates a pdf file.
+``-3`` converts these local ``efiles``, and creates a pdf file.
 
 Note ``-1``, ``-2`` and ``-3`` take the same url as input.
 You don't need to change that part of the commandline
@@ -254,15 +254,15 @@ applying the site config to the local html.  ::
 
     $ tosixinch -i https://somesite.com/article/aaa.html -2
 
-Optionally, you check the extracted html in the browser. ::
+Optionally, you check the extracted html (``efile``) in the browser. ::
 
     $ tosixinch -i https://somesite.com/article/aaa.html -b
 
-* ``'-b'`` or ``'--browser'`` opens ``Extracted_File``.
+* ``'-b'`` or ``'--browser'`` opens ``efile``.
 
 You try ``-2`` several times if necessary,
 editing and changing the site configuration
-(It overwrites the same ``Extracted_File``).
+(It overwrites the same ``efile``).
 
 And ::
 

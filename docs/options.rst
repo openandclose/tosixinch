@@ -377,7 +377,7 @@ General Section
 
     If ``True``,
     when ``convert``, the program processes ``urls``.
-    Normally (if it is ``False``), it processes ``Extracted_File``.
+    Normally (if it is ``False``), it processes ``efile``.
 
     I don't have much clear idea when and how it is used now.
 
@@ -387,7 +387,7 @@ General Section
     | ``[COMMA]``
 
     CSS file names to be used in order.
-    The names are referenced, in order, in ``Extracted_Files``
+    The names are referenced, in order, in ``efiles``
     (``'<link ... rel="stylesheet">'``).
 
     If the files are in ``css directory``,
@@ -504,7 +504,7 @@ General Section
         firefox 'site.slash_fnew'
 
     Here, you have to use the magic word ``site.slash_fnew``.
-    It evaluates to the intended url version of ``Extracted_File``.
+    It evaluates to the intended url version of ``efile``.
 
 
 Style Section
@@ -710,7 +710,7 @@ So section names themselves can be arbitrary.
     Xpath strings to select elements
     from ``dfile`` when ``extract``.
     Only selected elements are included
-    in the ``<body>`` tag of the new ``Extracted_File``,
+    in the ``<body>`` tag of the new ``efile``,
     discarding others.
 
     Each line in the value will be connected with a bar string (``'|'``)
@@ -726,7 +726,7 @@ So section names themselves can be arbitrary.
     | ``[LINE]``
 
     Xpath strings to remove elements
-    from the new ``Extracted_File`` after ``select``.
+    from the new ``efile`` after ``select``.
     So you don't need to exclude already excluded elements by ``select``.
     As in ``select``,
     each line in the value will be connected with a bar string (``'|'``).
@@ -759,7 +759,7 @@ So section names themselves can be arbitrary.
     The first argument of the functions is always ``doc``,
     which the program provides.
     It is ``lxml.html`` DOM object (``HtmlElement``),
-    corresponding to the resultant ``Extracted_File``
+    corresponding to the resultant ``efile``
     after ``select`` and ``exclude``.
 
     The function can have additional arguments.

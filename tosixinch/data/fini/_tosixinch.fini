@@ -64,7 +64,7 @@ appcheck=           : print application settings after command line evaluation, 
                     :: names: a
                     :: action: store_true
 
-browser=            : open (first) extracted html in browser, and exit
+browser=            : open first extracted html (efile) in browser, and exit
                     :: names: b
                     :: action: store_true
 
@@ -79,7 +79,7 @@ inspect=            : parse downloaded htmls (dfiles), and do arbitrary things u
                     :: action: store_true
 
 printout=           : print filenames the program's actions would create
-                    : (0=url, 1=dfiles, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
+                    : (0=url, 1=dfiles, 2=efiles 3=pdfname, all=0<tab>1<tab>2)
                     :: choices: '0', '1', '2', '3', 'all'
 
 
@@ -272,7 +272,7 @@ keep_html=          : do not extract, keep html as is, just component download
                     :: f: bool
                     no
 
-overwrite_html=     : do not create new 'Extracted_File' (overwrite 'dfiles')
+overwrite_html=     : do not create new 'efile' (overwrite 'dfiles')
                     :: f: bool
                     no
 

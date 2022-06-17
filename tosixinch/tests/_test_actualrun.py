@@ -507,7 +507,7 @@ def create_ref():
 
 
 def update_one_ref(urls):
-    """Update reference Extracted_File and PDFFile.
+    """Update reference efiles and PDFFile.
 
     If the present code changes and generated files changes is to remain,
     from this new model, recreate reference files, only for one url.

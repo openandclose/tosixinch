@@ -89,13 +89,13 @@ The program uses ``pyqt5`` or ``selenium``, instead of ``urllib``
 extract
 ^^^^^^^
 
-Opens ``dfile``, and generates ``Extracted_File``.
+Opens ``dfile``, and generates ``efile``.
 (``dfile`` is kept intact).
 
-It always runs, overwriting existing ``Extracted_File`` if any.
+It always runs, overwriting existing ``efile`` if any.
 
 (If ``url`` is local filepath, ``dfile`` is not created,
-but ``Extracted_File`` *is* created).
+but ``efile`` *is* created).
 
 Extraction procedure is predetermined,
 and according to options in `site.ini <#dword-site.ini>`__.
@@ -107,8 +107,8 @@ and `clean <options.html#confopt-clean>`__ options.
 convert
 ^^^^^^^
 
-Opens ``Extracted_File``, and generates ``PDF_File``.
-(``Extracted_File`` is kept intact).
+Opens ``efile``, and generates ``PDF_File``.
+(``efile`` is kept intact).
 
 It always runs, overwriting existing ``PDF_File`` if any.
 
@@ -231,13 +231,13 @@ But disposing of the files (deleting or moving) is users' job.
         the whole ``url`` is sha1-hashed,
         and the name takes a ``_html/_hash/<sha1-hexdigit>`` form.
 
-.. dword:: Extracted_File
+.. dword:: efile
 
     String ``'~'`` and ``'.html'`` (If not already have one)
     is added to ``dfile``.
 
     If ``url`` is a local filepath,
-    The path components of ``Extracted_File`` are created
+    The path components of ``efile`` are created
     by the same process as ``dfile``.
 
     Example::
@@ -392,7 +392,7 @@ Config Files
 
     When Action is ``extract``,
     you can apply arbitrary functions to the html DOM elements,
-    before writing to ``Extracted_File``.
+    before writing to ``efile``.
 
     (For the details, see `process option <options.html#confopt-process>`__).
 
