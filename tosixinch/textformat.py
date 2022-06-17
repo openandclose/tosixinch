@@ -37,7 +37,7 @@ PYTHONFILE = re.compile((
 ))
 
 
-def is_prose(fname, text):
+def is_prose(dfile, text):
     """Check if text is prose or not.
 
     Here 'prose' means general texts
@@ -70,8 +70,8 @@ def is_prose(fname, text):
     return False
 
 
-def is_python(fname, text=None):
-    parts = fname.rsplit('.', maxsplit=1)
+def is_python(dfile, text=None):
+    parts = dfile.rsplit('.', maxsplit=1)
     if len(parts) == 2 and parts[1] in PYTHONEXT:
         return True
     if PYTHONFILE.match(text):
@@ -213,11 +213,11 @@ class PythonCode(Code):
 
 def run(conf, site):
     if not site.ftype:
-        fname = site.fname
+        dfile = site.dfile
         text = site.text
-        if is_prose(fname, text):
+        if is_prose(dfile, text):
             site.ftype = 'prose'
-        elif is_python(fname, text):
+        elif is_python(dfile, text):
             site.ftype = 'python'
         else:
             site.ftype = 'nonprose'  # default
@@ -229,5 +229,5 @@ def run(conf, site):
     else:
         runner = NonProse
 
-    logger.info('[ftype] %s: %r', site.ftype, site.fname)
+    logger.info('[ftype] %s: %r', site.ftype, site.dfile)
     runner(conf, site).run()

@@ -52,7 +52,7 @@ def build_new_html(doctype=None, title=None, content=None):
     return root
 
 
-def get_component_size(el, fname, stream=None):
+def get_component_size(el, dfile, stream=None):
     # Get size from html attributes (if any and the unit is no unit or 'px').
     w = el.get('width')
     h = el.get('height')
@@ -66,7 +66,7 @@ def get_component_size(el, fname, stream=None):
 
     # Get size from file header (if possible).
     try:
-        mime, w, h = imagesize.get_size(fname, stream)
+        mime, w, h = imagesize.get_size(dfile, stream)
         return int(w), int(h)
     except FileNotFoundError:
         return None, None

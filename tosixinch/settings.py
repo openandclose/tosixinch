@@ -416,10 +416,10 @@ class Site(location.Location):
 
     @cached_property
     def text(self):
-        fname = self.fname
+        dfile = self.dfile
         codings = self.general.encoding
         errors = self.general.encoding_errors
-        reader = action.ExtractReader(fname, codings=codings, errors=errors)
+        reader = action.ExtractReader(dfile, codings=codings, errors=errors)
         return reader.read()
 
 
@@ -554,10 +554,10 @@ class Conf(object):
             if opt == '0':
                 print(site.url)
             elif opt == '1':
-                print(site.fname)
+                print(site.dfile)
             elif opt == '2':
                 print(site.efile)
             elif opt == 'all':
-                print('%s\t%s\t%s' % (site.url, site.fname, site.efile))
+                print('%s\t%s\t%s' % (site.url, site.dfile, site.efile))
         if opt == '3':
             print(self.pdfname)

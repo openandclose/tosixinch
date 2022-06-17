@@ -347,7 +347,7 @@ def compare(conf, action):
     site = [site for site in conf.sites][0]
 
     if action == 'download':
-        filename = site.fname
+        filename = site.dfile
     if action == 'extract':
         filename = site.efile
     elif action == 'convert':
@@ -438,8 +438,8 @@ def _clean_outcome_directory(urls):
 
     # Delete files, but keep ``dfiles``.
     png_dir = os.path.abspath(PNG_DIR)
-    fnames = [os.path.abspath(n) for n in _get_downloaded_files(urls)]
-    excludes = [png_dir] + fnames
+    dfiles = [os.path.abspath(n) for n in _get_downloaded_files(urls)]
+    excludes = [png_dir] + dfiles
     _clean_directory(excludes=excludes)
 
 
@@ -457,20 +457,20 @@ def _clean_ref():
 
 def _get_downloaded_files(urls):
     for url in urls:
-        fname = location.Location(url).fname
-        yield tosixinch.system.ExtractReader(fname).get_filename()
+        dfile = location.Location(url).dfile
+        yield tosixinch.system.ExtractReader(dfile).get_filename()
 
 
 def _copy_downloaded_files(urls):
     assert os.path.abspath(os.curdir) == REFERENCE
 
-    fnames = _get_downloaded_files(urls)
-    for fname in fnames:
-        fname_outcome = os.path.join(OUTCOME, fname)
-        if fname_outcome == fname:
+    dfiles = _get_downloaded_files(urls)
+    for dfile in dfiles:
+        dfile_outcome = os.path.join(OUTCOME, dfile)
+        if dfile_outcome == dfile:
             continue
-        _mkdirs(os.path.dirname(fname_outcome))
-        shutil.copy(fname, fname_outcome)
+        _mkdirs(os.path.dirname(dfile_outcome))
+        shutil.copy(dfile, dfile_outcome)
 
 
 def _copy_pdf_files():

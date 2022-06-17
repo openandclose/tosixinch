@@ -118,7 +118,7 @@ class Location(urlmap.Map):
     @property
     def efile(self):
         if self.OVERWRITE:
-            return self.fname
+            return self.dfile
         return self.mapped_name
 
     @property
@@ -168,7 +168,7 @@ class Component(urlmap.Ref):
 
     @property
     def relative_reference(self):
-        path, basepath, url = self.fname, self._parent_cls.efile, self.url
+        path, basepath, url = self.dfile, self._parent_cls.efile, self.url
         return get_relative_reference(path, basepath, url)
 
 

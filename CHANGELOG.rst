@@ -16,7 +16,7 @@ Unreleased
 
     https://en.wikipedia.org/wiki/XPath
 
-  Old fname::
+  Old dfile::
 
     _htmls/en.wikipedia.org/wiki/XPath/_
 

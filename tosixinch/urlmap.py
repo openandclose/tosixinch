@@ -247,8 +247,8 @@ class Map(object):
         return self._map_name(name)
 
     @property
-    def fname(self):
-        """Return a new filename only for remote resources (url).
+    def dfile(self):
+        """Return a new filename only for remote resources.
 
         A kind of shortcut.
         When c.f. retrieving files, it is convenient
@@ -285,7 +285,7 @@ class Ref(object):
         url = self._resolve(url)
         self._cls = self._detect(url)
         self.url = self._cls.input_name
-        self.fname = self._cls.fname
+        self.dfile = self._cls.dfile
 
     def _resolve(self, url):
         if self.baseurl:
@@ -317,5 +317,5 @@ class Ref(object):
 
     @property
     def relative_reference(self):
-        path, basepath, url = self.fname, self._parent_cls.fname, self._url
+        path, basepath, url = self.dfile, self._parent_cls.dfile, self._url
         return _get_relative_reference(path, basepath, url)

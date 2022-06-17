@@ -127,7 +127,7 @@ def fromstring(html, **kw):
 class HtmlReader(system.Reader):
     """html reader object.
 
-    From fname or text, return document object (lxml_html.HtmlElement).
+    From dfile or text, return document object (lxml_html.HtmlElement).
     """
 
     def _parse(self):
@@ -142,11 +142,11 @@ class HtmlReader(system.Reader):
 class HtmlWriter(system.Writer):
     """html writer object.
 
-    From document object, write serialized text to fname.
+    From document object, write serialized text to dfile.
     """
 
-    def __init__(self, fname, doc=None, text=None):
-        super().__init__(fname, text)
+    def __init__(self, dfile, doc=None, text=None):
+        super().__init__(dfile, text)
         self.doc = doc
 
     def _serialize(self):
@@ -160,9 +160,9 @@ class HtmlWriter(system.Writer):
         super()._prepare()
 
 
-def read(fname, text=None, codings=None,
+def read(dfile, text=None, codings=None,
         errors='strict'):
-    return HtmlReader(fname, text, codings, errors).read()
+    return HtmlReader(dfile, text, codings, errors).read()
 
 
 def write(fname, doc=None, text=None):

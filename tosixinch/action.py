@@ -25,10 +25,11 @@ class DownloadWriter(_File, system.DownloadWriter):
     """Forward to dfile."""
 
     def get_filename(self):
-        orig = self.fname + self.SUFFIX_ORIG
+        fname = self.fname
+        orig = fname + self.SUFFIX_ORIG
         if os.path.isfile(orig):
             return orig
-        return self.fname
+        return fname
 
     def write(self):
         fname = self.get_filename()
@@ -80,7 +81,7 @@ class Action(object):
         self._site = site
 
         self.url = site.url
-        self.fname = site.fname
+        self.dfile = site.dfile
         self.efile = site.efile
 
         self.codings = site.general.encoding
@@ -104,7 +105,7 @@ class Downloader(Action):
             return True
         return False
 
-    def check_fname(self, site):
+    def check_dfile(self, site):
         """Check if downloading is necessary (done).
 
         True:  not necessary
@@ -113,19 +114,19 @@ class Downloader(Action):
         if self.check_url(site):
             return True
 
-        fname = site.fname
+        dfile = site.dfile
         force = self._site.general.force_download
         cache = self._conf._cache.download
 
-        if os.path.exists(fname):
+        if os.path.exists(dfile):
             if not force:
                 return True
             else:
-                if cache and cache.get(fname):
+                if cache and cache.get(dfile):
                     return True
 
         if cache:
-            cache[fname] = 1
+            cache[dfile] = 1
         return False
 
     def request(self, site, on_error_exit=True):
@@ -154,13 +155,13 @@ class Downloader(Action):
         return DownloadWriter(name, text).write()
 
     def download(self):
-        if self.check_fname(self._site):
+        if self.check_dfile(self._site):
             return
 
         self.request(self._site)
         self.process()
         self.retrieve()
-        self.write(self.fname, self.text)
+        self.write(self.dfile, self.text)
         self.sleep(self._site)
 
 
@@ -171,7 +172,7 @@ class CompDownloader(Downloader):
         return system.DownloadWriter(name, text).write()  # no Forwarding
 
     def download(self, comp):
-        if self.check_fname(comp._cls):
+        if self.check_dfile(comp._cls):
             return
 
         self.request(comp, on_error_exit=False)
@@ -179,7 +180,7 @@ class CompDownloader(Downloader):
             return
         self.retrieve(on_error_exit=False)
         if self.text:
-            self.write(comp.fname, self.text)
+            self.write(comp.dfile, self.text)
             self.sleep(comp._parent_cls)
 
 
@@ -217,7 +218,7 @@ class Extractor(TextFormatter):
 
     def parse(self):
         return lxml_html.read(
-            self.fname, self.text, codings=self.codings, errors=self.errors)
+            self.dfile, self.text, codings=self.codings, errors=self.errors)
 
     def _add_css_elememnt(self, doc):
         for url in self.get_css_reference():

@@ -38,17 +38,17 @@ class Tags(object):
                 yield self._parse_line(ln)
 
     def _parse_line(self, line):
-        tag, fname, lnum, *ext = line.split('\t')
+        tag, dfile, lnum, *ext = line.split('\t')
         ext = [ext] if isinstance(ext, str) else ext
         try:
-            index = self._files_cache.index(fname)
+            index = self._files_cache.index(dfile)
         except ValueError:
-            self._files_cache.append(fname)
-            index = self._files_cache.index(fname)
+            self._files_cache.append(dfile)
+            index = self._files_cache.index(dfile)
         if lnum.endswith(';"'):
             lnum = int(lnum[:-2])
             return (tag, index, lnum, *self._parse_extension(ext))
-        return (tag, fname, lnum, '', '', '', '')
+        return (tag, dfile, lnum, '', '', '', '')
 
     def _parse_extension(self, ext):
         lang = ''
@@ -75,7 +75,7 @@ class Tags(object):
         cmd = """
             CREATE TABLE tags (
                 tag TEXT,
-                fname INTEGER,
+                dfile INTEGER,
                 lnum INTEGER,
                 lang TEXT,
                 kind TEXT,
@@ -91,8 +91,8 @@ class Tags(object):
     def close_db(self):
         self.cur.connection.close()
 
-    def find(self, tag, ftype, fname):
-        if fname not in self._files_cache:
+    def find(self, tag, ftype, dfile):
+        if dfile not in self._files_cache:
             return [], []
 
         rows1, rows2 = [], []  # rows1: in the same file, rows2: in other.
@@ -100,7 +100,7 @@ class Tags(object):
         cmd = 'SELECT rowid, * FROM tags WHERE tag = (?) AND lang = (?)'
         cur.execute(cmd, (tag, ftype))
         for row in cur.fetchall():
-            if row[2] == self._files_cache.index(fname):
+            if row[2] == self._files_cache.index(dfile):
                 rows1.append(self._build_row(row))
             else:
                 rows2.append(self._build_row(row))

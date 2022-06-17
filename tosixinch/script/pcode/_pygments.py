@@ -186,7 +186,7 @@ class PygmentsCode(_PygmentsCode):
         if not self.tagdb:
             return value
 
-        rows = self.tagdb.find(value, self.ftype, self.fname)
+        rows = self.tagdb.find(value, self.ftype, self.dfile)
         if rows == ([], []):
             return value
 
@@ -232,7 +232,7 @@ class PygmentsCode(_PygmentsCode):
         return fmt.format(**fdict)
 
     def get_relative_url(self, refname):
-        if refname == self.fname:
+        if refname == self.dfile:
             return ''
         path = location.Location(refname).efile
         return location.path2ref(path, self.efile)
@@ -246,8 +246,8 @@ class PygmentsCode(_PygmentsCode):
         return self.TAGNAME
 
 
-def _get_lexer(fname, text):
+def _get_lexer(dfile, text):
     try:
-        return pygments.lexers.guess_lexer_for_filename(fname, text)
+        return pygments.lexers.guess_lexer_for_filename(dfile, text)
     except pygments.util.ClassNotFound:
         pass

@@ -73,7 +73,7 @@ _HTMLFILE = re.compile(
     flags=re.IGNORECASE | re.DOTALL)
 
 
-def _is_html(fname, text, max_chars=4096):
+def _is_html(dfile, text, max_chars=4096):
     if _HTMLFILE.match(text[:max_chars]):
         return True
     return False
@@ -85,7 +85,7 @@ def _set_ftypes(conf):
         if site.ftype:
             continue
 
-        if _is_html(site.fname, site.text):
+        if _is_html(site.dfile, site.text):
             site.ftype = 'html'
 
 

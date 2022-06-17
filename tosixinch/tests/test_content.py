@@ -36,12 +36,12 @@ class TestBlankHtml:
 
 
 class _TestRelinkComponent:
-    fname = 'aaa/bb/cc'
+    url = 'aaa/bb/cc'
     base = 'xxx/yy'
 
     def run(self, url):
         doc = fromstring('<body><img src=%s></body>' % url)
-        content._relink_component(doc, self.base, self.fname)
+        content._relink_component(doc, self.base, self.url)
         return doc
 
     def test(self):

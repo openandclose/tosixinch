@@ -24,15 +24,15 @@ logger = logging.getLogger(__name__)
 EXTENSION = r'^(.+\.[1-9]([a-z]+)?)(\.gz)?$'
 
 
-def man(fname, efile, delete=True):
+def man(dfile, efile, delete=True):
     env = {'MANROFFOPT': '-rIN=2n'}
-    cmd = ['man', '-Thtml', fname]
+    cmd = ['man', '-Thtml', dfile]
     ret = subprocess.run(
         cmd, capture_output=True, check=True, env=os.environ.update(env))
     if logger.name == '__main__':
-        print('processing %r... (write to %r)' % (fname, efile))
+        print('processing %r... (write to %r)' % (dfile, efile))
     else:
-        logger.info('[man] processing %r...', fname)
+        logger.info('[man] processing %r...', dfile)
     text = ret.stdout.decode(sys.stdout.encoding)
     system.write(efile, text=text)
     if delete:
@@ -47,8 +47,8 @@ def delete_images():
             os.remove(entry)
 
 
-def match(fname):
-    basename = os.path.basename(fname)
+def match(dfile):
+    basename = os.path.basename(dfile)
     m = re.search(EXTENSION, basename)
     if m:
         return m.group(1)
@@ -56,24 +56,24 @@ def match(fname):
 
 
 def run(conf, site):
-    ret = _run(site.fname, site.efile)
+    ret = _run(site.dfile, site.efile)
     if ret == 101:
         action.CSSWriter(conf, site).read_and_write()
     return ret
 
 
-def _run(fname, efile):
-    if match(fname):
-        return man(fname, efile)
+def _run(dfile, efile):
+    if match(dfile):
+        return man(dfile, efile)
     return 0
 
 
 def main():
     if len(sys.argv) == 2:
-        fname = sys.argv[1]
-        name = match(fname)
+        dfile = sys.argv[1]
+        name = match(dfile)
         if name:
-            man(fname, name + '.html')
+            man(dfile, name + '.html')
             return
     print(__doc__)
 

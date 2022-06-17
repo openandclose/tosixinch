@@ -113,7 +113,7 @@ class KeepExtract(Extract):
     """Provide superficial extractor.
 
     Use input html as is, without select, clean, css-add etc.
-    Only do comp-download and resolve, to make local html (fname) complete.
+    Only do comp-download and resolve, to make local html (dfile) complete.
     """
 
     def run(self):
@@ -131,10 +131,10 @@ class Resolver(content.Resolver):
 
     def _get_component(self, el, comp):
         self._download_component(comp)
-        self._add_component_attributes(el, comp.fname)
+        self._add_component_attributes(el, comp.dfile)
 
     def _set_component(self, comp):
-        if os.path.isfile(comp.fname):
+        if os.path.isfile(comp.dfile):
             super()._set_component(comp)
 
     def _download_component(self, comp):
@@ -144,12 +144,12 @@ class Resolver(content.Resolver):
         downloader = CompDownloader(self._conf, self.loc)
         downloader.download(comp)
 
-    def _add_component_attributes(self, el, fname):
+    def _add_component_attributes(self, el, dfile):
         if el.tag != 'img':
             return
 
         full = self.loc.general.full_image
-        w, h = content.get_component_size(el, fname)
+        w, h = content.get_component_size(el, dfile)
         if w and h:
             length = max(w, h)
             if length >= full:

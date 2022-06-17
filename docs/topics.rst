@@ -589,8 +589,8 @@ Also, the following environment variables are exposed
 
 .. code-block:: none
 
-    TOSIXINCH_URL:     url (or filepath)
-    TOSIXINCH_FNAME:   dfile
+    TOSIXINCH_URL:      url (or filepath)
+    TOSIXINCH_DFILE:    dfile
     TOSIXINCH_EFILE:    efile
 
 

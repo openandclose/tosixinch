@@ -71,15 +71,15 @@ class PCode(object):
         for site in self.conf.sites:
             if site.ftype:
                 continue
-            fname = site.fname
+            dfile = site.dfile
             text = site.text
-            lexer = _pygments._get_lexer(fname, text)
+            lexer = _pygments._get_lexer(dfile, text)
             if lexer:
                 name = lexer.name
                 if name == 'HTML':
                     continue
                 fmt = 'Pygments lexer: %r (%s)'
-                logger.debug(fmt % (name, fname))
+                logger.debug(fmt % (name, dfile))
                 ftype = self.p2ftype.get(name)
                 if ftype:
                     if ftype == 'prose':
@@ -89,8 +89,8 @@ class PCode(object):
                         site.ftype = 'nonprose'
                         continue
 
-                    self._lexer_cache[fname] = lexer
-                    self._class_cache[fname] = self._get_module(ftype)
+                    self._lexer_cache[dfile] = lexer
+                    self._class_cache[dfile] = self._get_module(ftype)
                     site.ftype = ftype
                     continue
                 else:
@@ -115,8 +115,8 @@ class PCode(object):
     def _create_ctags(self):
         tagfile = self.pconfig['ctags']['tagfile']
         cmd = self.ctags_path + ' ' + self.pconfig['ctags']['arguments']
-        files = [site.fname for site in self.conf.sites
-            if self._class_cache.get(site.fname)]
+        files = [site.dfile for site in self.conf.sites
+            if self._class_cache.get(site.dfile)]
         _ctags._create_ctags(tagfile, cmd, files)
         self._db = _ctags.Tags(tagfile=tagfile, c2ftype=self.c2ftype)
 
@@ -134,12 +134,12 @@ class PCode(object):
         return d
 
     def run(self, site):
-        fname = site.fname
-        runner = self._class_cache.get(fname)
+        dfile = site.dfile
+        runner = self._class_cache.get(dfile)
         if runner:
-            lexer = self._lexer_cache[fname]
+            lexer = self._lexer_cache[dfile]
             fmt = '[pcode: %s (%s)] %r'
-            logger.info(fmt % (site.ftype, runner.__name__, fname))
+            logger.info(fmt % (site.ftype, runner.__name__, dfile))
 
             section = self._get_section(site.ftype)
             start_token = section.get('start_token')
