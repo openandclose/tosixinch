@@ -51,6 +51,8 @@ Unreleased
     _htmls/en.wikipedia.org/wiki/XPath.orig     (dfile)
     _htmls/en.wikipedia.org/wiki/XPath          (efile)
 
+* **!!** Change default resource filename 'urls.txt' -> 'rsrcs.txt'
+
 **Add:**
 
 * Use temporary file when downloading (with suffix '.part')

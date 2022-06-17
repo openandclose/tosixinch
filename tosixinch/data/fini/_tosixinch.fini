@@ -17,7 +17,7 @@ input=              : input rsrc (URL or file path). it can be specified multipl
 
 file=               : file to read inputs. only one file
                     :: names: f
-                    :: default: urls.txt
+                    :: default: rsrcs.txt
 
 help=               : show this help message and exit
                     :: names: h

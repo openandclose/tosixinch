@@ -275,7 +275,7 @@ And ::
 
 Next, you build an rsrc list, by some means. ::
 
-    # in './urls.txt'
+    # in './rsrcs.txt'
     https://somesite.com/article/aaa.html
     https://somesite.com/article/bbb.html
     https://somesite.com/article/zzz.html
@@ -285,7 +285,7 @@ And ::
     $ tosixinch -123
 
 * If inputs are not specified (no ``-i`` and no ``-f``),
-  it defaults to ``'urls.txt'`` in current directory.
+  it defaults to ``'rsrcs.txt'`` in current directory.
 
 * It generates ``./somesite.pdf``, with three htmls as each chapter.
 

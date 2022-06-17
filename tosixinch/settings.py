@@ -77,7 +77,7 @@ class Loader(object):
 class SampleLoader(Loader):
     """Get sample rsrcs."""
 
-    SAMPLE_RFILE = 'urls.txt'
+    SAMPLE_RFILE = 'rsrcs.txt'
     PDFNAME = 'sample.pdf'
 
     def get_data(self):

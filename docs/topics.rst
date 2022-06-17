@@ -163,7 +163,7 @@ TOC
 Concept
 ^^^^^^^
 
-Given the following ``urls.txt``:
+Given the following ``rsrcs.txt``:
 
 .. code-block:: none
 
@@ -254,7 +254,7 @@ with the same ``rfile``.
 Table of Contents adjustments are done
 simply by decreasing ``heading`` numbers.
 
-It first reads ``urls.txt``.
+It first reads ``rsrcs.txt``.
 If there is a line starting with ``'#'``,
 it is interpreted as a new chapter
 (new html ``<title>`` and new ``'<h1>'`` text).
@@ -345,7 +345,7 @@ strange path names (``'_~'``) are names ``efiles`` created from ``rsrcs``.
 ``(13)``
     the same as (12).
 
-and it creates ``urls-toc.txt``, which contains::
+and it creates ``rsrcs-toc.txt``, which contains::
 
     https://somesite.com/index.html                 (21)
     http://tosixinch.example.com/alices-articles    (22)
@@ -355,7 +355,7 @@ and it creates ``urls-toc.txt``, which contains::
 (21)(22)(23) are the names of ``rsrcs``,
 corresponding to (11)(12)(13) (``efiles``).
 
-So, ``convert`` doesn't do anything special for ``urls-toc.txt``,
+So, ``convert`` doesn't do anything special for ``rsrcs-toc.txt``,
 just processes pre-built htmls.
 
 .. note::
@@ -662,7 +662,7 @@ skipping the main extraction.
 
       .. code-block:: bash
 
-          # in urls.txt
+          # in rsrcs.txt
           /usr/share/man/man1/cp.1.gz
           /usr/share/man/man1/grep.1.gz
 

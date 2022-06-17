@@ -50,7 +50,7 @@ General
 
     file to read inputs. only one file
 
-        default=urls.txt
+        default=rsrcs.txt
 
 .. option:: -h, --help
 

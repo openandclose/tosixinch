@@ -8,7 +8,7 @@ from tosixinch import toc
 def check(ulist, expected):
     ulist = [u.strip() for u in ulist.strip().split('\n')]
     expected = textwrap.dedent(expected).split('\n')[1:-1]
-    nodes = toc.Nodes(ulist, 'dummy-urls.txt', 'dummy-urls-toc.txt')
+    nodes = toc.Nodes(ulist, 'dummy-rsrcs.txt', 'dummy-rsrcs-toc.txt')
     result = []
     append = result.append
     for node in nodes.nodes:

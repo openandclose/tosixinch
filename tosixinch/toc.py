@@ -1,7 +1,7 @@
 
-"""Merging extracted files and make new 'urls.txt' ('utls-toc.txt').
+"""Merging extracted files and make new 'rsrcs.txt' ('utls-toc.txt').
 
-Use comment structure in 'urls.txt' as directive.
+Use comment structure in 'rsrcs.txt' as directive.
 """
 
 import logging
@@ -157,7 +157,7 @@ def run(conf):
     rfile = conf._rfile
     if not rfile:
         msg = ("To run '--toc', you can not use '--input'. "
-            "Use either '--file', or implicit 'urls.txt'.")
+            "Use either '--file', or implicit 'rsrcs.txt'.")
         raise ValueError(msg)
     tocfile = get_tocfile(rfile)
 

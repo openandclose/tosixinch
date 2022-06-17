@@ -8,7 +8,7 @@ $ tosixinch -i https://en.wikipedia.org/wiki/Xpath -1
 
 $ tosixinch -123
     download(1), extract(2), and convert(3) resource,
-    reading from 'urls.txt' in current directory.
+    reading from 'rsrcs.txt' in current directory.
     no '--input' and no '--file' defaults to this file.
 """
 
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 ENVS = {'userdir': 'TOSIXINCH_USERDIR'}
 
-DEFAULT_RFILE = 'urls.txt'
+DEFAULT_RFILE = 'rsrcs.txt'
 
 
 # For argument parser object:

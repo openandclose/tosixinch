@@ -264,7 +264,7 @@ But disposing of the files (deleting or moving) is users' job.
 Config Files
 ------------
 
-.. dword:: urls.txt
+.. dword:: rsrcs.txt
 
     It is the default filename for ``--file``,
     and used when no other file or input ``rsrc`` is specified.
@@ -284,7 +284,7 @@ Config Files
 
     I find this is a bit excessive for our humble ``a few minutes`` concern.
     Users are always on the same directory,
-    reusing ``urls.txt`` (deleting and reediting the contents).
+    reusing ``rsrcs.txt`` (deleting and reediting the contents).
 
 .. dword:: tocfile
 
@@ -295,7 +295,7 @@ Config Files
     and processed automatically when ``convert``.
 
     The filename is determined from ``--file`` input (basename part),
-    adding '-toc' suffix before extension. e.g. ``urls-toc.txt``.
+    adding '-toc' suffix before extension. e.g. ``rsrcs-toc.txt``.
 
     see `TOC <topics.html#toc>`__ for details.
 
