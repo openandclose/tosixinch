@@ -326,7 +326,7 @@ def _check_module(directory, cmd):
     """Check if the command looks like a module.
 
     If a command consists of one word, without 'dot',
-    the script tries to import and run it internally
+    the program tries to import and run it internally
     (as opposed to run it as a system subprocess command).
     """
     if len(cmd) > 1:

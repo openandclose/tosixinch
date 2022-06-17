@@ -5,7 +5,7 @@ Introduction
 Somehow, I don't like reading on the computer screen.
 
 So I frequently convert web pages or other texts to pdf, to read in e-readers.
-And this script helps me to do that.
+And this program helps me to do that.
 
 ---
 
@@ -19,9 +19,9 @@ And it basically does what people expect it to do,
 using the most general technologies.
 
 But it tries a bit harder to get the job done faster.
-The legend of the script says, 'Browser to e-reader in a few minutes'.
+The legend of the program says, 'Browser to e-reader in a few minutes'.
 This constraint ('in a few minutes') generally defines
-the domain and methods of the script.
+the domain and methods of the program.
 
 ---
 
@@ -33,11 +33,11 @@ Some points to consider:
 
 * Many related applications seem to concentrate on major new sites,
   parsing specific article pages or RSS for the target htmls.
-  This script doesn't have special functionalities for these sites.
+  This program doesn't have special functionalities for these sites.
   It is rather for more static reading contents,
   like personal blogs or technical documents.
 
-* Extraction is the most important part of the script.
+* Extraction is the most important part of the program.
   But it is done by very simple and predetermined method.
 
   1. Parse html text as DOM elements tree (by ``lxml``).
@@ -48,9 +48,9 @@ Some points to consider:
   5. ``clean`` the resultant tree.
      (strip some tags, attributes, javascript and css).
 
-  So the script is only suitable for htmls
+  So the program is only suitable for htmls
   as complex as this simple method can take.
-  For example, perhaps the script is not suitable for
+  For example, perhaps the program is not suitable for
   academic papers in multiple columns with many figures.
 
 
@@ -87,9 +87,9 @@ Requirements
 ------------
 
 Technically it has no library requirements,
-because each action in this script is independent, so optional.
+because each action in this program is independent, so optional.
 
-But in general, if you are in the mood to try this script,
+But in general, if you are in the mood to try this program,
 installing ``lxml`` and at least one of pdf converters is recommended.
 (That way you can do all ``-1``, ``-2`` and ``-3`` below).
 
@@ -111,7 +111,7 @@ that a pdf consists of hundreds or thousands of pages).
 But it is written in python, by great authors.
 I want to keep it rather as a reference.
 
-Anyway, the script just helps to build conversion commandline.
+Anyway, the program just helps to build conversion commandline.
 It only adds some useful shortcuts.
 Abstraction, consistency or support for multiple converters
 are not intended.
@@ -120,7 +120,7 @@ are not intended.
 Basic Usage
 -----------
 
-The main comandline options of the script are:
+The main comandline options of the program are:
 
     * ``-i`` ``INPUT``, ``--input`` ``INPUT`` (input url or file path)
     * ``-f`` ``FILE``, ``--file`` ``FILE`` (file to read inputs)
@@ -142,7 +142,7 @@ You don't need to change that part of the commandline
 Samples
 -------
 
-The script includes a sample ini file (``site.sample.ini``),
+The program includes a sample ini file (``site.sample.ini``),
 and reads it into configuration.
 
 .. code-block:: none
@@ -164,7 +164,7 @@ and reads it into configuration.
     https://gist.github.com/*
 
 For urls that match one of them,
-you can test the script without preparing the configuration.
+you can test the program without preparing the configuration.
 
 (``(T)`` just means used internally for tests).
 
@@ -304,7 +304,7 @@ including ``html5prescan`` encoding declaration parser,
 and ``ftfy`` UTF-8 encoding fix.
 `option: encoding <options.html#confopt-encoding>`__.
 
-The script has vary basic headless browser downloading functions
+The program has vary basic headless browser downloading functions
 using ``Selenium``.
 So if you are lucky,
 you may get javascript generated html contents.
@@ -360,12 +360,12 @@ As already mentioned, it can open the pdf with a pdf viewer.
 
 It has pre and post hooks for each (sequential) actions.
 For each, users can call external commands or python modules,
-adding or bypassing some of the script's capabilities.
+adding or bypassing some of the program's capabilities.
 `Hookcmds <topics.html#hookcmds>`__.
 
 As a last resort, it can print out file names to be created.
 They are determined uniquely given url inputs.
-So that users can do some of the script's jobs outside of the script.
+So that users can do some of the program's jobs outside of the program.
 `commandline: printout <commandline.html#cmdoption-printout>`__.
 
 A basic bash completion script is included.

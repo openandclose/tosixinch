@@ -7,7 +7,7 @@ Topics
 Text Format
 -----------
 
-When ``extract``, the script actually checks
+When ``extract``, the program actually checks
 if the content is really an ``html``.
 (Before the main extract procedures:
 ``select``, ``exclude``, ``process``, and ``clean``.)
@@ -36,7 +36,7 @@ the usual html extraction is skipped.
 The text extraction procedure begins instead,
 which basically puts all text content inside a ``<pre>`` tag in a html file.
 
-The script separates it into three types:
+The program separates it into three types:
 
 * ``prose``
 * ``non-prose``
@@ -77,7 +77,7 @@ non-prose
 We should keep newlines, so css shouldn't wrap long lines.
 But this is not possible in many cases because e-reader screens are so small.
 
-As a solution, the script pre-processes text to have exact line length,
+As a solution, the program pre-processes text to have exact line length,
 and attaches some label to wrapped lines, according to settings
 (`textwidth <options.html#confopt-textwidth>`__ and
 `textindent <options.html#confopt-textindent>`__ respectively).
@@ -176,7 +176,7 @@ Given the following ``urls.txt``:
     https://somesite.com/bob/article/xxx.html       (7)
     https://somesite.com/bob/article/yyy.html       (8)
 
-The script ordinarily creates top level pdf bookmarks like this:
+The program ordinarily creates top level pdf bookmarks like this:
 
 .. code-block:: none
 
@@ -228,7 +228,7 @@ or
 
     $ tosixinch -123 --toc
 
-The script creates a more structured version of pdf file.
+The program creates a more structured version of pdf file.
 
 rules
 ^^^^^
@@ -419,7 +419,7 @@ Precmds and Postcmds
 ^^^^^^^^^^^^^^^^^^^^
 
 Before and after main actions (``'-1'``, ``'-2'`` and ``'-3``),
-The script calls arbitrary commands,
+The program calls arbitrary commands,
 according to precmds and postcmds options in ``tosixinch.ini``.
 
 One useful use case of ``postcmds`` is notification,
@@ -452,7 +452,7 @@ It uses ``eval``, so be careful.)
 
 If a command consists of one word, without 'dot',
 and the file actually exists in `script directory <overview.html#dword-script_directory>`__,
-the script runs the command as Python module internally
+the program runs the command as Python module internally
 (as opposed to running it as an external system subprocess).
 
 That is, if a cmd is ``['foo']``, for example::
@@ -460,7 +460,7 @@ That is, if a cmd is ``['foo']``, for example::
     precmd1=    foo
 
 and there is a file ``foo.py`` in ``script directory``,
-the script does roughly::
+the program does roughly::
 
     import script.foo
     script.foo.run(conf, site)
@@ -470,7 +470,7 @@ So the module must have ``run`` function with this signature.
 since it is not available.)
 
 ``userdir`` is inserted to ``sys.path`` (``sys.path[0]``).
-So if you want to import sibling modules in the script file,
+So if you want to import sibling modules in the program file,
 refer them from ``script`` package, e.g. ::
 
     import script.bar
@@ -491,19 +491,19 @@ Their value function signatures are actually ``[LINE][CMDS]``, that is,
 you can run multiple commands in a hookcmd, one command for each line.
 
 If the return code of a command is 0,
-the script runs the next command, if any.
+the program runs the next command, if any.
 
 If the return code of a command is 100,
-the script skips the following commands, if any.
+the program skips the following commands, if any.
 
 If the return code of a command is 101,
 and the command is one of precmds (not postcmds),
-the script skips the following commands,
+the program skips the following commands,
 and the following action altogether.
 The following *postcmd* are executed.
 
 If the return code of a command is 102,
-the script skips the following postcmd in addition.
+the program skips the following postcmd in addition.
 
 .. code-block:: none
 
@@ -545,7 +545,7 @@ as pdf viewer, ::
 
 will open the viewer with the generated pdf file.
 
-Also, the script includes a sample file `_viewer.py <topics.html#viewer>`__.
+Also, the program includes a sample file `_viewer.py <topics.html#viewer>`__.
 (It does basically the same thing as above,
 but cancels duplicate openings.)
 
@@ -820,7 +820,7 @@ Source it in your ``.bashrc``. For example::
 Vendored Libraries
 ------------------
 
-The script uses a few vendored (included) libraries.
+The program uses a few vendored (included) libraries.
 They are all single file modules.
 
 .. script:: templite.py

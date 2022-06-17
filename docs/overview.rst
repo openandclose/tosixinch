@@ -5,7 +5,7 @@ Overview
 Actions
 -------
 
-The script consists of several, independent actions (subcommands).
+The program consists of several, independent actions (subcommands).
 
 An action is either a ``sequential action`` or a ``single action``.
 
@@ -24,7 +24,7 @@ An action is either a ``sequential action`` or a ``single action``.
 
 You can call more than one ``sequential actions`` in one invocation.
 Irrespective of the arguments order,
-the script executes actions in the above order.
+the program executes actions in the above order.
 
 So, the three invocations below make no difference. ::
 
@@ -61,7 +61,7 @@ So, the three invocations below make no difference. ::
       Do something, according to site config option
       `inspect <options.html#confopt-inspect>`__
 
-The script executes only the first ``single action``
+The program executes only the first ``single action``
 (if there are many, or mixed with sequential ones),
 and exits.
 
@@ -71,7 +71,7 @@ download
 Downloads ``url``, and saves it as ``Downloaded_File``.
 
 If `force_download <options.html#confopt-force_download>`__ is ``False`` (default),
-the script skips downloading if the file already exists.
+the program skips downloading if the file already exists.
 
 If ``url`` is a local filepath, it also does nothing.
 ``Downloaded_File`` is the same as ``url``.
@@ -83,7 +83,7 @@ with `user-agent <options.html#confopt-user_agent>`__ and
 `encoding <options.html#confopt-encoding>`__ configurable.
 
 If `headless <options.html#javascript>`__ option is ``True``,
-The script uses ``pyqt5`` or ``selenium``, instead of ``urllib``
+The program uses ``pyqt5`` or ``selenium``, instead of ``urllib``
 (See `Features <intro.html#features>`__).
 
 extract
@@ -119,7 +119,7 @@ decides which ``converter`` to use.
 Target Files
 ------------
 
-The point of the script is that you don't have to specify
+The point of the program is that you don't have to specify
 each input and output for each consecutive action.
 For this, given ``url``, target files' names are uniquely determined.
 
@@ -247,7 +247,7 @@ But disposing of the files (deleting or moving) is users' job.
 .. dword:: PDF_File
 
     When ``--pdfname`` option is not provided,
-    the script auto-creates the pdf filename.
+    the program auto-creates the pdf filename.
     The name is made up from ``url``'s last path,
     query, section name and host name *of the first url*.
 
@@ -312,7 +312,7 @@ Config Files
 
           $ source ~/.bashrc
 
-    If the script cannot find the variable,
+    If the program cannot find the variable,
     a basic search is done for the most common configuration directories
     (in the same order below for each OS).
 
@@ -356,7 +356,7 @@ Config Files
 
 .. dword:: css files
 
-    The script searches css files (``'*.css'``)
+    The program searches css files (``'*.css'``)
     in ``css directory`` (or current directory) when ``convert``.
     ``prince`` and ``weasyprint`` require css files.
     Other converters may not need them depending on the configuration.
@@ -364,7 +364,7 @@ Config Files
     Each file name must be specified for each converter
     in ``tosixinch.ini`` (see option `css <options.html#confopt-css>`__.
 
-    By default, the script uses ``sample.css`` for all converters.
+    By default, the program uses ``sample.css`` for all converters.
     It is generated from the template ``sample.t.css`` (see below).
 
 .. dword:: css template files
@@ -375,7 +375,7 @@ Config Files
 
     (for the syntax and values, see `CSS Template Values <#css-template-values>`__).
 
-    When ``convert``, the script always renders them,
+    When ``convert``, the program always renders them,
     and resultant ``css files`` are placed in ``css directory`` (or current directory),
     overwriting older one, if any.
 
@@ -396,7 +396,7 @@ Config Files
 
     (For the details, see `process option <options.html#confopt-process>`__).
 
-    The script searches process functions in python files (``'*.py'``)
+    The program searches process functions in python files (``'*.py'``)
     in ``process directory``.
 
     If it cannot find the one,
@@ -504,7 +504,7 @@ then it falls back to ordinary mechanism.
 It is to omit duplicate options.
 For example, wiki pages of mobileread.com use the same layout
 as wikipedia.org.
-So the options for the script are also the same,
+So the options for the program are also the same,
 and you don't have to write.
 (other than ``match``). ::
 
@@ -618,7 +618,7 @@ Users have to fill the value accordingly, if setting.
     Mixing these raises Error.
 
     You can pass ``minus item`` in the same way in commandline.
-    The script can parse these a bit confusing arguments.
+    The program can parse these a bit confusing arguments.
     (leading single dash is also a short optional argument marker) ::
 
         ... --plus-option -one

@@ -8,7 +8,7 @@ suitable for actual reading in 6-inch e-readers.
 import logging
 
 
-# Default logging level for the script is changed to ``info``.
+# Default logging level for the program is changed to ``info``.
 # Logging is used mostly as a feature-rich ``print``.
 
 def _add_handler(logger, formatter):

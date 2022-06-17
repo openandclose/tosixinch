@@ -114,7 +114,7 @@ General Section
 
     Web pages may have some component content.
     Most important ones are images,
-    and currently the script only concerns images
+    and currently the program only concerns images
     (in html tag ``<img src=...>``).
     The value specifies whether it downloads these components
     when ``extract``.
@@ -129,10 +129,10 @@ General Section
     for multiple trials and layout checking.
 
     If `force_download <#confopt-force_download>`__ is ``False`` (default),
-    the script skips downloading if the file already exists.
+    the program skips downloading if the file already exists.
 
     TODO:
-        So the script does nothing about ``iframe`` inline sources.
+        So the program does nothing about ``iframe`` inline sources.
         Downloading and rendering are done by converters,
         but we can't apply our css rules
         (They are different domains).
@@ -142,7 +142,7 @@ General Section
     | (``False``)
     | ``[BOOL]``
 
-    By default, The script does not download if the destination file exists.
+    By default, The program does not download if the destination file exists.
 
     If this options is ``True``:
 
@@ -154,7 +154,7 @@ General Section
     even if they exist.
 
     But in one invocation, this re-downloading is always once for one ``url``.
-    (The script doesn't download the same icon files again and again.)
+    (The program doesn't download the same icon files again and again.)
 
 .. confopt:: guess
 
@@ -175,7 +175,7 @@ General Section
     * The xpaths in this value are searched in order.
     * If match is found and match is a single element
       (not multiple occurrences),
-      the script ``select`` s the xpath.
+      the program ``select`` s the xpath.
 
 .. confopt:: defaultprocess \*
 
@@ -183,7 +183,7 @@ General Section
     | ``[LINE]``
 
     Before site specific ``process`` functions,
-    the script applies default ``process`` functions to all ``url``,
+    the program applies default ``process`` functions to all ``url``,
     according to this value.
 
     The syntax is the same as `process <#confopt-process>`__ option, in ``site.ini``.
@@ -227,7 +227,7 @@ General Section
 
     ``[PLUS]``
 
-    The script ignores ``urls`` with binary like looking extensions,
+    The program ignores ``urls`` with binary like looking extensions,
     only when multiple ``urls`` are provided.
 
     This option value adds to or subtracts from
@@ -248,7 +248,7 @@ General Section
     | ``[PLUS]``
 
     After ``select``, ``exclude`` and ``process`` in ``extract``,
-    the script ``clean`` s the resultant html.
+    the program ``clean`` s the resultant html.
 
     The tags in this option are stripped.
     The current default is none.
@@ -259,7 +259,7 @@ General Section
     | ``[PLUS]``
 
     After ``select``, ``exclude`` and ``process`` in ``extract``,
-    the script ``clean`` s the resultant html.
+    the program ``clean`` s the resultant html.
 
     The attributes in this option are stripped.
     The current default is color, width and height.
@@ -278,7 +278,7 @@ General Section
     ``[LINE]``
 
     After ``select``, ``exclude`` and ``process`` in ``extract``,
-    the script ``clean`` s the resultant html.
+    the program ``clean`` s the resultant html.
 
     The program skips cleaning attributes
     for the elements that matches one of the XPath in this option.
@@ -332,7 +332,7 @@ General Section
 
     ``ConfigParser`` strips leading and ending whitespaces.
     So if you want actual whitespaces, quote them as the default does.
-    Quotes are stripped by the script in turn.
+    Quotes are stripped by the program in turn.
 
 .. confopt:: trimdirs \*
 
@@ -393,7 +393,7 @@ General Section
     If the files are in ``css directory``,
     you can only use the filenames (not full paths).
 
-    The script includes sample css ``sample.t.css``,
+    The program includes sample css ``sample.t.css``,
     and as a special case, it can be abbreviated as ``sample``
     (default).
 
@@ -402,7 +402,7 @@ General Section
     | (None)
 
     Specify output PDF file name.
-    If not provided (default), the script makes up some name.
+    If not provided (default), the program makes up some name.
     see `PDF_File <overview.html#dword-PDF_File>`__.
 
 ---
@@ -532,7 +532,7 @@ In the following, the roles in the sample file
     (``90mm 118mm``)
 
     Specify portrait page size (width and height).
-    The script uses this value when ``orientation`` is ``portrait``.
+    The program uses this value when ``orientation`` is ``portrait``.
 
     The display size of common 6-inch e-readers seems
     around 90mm x 120mm.
@@ -547,7 +547,7 @@ In the following, the roles in the sample file
     (``118mm 90mm``)
 
     Specify landscape page size (width and height).
-    The script use this value when ``orientation`` is ``landscape``.
+    The program use this value when ``orientation`` is ``landscape``.
 
 .. confopt:: toc_depth
 
@@ -685,7 +685,7 @@ So section names themselves can be arbitrary.
     (Actually, it uses `fnmatch module <https://docs.python.org/3/library/fnmatch.html>`__,
     not `glob module <https://docs.python.org/3/library/glob.html>`__.).
 
-    The script tries the values of this option from all the sections.
+    The program tries the values of this option from all the sections.
     The section whose ``match`` option matches the ``url``
     is used for the settings.
 
@@ -780,7 +780,7 @@ So section names themselves can be arbitrary.
 
     You don't have to ``return`` anything,
     just manipulate ``doc`` as you like.
-    The script uses the resultant ``doc`` subsequently.
+    The program uses the resultant ``doc`` subsequently.
 
     See `process.sample <api.html#module-tosixinch.process.sample>`__ for included sample functions.
 
@@ -814,7 +814,7 @@ So section names themselves can be arbitrary.
     | (Note there is no option named ``clean``. This section is here only for documentation purpose.)
 
     After ``select``, ``exclude`` and ``process`` in ``extract``,
-    the script ``clean`` s the resultant html.
+    the program ``clean`` s the resultant html.
 
     **tags**:
         According to `add_clean_tags <#confopt-add_clean_tags>`__.
@@ -919,7 +919,7 @@ So section names themselves can be arbitrary.
     (Experimental)
 
     When action is ``inspect`` (``--inspect`` is in commandline),
-    the script runs functions this option specifies.
+    the program runs functions this option specifies.
 
     This is similar to ``extract`` action's ``process``,
     but ``inspect`` does not do anything before and after

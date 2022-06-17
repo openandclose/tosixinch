@@ -234,7 +234,7 @@ So be careful to upgrade.
 
 * Cut head data inclusion
 
-  Previously, the script kept the original <head> content in the extracted file.
+  Previously, the program kept the original <head> content in the extracted file.
   Now it just includes a minimal <head> content.
   (Shouldn't affect the end user usage).
 
@@ -468,7 +468,7 @@ v0.2.0 (2019-11-10)
 * **!!** Change 'preprocess' option name to 'defaultprocess'.
   Again, users have to rename this option if used.
 
-* pdfname (when the script creates) is made more descriptive.
+* pdfname (when the program creates) is made more descriptive.
 
 * Add maximum argument to delete_duplicate_br (process/gen.py)
 
@@ -482,7 +482,7 @@ v0.2.0 (2019-11-10)
 
 * Add printout option.
 
-  Print out filenames the scripts' actions would create.
+  Print out filenames the program's actions would create.
 
 * Add encoding_errors option (for codec Error Handler).
 
