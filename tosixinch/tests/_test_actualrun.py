@@ -2,7 +2,7 @@
 
 """Actualy invoke tosixinch.main._main().
 
-For each url from urls.txt,
+For each rsrc from urls.txt,
 do download, extract, toc or convert.
 And compare the outputs with prepared reference files.
 
@@ -32,16 +32,16 @@ Actual tests are always done with 'outcome' as current directory.
 
 Main Command line options are:
 -x:     (short)
-        try to run only necesarry actions, for only a few selected urls.
-        test extract. (3 urls)
-        test convert, only when related files are modified. (3 urls)
+        try to run only necesarry actions, for only a few selected rsrcs.
+        test extract. (3 rsrcs)
+        test convert, only when related files are modified. (3 rsrcs)
         test toc extraction, only when related files are modified.
 -xx:    (short-plus)
         delete most files in the test derectory before runnnig short.
 -xxx:   (normal)
         test extract.
         test convert.
-        test ufile-convert, making an 'all in one' pdf.
+        test rfile-convert, making an 'all in one' pdf.
         test toc extraction (merging htmls).
 
 Environment Variable:
@@ -175,29 +175,29 @@ class Checker(object):
             f.write(data)
 
 
-class _URLData(object):
-    """Collect all URL retrieving functions."""
+class _RSRCData(object):
+    """Collect all rsrcs retrieving functions."""
 
     def __init__(self):
-        urls, ufile = tosixinch.settings.SampleURLLoader().get_data()
-        self.urls = urls
-        self.ufile = ufile
+        rsrcs, rfile = tosixinch.settings.SampleLoader().get_data()
+        self.rsrcs = rsrcs
+        self.rfile = rfile
 
     @property
     def tocfile(self):
-        return tosixinch.toc.get_tocfile(self.ufile)
+        return tosixinch.toc.get_tocfile(self.rfile)
 
     @property
     def toc_urls(self):
         if not os.path.isfile(self.tocfile):
             raise ValueError('tocfile is not created.')
-        return location.Locations(ufile=self.tocfile).urls
+        return location.Locations(rfile=self.tocfile).rsrcs
 
 
-URLData = _URLData()
-URLS = URLData.urls
-UFILE = URLData.ufile
-TOCFILE = URLData.tocfile
+RSRCData = _RSRCData()
+RSRCS = RSRCData.rsrcs
+RFILE = RSRCData.rfile
+TOCFILE = RSRCData.tocfile
 
 ALL_PDF = '_all.pdf'
 TOC_PDF = '_toc.pdf'
@@ -234,9 +234,9 @@ def _prepare_directories():
     _mkdirs(os.path.join(OUTCOME, PNG_DIR))
 
 
-def print_urls(urls):
-    for i, url in enumerate(urls, 1):
-        print('%2d: %s' % (i, url))
+def print_rsrcs(rsrcs):
+    for i, rsrc in enumerate(rsrcs, 1):
+        print('%2d: %s' % (i, rsrc))
 
 
 def _bincmp(f1, f2):
@@ -367,23 +367,23 @@ def compare_error(filename):
         raise ValueError(fmt % filename)
 
 
-def _run(urls, args, action, do_compare=True):
-    for url in urls:
-        action_args = args + ['--input', url, '--' + action]
+def _run(rsrcs, args, action, do_compare=True):
+    for rsrc in rsrcs:
+        action_args = args + ['--input', rsrc, '--' + action]
         conf = tosixinch.main._main(args=action_args)
 
         if do_compare:
             compare(conf, action)
 
 
-def _run_ufile(args, do_compare=True):
+def _run_rfile(args, do_compare=True):
     # Instead of generating each pdf file, generates one big pdf file
-    # from all urls.
+    # from all rsrcs.
     # Let's skip extraction test since it should be the same as ``_run``.
     if os.path.isfile(TOCFILE):
         os.remove(TOCFILE)
 
-    action_args = args + ['-f', UFILE, '--convert', '--pdfname', ALL_PDF]
+    action_args = args + ['-f', RFILE, '--convert', '--pdfname', ALL_PDF]
     conf = tosixinch.main._main(args=action_args)
 
     if do_compare:
@@ -391,19 +391,19 @@ def _run_ufile(args, do_compare=True):
 
 
 def _run_toc(args, action, do_compare=True):
-    args += ['-f', UFILE]
+    args += ['-f', RFILE]
     if action == 'toc':
         action_args = args + ['--toc']
         conf = tosixinch.main._main(args=action_args)
         if do_compare:
             _compare(TOCFILE)
-            urls = URLData.toc_urls
+            urls = RSRCData.toc_urls
             for url in urls:
                 efile = location.Location(url).efile
                 _compare(efile)
 
     # We can almost skip conversion test
-    # since it should be similar as ``_run_ufile``.
+    # since it should be similar as ``_run_rfile``.
     # But we have to check at least for the first time.
     elif action == 'convert':
         action_args = args + ['--convert', '--pdfname', TOC_PDF]
@@ -433,12 +433,12 @@ def _clean_directory(excludes=None, top='.'):
             os.rmdir(path)
 
 
-def _clean_outcome_directory(urls):
+def _clean_outcome_directory(rsrcs):
     assert os.path.abspath(os.curdir) == OUTCOME
 
     # Delete files, but keep ``dfiles``.
     png_dir = os.path.abspath(PNG_DIR)
-    dfiles = [os.path.abspath(n) for n in _get_downloaded_files(urls)]
+    dfiles = [os.path.abspath(n) for n in _get_downloaded_files(rsrcs)]
     excludes = [png_dir] + dfiles
     _clean_directory(excludes=excludes)
 
@@ -455,16 +455,16 @@ def _clean_ref():
     _clean_ref_directory()
 
 
-def _get_downloaded_files(urls):
-    for url in urls:
-        dfile = location.Location(url).dfile
+def _get_downloaded_files(rsrcs):
+    for rsrc in rsrcs:
+        dfile = location.Location(rsrc).dfile
         yield tosixinch.system.ExtractReader(dfile).get_filename()
 
 
-def _copy_downloaded_files(urls):
+def _copy_downloaded_files(rsrcs):
     assert os.path.abspath(os.curdir) == REFERENCE
 
-    dfiles = _get_downloaded_files(urls)
+    dfiles = _get_downloaded_files(rsrcs)
     for dfile in dfiles:
         dfile_outcome = os.path.join(OUTCOME, dfile)
         if dfile_outcome == dfile:
@@ -476,7 +476,7 @@ def _copy_downloaded_files(urls):
 def _copy_pdf_files():
     assert os.path.abspath(os.curdir) == REFERENCE
 
-    # for _run_ufile
+    # for _run_rfile
     shutil.copy(ALL_PDF, os.path.join(OUTCOME, ALL_PDF))
     # for _run_toc
     shutil.copy(TOCFILE, os.path.join(OUTCOME, TOCFILE))
@@ -490,39 +490,39 @@ def create_ref():
     os.chdir(REFERENCE)
 
     _clean_ref()
-    urls = URLS
+    rsrcs = RSRCS
     args = _minimum_args()
 
-    _run(urls, args, 'download', do_compare=False)
-    _run(urls, args, 'extract', do_compare=False)
-    _run(urls, args, 'convert', do_compare=False)
-    _run_ufile(args, do_compare=False)
+    _run(rsrcs, args, 'download', do_compare=False)
+    _run(rsrcs, args, 'extract', do_compare=False)
+    _run(rsrcs, args, 'convert', do_compare=False)
+    _run_rfile(args, do_compare=False)
     _run_toc(args, 'toc', do_compare=False)
     _run_toc(args, 'convert', do_compare=False)
 
-    _copy_downloaded_files(urls)
+    _copy_downloaded_files(rsrcs)
     _copy_pdf_files()
 
     os.chdir(curdir)
 
 
-def update_one_ref(urls):
+def update_one_ref(rsrcs):
     """Update reference efiles and PDFFile.
 
     If the present code changes and generated files changes is to remain,
-    from this new model, recreate reference files, only for one url.
+    from this new model, recreate reference files, only for one rsrc.
     """
     curdir = os.curdir
     os.chdir(REFERENCE)
 
     args = _minimum_args()
 
-    update_url_download(urls)
-    update_url_extract(urls)
-    update_url_convert(urls)
+    update_rsrc_download(rsrcs)
+    update_rsrc_extract(rsrcs)
+    update_rsrc_convert(rsrcs)
 
-    urls = URLS
-    _run_ufile(args, do_compare=False)
+    rsrcs = RSRCS
+    _run_rfile(args, do_compare=False)
     _run_toc(args, 'toc', do_compare=False)
     _run_toc(args, 'convert', do_compare=False)
 
@@ -531,101 +531,101 @@ def update_one_ref(urls):
     os.chdir(curdir)
 
 
-def _in_short_ulist(url):
+def _in_short_ulist(rsrc):
     for sel in SELECT_SHORT_ULIST:
-        if sel in url:
+        if sel in rsrc:
             return True
 
 
-def _get_short_ulist(urls):
-    return [url for url in urls if _in_short_ulist(url)]
+def _get_short_ulist(rsrcs):
+    return [rsrc for rsrc in rsrcs if _in_short_ulist(rsrc)]
 
 
-def short_run(urls, args, delete=False):
+def short_run(rsrcs, args, delete=False):
     assert os.path.abspath(os.curdir) == OUTCOME
     if delete:
-        _clean_outcome_directory(urls)
+        _clean_outcome_directory(rsrcs)
 
-    short_urls = _get_short_ulist(urls)
-    _run(short_urls, args, 'extract')
+    short_rsrcs = _get_short_ulist(rsrcs)
+    _run(short_rsrcs, args, 'extract')
 
     ch = Checker('convert')
     if ch.check():
         print('doing conversion test...')
-        _run(short_urls, args, 'convert')
+        _run(short_rsrcs, args, 'convert')
         ch.write()
 
     ch = Checker('toc')
     if ch.check():
         print('doing toc test...')
-        # Note: Here it uses all urls, the same as normal_run.
-        _run(urls, args, 'extract')
+        # Note: Here it uses all rsrcs, the same as normal_run.
+        _run(rsrcs, args, 'extract')
         _run_toc(args, 'toc')
         ch.write()
 
     success()
 
 
-def normal_run(urls, args):
+def normal_run(rsrcs, args):
     assert os.path.abspath(os.curdir) == OUTCOME
-    _clean_outcome_directory(urls)
+    _clean_outcome_directory(rsrcs)
 
-    _run(urls, args, 'extract')
-    _run(urls, args, 'convert')
-    _run_ufile(args)
+    _run(rsrcs, args, 'extract')
+    _run(rsrcs, args, 'convert')
+    _run_rfile(args)
     _run_toc(args, 'toc')
     _run_toc(args, 'convert')
     success()
 
 
-def _tox_run(urls, args):
-    _run(urls, args, 'download', do_compare=False)
-    _run(urls, args, 'extract', do_compare=False)
-    _run(urls, args, 'convert', do_compare=False)
-    # _run_toc(urls, args, 'toc', do_compare=False)
+def _tox_run(rsrcs, args):
+    _run(rsrcs, args, 'download', do_compare=False)
+    _run(rsrcs, args, 'extract', do_compare=False)
+    _run(rsrcs, args, 'convert', do_compare=False)
+    # _run_toc(rsrcs, args, 'toc', do_compare=False)
 
 
 def tox_run():
     """Just check if actual invocation doesn't raise Errors (for tox)."""
-    # Get only the first url (wikipedia.org).
-    urls = [URLS[0]]
+    # Get only the first rsrc (wikipedia.org).
+    rsrcs = [RSRCS[0]]
     args = _minimum_args()
 
     with tempfile.TemporaryDirectory(prefix='tosixinch-') as tmpdir:
         os.chdir(tmpdir)
-        _tox_run(urls, args)
+        _tox_run(rsrcs, args)
 
 
-def update_url_download(urls):
+def update_rsrc_download(rsrcs):
     os.chdir(REFERENCE)
     args = _minimum_args()
     args.append('--force-download')
-    _run(urls, args, 'download', do_compare=False)
-    _copy_downloaded_files(urls)
+    _run(rsrcs, args, 'download', do_compare=False)
+    _copy_downloaded_files(rsrcs)
 
 
-def update_url_extract(urls):
+def update_rsrc_extract(rsrcs):
     os.chdir(REFERENCE)
     args = _minimum_args()
     args.append('--force-download')
-    _run(urls, args, 'extract', do_compare=False)
+    _run(rsrcs, args, 'extract', do_compare=False)
 
 
-def update_url_convert(urls):
+def update_rsrc_convert(rsrcs):
     os.chdir(REFERENCE)
     args = _minimum_args()
-    _run(urls, args, 'convert', do_compare=False)
+    _run(rsrcs, args, 'convert', do_compare=False)
 
 
-def test_url_extract(urls, args):
+def test_rsrc_extract(rsrcs, args):
     assert os.path.abspath(os.curdir) == OUTCOME
-    _run(urls, args, 'extract')
+    _run(rsrcs, args, 'extract')
     success()
 
 
-def test_url_convert(urls, args):
+def test_rsrc_convert(rsrcs, args):
     assert os.path.abspath(os.curdir) == OUTCOME
-    _run(urls, args, 'convert')
+    _run(rsrcs, args, 'convert')
     success()
 
 
@@ -634,11 +634,11 @@ def parse_args(args=sys.argv[1:]):
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('-x', '--run', action='count',
-        help='run test (-x: short, --xx: short-plus, --xxx: all urls).')
+        help='run test (-x: short, --xx: short-plus, --xxx: all rsrcs).')
 
     parser.add_argument('-p', '--print',
         action='store_const', const='yes',
-        help='print numbers and urls')
+        help='print numbers and rsrcs')
     parser.add_argument('-n', '--number',
         help='file number to process in urls.txt.')
 
@@ -647,26 +647,26 @@ def parse_args(args=sys.argv[1:]):
         help='create reference files from zero')
     parser.add_argument('--update-one-ref',
         action='store_const', const='yes',
-        help='update reference files for one url')
+        help='update reference files for one rsrc')
     parser.add_argument('--tox-run',
         action='store_const', const='yes',
         help='run -123 and --toc in temporary directory in tox environment.')
 
-    parser.add_argument('-7', '--update-url-download',
+    parser.add_argument('-7', '--update-rsrc-download',
         action='store_const', const='yes',
         help='update a reference downloaded file')
-    parser.add_argument('-8', '--update-url-extract',
+    parser.add_argument('-8', '--update-rsrc-extract',
         action='store_const', const='yes',
         help='update a reference extracted file')
-    parser.add_argument('-9', '--update-url-convert',
+    parser.add_argument('-9', '--update-rsrc-convert',
         action='store_const', const='yes',
         help='update a reference pdf file')
-    parser.add_argument('-2', '--test-url-extract',
+    parser.add_argument('-2', '--test-rsrc-extract',
         action='store_const', const='yes',
-        help='test extraction for a single url')
-    parser.add_argument('-3', '--test-url-convert',
+        help='test extraction for a single rsrc')
+    parser.add_argument('-3', '--test-rsrc-convert',
         action='store_const', const='yes',
-        help='test conversion for a single url')
+        help='test conversion for a single rsrc')
 
     parser.add_argument('--verbose',
         action='store_const', const='yes',
@@ -714,41 +714,41 @@ def main():
 
     os.chdir(OUTCOME)
 
-    urls = URLS
+    rsrcs = RSRCS
 
     if args.print:
-        print_urls(urls)
+        print_rsrcs(rsrcs)
         return
 
     cmd_args = build_cmd_args(args)
 
     if args.run:
         if args.run == 1:
-            short_run(urls, cmd_args)
+            short_run(rsrcs, cmd_args)
             return
         elif args.run == 2:
-            short_run(urls, cmd_args, delete=True)
+            short_run(rsrcs, cmd_args, delete=True)
             return
         elif args.run == 3:
-            normal_run(urls, cmd_args)
+            normal_run(rsrcs, cmd_args)
             return
         else:
             raise ValueError('Not Implemented (only -x, -xx or -xxx).')
 
     if args.number:
-        urls = [urls[int(args.number) - 1]]
+        rsrcs = [rsrcs[int(args.number) - 1]]
         if args.update_one_ref:
-            update_one_ref(urls)
-        elif args.update_url_download:
-            update_url_download(urls)
-        elif args.update_url_extract:
-            update_url_extract(urls)
-        elif args.update_url_convert:
-            update_url_convert(urls)
-        elif args.test_url_extract:
-            test_url_extract(urls, cmd_args)
-        elif args.test_url_convert:
-            test_url_convert(urls, cmd_args)
+            update_one_ref(rsrcs)
+        elif args.update_rsrc_download:
+            update_rsrc_download(rsrcs)
+        elif args.update_rsrc_extract:
+            update_rsrc_extract(rsrcs)
+        elif args.update_rsrc_convert:
+            update_rsrc_convert(rsrcs)
+        elif args.test_rsrc_extract:
+            test_rsrc_extract(rsrcs, cmd_args)
+        elif args.test_rsrc_convert:
+            test_rsrc_convert(rsrcs, cmd_args)
         else:
             raise ValueError("'--number' is used without some action")
         return

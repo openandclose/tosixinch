@@ -31,7 +31,7 @@ from tosixinch.zconfigparser import ZConfigParser
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_PDFNAME = 'no-urls.pdf'
+DEFAULT_PDFNAME = 'no-rsrcs.pdf'
 
 # https://github.com/sindresorhus/binary-extensions
 BINARY_EXTENSIONS = """
@@ -58,12 +58,12 @@ class Cache(object):
     """A namespace for caches."""
 
 
-class URLLoader(object):
-    """Supply urls to ``Conf`` object."""
+class Loader(object):
+    """Supply rsrcs to ``Conf`` object."""
 
-    def __init__(self, conf=None, urls=None, ufile=None):
-        self.urls = urls
-        self.ufile = ufile
+    def __init__(self, conf=None, rsrcs=None, rfile=None):
+        self.rsrcs = rsrcs
+        self.rfile = rfile
         self.conf = conf
 
     def build(self):
@@ -74,64 +74,64 @@ class URLLoader(object):
         return self.conf
 
 
-class SampleURLLoader(URLLoader):
-    """Get sample urls."""
+class SampleLoader(Loader):
+    """Get sample rsrcs."""
 
-    SAMPLE_UFILE = 'urls.txt'
+    SAMPLE_RFILE = 'urls.txt'
     PDFNAME = 'sample.pdf'
 
     def get_data(self):
         configdir = _get_configdir()
-        ufile = os.path.join(configdir, self.SAMPLE_UFILE)
-        urls = location.Locations(ufile=ufile).urls
-        return urls, ufile
+        rfile = os.path.join(configdir, self.SAMPLE_RFILE)
+        rsrcs = location.Locations(rfile=rfile).rsrcs
+        return rsrcs, rfile
 
     def build(self):
-        urls, ufile = self.get_data()
+        rsrcs, rfile = self.get_data()
 
         pname = self.conf.general.pdfname
         if not pname:
             self.conf.general.pdfname = self.PDFNAME
-        self.conf.sites_init(urls=urls)
+        self.conf.sites_init(rsrcs=rsrcs)
 
 
-class ReplaceURLLoader(URLLoader):
-    """Preprocess urls before Conf.sites_init."""
+class ReplaceLoader(Loader):
+    """Preprocess rsrcs before Conf.sites_init."""
 
-    REPLACEFILE = 'urlreplace.txt'
+    REPLACEFILE = 'replace.txt'
 
-    def get_urls(self):
+    def get_rsrcs(self):
         userdir = self.conf._userdir
         if not userdir:
-            return self.urls
+            return self.rsrcs
         replacefile = os.path.join(userdir, self.REPLACEFILE)
 
-        urls = self.urls
-        if not self.urls:
+        rsrcs = self.rsrcs
+        if not rsrcs:
             try:
-                with open(self.ufile) as f:
-                    urls = f.readlines()
+                with open(self.rfile) as f:
+                    rsrcs = f.readlines()
             except FileNotFoundError:
-                urls = []
+                rsrcs = []
 
-        urls = location.ReplacementParser(replacefile, urls, self.ufile)()
-        return urls
+        rsrcs = location.ReplacementParser(replacefile, rsrcs, self.rfile)()
+        return rsrcs
 
     def build(self):
-        urls = self.get_urls()
-        self.conf.sites_init(urls=urls, ufile=self.ufile)
+        rsrcs = self.get_rsrcs()
+        self.conf.sites_init(rsrcs=rsrcs, rfile=self.rfile)
 
 
 def _get_pdfname(sites):
     site = list(sites)[0]
-    url = site.url
+    rsrc = site.rsrc
     section = site.section
     length = len(sites)
-    return _getpdfname(url, section, length)
+    return _getpdfname(rsrc, section, length)
 
 
-def _getpdfname(url, section, length=1):
-    parts = urllib.parse.urlsplit(url)
+def _getpdfname(rsrc, section, length=1):
+    parts = urllib.parse.urlsplit(rsrc)
     host = ''
     if parts.netloc:
         domainparts = parts.netloc.replace('www.', '').split('.')[:-1]
@@ -160,12 +160,12 @@ def _getpdfname(url, section, length=1):
 
 
 # TODO: refactor
-# build a reverse dictionary with match url keys, for faster lookup.
-def _checkmacth(url, siteconfig):
-    def checkloc(url, matches):
-        url = url.lower()
+# build a reverse dictionary with match rsrc keys, for faster lookup.
+def _checkmacth(rsrc, siteconfig):
+    def checkloc(rsrc, matches):
+        rsrc = rsrc.lower()
         matches = [
-            m for m in matches if fnmatch.fnmatch(url, m.lower())]
+            m for m in matches if fnmatch.fnmatch(rsrc, m.lower())]
 
         if len(matches) == 0:
             matched = 'http://tosixinch.example.com'  # [scriptdefault]
@@ -175,15 +175,15 @@ def _checkmacth(url, siteconfig):
             matched = sorted(matches, key=checkslash)[-1]
         return matched
 
-    def checkslash(url):
-        upath = urllib.parse.urlsplit(url)[2]
+    def checkslash(rsrc):
+        upath = urllib.parse.urlsplit(rsrc)[2]
         num = len(upath.split('/'))
         if upath == '':
             num = -1
         return num
 
     t = [[sec, siteconfig[sec]['match']] for sec in siteconfig.sections()]
-    matched = checkloc(url, [match for sec, match in t])
+    matched = checkloc(rsrc, [match for sec, match in t])
     for sec, match in t:
         if match == matched:
             return sec
@@ -344,8 +344,8 @@ class Func(configfetch.Func):
 class Sites(location.Locations):
     """An object for ``Site`` iteration."""
 
-    def __init__(self, urls, ufile, conf, siteconf):
-        super().__init__(urls, ufile)
+    def __init__(self, rsrcs, rfile, conf, siteconf):
+        super().__init__(rsrcs, rfile)
         self._conf = conf
         self._siteconf = siteconf
         self._config = siteconf._config
@@ -353,30 +353,31 @@ class Sites(location.Locations):
 
         self._filters = conf.general.add_binary_extensions
 
-    def _filter_urls(self, urls):
-        for url in urls:
-            parts = url.rsplit('.', maxsplit=1)
+    def _filter_rsrcs(self, rsrcs):
+        for rsrc in rsrcs:
+            parts = rsrc.rsplit('.', maxsplit=1)
             if len(parts) > 1:
                 if parts[-1] in self._filters:
-                    logger.info('skipping url with binary extension: %r', url)
+                    logger.info(
+                        'skipping rsrc with binary extension: %r', rsrc)
                     continue
-            yield url
+            yield rsrc
 
     @cached_property
-    def urls(self):
-        urls = super().urls
-        # If urls consists of a single url, It doesn't apply filters.
-        if len(urls) == 1:
-            return urls
+    def rsrcs(self):
+        rsrcs = super().rsrcs
+        # If rsrcs consists of a single rsrc, It doesn't apply filters.
+        if len(rsrcs) == 1:
+            return rsrcs
         else:
-            return list(self._filter_urls(urls))
+            return list(self._filter_rsrcs(rsrcs))
 
 
 class Site(location.Location):
-    """Settings for each url."""
+    """Settings for each rsrc."""
 
-    def __init__(self, url, conf, siteconf, input_type=None):
-        super().__init__(url, input_type)
+    def __init__(self, rsrc, conf, siteconf, input_type=None):
+        super().__init__(rsrc, input_type)
         self._conf = conf
         self._siteconf = siteconf
         self._config = siteconf._config
@@ -384,7 +385,7 @@ class Site(location.Location):
         self.PREFIX = conf.general.download_dir  # may be blank string ''
         self.OVERWRITE = conf.general.overwrite_html
 
-        self.section = _checkmacth(self.url, self._config)
+        self.section = _checkmacth(self.rsrc, self._config)
 
         _sec = self._get_self()
         self.general = configfetch.Double(_sec, self._conf.general)
@@ -407,7 +408,7 @@ class Site(location.Location):
         else:
             num = 2  # remove scheme ('https://')
             sep = '/'
-        parts = self.url.split(sep)
+        parts = self.rsrc.split(sep)
         if num > -1:
             num = min(num, len(parts) - 1)
         else:
@@ -435,14 +436,14 @@ class Conf(object):
     ('--userdir' and '--nouserdir'),
     it loads user configs.
 
-    Third, after possible preprocessing of urls,
-    It loads urls (by a URLLoader).
+    Third, after possible preprocessing of rsrcs,
+    It loads rsrcs (by a Loader).
     """
 
     SCRIPTDIR = 'script'
     CSSDIR = 'css'
 
-    def __init__(self, urls=None, ufile=None,
+    def __init__(self, rsrcs=None, rfile=None,
             fmts=None, args=None, envs=None):
         fmts = fmts or {}
         args = args or argparse.Namespace()
@@ -461,9 +462,9 @@ class Conf(object):
         self.general = self._appconf.general
         self.style = self._appconf.style
 
-        if urls or ufile:
+        if rsrcs or rfile:
             self.user_init(args)
-            self.sites_init(urls, ufile)
+            self.sites_init(rsrcs, rfile)
 
     def user_init(self, args):
         self._userdir = _get_user_configs(
@@ -478,16 +479,16 @@ class Conf(object):
 
         _read_cur_config(self._appconf, self._siteconf)
 
-    def sites_init(self, urls=None, ufile=None):
-        sites = Sites(urls, ufile, self._appconf, self._siteconf)
+    def sites_init(self, rsrcs=None, rfile=None):
+        sites = Sites(rsrcs, rfile, self._appconf, self._siteconf)
 
-        self._urls = sites._urls
-        self._ufile = sites._ufile
+        self._rsrcs = sites._rsrcs
+        self._rfile = sites._rfile
         self.sites = sites
 
     @property
-    def urls(self):
-        return self.sites.urls
+    def rsrcs(self):
+        return self.sites.rsrcs
 
     @property
     def converter(self):
@@ -498,7 +499,7 @@ class Conf(object):
         pname = self.general.pdfname
         if pname:
             return pname
-        if not self.urls:
+        if not self.rsrcs:
             return DEFAULT_PDFNAME
         return _get_pdfname(self.sites)
 
@@ -552,12 +553,12 @@ class Conf(object):
     def print_files(self, opt):
         for site in self.sites:
             if opt == '0':
-                print(site.url)
+                print(site.rsrc)
             elif opt == '1':
                 print(site.dfile)
             elif opt == '2':
                 print(site.efile)
             elif opt == 'all':
-                print('%s\t%s\t%s' % (site.url, site.dfile, site.efile))
+                print('%s\t%s\t%s' % (site.rsrc, site.dfile, site.efile))
         if opt == '3':
             print(self.pdfname)

@@ -38,41 +38,41 @@ def test_slugify():
 
 class TestMakePath:
 
-    def compare(self, url, dfile, efile):
-        loc= location.Location(url)
+    def compare(self, rsrc, dfile, efile):
+        loc= location.Location(rsrc)
         assert loc.dfile == dfile
         assert loc.efile == efile
 
     def test(self):
-        url, dfile, efile = (
+        rsrc, dfile, efile = (
             'https://aaa.org/bbb.html',
             '_htmls/aaa.org/bbb.html',
             '_htmls/aaa.org/bbb.html')
-        self.compare(url, dfile, efile)
+        self.compare(rsrc, dfile, efile)
 
-        url, dfile, efile = (
+        rsrc, dfile, efile = (
             'https://aaa.org/bbb',
             '_htmls/aaa.org/bbb',
             '_htmls/aaa.org/bbb')
-        self.compare(url, dfile, efile)
+        self.compare(rsrc, dfile, efile)
 
-        url, dfile, efile = (
+        rsrc, dfile, efile = (
             'aaa/bbb.html',
             abspath('.') + '/aaa/bbb.html',
             '_htmls' + abspath('.') + '/aaa/bbb.html')
-        self.compare(url, dfile, efile)
+        self.compare(rsrc, dfile, efile)
 
-        url, dfile, efile = (
+        rsrc, dfile, efile = (
             '../../aaa/bbb.html',
             abspath('../../') + '/aaa/bbb.html',
             '_htmls' + abspath('../..') + '/aaa/bbb.html')
-        self.compare(url, dfile, efile)
+        self.compare(rsrc, dfile, efile)
 
-        url, dfile, efile = (
+        rsrc, dfile, efile = (
             '/aaa/bbb.html',
             '/aaa/bbb.html',
             '_htmls/aaa/bbb.html')
-        self.compare(url, dfile, efile)
+        self.compare(rsrc, dfile, efile)
 
     def test_filescheme(self):
         dfile = '/aaa/bbb.html'
@@ -92,17 +92,16 @@ class TestMakePath:
         with pytest.raises(ValueError):
             self.compare(url, dfile, efile)
 
-
     def test_rootpath(self):
         dfile = '/aaa/bbb.html'
         efile = '_htmls/aaa/bbb.html'
 
-        url = '/aaa/bbb.html'
-        self.compare(url, dfile, efile)
-        url = '//aaa/bbb.html'
-        self.compare(url, url, efile)  # note arguments: url, url, efile
-        url = '///aaa/bbb.html'
-        self.compare(url, dfile, efile)
+        rsrc = '/aaa/bbb.html'
+        self.compare(rsrc, dfile, efile)
+        rsrc = '//aaa/bbb.html'
+        self.compare(rsrc, rsrc, efile)  # note arguments: rsrc, rsrc, efile
+        rsrc = '///aaa/bbb.html'
+        self.compare(rsrc, dfile, efile)
 
 
 class TestLocalReference:
@@ -201,16 +200,16 @@ class TestLocalReference:
 
 class TestReplacementParser:
 
-    URLS = ['https://www.reddit.com/aaa', 'https://www.reddit.com/bbb']
+    rsrcs = ['https://www.reddit.com/aaa', 'https://www.reddit.com/bbb']
 
-    def compare(self, text, urls):
+    def compare(self, text, rsrcs):
         f = io.StringIO(text)
-        parser = location.ReplacementParser(f, self.URLS)
-        assert urls == parser._parse()
+        parser = location.ReplacementParser(f, self.rsrcs)
+        assert rsrcs == parser._parse()
 
     def compare_bad(self, text):
         f = io.StringIO(text)
-        parser = location.ReplacementParser(f, self.URLS)
+        parser = location.ReplacementParser(f, self.rsrcs)
         with pytest.raises(ValueError):
             parser._parse()
 
@@ -220,15 +219,15 @@ class TestReplacementParser:
             https://old.reddit.com/
 
         """
-        urls = ['https://old.reddit.com/aaa', 'https://old.reddit.com/bbb']
-        self.compare(text, urls)
+        rsrcs = ['https://old.reddit.com/aaa', 'https://old.reddit.com/bbb']
+        self.compare(text, rsrcs)
 
         text = r"""
 
 
             https://www\.reddit\.com/
             https://old.reddit.com/"""
-        self.compare(text, urls)
+        self.compare(text, rsrcs)
 
         text = r"""
             # xxx
@@ -238,14 +237,14 @@ class TestReplacementParser:
 
             # xxx
         """
-        self.compare(text, urls)
+        self.compare(text, rsrcs)
 
         text = r"""
             (?<!\\)\.c\w+/
             .org/
         """
-        urls = ['https://www.reddit.org/aaa', 'https://www.reddit.org/bbb']
-        self.compare(text, urls)
+        rsrcs = ['https://www.reddit.org/aaa', 'https://www.reddit.org/bbb']
+        self.compare(text, rsrcs)
 
     def test_bad(self):
         text = r"""

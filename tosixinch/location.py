@@ -1,15 +1,6 @@
 
-"""URL and filepath related module.
+"""URL and filepath related module."""
 
-URL object collections (URLS):
-    Locations
-
-URL object (a URL and destination filepaths):
-    Location
-
-component URL localizer:
-    Component
-"""
 
 import functools
 import io
@@ -53,39 +44,39 @@ def slugify(value, allow_unicode=False):
 class Locations(object):
     """Make ``Location`` object and implement iteration."""
 
-    def __init__(self, urls=None, ufile=None):
-        if not urls:
+    def __init__(self, rsrcs=None, rfile=None):
+        if not rsrcs:
             try:
-                with open(ufile) as f:
-                    urls = f.readlines()
+                with open(rfile) as f:
+                    rsrcs = f.readlines()
             except FileNotFoundError:
-                urls = []
+                rsrcs = []
 
-        self._urls = [url.strip() for url in urls if url.strip()]
-        self._ufile = ufile
+        self._rsrcs = [rsrc.strip() for rsrc in rsrcs if rsrc.strip()]
+        self._rfile = rfile
 
         self._iterobj = (Location,)
         self._container = None
 
         self._comment = COMMENT_PREFIX
 
-    def _parse_urls(self):
-        for url in self._urls:
-            if url.startswith(self._comment):
+    def _parse_rsrcs(self):
+        for rsrc in self._rsrcs:
+            if rsrc.startswith(self._comment):
                 continue
-            yield url
+            yield rsrc
 
     @property
-    def urls(self):
-        return list(self._parse_urls())
+    def rsrcs(self):
+        return list(self._parse_rsrcs())
 
     def __len__(self):
-        return len(self.urls)
+        return len(self.rsrcs)
 
     def _iterate(self):
-        for url in self.urls:
+        for rsrc in self.rsrcs:
             obj, *args = self._iterobj
-            yield obj(url, *args)
+            yield obj(rsrc, *args)
 
     def __iter__(self):
         if self._container is None:
@@ -110,9 +101,8 @@ class Location(urlmap.Map):
         else:
             return self.sep.join((self.PREFIX, name))
 
-    # TODO: invent more general term
     @property
-    def url(self):
+    def rsrc(self):
         return self.input_name
 
     @property
@@ -133,7 +123,7 @@ class Location(urlmap.Map):
         def to_ascii(s):
             return s.encode('idna').decode('ascii')
 
-        url = self.url
+        url = self.rsrc
         try:
             url.encode('ascii')
             return url
@@ -173,7 +163,7 @@ class Component(urlmap.Ref):
 
 
 class ReplacementParser(object):
-    """Parse url replacement file and return new urls.
+    """Parse rsrc replacement file and return new rsrcs.
 
     The format:
         zero or more units
@@ -185,18 +175,18 @@ class ReplacementParser(object):
         (lines starting with '#' are ignored)
     """
 
-    def __init__(self, replacefile, urls=None, ufile=None):
+    def __init__(self, replacefile, rsrcs=None, rfile=None):
         self.replacefile = replacefile
-        self.urls = urls
-        self.ufile = ufile
+        self.rsrcs = rsrcs
+        self.rfile = rfile
         self.state = None
         self.result = None
 
     def __call__(self):
         if not os.path.isfile(self.replacefile):
-            return self.urls
-        urls = self._parse()
-        return urls
+            return self.rsrcs
+        rsrcs = self._parse()
+        return rsrcs
 
     def _parse(self):
         self.state = 0
@@ -212,7 +202,7 @@ class ReplacementParser(object):
 
     def _parse_line(self, i, line):
         """
-        Parse a line of url replacement file.
+        Parse a line of rsrc replacement file.
 
         state:
             0: before the first line
@@ -220,7 +210,7 @@ class ReplacementParser(object):
             2: done reading the second line
         """
         line = line.strip()
-        errormsg = "Can't parse urlreplace.txt: [%d] %s" % (i, line or "''")
+        errormsg = "Can't parse replace.txt: [%d] %s" % (i, line or "''")
         if line.startswith('#'):
             return
         if self.state == 0:
@@ -242,9 +232,9 @@ class ReplacementParser(object):
                 self.state = 0
 
     def _apply_regex(self):
-        newurls = []
-        for url in self.urls:
+        newrsrcs = []
+        for rsrc in self.rsrcs:
             for regex in self.result:
-                url = regex(url)
-            newurls.append(url)
-        return newurls
+                rsrc = regex(rsrc)
+            newrsrcs.append(rsrc)
+        return newrsrcs

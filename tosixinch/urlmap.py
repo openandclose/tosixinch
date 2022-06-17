@@ -14,7 +14,7 @@ from tosixinch import urlno
 
 
 # query and fragment can have '/' character.
-# So when creating system path from url strings,
+# So when creating system path from URL strings,
 # it is better to change it to some.
 # (given URL 'aaa?bbb/ccc', to 'aaa?bbb_ccc')
 _CHANGE_TO = {
@@ -25,9 +25,9 @@ _CHANGE_TO = {
     'fragment': {'/': '_', },
 }
 
-# When creating system path from url strings,
+# When creating system path from URL strings,
 # blank segments must be changed (to some).
-# e.g. 'a//b' (url path) -> 'a/_blank_/b' (system path).
+# e.g. 'a//b' (URL path) -> 'a/_blank_/b' (system path).
 _BLANK_SEG = '/_blank_'
 
 
@@ -104,8 +104,8 @@ class URL(object):
         self.url = urlno.URL(url).url
 
     @classmethod
-    def detect(cls, url):
-        if cls.MATCHER.match(url):
+    def detect(cls, input_name):
+        if cls.MATCHER.match(input_name):
             return True
         return False
 
@@ -116,8 +116,7 @@ class URL(object):
         url = url.rstrip('/')
         if '/' not in url:
             return posixpath.join(url, 'index.html')
-        url = _url2path(url)
-        return url
+        return _url2path(url)
 
 
 class FileURL(object):
@@ -132,8 +131,8 @@ class FileURL(object):
         self.url = urlno.URL(url).url
 
     @classmethod
-    def detect(cls, url):
-        if url.lower().startswith('file:/'):
+    def detect(cls, input_name):
+        if input_name.lower().startswith('file:/'):
             return True
         return False
 
@@ -212,7 +211,7 @@ class Map(object):
         return Path(input_name)
 
     def _map_name(self, name):
-        # 'name' is always derived from a url, so it is ascii.
+        # 'name' is always derived from a URL, so it is ascii.
         for segment in name.split(self.sep):
             if len(segment) > 255:
                 self._hashed = True

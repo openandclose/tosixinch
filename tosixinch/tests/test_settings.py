@@ -18,10 +18,10 @@ class TestParse:
         args = argparse.Namespace()
         args.nouserdir = None
         args.userdir = config_dir
-        urls = (
+        rsrcs = (
             'http://bbb.com/ttt/xxx#yyy',
         )
-        return tosixinch.settings.Conf(urls, args=args)
+        return tosixinch.settings.Conf(rsrcs, args=args)
 
     @pytest.fixture(scope='class')
     def site(self, conf):
@@ -54,27 +54,27 @@ class TestParse:
 
 class TestPDFName:
 
-    def compare(self, url, section, length, pdfname):
+    def compare(self, rsrc, section, length, pdfname):
         f = tosixinch.settings._getpdfname
-        assert f(url, section, length) == pdfname
+        assert f(rsrc, section, length) == pdfname
 
     def test(self):
-        # for pdfname, we assume an url always has top level domain.
-        url = 'https://aaa'
+        # for pdfname, we assume an rsrc always has top level domain.
+        rsrc = 'https://aaa'
         with pytest.raises(ValueError):
-            self.compare(url, 'x', 1, 'x-aaa.pdf')
+            self.compare(rsrc, 'x', 1, 'x-aaa.pdf')
 
-        url = 'https://aaa.com'
-        self.compare(url, 'x', 1, 'x-aaa.pdf')
-        url = 'https://aaa.com/'
-        self.compare(url, 'x', 1, 'x-aaa.pdf')
-        url = 'https://aaa.com//'
-        self.compare(url, 'x', 1, 'x-aaa.pdf')
-        url = 'https://aaa.com/bbb.txt'
-        self.compare(url, 'x', 1, 'x-bbb.txt.pdf')
-        url = 'https://aaa.com/bbb.txt'
-        self.compare(url, 'x', 2, 'x.pdf')
+        rsrc = 'https://aaa.com'
+        self.compare(rsrc, 'x', 1, 'x-aaa.pdf')
+        rsrc = 'https://aaa.com/'
+        self.compare(rsrc, 'x', 1, 'x-aaa.pdf')
+        rsrc = 'https://aaa.com//'
+        self.compare(rsrc, 'x', 1, 'x-aaa.pdf')
+        rsrc = 'https://aaa.com/bbb.txt'
+        self.compare(rsrc, 'x', 1, 'x-bbb.txt.pdf')
+        rsrc = 'https://aaa.com/bbb.txt'
+        self.compare(rsrc, 'x', 2, 'x.pdf')
 
         # with querry
-        url = 'https://aaa.com/bbb?s=3+t=5&u=7+8'
-        self.compare(url, 'x', 1, 'x-bbb-s-3-t-5-u-7-8.pdf')
+        rsrc = 'https://aaa.com/bbb?s=3+t=5&u=7+8'
+        self.compare(rsrc, 'x', 1, 'x-bbb-s-3-t-5-u-7-8.pdf')

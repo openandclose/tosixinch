@@ -48,10 +48,10 @@ So, the three invocations below make no difference. ::
 
     * `check <commandline.html#cmdoption-c>`__
 
-      Print matched url settings and, exit.
+      Print matched rsrc settings and, exit.
       
-      You have to supply url some way (``-i`` or ``-f``).
-      If input url is only one,
+      You have to supply rsrc some way (``-i`` or ``-f``).
+      If input rsrc is only one,
       print all the option values.
       Otherwise, print just section name and ``match`` option.
 
@@ -68,13 +68,13 @@ and exits.
 download
 ^^^^^^^^
 
-Downloads ``url``, and saves it as ``dfile``.
+Downloads ``rsrc``, and saves it as ``dfile``.
 
 If `force_download <options.html#confopt-force_download>`__ is ``False`` (default),
 the program skips downloading if the file already exists.
 
-If ``url`` is a local filepath, it also does nothing.
-``dfile`` is the same as ``url``.
+If ``rsrc`` is a local filepath, it also does nothing.
+``dfile`` is the same as ``rsrc``.
 
 For the actual downloading, it just uses
 `urllib.request <https://docs.python.org/3/library/urllib.request.html>`__
@@ -94,7 +94,7 @@ Opens ``dfile``, and generates ``efile``.
 
 It always runs, overwriting existing ``efile`` if any.
 
-(If ``url`` is local filepath, ``dfile`` is not created,
+(If ``rsrc`` is local filepath, ``dfile`` is not created,
 but ``efile`` *is* created).
 
 Extraction procedure is predetermined,
@@ -121,7 +121,7 @@ Target Files
 
 The point of the program is that you don't have to specify
 each input and output for each consecutive action.
-For this, given ``url``, target files' names are uniquely determined.
+For this, given ``rsrc``, target files' names are uniquely determined (mostly).
 
 All generated html files are
 in ``_htmls`` sub directory in current directory (created if necessary).
@@ -131,7 +131,7 @@ Generated *pdf* file is placed under current directory.
 Usually users don't have to care about these files' details.
 But disposing of the files (deleting or moving) is users' job.
 
-.. dword:: url
+.. dword:: rsrc
 
     Input resource location. URL or local filepath.
     Only ``http``, ``https`` and ``file`` schemes are supported for URL.
@@ -151,16 +151,16 @@ But disposing of the files (deleting or moving) is users' job.
     They are converted immediately to regular filepaths,
     so e.g. ``--printout 0`` returns the latter.
 
-.. dword:: ufile
+.. dword:: rfile
 
     The required argument of the commandline option ``-f`` or ``--file``.
-    It should be a file containing ``urls``.
+    It should be a file containing ``rsrcs``.
 
-    ``ufile`` defaults to `urls.txt <#dword-urls.txt>`__.
+    ``rfile`` defaults to `rsrcs.txt <#dword-rsrcs.txt>`__.
 
     The file's syntax is:
 
-        * Each line is parsed as ``url`` (or filepath).
+        * Each line is parsed as ``rsrc``.
 
         * When action is not ``toc``,
           the lines starting with ``'#'`` or ``';'`` are ignored.
@@ -169,34 +169,34 @@ But disposing of the files (deleting or moving) is users' job.
           the lines starting with ``'#'`` are interpreted as chapters.
           the lines starting with ``';'`` are ignored.
 
-        * When there are multiple ``urls``,
-          if ``url`` has an extension that looks like binary,
-          this ``url`` is ignored
+        * When there are multiple ``rsrcs``,
+          if ``rsrc`` has an extension that looks like binary,
+          this ``rsrc`` is ignored
           (according to 
           `add_binary_extensions <options.html#confopt-add_binary_extensions>`__ option).
 
-          Note if input ``url`` is single,
+          Note if input ``rsrc`` is single,
           whether ``-i`` or ``-f``,
           this ``add_binary_extensions`` filter is not applied.
 
 .. dword:: dfile
 
-    If ``url`` is a remote one,
+    If ``rsrc`` is a remote one,
     ``dfile`` is created inside ``_htmls`` directory,
     with URL ``authority`` and ``path segments`` as subdirectories.
 
-    If ``url``'s last ``path`` doesn't have file extension or ``'?'``,
+    If ``URL``'s last ``path`` doesn't have file extension or ``'?'``,
     string ``'/_'`` is added.
     If it ends with ``'/'``, ``'_'`` is added.
 
     .. note::
 
-        Recent servers extensively use no-extension urls with or without a slash.
+        Recent servers extensively use no-extension URLs with or without a slash.
         They tend to make each path component a veritable resource destination.
 
         These URLs are difficult to convert to filepath.
 
-        E.g. they have both urls::
+        E.g. they have both URLs::
 
             'http://example.com/aaa'         # a document
             'http://example.com/aaa/bbb'     # a document
@@ -210,7 +210,7 @@ But disposing of the files (deleting or moving) is users' job.
         Extension check is a rough heuristic
         because I don't want to go any further.
 
-        If the site has a url ::
+        If the site has a URL ::
 
             'http://example.com/aaa.html'
 
@@ -226,9 +226,9 @@ But disposing of the files (deleting or moving) is users' job.
 
     .. note::
 
-        As an exception, if original ``url`` is too long for file name conversion
+        As an exception, if original ``URL`` is too long for file name conversion
         (a path segment more than 255 characters),
-        the whole ``url`` is sha1-hashed,
+        the whole ``URL`` is sha1-hashed,
         and the name takes a ``_html/_hash/<sha1-hexdigit>`` form.
 
 .. dword:: efile
@@ -236,7 +236,7 @@ But disposing of the files (deleting or moving) is users' job.
     String ``'~'`` and ``'.html'`` (If not already have one)
     is added to ``dfile``.
 
-    If ``url`` is a local filepath,
+    If ``rsrc`` is a local filepath,
     The path components of ``efile`` are created
     by the same process as ``dfile``.
 
@@ -248,15 +248,15 @@ But disposing of the files (deleting or moving) is users' job.
 
     When ``--pdfname`` option is not provided,
     the program auto-creates the pdf filename.
-    The name is made up from ``url``'s last path,
-    query, section name and host name *of the first url*.
+    The name is made up from ``rsrc``'s last path,
+    query, section name and host name *of the first rsrc*.
 
     Example::
 
         ~/Download/tosixinch/wikipedia-Xpath.pdf (from single input)
         ~/Download/tosixinch/wikipedia.pdf (from multiple input)
 
-    Even if ``urls`` are from multiple domains (e.g. wikipedia and reddit),
+    Even if ``rsrcs`` are from multiple domains (e.g. wikipedia and reddit),
     the filename of the pdf is named after the first one (just wikipedia).
     So, it is not always appropriate.
 
@@ -267,7 +267,7 @@ Config Files
 .. dword:: urls.txt
 
     It is the default filename for ``--file``,
-    and used when no other file or input ``url`` is specified.
+    and used when no other file or input ``rsrc`` is specified.
 
 .. note::
 
@@ -288,7 +288,7 @@ Config Files
 
 .. dword:: tocfile
 
-    It is the ``toc`` version of `ufile <#dword-ufile>`__.
+    It is the ``toc`` version of `rfile <#dword-rfile>`__.
 
     It is generated automatically in current directory,
     when action is ``toc``,

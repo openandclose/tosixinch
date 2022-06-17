@@ -11,7 +11,7 @@
 
 [_generic]
 
-input=              : input url or file path. it can be specified multiple times
+input=              : input rsrc (URL or file path). it can be specified multiple times
                     :: names: i
                     :: action: append
 
@@ -68,18 +68,18 @@ browser=            : open first extracted html (efile) in browser, and exit
                     :: names: b
                     :: action: store_true
 
-check=              : print matched url settings, and exit (so you have to supply url some way)
+check=              : print matched rsrc settings, and exit (so you have to supply rsrc some way)
                     :: names: c
                     :: action: store_true
 
-toc=                : create toc htmls and a toc url list. conflicts with '--input'.
+toc=                : create toc htmls and a toc rsrc list file. conflicts with '--input'.
                     :: action: store_true
 
 inspect=            : parse downloaded htmls (dfiles), and do arbitrary things user specified
                     :: action: store_true
 
 printout=           : print filenames the program's actions would create
-                    : (0=url, 1=dfiles, 2=efiles 3=pdfname, all=0<tab>1<tab>2)
+                    : (0=rsrc, 1=dfiles, 2=efiles 3=pdfname, all=0<tab>1<tab>2)
                     :: choices: '0', '1', '2', '3', 'all'
 
 
@@ -175,7 +175,7 @@ converter=          : argparse.SUPPRESS
                     :: f: bool
                     no
 
-guess=              : if there is no matched url, use this xpath for content selection (f: line)
+guess=              : if there is no matched option, use this xpath for content selection (f: line)
                     :: f: line
                     //div[@itemprop="articleBody"]
                     //div[@role="main"]
@@ -229,7 +229,7 @@ textindent=         : line continuation marker for rendering non-prose text
                     :: f: int
                     3
 
-raw=                : use input paths as is (no url transformation, and only for local files)
+raw=                : use input paths as is (no filename transformation, and only for local files)
                     :: f: bool
                     no
 

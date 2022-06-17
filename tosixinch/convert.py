@@ -31,11 +31,11 @@ def _extend(obj, args):
     raise ValueError(msg)
 
 
-def _is_newer(ufile, tocfile):
-    if os.path.getmtime(ufile) < os.path.getmtime(tocfile):
+def _is_newer(rfile, tocfile):
+    if os.path.getmtime(rfile) < os.path.getmtime(tocfile):
         with open(tocfile) as f:
-            ufile_line = f.readline()[1:].strip()
-        if os.path.abspath(ufile) == ufile_line:
+            rfile_line = f.readline()[1:].strip()
+        if os.path.abspath(rfile) == rfile_line:
             return True
     return False
 
@@ -68,12 +68,12 @@ class Convert(object):
         self.style = conf.style
         self._encoding = conf.general.encoding
 
-        ufile = conf._ufile
-        tocfile = self._get_tocfile(ufile)
+        rfile = conf._rfile
+        tocfile = self._get_tocfile(rfile)
         if conf.general.raw:
-            files = [site.url for site in conf.sites]
-        elif ufile and tocfile and _is_newer(ufile, tocfile):
-            locations = location.Locations(ufile=tocfile)
+            files = [site.rsrc for site in conf.sites]
+        elif rfile and tocfile and _is_newer(rfile, tocfile):
+            locations = location.Locations(rfile=tocfile)
             files = [loc.efile for loc in locations]
         else:
             files = [site.efile for site in conf.sites]
@@ -81,8 +81,8 @@ class Convert(object):
 
         self.cmd = [self.path]
 
-    def _get_tocfile(self, ufile):
-        tocfile = toc.get_tocfile(ufile)
+    def _get_tocfile(self, rfile):
+        tocfile = toc.get_tocfile(rfile)
         if tocfile:
             if os.path.isfile(tocfile):
                 return tocfile

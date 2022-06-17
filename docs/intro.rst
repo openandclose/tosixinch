@@ -122,11 +122,13 @@ Basic Usage
 
 The main comandline options of the program are:
 
-    * ``-i`` ``INPUT``, ``--input`` ``INPUT`` (input url or file path)
+    * ``-i`` ``INPUT``, ``--input`` ``INPUT`` (input rsrc)
     * ``-f`` ``FILE``, ``--file`` ``FILE`` (file to read inputs)
     * ``-1``, ``--download``
     * ``-2``, ``--extract``
     * ``-3``, ``--convert``
+
+``rsrc`` (resource) means either URL or system path.
 
 ``-1`` downloads htmls to ``_htmls`` sub directory in current directory.
 
@@ -134,7 +136,7 @@ The main comandline options of the program are:
 
 ``-3`` converts these local ``efiles``, and creates a pdf file.
 
-Note ``-1``, ``-2`` and ``-3`` take the same url as input.
+Note ``-1``, ``-2`` and ``-3`` take the same rsrc as input.
 You don't need to change that part of the commandline
 (see `Example <#example>`__ below).
 
@@ -163,7 +165,7 @@ and reads it into configuration.
     https://github.com/*/wiki/*
     https://gist.github.com/*
 
-For urls that match one of them,
+For URLs that match one of them,
 you can test the program without preparing the configuration.
 
 (``(T)`` just means used internally for tests).
@@ -219,7 +221,8 @@ You move to some working directory. ::
 
     $ cd ~/Downloads/tosixinch    # an example
 
-You test for one url. First, you have to download. ::
+You test for one rsrc.
+If it is URL like this one, you have to download it first. ::
 
     $ tosixinch -i https://somesite.com/article/aaa.html -1
 
@@ -270,7 +273,7 @@ And ::
 
 * It generates ``./somesite-aaa.pdf``.
 
-Next, you build an url list, by some means. ::
+Next, you build an rsrc list, by some means. ::
 
     # in './urls.txt'
     https://somesite.com/article/aaa.html
@@ -296,8 +299,8 @@ Additionally, if you configured so::
 Features
 --------
 
-URL strings can be pre-processed by regular expressions
-before mainline processing. `URL replace <topics.html#urlreplace>`__.
+``rsrc`` strings can be pre-processed by regular expressions
+before mainline processing. `Replace <topics.html#replace>`__.
 
 You can specify multiple encodings for documents,
 including ``html5prescan`` encoding declaration parser,
@@ -364,7 +367,7 @@ adding or bypassing some of the program's capabilities.
 `Hookcmds <topics.html#hookcmds>`__.
 
 As a last resort, it can print out file names to be created.
-They are determined uniquely given url inputs.
+They are determined uniquely given rsrc inputs.
 So that users can do some of the program's jobs outside of the program.
 `commandline: printout <commandline.html#cmdoption-printout>`__.
 

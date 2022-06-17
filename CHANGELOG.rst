@@ -146,7 +146,7 @@ let's make it updated now.
 
 * When the name of dfile is too long
   (if it has a path segment more than 255 characters),
-  the url is hashed,
+  the filename is hashed,
   and the filename now takes '_htmls/_hash/<sha1-hexdigit>' form.
 
 * Change browser_engine option default: webkit -> selenium-firefox
@@ -450,7 +450,7 @@ v0.2.0 (2019-11-10)
 
 **Change:**
 
-* Change one of sample urls. Local templite.py to remote textwrap.py.
+* Change one of sample rsrcs. Local templite.py to remote textwrap.py.
 
 * Stop adding suffix to query url.
 
@@ -486,7 +486,7 @@ v0.2.0 (2019-11-10)
 
 * Add encoding_errors option (for codec Error Handler).
 
-* Add urlreplace feature (see doc: topics.html#urlreplace).
+* Add urlreplace feature (see doc: topics.html#replace).
 
 * Add multi commands feature for hookcmds.
 
@@ -584,7 +584,7 @@ v0.0.10 (2019-05-04)
 
 * blank API documents (lack of a readthedocs config)
 * Accept very long html start tag (now support hatenablog.com).
-* Broken '--sample-pdf' and '--appcheck' (no urls case etc.).
+* Broken '--sample-pdf' and '--appcheck' (no rsrcs case etc.).
 
 **Dev:**
 
@@ -598,7 +598,7 @@ v0.0.9 (2019-04-26)
 **Change:**
 
 * Rename 'tsi-big' class attribute for large images, to 'tsi-wide'.
-* Remove file listing feature when urls consist of directories.
+* Remove file listing feature when rsrcs consist of directories.
 
 **Add:**
 
@@ -616,7 +616,7 @@ v0.0.9 (2019-04-26)
 
 * Fix detection whether an image is wide or tall.
 * Fix current directory check in making directories
-* Fix multiple extensions case in filtering binary-like extension urls.
+* Fix multiple extensions case in filtering binary-like extension rsrcs.
 * Fix url escaping for '%' itself (never escape it).
 
 **Dev:**

@@ -80,7 +80,7 @@ class Action(object):
         self._conf = conf
         self._site = site
 
-        self.url = site.url
+        self.rsrc = site.rsrc
         self.dfile = site.dfile
         self.efile = site.efile
 
@@ -95,13 +95,13 @@ class Action(object):
 class Downloader(Action):
     """Provide basic downloading capability."""
 
-    def check_url(self, site):
+    def check_rsrc(self, site):
         if site.is_local:
-            url = site.url
-            if not os.path.exists(url):
-                raise FileNotFoundError('[url] File not found: %r' % url)
-            if os.path.isdir(url):
-                raise IsADirectoryError('[url] Got directory name: %r' % url)
+            path = site.rsrc
+            if not os.path.exists(path):
+                raise FileNotFoundError('[path] File not found: %r' % path)
+            if os.path.isdir(path):
+                raise IsADirectoryError('[path] Got directory name: %r' % path)
             return True
         return False
 
@@ -111,7 +111,7 @@ class Downloader(Action):
         True:  not necessary
         False: necessary
         """
-        if self.check_url(site):
+        if self.check_rsrc(site):
             return True
 
         dfile = site.dfile
@@ -221,8 +221,8 @@ class Extractor(TextFormatter):
             self.dfile, self.text, codings=self.codings, errors=self.errors)
 
     def _add_css_elememnt(self, doc):
-        for url in self.get_css_reference():
-            el = lxml_html.fragment_fromstring(url)
+        for htmlstr in self.get_css_reference():
+            el = lxml_html.fragment_fromstring(htmlstr)
             doc.head.append(el)
 
     def add_css_elememnt(self):

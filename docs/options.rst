@@ -147,13 +147,13 @@ General Section
     If this options is ``True``:
 
     In case of ``-1``,
-    it (re-) downloads ``url`` even if ``dfile`` exists.
+    it (re-) downloads ``URL`` even if ``dfile`` exists.
 
     In case of ``-2``,
     it (re-) downloads component files (images etc.)
     even if they exist.
 
-    But in one invocation, this re-downloading is always once for one ``url``.
+    But in one invocation, this re-downloading is always once for one ``URL``.
     (The program doesn't download the same icon files again and again.)
 
 .. confopt:: guess
@@ -166,7 +166,7 @@ General Section
 
     ``[LINE]``
 
-    If ``url`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
+    If html ``rsrc`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
     ``select`` is done according to this value.
 
     The procedure is different from ordinary ``select``
@@ -183,7 +183,7 @@ General Section
     | ``[LINE]``
 
     Before site specific ``process`` functions,
-    the program applies default ``process`` functions to all ``url``,
+    the program applies default ``process`` functions to all html ``rsrc``,
     according to this value.
 
     The syntax is the same as `process <#confopt-process>`__ option, in ``site.ini``.
@@ -227,8 +227,8 @@ General Section
 
     ``[PLUS]``
 
-    The program ignores ``urls`` with binary like looking extensions,
-    only when multiple ``urls`` are provided.
+    The program ignores ``rsrcs`` with binary like looking extensions,
+    only when multiple ``rsrcs`` are provided.
 
     This option value adds to or subtracts from
     the default ``add_binary_extensions`` list above.
@@ -236,7 +236,7 @@ General Section
     The list is taken from Sindre Sorhus'
     `binary-extensions <https://github.com/sindresorhus/binary-extensions>`__.
 
-    This is for user convenience. If you copy and paste many urls,
+    This is for user convenience. If you copy and paste many rsrcs,
     checking strange extensions is a bit of work.
     But I'm afraid sometimes it gets in the way.
 
@@ -366,7 +366,7 @@ General Section
 
     C.f. `--check <commandline.html#cmdoption-c>`__ commandline option
     prints out this shortened names for local files.
-    They include URLs, so it is not perfect,
+    They include html ``rsrc``s, so it is not perfect,
     but it can be useful for
     checking and adjusting this ``trimdirs`` option.
 
@@ -376,7 +376,7 @@ General Section
     | ``[BOOL]``
 
     If ``True``,
-    when ``convert``, the program processes ``urls``.
+    when ``convert``, the program processes ``rsrcs``.
     Normally (if it is ``False``), it processes ``efile``.
 
     I don't have much clear idea when and how it is used now.
@@ -504,7 +504,7 @@ General Section
         firefox 'site.slash_efile'
 
     Here, you have to use the magic word ``site.slash_efile``.
-    It evaluates to the intended url version of ``efile``.
+    It evaluates to the intended URL version of ``efile`` (percent encoding etc.).
 
 
 Style Section
@@ -666,7 +666,7 @@ in which the common options (the same ones as in ``tosixinch.ini``)
 are not described here.
 
 Each section must have ``match`` option.
-It is this option that is used as glob string to match input urls,
+It is this option that is used as glob string to match input ``rsrcs``,
 and consequently select which section to use.
 
 So section names themselves can be arbitrary.
@@ -676,9 +676,9 @@ So section names themselves can be arbitrary.
 
     (None)
 
-    Glob string to match against input ``url``.
+    Glob string to match against input ``rsrc``.
 
-    URL path separator (``'/'``) is not special
+    Path separator (``'/'``) is not special
     for wildcards (``*?[]!``).
     So, e.g. ``'*'`` matches any strings
     including all subdirectories.
@@ -686,7 +686,7 @@ So section names themselves can be arbitrary.
     not `glob module <https://docs.python.org/3/library/glob.html>`__.).
 
     The program tries the values of this option from all the sections.
-    The section whose ``match`` option matches the ``url``
+    The section whose ``match`` option matches the ``rsrc``
     is used for the settings.
 
     If there are multiple matches,

@@ -229,7 +229,7 @@ class TestRef:
         for url, expected in tests:
             compare(parent_url, baseurl, url, expected)
 
-        parent_url = 's/t/u.html'  # local system path
+        parent_url = 's/t/u.html'  # local
         baseurl = 'http://h/x/y'
         tests = (
             ('a.html',              '../../h/x/a.html'),
@@ -243,7 +243,7 @@ class TestRef:
             compare(parent_url, baseurl, url, expected)
 
         baseurl = None
-        parent_url = 's/t/u.html'  # local system path
+        parent_url = 's/t/u.html'  # local
         tests = (
             ('',                    ''),
             ('#',                   ''),

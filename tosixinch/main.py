@@ -4,10 +4,10 @@
 
 Example:
 $ tosixinch -i https://en.wikipedia.org/wiki/Xpath -1
-    download(1) (i)nput url.
+    download(1) (i)nput resource.
 
 $ tosixinch -123
-    download(1), extract(2), and convert(3) urls,
+    download(1), extract(2), and convert(3) resource,
     reading from 'urls.txt' in current directory.
     no '--input' and no '--file' defaults to this file.
 """
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 ENVS = {'userdir': 'TOSIXINCH_USERDIR'}
 
-DEFAULT_UFILE = 'urls.txt'
+DEFAULT_RFILE = 'urls.txt'
 
 
 # For argument parser object:
@@ -137,22 +137,22 @@ def _main(args=sys.argv[1:], conf=None):
     # logging_tree.printout()
     # return
 
-    urls = args.input
-    ufile = None if urls else args.file
+    rsrcs = args.input
+    rfile = None if rsrcs else args.file
 
-    settings.ReplaceURLLoader(conf, urls=urls, ufile=ufile)()
+    settings.ReplaceLoader(conf, rsrcs=rsrcs, rfile=rfile)()
 
     if args.appcheck:
         conf.print_appconf()
         return
 
-    if not conf.sites.urls:
-        if ufile == DEFAULT_UFILE:
-            fmt = ('urls are not supplied. '
-                'use --input, --file or %r (default ufile).')
-            raise ValueError(fmt % DEFAULT_UFILE)
+    if not conf.sites.rsrcs:
+        if rfile == DEFAULT_RFILE:
+            fmt = ('resources are not supplied. '
+                'use --input, --file or %r (default rfile).')
+            raise ValueError(fmt % DEFAULT_RFILE)
         else:
-            raise ValueError('File not found: %r' % ufile)
+            raise ValueError('File not found: %r' % rfile)
 
     if args.browser:
         open_browser(conf)

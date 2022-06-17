@@ -207,11 +207,11 @@ To do that, ``--toc`` action creates
   * ``h1`` strings are made from hash comment lines (2 and 6).
   * contents are made from children htmls (3, 4 and 5. And 7 and 8).
 
-* new ``ufile`` (``tocfile``)
+* new ``rfile`` (``tocfile``)
 
   * made to refer to newly created htmls instead of now redundant children htmls.
 
-``--convert`` action, in turn, read ``tocfile`` instead of the original ``ufile``,
+``--convert`` action, in turn, read ``tocfile`` instead of the original ``rfile``,
 if ``tocfile`` exists, and *it's mtime is newer*.
 
 So that if you run
@@ -234,22 +234,22 @@ rules
 ^^^^^
 
 The ``toc`` action treats ``'#'`` as special chapter directive.
-So comments in ``ufile`` are lines only beginning ``';'``.
+So comments in ``rfile`` are lines only beginning ``';'``.
 (In other ``actions``, both ``'#'`` and ``';'`` are comments).
 
 The ``toc`` action creates `tocfile <overview.html#dword-tocfile>`__
-in current directory, adding ``'-toc'`` to ``ufile``.
-(When ``--file`` is ``'urls.txt'`` (default),
-the name of ``tocfile`` is ``'urls-toc.txt'``).
+in current directory, adding ``'-toc'`` to ``rfile``.
+(When ``--file`` is ``'rsrcs.txt'`` (default),
+the name of ``tocfile`` is ``'rsrcs-toc.txt'``).
 
-So it is Error when ``ufile`` is not provided.
-(``--file`` or implicit ``urls.txt``. No ``--input``).
+So it is Error when ``rfile`` is not provided.
+(``--file`` or implicit ``rsrcs.txt``. No ``--input``).
 
 The ``toc`` action processes ``efiles``,
 bundling some of them, and creating new htmls.
 
 So it is Error when you didn't run ``extract`` before,
-with the same ``ufile``.
+with the same ``rfile``.
 
 Table of Contents adjustments are done
 simply by decreasing ``heading`` numbers.
@@ -283,7 +283,7 @@ To use the same example:
     _htmls/tosixinch.example.com/bobs-articles/_~.html      (13)
 
 ``tosixinch.example.com`` is an imaginary placeholder host,
-strange path names (``'_~'``) are names ``efiles`` created from ``urls``.
+strange path names (``'_~'``) are names ``efiles`` created from ``rsrcs``.
 
 ``(11)``
     (1) is outside of new chapters structure,
@@ -352,7 +352,7 @@ and it creates ``urls-toc.txt``, which contains::
     http://tosixinch.example.com/bobs-articles      (23)
 
 
-(21)(22)(23) are the names of ``urls``,
+(21)(22)(23) are the names of ``rsrcs``,
 corresponding to (11)(12)(13) (``efiles``).
 
 So, ``convert`` doesn't do anything special for ``urls-toc.txt``,
@@ -366,13 +366,13 @@ just processes pre-built htmls.
     you should control the effects carefully.
 
 
-URLReplace
+Replace
 ----------
 
-If there is a file ``'urlreplace.txt'`` in `userdir <overview.html#dword-userdir>`__,
-it is used for regex url preprocess.
+If there is a file ``'replace.txt'`` in `userdir <overview.html#dword-userdir>`__,
+it is used for regex rsrc preprocess.
 
-The urls matching the pattern are internally changed to replacement urls,
+The rsrcs matching the pattern are internally changed to replacement rsrcs,
 and processed accordingly.
 
 If there are lines in the file::
@@ -555,24 +555,24 @@ Pre_Each_Cmds and Post_Each_Cmds
 
 An action group consists of ``precmd``, ``action`` and ``postcmd``.
 But when ``download`` or ``extract``,
-``action`` itself is a collection of jobs, one job for each ``url``.
+``action`` itself is a collection of jobs, one job for each ``rsrc``.
 For this job, there are corresponding pre- and post- hookcmds.
 
 .. code-block:: none
 
     precmd                  pre_each_cmd
-    action (urls) ----+---  job (an url)
+    action (rsrcs) ---+---  job (an rsrc)
     postcmd           |     post_each_cmd
                       |
                       |     pre_each_cmd
-                      +---  job (an url)
+                      +---  job (an rsrc)
                       |     post_each_cmd
                       |
                       :     ...
 
 The specification (return codes etc.) is the same as precmds and postcmds.
 
-In this context, there are ``url`` specific configurations,
+In this context, there are ``rsrc`` specific configurations,
 in addition to the general configuration.
 So you can use ``site`` variable, in addition to ``conf``:
 
@@ -582,14 +582,14 @@ it is evaluated as the object ``site``. For example::
 
     post_each_cmd1=   echo site.efile site.match
 
-will print each ``efile`` and url glob pattern.
+will print each ``efile`` and rsrc glob pattern.
 
 Also, the following environment variables are exposed
 (in running subprocess case).
 
 .. code-block:: none
 
-    TOSIXINCH_URL:      url (or filepath)
+    TOSIXINCH_RSRC:     URL or filepath
     TOSIXINCH_DFILE:    dfile
     TOSIXINCH_EFILE:    efile
 
@@ -628,7 +628,7 @@ And one way to see the help is::
 
     $ tosixinch -4 --viewcmd '_viewer.py --help' -i aaa
 
-(This doesn't work if ``urls`` is not supplied,
+(This doesn't work if ``rsrcs`` is not supplied,
 so you have to supply something, like the above ``-i aaa``.)
 
 
@@ -654,7 +654,7 @@ skipping the main extraction.
           pre_each_cmd2=    echo foo
                             _man
 
-    * If you supply multiple ``urls``,
+    * If you supply multiple ``rsrcs``,
       it triggers the binary-extension filter,
       and the default includes ``gz``.
       In this case, you have to subtract ``gz`` from the list.
@@ -706,7 +706,7 @@ But you must explicitly define other names.
 
 If Pygments finds a language but the language is not mapped,
 It does not do formatting (skips to other ``pre_each_cmd2`` or the builtin text extraction).
-But it registers the ``url``'s ``ftype`` as ``nonprose``.
+But it registers the ``rsrc``'s ``ftype`` as ``nonprose``.
 
 (It is an heuristic.
 If Pygments finds a language, it is better to treat the text as code-like,
@@ -717,7 +717,7 @@ but Ctags doesn't find a language, the language is not mapped, or not mapped to 
 It does formatting only with Pygments tokens.
 
 As a special case, if Pygments name is mapped to the name ``'prose'``,
-It does not do formatting, but registers the ``url``'s ``ftype`` as ``prose``
+It does not do formatting, but registers the ``rsrc``'s ``ftype`` as ``prose``
 (The default is: ``reStructuredText`` and ``markdown``).
 
 **Configuration:**

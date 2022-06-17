@@ -20,9 +20,9 @@ COMMENT_PREFIX = ';'
 TOCDOMAIN = 'http://tosixinch.example.com'
 
 
-def get_tocfile(ufile):
-    if ufile:
-        root, ext = os.path.splitext(os.path.basename(ufile))
+def get_tocfile(rfile):
+    if rfile:
+        root, ext = os.path.splitext(os.path.basename(rfile))
         return root + '-toc' + ext
 
 
@@ -33,7 +33,7 @@ def _create_toc_url(title):
 
 
 class Node(object):
-    """Represent one non-blank line in ufile."""
+    """Represent one non-blank line in rfile."""
 
     def __init__(self, root, children, title):
         self._root = root
@@ -42,7 +42,7 @@ class Node(object):
 
         self.doc = self._make_toc_html()
         self._loc = location.Location(root)
-        self.url = self._loc.url
+        self.rsrc = self._loc.rsrc
         self.root = self._loc.efile
         self.children = [location.Location(child).efile for child in children]
 
@@ -58,15 +58,15 @@ class Node(object):
 
 
 class Nodes(object):
-    """Represent ufile."""
+    """Represent rfile."""
 
     COMMENT = COMMENT_PREFIX
     DIRECTIVE_RE = re.compile(
         r'^\s*(%s+?)?\s*(.+)?\s*$' % DIRECTIVE_PREFIX)
 
-    def __init__(self, urls, ufile, tocfile):
-        self.urls = urls
-        self.ufile = ufile
+    def __init__(self, rsrcs, rfile, tocfile):
+        self.rsrcs = rsrcs
+        self.rfile = rfile
         self.tocfile = tocfile
         self.cache = set()  # title cache
         self.nodes = self.parse()
@@ -83,8 +83,8 @@ class Nodes(object):
 
         return _create_toc_url(new)
 
-    def _parse_line(self, url):
-        m = self.DIRECTIVE_RE.match(url)
+    def _parse_line(self, rsrc):
+        m = self.DIRECTIVE_RE.match(rsrc)
         if m.group(1):
             cnt = 1
         else:
@@ -93,28 +93,28 @@ class Nodes(object):
         if cnt:
             if line:
                 title = line
-                url = self._create_toc_url(title)
+                rsrc = self._create_toc_url(title)
             else:
                 title = None
-                url = None
+                rsrc = None
         else:
             title = None
-            url = line
+            rsrc = line
 
-        return cnt, url, title
+        return cnt, rsrc, title
 
     def parse(self):
         nodes = []
         level = 0
         queue = []
         # adding one extra ('# aaa') to handle the last node
-        for url in self.urls + ['# aaa']:
-            if url.startswith(self.COMMENT):
+        for rsrc in self.rsrcs + ['# aaa']:
+            if rsrc.startswith(self.COMMENT):
                 continue
             first = False
-            cnt, url, title = self._parse_line(url)
+            cnt, rsrc, title = self._parse_line(rsrc)
             if cnt:
-                if url is None:
+                if rsrc is None:
                     level = 0
                     continue
 
@@ -130,7 +130,7 @@ class Nodes(object):
                 nodes.append(Node(root, children, title_))
                 queue = []
 
-            queue.append((url, title))
+            queue.append((rsrc, title))
 
         return nodes
 
@@ -145,21 +145,21 @@ class Nodes(object):
         for node in self.nodes:
             node.merge(table)
 
-        ufile = '%s %s\n' % (self.COMMENT, os.path.abspath(self.ufile))
-        urls = '\n'.join([node.url for node in self.nodes])
+        rfile = '%s %s\n' % (self.COMMENT, os.path.abspath(self.rfile))
+        rsrcs = '\n'.join([node.rsrc for node in self.nodes])
         with open(self.tocfile, 'w') as f:
-            f.write(ufile)
-            f.write(urls)
+            f.write(rfile)
+            f.write(rsrcs)
 
 
 def run(conf):
-    urls = conf.sites._urls
-    ufile = conf._ufile
-    if not ufile:
+    rsrcs = conf.sites._rsrcs
+    rfile = conf._rfile
+    if not rfile:
         msg = ("To run '--toc', you can not use '--input'. "
             "Use either '--file', or implicit 'urls.txt'.")
         raise ValueError(msg)
-    tocfile = get_tocfile(ufile)
+    tocfile = get_tocfile(rfile)
 
-    nodes = Nodes(urls=urls, ufile=ufile, tocfile=tocfile)
+    nodes = Nodes(rsrcs=rsrcs, rfile=rfile, tocfile=tocfile)
     nodes.merge()

@@ -366,7 +366,7 @@ def _add_path_env(user_scriptdir, scriptdir):
 
 def _add_files_env(site):
     return {
-        'TOSIXINCH_URL': site.url,
+        'TOSIXINCH_RSRC': site.rsrc,
         'TOSIXINCH_DFILE': site.dfile,
         'TOSIXINCH_EFILE': site.efile,
     }
