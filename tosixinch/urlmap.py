@@ -104,8 +104,8 @@ class URL(object):
         self.url = urlno.URL(url).url
 
     @classmethod
-    def detect(cls, input_name):
-        if cls.MATCHER.match(input_name):
+    def detect(cls, rsrc):
+        if cls.MATCHER.match(rsrc):
             return True
         return False
 
@@ -131,8 +131,8 @@ class FileURL(object):
         self.url = urlno.URL(url).url
 
     @classmethod
-    def detect(cls, input_name):
-        if input_name.lower().startswith('file:/'):
+    def detect(cls, rsrc):
+        if rsrc.lower().startswith('file:/'):
             return True
         return False
 
@@ -186,29 +186,29 @@ class Map(object):
     'map' here means to change somewhat neutral paths to actual filepaths.
     """
 
-    def __init__(self, input_name, input_type=None):
-        self._input_name = input_name
+    def __init__(self, rsrc, input_type=None):
+        self._rsrc = rsrc
         self.sep = '/'
-        self._cls = self._detect(input_name, input_type)
+        self._cls = self._detect(rsrc, input_type)
         self._hashed = False
 
-    def _detect(self, input_name, input_type):
+    def _detect(self, rsrc, input_type):
         if input_type:
             if input_type == 'url':
-                return URL(input_name)
+                return URL(rsrc)
             if input_type == 'fileurl':
-                return FileURL(input_name)
+                return FileURL(rsrc)
             if input_type == 'path':
-                return Path(input_name)
+                return Path(rsrc)
             fmt = ("got invalid input_type for class 'Map': %r"
                 "(must be one of 'url', 'fileurl' or 'path').")
             raise ValueError(fmt % input_type)
 
-        if URL.detect(input_name):
-            return URL(input_name)
-        if FileURL.detect(input_name):
-            return FileURL(input_name)
-        return Path(input_name)
+        if URL.detect(rsrc):
+            return URL(rsrc)
+        if FileURL.detect(rsrc):
+            return FileURL(rsrc)
+        return Path(rsrc)
 
     def _map_name(self, name):
         # 'name' is always derived from a URL, so it is ascii.
@@ -233,7 +233,7 @@ class Map(object):
         return self._cls.url
 
     @property
-    def input_name(self):
+    def rsrc(self):
         if self.is_local:
             # Note: FileURL returns system path.
             return self._cls.path
@@ -254,7 +254,7 @@ class Map(object):
         if local resources (fileurl and path) skip to create new names.
         """
         if self.is_local:
-            return self.input_name
+            return self.rsrc
         else:
             return self.mapped_name
 
@@ -283,7 +283,7 @@ class Ref(object):
         url, _ = _split_fragment(url)
         url = self._resolve(url)
         self._cls = self._detect(url)
-        self.url = self._cls.input_name
+        self.url = self._cls.rsrc
         self.dfile = self._cls.dfile
 
     def _resolve(self, url):

@@ -102,10 +102,6 @@ class Location(urlmap.Map):
             return self.sep.join((self.PREFIX, name))
 
     @property
-    def rsrc(self):
-        return self.input_name
-
-    @property
     def efile(self):
         if self.OVERWRITE:
             return self.dfile

@@ -166,9 +166,9 @@ class TestMap:
             ('/a/b',            '/a/b',             'a/b'),
         )
 
-        for src, input_name, mapped_name in tests:
+        for src, rsrc, mapped_name in tests:
             m = urlmap.Map(src)
-            assert m.input_name == input_name
+            assert m.rsrc == rsrc
             assert m.mapped_name == mapped_name
 
 
