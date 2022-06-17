@@ -1,5 +1,5 @@
 
-"""parse downloaded htmls, and do arbitrary things user specified."""
+"""parse downloaded htmls (dfiles), and do arbitrary things user specified."""
 
 import logging
 

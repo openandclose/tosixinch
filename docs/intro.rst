@@ -130,7 +130,7 @@ The main comandline options of the program are:
 
 ``-1`` downloads htmls to ``_htmls`` sub directory in current directory.
 
-``-2`` extracts these local ``Downloaded_Files``, and creates new files.
+``-2`` extracts these local ``dfiles``, and creates new files.
 
 ``-3`` converts these local ``Extracted_Files``, and creates a pdf file.
 

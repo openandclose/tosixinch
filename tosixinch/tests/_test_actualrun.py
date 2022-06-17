@@ -436,7 +436,7 @@ def _clean_directory(excludes=None, top='.'):
 def _clean_outcome_directory(urls):
     assert os.path.abspath(os.curdir) == OUTCOME
 
-    # Delete files, but keep ``Downloaded_Files``.
+    # Delete files, but keep ``dfiles``.
     png_dir = os.path.abspath(PNG_DIR)
     fnames = [os.path.abspath(n) for n in _get_downloaded_files(urls)]
     excludes = [png_dir] + fnames

@@ -10,7 +10,7 @@ Unreleased
 
 **Change:**
 
-* **!!** Change name syntax of Downloaded_File, Using suffix '.f'
+* **!!** Change name syntax of dfile, Using suffix '.f'
 
   Given URL::
 
@@ -34,8 +34,8 @@ Unreleased
 
 * **!!** Change name syntax of Extracted_File using suffix '.orig'
 
-  Reuse the same name as Downloaded_File,
-  but make sure to rename Downloaded_File with the suffix.
+  Reuse the same name as dfile,
+  but make sure to rename dfile with the suffix.
 
   Given URL::
 
@@ -43,12 +43,12 @@ Unreleased
 
   Old::
 
-    _htmls/en.wikipedia.org/wiki/XPath          (Downloaded_File)
+    _htmls/en.wikipedia.org/wiki/XPath          (dfile)
     _htmls/en.wikipedia.org/wiki/XPath~.html    (Extracted_File)
 
   Now::
 
-    _htmls/en.wikipedia.org/wiki/XPath.orig     (Downloaded_File)
+    _htmls/en.wikipedia.org/wiki/XPath.orig     (dfile)
     _htmls/en.wikipedia.org/wiki/XPath          (Extracted_File)
 
 **Add:**
@@ -91,7 +91,7 @@ Incremental Improvements
 
 * Change '_add_index' from URL to Map class
 
-  Very slightly change the handling of '/' and '?' in Downloaded_File name
+  Very slightly change the handling of '/' and '?' in dfile name
 
 **Add:**
 
@@ -144,7 +144,7 @@ let's make it updated now.
 
 **Change:**
 
-* When the name of Downloaded_File is too long
+* When the name of dfile is too long
   (if it has a path segment more than 255 characters),
   the url is hashed,
   and the filename now takes '_htmls/_hash/<sha1-hexdigit>' form.
@@ -454,7 +454,7 @@ v0.2.0 (2019-11-10)
 
 * Stop adding suffix to query url.
 
-  Previously url 'bb?cc' was changed to Downloaded_File 'bb?cc/index--tosixinch' or 'bb?cc_index--tosixinch'.
+  Previously url 'bb?cc' was changed to dfile 'bb?cc/index--tosixinch' or 'bb?cc_index--tosixinch'.
   Now just to 'bb?cc'.
 
 * Stop adding './' prefix unconditionally for relative references.

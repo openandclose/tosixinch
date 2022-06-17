@@ -113,11 +113,11 @@ Actions
 
 .. option:: --inspect
 
-    parse downloaded htmls, and do arbitrary things user specified
+    parse downloaded htmls (dfiles), and do arbitrary things user specified
 
 .. option:: --printout {0,1,2,3,all}
 
-    print filenames the program's actions would create (0=url, 1=Downloaded_Files, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
+    print filenames the program's actions would create (0=url, 1=dfiles, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
 
         choices=0, 1, 2, 3, all
 
@@ -271,7 +271,7 @@ Configs
 
 .. option:: --overwrite-html
 
-    do not create new 'Extracted_File' (overwrite 'Downloaded_Files')
+    do not create new 'Extracted_File' (overwrite 'dfiles')
 
 Styles
 ------

@@ -75,11 +75,11 @@ check=              : print matched url settings, and exit (so you have to suppl
 toc=                : create toc htmls and a toc url list. conflicts with '--input'.
                     :: action: store_true
 
-inspect=            : parse downloaded htmls, and do arbitrary things user specified
+inspect=            : parse downloaded htmls (dfiles), and do arbitrary things user specified
                     :: action: store_true
 
 printout=           : print filenames the program's actions would create
-                    : (0=url, 1=Downloaded_Files, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
+                    : (0=url, 1=dfiles, 2=Extracted_Files 3=pdfname, all=0<tab>1<tab>2)
                     :: choices: '0', '1', '2', '3', 'all'
 
 
@@ -272,7 +272,7 @@ keep_html=          : do not extract, keep html as is, just component download
                     :: f: bool
                     no
 
-overwrite_html=     : do not create new 'Extracted_File' (overwrite 'Downloaded_Files')
+overwrite_html=     : do not create new 'Extracted_File' (overwrite 'dfiles')
                     :: f: bool
                     no
 

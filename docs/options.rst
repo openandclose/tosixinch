@@ -122,7 +122,7 @@ General Section
     Note downloading may occur anyway by pdf converters.
 
     If this option is ``True``,
-    download links are rewritten to point to local ``Downloaded_Files``.
+    download links are rewritten to point to local ``dfiles``.
     So downloading doesn't happen when ``convert``.
 
     In general, pre-downloading is useful
@@ -147,7 +147,7 @@ General Section
     If this options is ``True``:
 
     In case of ``-1``,
-    it (re-) downloads ``url`` even if ``Downloaded_File`` exists.
+    it (re-) downloads ``url`` even if ``dfile`` exists.
 
     In case of ``-2``,
     it (re-) downloads component files (images etc.)
@@ -708,7 +708,7 @@ So section names themselves can be arbitrary.
     | ``[LINE]``
 
     Xpath strings to select elements
-    from ``Downloaded_File`` when ``extract``.
+    from ``dfile`` when ``extract``.
     Only selected elements are included
     in the ``<body>`` tag of the new ``Extracted_File``,
     discarding others.

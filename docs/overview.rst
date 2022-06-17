@@ -68,13 +68,13 @@ and exits.
 download
 ^^^^^^^^
 
-Downloads ``url``, and saves it as ``Downloaded_File``.
+Downloads ``url``, and saves it as ``dfile``.
 
 If `force_download <options.html#confopt-force_download>`__ is ``False`` (default),
 the program skips downloading if the file already exists.
 
 If ``url`` is a local filepath, it also does nothing.
-``Downloaded_File`` is the same as ``url``.
+``dfile`` is the same as ``url``.
 
 For the actual downloading, it just uses
 `urllib.request <https://docs.python.org/3/library/urllib.request.html>`__
@@ -89,12 +89,12 @@ The program uses ``pyqt5`` or ``selenium``, instead of ``urllib``
 extract
 ^^^^^^^
 
-Opens ``Downloaded_File``, and generates ``Extracted_File``.
-(``Downloaded_File`` is kept intact).
+Opens ``dfile``, and generates ``Extracted_File``.
+(``dfile`` is kept intact).
 
 It always runs, overwriting existing ``Extracted_File`` if any.
 
-(If ``url`` is local filepath, ``Downloaded_File`` is not created,
+(If ``url`` is local filepath, ``dfile`` is not created,
 but ``Extracted_File`` *is* created).
 
 Extraction procedure is predetermined,
@@ -179,10 +179,10 @@ But disposing of the files (deleting or moving) is users' job.
           whether ``-i`` or ``-f``,
           this ``add_binary_extensions`` filter is not applied.
 
-.. dword:: Downloaded_File
+.. dword:: dfile
 
     If ``url`` is a remote one,
-    ``Downloaded_File`` is created inside ``_htmls`` directory,
+    ``dfile`` is created inside ``_htmls`` directory,
     with URL ``authority`` and ``path segments`` as subdirectories.
 
     If ``url``'s last ``path`` doesn't have file extension or ``'?'``,
@@ -234,11 +234,11 @@ But disposing of the files (deleting or moving) is users' job.
 .. dword:: Extracted_File
 
     String ``'~'`` and ``'.html'`` (If not already have one)
-    is added to ``Downloaded_File``.
+    is added to ``dfile``.
 
     If ``url`` is a local filepath,
     The path components of ``Extracted_File`` are created
-    by the same process as ``Downloaded_File``.
+    by the same process as ``dfile``.
 
     Example::
 

@@ -22,7 +22,7 @@ class _File(object):
 
 
 class DownloadWriter(_File, system.DownloadWriter):
-    """Forward to Downloaded_File."""
+    """Forward to dfile."""
 
     def get_filename(self):
         orig = self.fname + self.SUFFIX_ORIG
@@ -36,7 +36,7 @@ class DownloadWriter(_File, system.DownloadWriter):
 
 
 class ExtractReader(_File, system.Reader):
-    """Forward to Downloaded_File."""
+    """Forward to dfile."""
 
     def get_filename(self):
         fname = self.fname
@@ -57,7 +57,7 @@ class _ExtractWriter(_File):
 
 
 class ExtractWriter(_ExtractWriter, system.Writer):
-    """Move Downloaded_File, before writing."""
+    """Move dfile, before writing."""
 
     def _prepare(self):
         super()._prepare()

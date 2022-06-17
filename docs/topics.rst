@@ -590,7 +590,7 @@ Also, the following environment variables are exposed
 .. code-block:: none
 
     TOSIXINCH_URL:     url (or filepath)
-    TOSIXINCH_FNAME:   Downloaded_File
+    TOSIXINCH_FNAME:   dfile
     TOSIXINCH_FNEW:    Extracted_File
 
 
