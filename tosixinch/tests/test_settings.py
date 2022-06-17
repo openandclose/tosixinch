@@ -34,9 +34,9 @@ class TestParse:
     def test_parse_pdfname(self, conf):
         assert conf.pdfname == 'bbb-xxx.pdf'
 
-    def test_parse_fnew(self, site):
-        fnew_value = '_htmls/bbb.com/ttt/xxx'
-        assert site.fnew == fnew_value
+    def test_parse_efile(self, site):
+        efile_value = '_htmls/bbb.com/ttt/xxx'
+        assert site.efile == efile_value
 
     def test_parse_select(self, site):
         select_value = '//div[@id="title"]|//div[@id="article"]'

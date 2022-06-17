@@ -580,7 +580,7 @@ If a word in the statement begins with ``'site.'``,
 and the rest is dot-separated identifier (``[a-zA-Z_][a-zA-Z_0-9]+``),
 it is evaluated as the object ``site``. For example::
 
-    post_each_cmd1=   echo site.fnew site.match
+    post_each_cmd1=   echo site.efile site.match
 
 will print each ``efile`` and url glob pattern.
 
@@ -591,7 +591,7 @@ Also, the following environment variables are exposed
 
     TOSIXINCH_URL:     url (or filepath)
     TOSIXINCH_FNAME:   dfile
-    TOSIXINCH_FNEW:    efile
+    TOSIXINCH_EFILE:    efile
 
 
 Scripts

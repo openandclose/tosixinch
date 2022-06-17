@@ -349,7 +349,7 @@ def compare(conf, action):
     if action == 'download':
         filename = site.fname
     if action == 'extract':
-        filename = site.fnew
+        filename = site.efile
     elif action == 'convert':
         filename = conf.pdfname
 
@@ -399,8 +399,8 @@ def _run_toc(args, action, do_compare=True):
             _compare(TOCFILE)
             urls = URLData.toc_urls
             for url in urls:
-                fnew = location.Location(url).fnew
-                _compare(fnew)
+                efile = location.Location(url).efile
+                _compare(efile)
 
     # We can almost skip conversion test
     # since it should be similar as ``_run_ufile``.

@@ -38,71 +38,71 @@ def test_slugify():
 
 class TestMakePath:
 
-    def compare(self, url, fname, fnew):
+    def compare(self, url, fname, efile):
         loc= location.Location(url)
         assert loc.fname == fname
-        assert loc.fnew == fnew
+        assert loc.efile == efile
 
     def test(self):
-        url, fname, fnew = (
+        url, fname, efile = (
             'https://aaa.org/bbb.html',
             '_htmls/aaa.org/bbb.html',
             '_htmls/aaa.org/bbb.html')
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
 
-        url, fname, fnew = (
+        url, fname, efile = (
             'https://aaa.org/bbb',
             '_htmls/aaa.org/bbb',
             '_htmls/aaa.org/bbb')
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
 
-        url, fname, fnew = (
+        url, fname, efile = (
             'aaa/bbb.html',
             abspath('.') + '/aaa/bbb.html',
             '_htmls' + abspath('.') + '/aaa/bbb.html')
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
 
-        url, fname, fnew = (
+        url, fname, efile = (
             '../../aaa/bbb.html',
             abspath('../../') + '/aaa/bbb.html',
             '_htmls' + abspath('../..') + '/aaa/bbb.html')
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
 
-        url, fname, fnew = (
+        url, fname, efile = (
             '/aaa/bbb.html',
             '/aaa/bbb.html',
             '_htmls/aaa/bbb.html')
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
 
     def test_filescheme(self):
         fname = '/aaa/bbb.html'
-        fnew = '_htmls/aaa/bbb.html'
+        efile = '_htmls/aaa/bbb.html'
 
         url = 'file:/aaa/bbb.html'
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
         url = 'file:///aaa/bbb.html'
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
         url = 'file://localhost/aaa/bbb.html'
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
 
         url = 'file://aaa/bbb.html'
         with pytest.raises(ValueError):
-            self.compare(url, fname, fnew)
+            self.compare(url, fname, efile)
         url = 'file:////aaa/bbb.html'
         with pytest.raises(ValueError):
-            self.compare(url, fname, fnew)
+            self.compare(url, fname, efile)
 
 
     def test_rootpath(self):
         fname = '/aaa/bbb.html'
-        fnew = '_htmls/aaa/bbb.html'
+        efile = '_htmls/aaa/bbb.html'
 
         url = '/aaa/bbb.html'
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
         url = '//aaa/bbb.html'
-        self.compare(url, url, fnew)  # note arguments: url, url, fnew
+        self.compare(url, url, efile)  # note arguments: url, url, efile
         url = '///aaa/bbb.html'
-        self.compare(url, fname, fnew)
+        self.compare(url, fname, efile)
 
 
 class TestLocalReference:

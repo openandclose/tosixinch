@@ -501,9 +501,9 @@ General Section
     specify the command to open a browser,
     if the default (calling Python stdlib ``webbrowser``) is not desirable. E.g.::
 
-        firefox 'site.slash_fnew'
+        firefox 'site.slash_efile'
 
-    Here, you have to use the magic word ``site.slash_fnew``.
+    Here, you have to use the magic word ``site.slash_efile``.
     It evaluates to the intended url version of ``efile``.
 
 

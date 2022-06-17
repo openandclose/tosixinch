@@ -43,8 +43,8 @@ class Node(object):
         self.doc = self._make_toc_html()
         self._loc = location.Location(root)
         self.url = self._loc.url
-        self.root = self._loc.fnew
-        self.children = [location.Location(child).fnew for child in children]
+        self.root = self._loc.efile
+        self.children = [location.Location(child).efile for child in children]
 
     def _make_toc_html(self):
         title = self.title or content.DEFAULT_TITLE

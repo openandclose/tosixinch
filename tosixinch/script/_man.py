@@ -24,17 +24,17 @@ logger = logging.getLogger(__name__)
 EXTENSION = r'^(.+\.[1-9]([a-z]+)?)(\.gz)?$'
 
 
-def man(fname, fnew, delete=True):
+def man(fname, efile, delete=True):
     env = {'MANROFFOPT': '-rIN=2n'}
     cmd = ['man', '-Thtml', fname]
     ret = subprocess.run(
         cmd, capture_output=True, check=True, env=os.environ.update(env))
     if logger.name == '__main__':
-        print('processing %r... (write to %r)' % (fname, fnew))
+        print('processing %r... (write to %r)' % (fname, efile))
     else:
         logger.info('[man] processing %r...', fname)
     text = ret.stdout.decode(sys.stdout.encoding)
-    system.write(fnew, text=text)
+    system.write(efile, text=text)
     if delete:
         delete_images()
     return 101
@@ -56,15 +56,15 @@ def match(fname):
 
 
 def run(conf, site):
-    ret = _run(site.fname, site.fnew)
+    ret = _run(site.fname, site.efile)
     if ret == 101:
         action.CSSWriter(conf, site).read_and_write()
     return ret
 
 
-def _run(fname, fnew):
+def _run(fname, efile):
     if match(fname):
-        return man(fname, fnew)
+        return man(fname, efile)
     return 0
 
 

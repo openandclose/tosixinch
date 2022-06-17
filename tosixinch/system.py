@@ -368,7 +368,7 @@ def _add_files_env(site):
     return {
         'TOSIXINCH_URL': site.url,
         'TOSIXINCH_FNAME': site.fname,
-        'TOSIXINCH_FNEW': site.fnew,
+        'TOSIXINCH_EFILE': site.efile,
     }
 
 

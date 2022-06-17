@@ -234,8 +234,8 @@ class PygmentsCode(_PygmentsCode):
     def get_relative_url(self, refname):
         if refname == self.fname:
             return ''
-        path = location.Location(refname).fnew
-        return location.path2ref(path, self.fnew)
+        path = location.Location(refname).efile
+        return location.path2ref(path, self.efile)
 
     def get_tagname(self, kind):
         d = self.kindmap

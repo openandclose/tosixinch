@@ -556,8 +556,8 @@ class Conf(object):
             elif opt == '1':
                 print(site.fname)
             elif opt == '2':
-                print(site.fnew)
+                print(site.efile)
             elif opt == 'all':
-                print('%s\t%s\t%s' % (site.url, site.fname, site.fnew))
+                print('%s\t%s\t%s' % (site.url, site.fname, site.efile))
         if opt == '3':
             print(self.pdfname)

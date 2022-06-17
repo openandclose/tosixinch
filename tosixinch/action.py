@@ -81,7 +81,7 @@ class Action(object):
 
         self.url = site.url
         self.fname = site.fname
-        self.fnew = site.fnew
+        self.efile = site.efile
 
         self.codings = site.general.encoding
         self.errors = site.general.encoding_errors
@@ -200,7 +200,7 @@ class TextFormatter(Action):
         sheets = []
         cssfiles = stylesheet.StyleSheet(self._conf, self._site).stylesheets
         for cssfile in cssfiles:
-            url = location.path2ref(cssfile, self.fnew)
+            url = location.path2ref(cssfile, self.efile)
             sheets.append(url)
         return sheets
 
@@ -230,15 +230,15 @@ class Extractor(TextFormatter):
     def write(self, doc):
         overwrite = self._conf.general.overwrite_html
         if overwrite:
-            return lxml_html.HtmlWriter(self.fnew, doc).write()
+            return lxml_html.HtmlWriter(self.efile, doc).write()
         else:
-            return HtmlExtractWriter(self.fnew, doc).write()
+            return HtmlExtractWriter(self.efile, doc).write()
 
 
 class CSSWriter(Extractor):
     """Open html file and add css reference."""
 
     def read_and_write(self):
-        doc = self._parse(self.fnew)
+        doc = self._parse(self.efile)
         self._add_css_elememnt(doc)
         self.write(doc=doc)

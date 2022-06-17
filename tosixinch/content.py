@@ -116,7 +116,7 @@ class Resolver(object):
 
     def _build_sibling_urls(self, locs):
         for loc in locs:
-            path, basepath, url = loc.fnew, self.loc.fnew, loc.url
+            path, basepath, url = loc.efile, self.loc.efile, loc.url
             ref = location.get_relative_reference(path, basepath, url)
             yield loc.url, ref
 

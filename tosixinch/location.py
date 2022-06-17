@@ -116,14 +116,14 @@ class Location(urlmap.Map):
         return self.input_name
 
     @property
-    def fnew(self):
+    def efile(self):
         if self.OVERWRITE:
             return self.fname
         return self.mapped_name
 
     @property
-    def slash_fnew(self):
-        return urlmap._path2url(self.fnew)
+    def slash_efile(self):
+        return urlmap._path2url(self.efile)
 
     @property
     def idna_url(self):
@@ -168,7 +168,7 @@ class Component(urlmap.Ref):
 
     @property
     def relative_reference(self):
-        path, basepath, url = self.fname, self._parent_cls.fnew, self.url
+        path, basepath, url = self.fname, self._parent_cls.efile, self.url
         return get_relative_reference(path, basepath, url)
 
 

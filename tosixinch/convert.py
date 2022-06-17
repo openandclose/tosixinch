@@ -74,9 +74,9 @@ class Convert(object):
             files = [site.url for site in conf.sites]
         elif ufile and tocfile and _is_newer(ufile, tocfile):
             locations = location.Locations(ufile=tocfile)
-            files = [loc.fnew for loc in locations]
+            files = [loc.efile for loc in locations]
         else:
-            files = [site.fnew for site in conf.sites]
+            files = [site.efile for site in conf.sites]
         self.files = files
 
         self.cmd = [self.path]
