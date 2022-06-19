@@ -16,12 +16,6 @@ An action is either a ``sequential action`` or a ``single action``.
     * `convert <#convert>`__
     * `view <topics.html#viewcmd>`__ (open pdf viewer)
 
-.. note::
-
-    ``toc`` does not belong to the mainline actions,
-    and anyway very experimental.
-    So first-time readers can skip the references.
-
 You can call more than one ``sequential actions`` in one invocation.
 Irrespective of the arguments order,
 the program executes actions in the above order.
@@ -37,23 +31,24 @@ So, the three invocations below make no difference. ::
     $ tosixinch -321
 
 ``single actions`` are:
-    * `appcheck <commandline.html#cmdoption-a>`__
+    * `appcheck <commandline.html#cmdoption-a>`__ (``'-a'``)
 
       Print application settings, and exit.
 
       They are global, with commandline evaluation,
       but without site-specific option evaluation.
       
-    * `browser <commandline.html#cmdoption-b>`__
+    * `browser <commandline.html#cmdoption-b>`__ (``'-b'``)
 
-    * `check <commandline.html#cmdoption-c>`__
+    * `check <commandline.html#cmdoption-c>`__ (``'-c'``)
 
-      Print matched rsrc settings and, exit.
+      Print matched ``rsrc`` settings and, exit.
       
-      You have to supply rsrc some way (``-i`` or ``-f``).
-      If input rsrc is only one,
-      print all the option values.
-      Otherwise, print just section name and ``match`` option.
+      You have to supply ``rsrc`` some way (``-i`` or ``-f``).
+      If input ``rsrc`` is only one,
+      print all the option values,
+      with site-specific option evaluation.
+      Otherwise, print only section name and ``match`` option.
 
     * `printout <commandline.html#cmdoption-printout>`__
     * `inspect <commandline.html#cmdoption-inspect>`__
@@ -68,33 +63,32 @@ and exits.
 download
 ^^^^^^^^
 
-Downloads ``rsrc``, and saves it as ``dfile``.
+Downloads ``rsrc``, and saves it in a local file (``dfile``).
 
 If `force_download <options.html#confopt-force_download>`__ is ``False`` (default),
 the program skips downloading if the file already exists.
 
-If ``rsrc`` is a local filepath, it also does nothing.
+If ``rsrc`` is a local file path, it also does nothing.
 ``dfile`` is the same as ``rsrc``.
 
 For the actual downloading, it just uses
 `urllib.request <https://docs.python.org/3/library/urllib.request.html>`__
-(python standard library),
-with `user-agent <options.html#confopt-user_agent>`__ and
-`encoding <options.html#confopt-encoding>`__ configurable.
+(python standard library).
+`user-agent <options.html#confopt-user_agent>`__ and
+`encoding <options.html#confopt-encoding>`__ are configurable.
 
 If `headless <options.html#javascript>`__ option is ``True``,
-The program uses ``pyqt5`` or ``selenium``, instead of ``urllib``
+The program uses ``selenium`` instead of ``urllib``
 (See `Features <intro.html#features>`__).
 
 extract
 ^^^^^^^
 
-Opens ``dfile``, and generates ``efile``.
-(``dfile`` is kept intact).
+Opens ``dfile``, and generates a new file (``efile``).
 
-It always runs, overwriting existing ``efile`` if any.
+It always writes, overwriting existing ``efile`` if any.
 
-(If ``rsrc`` is local filepath, ``dfile`` is not created,
+(If ``rsrc`` is local file path, ``dfile`` is not created,
 but ``efile`` *is* created).
 
 Extraction procedure is predetermined,
@@ -108,9 +102,8 @@ convert
 ^^^^^^^
 
 Opens ``efile``, and generates ``PDF_File``.
-(``efile`` is kept intact).
 
-It always runs, overwriting existing ``PDF_File`` if any.
+It always writes, overwriting existing ``PDF_File`` if any.
 
 The `converter <options.html#confopt-converter>`__ option
 decides which ``converter`` to use.
@@ -119,26 +112,14 @@ decides which ``converter`` to use.
 Target Files
 ------------
 
-The point of the program is that you don't have to specify
-each input and output for each consecutive action.
-For this, given ``rsrc``, target files' names are uniquely determined (mostly).
-
-All generated html files are
-in ``_htmls`` sub directory in current directory (created if necessary).
-
-Generated *pdf* file is placed under current directory.
-
-Usually users don't have to care about these files' details.
-But disposing of the files (deleting or moving) is users' job.
-
 .. dword:: rsrc
 
-    Input resource location. URL or local filepath.
+    Input resource location. URL or system path.
     Only ``http``, ``https`` and ``file`` schemes are supported for URL.
 
     Example::
 
-        https://en.wikipedia.org/wiki/Xpath
+        https://en.wikipedia.org/wiki/XPath
 
 .. note::
 
@@ -156,7 +137,7 @@ But disposing of the files (deleting or moving) is users' job.
     The required argument of the commandline option ``-f`` or ``--file``.
     It should be a file containing ``rsrcs``.
 
-    ``rfile`` defaults to `rsrcs.txt <#dword-rsrcs.txt>`__.
+    ``rfile`` defaults to `'rsrcs.txt' <#dword-rsrcs.txt>`__.
 
     The file's syntax is:
 
@@ -170,7 +151,7 @@ But disposing of the files (deleting or moving) is users' job.
           the lines starting with ``';'`` are ignored.
 
         * When there are multiple ``rsrcs``,
-          if ``rsrc`` has an extension that looks like binary,
+          if a ``rsrc`` has an extension that looks like binary,
           this ``rsrc`` is ignored
           (according to 
           `add_binary_extensions <options.html#confopt-add_binary_extensions>`__ option).
@@ -181,48 +162,13 @@ But disposing of the files (deleting or moving) is users' job.
 
 .. dword:: dfile
 
-    If ``rsrc`` is a remote one,
+    If ``rsrc`` is URL,
     ``dfile`` is created inside ``_htmls`` directory,
     with URL ``authority`` and ``path segments`` as subdirectories.
 
-    If ``URL``'s last ``path`` doesn't have file extension or ``'?'``,
-    string ``'/_'`` is added.
-    If it ends with ``'/'``, ``'_'`` is added.
-
-    .. note::
-
-        Recent servers extensively use no-extension URLs with or without a slash.
-        They tend to make each path component a veritable resource destination.
-
-        These URLs are difficult to convert to filepath.
-
-        E.g. they have both URLs::
-
-            'http://example.com/aaa'         # a document
-            'http://example.com/aaa/bbb'     # a document
-
-        and since the filesystems cannot have the same name ('aaa')
-        for a file name and a directory name,
-        we have to invent some artificial local routing rules.
-
-        This is the reason for this rather verbose name changing.
-
-        Extension check is a rough heuristic
-        because I don't want to go any further.
-
-        If the site has a URL ::
-
-            'http://example.com/aaa.html'
-
-        I assume It is less likely that
-        the site would create ``'aaa.html/bbb'`` document.
-
-
-    Special characters are used in filenames as is.
-
     Example::
 
-        ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/_
+        ./_htmls/en.wikipedia.org/wiki/XPath
 
     .. note::
 
@@ -233,16 +179,25 @@ But disposing of the files (deleting or moving) is users' job.
 
 .. dword:: efile
 
-    String ``'~'`` and ``'.html'`` (If not already have one)
-    is added to ``dfile``.
 
-    If ``rsrc`` is a local filepath,
+    If ``rsrc`` is URL,
+    ``efile`` is the same as ``dfile``,
+    but ``dfile`` itself is renamed with suffix ``'.orig'``.
+
+    Example::
+
+        ./_htmls/en.wikipedia.org/wiki/XPath.orig   (dfile)
+        ./_htmls/en.wikipedia.org/wiki/XPath        (efile)
+
+    If ``rsrc`` is a local file path,
     The path components of ``efile`` are created
     by the same process as ``dfile``.
 
     Example::
 
-        ~/Download/tosixinch/_htmls/en.wikipedia.org/wiki/Xpath/_~.html
+        /home/john/script/aaa.txt               (rsrc)
+        /home/john/script/aaa.txt               (dfile)
+        ./_htmls/home/john/script/aaa.txt       (efile)
 
 .. dword:: PDF_File
 
@@ -253,8 +208,8 @@ But disposing of the files (deleting or moving) is users' job.
 
     Example::
 
-        ~/Download/tosixinch/wikipedia-Xpath.pdf (from single input)
-        ~/Download/tosixinch/wikipedia.pdf (from multiple input)
+        ./wikipedia-XPath.pdf (from single input)
+        ./wikipedia.pdf (from multiple input)
 
     Even if ``rsrcs`` are from multiple domains (e.g. wikipedia and reddit),
     the filename of the pdf is named after the first one (just wikipedia).
@@ -269,33 +224,13 @@ Config Files
     It is the default filename for ``--file``,
     and used when no other file or input ``rsrc`` is specified.
 
-.. note::
-
-    In general, it is better users have this file,
-    on the working directory specially chosen for ``tosixinch``.
-
-    I imagine this is the difference from ``a few hours`` application.
-    Many scraping or data extraction programs adopt 'new project strategy'.
-    For each objective, users think up some suitable name and place
-    (this is the hard part),
-    create a new directory,
-    and then let the programs initialize directory structure
-    and various configuration files.
-
-    I find this is a bit excessive for our humble ``a few minutes`` concern.
-    Users are always on the same directory,
-    reusing ``rsrcs.txt`` (deleting and reediting the contents).
-
 .. dword:: tocfile
 
     It is the ``toc`` version of `rfile <#dword-rfile>`__.
 
     It is generated automatically in current directory,
     when action is ``toc``,
-    and processed automatically when ``convert``.
-
-    The filename is determined from ``--file`` input (basename part),
-    adding '-toc' suffix before extension. e.g. ``rsrcs-toc.txt``.
+    and processed automatically when action is ``convert``.
 
     see `TOC <topics.html#toc>`__ for details.
 
@@ -313,8 +248,7 @@ Config Files
           $ source ~/.bashrc
 
     If the program cannot find the variable,
-    a basic search is done for the most common configuration directories
-    (in the same order below for each OS).
+    a basic search is done for the most common configuration directories.
 
     Mac:
 
@@ -329,7 +263,7 @@ Config Files
         $XDG_CONFIG_HOME/tosixinch
         ~/.config/tosixinch
 
-    (So, if this is OK for you, you don't have to create the environment variable).
+    (So, if this is OK for you, you don't have to export the environment variable).
 
     If this also fails, no user directory is set,
     and just default application config and sample site config are read.
@@ -358,8 +292,6 @@ Config Files
 
     The program searches css files (``'*.css'``)
     in ``css directory`` (or current directory) when ``convert``.
-    ``prince`` and ``weasyprint`` require css files.
-    Other converters may not need them depending on the configuration.
 
     Each file name must be specified for each converter
     in ``tosixinch.ini`` (see option `css <options.html#confopt-css>`__.
@@ -384,13 +316,13 @@ Config Files
 
 .. dword:: process directory
 
-    ``userdir`` can also have 'process' sub directory. For example ::
+    ``userdir`` can also have ``process`` sub directory. For example ::
 
         ~/.config/tosixinch/process
 
 .. dword:: process files
 
-    When Action is ``extract``,
+    When action is ``extract``,
     you can apply arbitrary functions to the html DOM elements,
     before writing to ``efile``.
 
@@ -400,20 +332,19 @@ Config Files
     in ``process directory``.
 
     If it cannot find the one,
-    it searches next in application's ``tosixinch.process`` directory.
+    it searches in application's ``tosixinch.process`` directory.
 
 .. dword:: dprocess directory
 
-    ``userdir`` can also have 'dprocess' sub directory.
+    ``userdir`` can also have ``dprocess`` sub directory.
 
     (See `dprocess <options.html#confopt-dprocess>`__).
 
 .. dword:: script directory
 
-    ``userdir`` can also have 'script' sub directory.
-    (For user hooks commands.
+    ``userdir`` can also have ``script`` sub directory.
 
-    See `Hookcmds <topics.html#hookcmds>`__ and `Scripts <topics.html#scripts>`__).
+    (See `Hookcmds <topics.html#hookcmds>`__ and `Scripts <topics.html#scripts>`__).
 
 
 Config Format
@@ -446,7 +377,7 @@ so *in the option value*, you can use inline comments
     [section]
     command= find . -name '*.py' # TODO: more suitable command example
 
-``ConfigParser`` reads the entire line after ``'='``,
+``ConfigParser`` reads the entire string after ``'='``,
 but it is passed to ``shlex``, and it strips ``'#'`` and after.
 
 Structure
@@ -473,9 +404,10 @@ and overrides the latter values if specified.
 ``commandline`` also has some common options as ``tosixinch.ini``,
 and overrides ``site.ini`` and ``tosixinch.ini``  values if specified.
 
-Common ``commandline`` options are made
-by adding ``'--'`` and  changing ``'_'`` to ``'-'``.
-For example, config option ``user_agent`` becomes ``--user-agent``.
+Common ``commandline`` options can be obtained
+by replacing ``'_'`` to ``'-'``.
+E.g., the ``commandline`` option of the config option ``user_agent`` is ``--user-agent``.
+
 
 Section Inheritance
 ^^^^^^^^^^^^^^^^^^^
@@ -492,7 +424,8 @@ but falls back to ``[bb]``. For example::
     x=bbb
     y=bbb
 
-In this config, ``aa.x`` is ``aaa``, and ``aa.y`` is ``bbb``.
+In this config, in ``aa`` section,
+``x`` option is 'aaa', and ``y`` option is 'bbb'.
 
 ``aa`` doesn't have ``y`` option,
 so it searches the parent section (``bb``).
@@ -502,14 +435,13 @@ then it falls back to ordinary mechanism.
 (``DEFAULT`` section search or ``NoOptionError``).
 
 It is to omit duplicate options.
-For example, wiki pages of mobileread.com use the same layout
-as wikipedia.org.
-So the options for the program are also the same,
-and you don't have to write.
-(other than ``match``). ::
+For example, wiki pages of
+`mobileread.com <https://wiki.mobileread.com>`__ use the same layout
+as `wikipedia.org <https://en.wikipedia.org>`__.
+So the options for the program are also the same. ::
 
     [wikipedia]
-    match=      ...
+    match=      https://*.wikipedia.org/wiki/*
     select=     ...
     exclude=    ...
     ...
@@ -538,10 +470,7 @@ Users have to fill the value accordingly, if setting.
 
     ``'0'``, ``'no'``, ``'false'`` and ``'off'`` are interpreted as ``False``.
 
-    ``''`` is interpreted as ``None``
-    (the same as ``False`` in many contexts. Normally do not use it. ).
-
-    It accepts only one of the nine (case insensitive).
+    case insensitive.
 
 .. dword:: INT
 
@@ -585,8 +514,7 @@ Users have to fill the value accordingly, if setting.
 
 .. dword:: CMDS
 
-    Like CMD, but accept a list as input (newline separated as ``LINE``).
-    The value is one or more lines of commandline ready strings.
+    list of ``CMD``, separated by newlines as in ``LINE``.
 
 .. dword:: PLUS
 
@@ -617,9 +545,7 @@ Users have to fill the value accordingly, if setting.
     or none of them.
     Mixing these raises Error.
 
-    You can pass ``minus item`` in the same way in commandline.
-    The program can parse these a bit confusing arguments.
-    (leading single dash is also a short optional argument marker) ::
+    You can pass ``minus item`` in the same way in commandline. ::
 
         ... --plus-option -one
 
@@ -648,12 +574,10 @@ is rendered if the ``option`` is evaluated to ``True``
 For example, you can write ``prince`` specific css rules
 inside ``{% if prince %} ... {% endif %}`` block.
 
-For the details,
-see the docstring of the code `Templite <api.html#tosixinch.templite.Templite>`__
-(by Ned and others).
-
 Values
 ^^^^^^
+
+Some extra values are defined for convenience.
 
 ``size`` variable is added.
 It is automatically set from either
@@ -662,7 +586,7 @@ or `landscape_size <options.html#confopt-landscape_size>`__,
 according to the value of
 `orientation <options.html#confopt-orientation>`__.
 
-``width`` and ``height`` variables are made from ``size``.
+``width`` and ``height`` variables are added (derived from ``size``).
 
 ``font_scale`` option is made into ``scale`` function.
 Use it like ``{{ font_serif|scale }}``.
@@ -686,7 +610,8 @@ In ``sample.t.css``, it is used like::
     h2 { prince-bookmark-level: {{ bm2 }} }
     h3 { prince-bookmark-level: {{ bm3 }} }
     h4 { prince-bookmark-level: {{ bm4 }} }
-    ...
+    h5 { prince-bookmark-level: {{ bm5 }} }
+    h6 { prince-bookmark-level: {{ bm6 }} }
 
 
 lxml.html.HtmlElement
@@ -695,8 +620,8 @@ lxml.html.HtmlElement
 The program uses a lightly customized version of ``lxml.html.HtmlElement``,
 which means mainly two things.
 
+* It prints out a bit more helpful Error message.
 * You can use a custom XPath syntax, ``double equals``.
-* When XPath string is invalid, it prints out a bit more helpful error message.
 
 Double Equals
 ^^^^^^^^^^^^^
@@ -714,11 +639,11 @@ So you have to write::
     div[contains(concat(" ", normalize-space(@class), " "), " aa ")]
 
 (See e.g. `When selecting by class, be as specific as necessary <https://blog.scrapinghub.com/2014/07/17/xpath-tips-from-the-web-scraping-trenches>`__,
-for explanations.)
+for the explanation).
 
-To ease this, the program introduces a custom syntax ``double equals`` (``'=='``).
+To ease this problem, the program introduces a custom syntax ``double equals`` (``'=='``).
 
-In configuration options supposing XPath strings,
+In configuration options expecting XPath strings,
 or arguments in ``.xpath()`` method in user python modules,
 
 if the string matches:

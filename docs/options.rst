@@ -25,7 +25,7 @@ General Section
     (``urllib``)
 
     Specify default downloader.
-    Either ``urllib`` (recommended) or ``headless``.
+    Either ``urllib`` or ``headless``.
 
 .. confopt:: extractor \*
 
@@ -60,14 +60,14 @@ General Section
     | (None)
 
     Specify the path of chromedriver for selenium
-    (passed to ``executable_path`` argument).
+    (passed to ``executable_path`` argument). Normally unnecessary.
 
 .. confopt:: selenium_firefox_path \*
 
     | (None)
 
     Specify the path of geckodriver for selenium
-    (passed to ``executable_path`` argument).
+    (passed to ``executable_path`` argument). Normally unnecessary.
 
 .. confopt:: encoding \*
 
@@ -78,8 +78,8 @@ General Section
     First successful one is used.
     Encoding names are as specified in
     `codecs library <https://docs.python.org/3/library/codecs.html#standard-encodings>`__,
-    or `html5prescan <https://github.com/openandclose/html5prescan>`__,
-    or `ftfy <https://ftfy.readthedocs.io/en/latest/>`__ if they are installed.
+    or `'html5prescan' <https://github.com/openandclose/html5prescan>`__,
+    or `'ftfy' <https://ftfy.readthedocs.io/en/latest/>`__ if they are installed.
 
     If the name is ``html5prescan``, ``html5prescan`` tries to get
     a valid encoding declaration from html.
@@ -90,13 +90,14 @@ General Section
     if the list includes ``ftfy``,
     ``ftfy.fixes.fix_encoding`` method is called with the decoded text.
     It may be able to fix some 'mojibake'.
-    (So it is always called last, the place in the list is irrelevant.)
+    (So it is always called last, the place in the list is irrelevant).
 
 .. note ::
 
     The included `bash completion <topics.html#script-_tosixinch.bash>`__
     only completes canonical codec names (with underline changed to dash).
-    But you can put any other alias name or names as long as they are legal in Python.
+    But you can put any other name or alias names, as long as they are legal
+    in your Python environment.
 
 .. confopt:: encoding_errors \*
 
@@ -131,12 +132,6 @@ General Section
     If `force_download <#confopt-force_download>`__ is ``False`` (default),
     the program skips downloading if the file already exists.
 
-    TODO:
-        So the program does nothing about ``iframe`` inline sources.
-        Downloading and rendering are done by converters,
-        but we can't apply our css rules
-        (They are different domains).
-
 .. confopt:: force_download \*
 
     | (``False``)
@@ -154,11 +149,12 @@ General Section
     even if they exist.
 
     But in one invocation, this re-downloading is always once for one ``URL``.
-    (The program doesn't download the same icon files again and again.)
+    (The program doesn't download the same icon files again and again).
 
 .. confopt:: guess
 
     | (``//div[@itemprop="articleBody"]``
+    | ``//div[@role="main"]``
     | ``//div[@id="main"]``
     | ``//div[@id="content"]``
     | ``//div[@class=="body"]``
@@ -166,16 +162,15 @@ General Section
 
     ``[LINE]``
 
-    If html ``rsrc`` doesn't `match <#confopt-match>`__ any site in ``site.ini``,
+    If html ``rsrc`` doesn't match any `match <#confopt-match>`__ option in ``site.ini``,
     ``select`` is done according to this value.
 
-    The procedure is different from ordinary ``select``
-    (with a little bit of extra precaution).
+    The procedure:
 
-    * The xpaths in this value are searched in order.
+    * The XPaths in this value are searched in order, line by line.
     * If match is found and match is a single element
       (not multiple occurrences),
-      the program ``select`` s the xpath.
+      the program ``select`` s the element.
 
 .. confopt:: defaultprocess \*
 
@@ -208,7 +203,7 @@ General Section
     | (``200``)
     | ``[INT]``
 
-    If width or height of component pixel size is equal or above this value,
+    If width or height of image pixel size is equal or above this value,
     class attribute ``tsi-tall`` or ``tsi-wide`` is added to the image tag,
     ``tsi-tall`` if height/width ratio is greater than
     the ratio of the e-reader display,
@@ -217,7 +212,7 @@ General Section
 
     By itself, it does nothing. However, In ``sample.css``,
     it is used to make medium sized images expand almost full display size,
-    with small images (icon, logo, etc.) as is.
+    with small images (icon, logo, etc.) intact.
     The layout gets a bit uglier,
     but I think it is necessary for small e-reader displays.
 
@@ -236,7 +231,7 @@ General Section
     The list is taken from Sindre Sorhus'
     `binary-extensions <https://github.com/sindresorhus/binary-extensions>`__.
 
-    This is for user convenience. If you copy and paste many rsrcs,
+    This is for user convenience. If you copy and paste many ``rsrcs``,
     checking strange extensions is a bit of work.
     But I'm afraid sometimes it gets in the way.
 
@@ -283,13 +278,13 @@ General Section
     The program skips cleaning attributes
     for the elements that matches one of the XPath in this option.
 
-    The default is ``math`` and ``svg`` tags.
-    They have inter-related width and hight information,
-    without which, they are not intelligible.
+    The default is ``math``, ``svg`` and some ``MathJax`` related tags.
+    They have inter-related width and height information,
+    which we usually want to keep.
 
-    Note xpaths are checked against each element, not from the root document.
-    So the selectors tend to be a bit complex
-    (not the usual e.g. ``'//math'``).
+    Note XPaths are checked from each element, not from the root document.
+    So the selectors are like above
+    (not like e.g. ``'//math'``).
 
 .. confopt:: ftype
 
@@ -301,16 +296,7 @@ General Section
 
         'html', 'prose', 'nonprose', 'python'
 
-.. note ::
-
-    It needs improvement, but the following seems to work now.
-
-    .. code-block:: ini
-
-        # in ~/.config/tosixinch/site.ini
-        [test]
-        match=  *.pyw
-        ftype=  python
+    It needs improvement.
 
 .. confopt:: textwidth
 
@@ -341,23 +327,28 @@ General Section
 
     Shorten PDF table of contents title, if it is a local text file.
 
-    PDF toc titles for Local text files are made from their full path.
-    If this trimdirs option value is plus,
+    PDF toc title for local text file is made from their full path.
+    If this trimdirs option value is with no sign,
     remove that number from leading path segments.
-    If it is minus, remove leading path segments to that number.
+    If it is with minus sign, remove leading path segments
+    to make the segments to that number.
 
     .. code-block:: none
 
         --trimdirs 0
         aaa/bbb/ccc/ddd/eee/fff
+
         --trimdirs 2  # remove two segments
         ccc/ddd/eee/fff
+
         --trimdirs -2  # reduce to two segments
         eee/fff
 
         # c.f. no bounding errors
+
         --trimdirs 100
         fff
+
         --trimdirs -100
         aaa/bbb/ccc/ddd/eee/fff
 
@@ -366,7 +357,7 @@ General Section
 
     C.f. `--check <commandline.html#cmdoption-c>`__ commandline option
     prints out this shortened names for local files.
-    They include html ``rsrc``s, so it is not perfect,
+    They include local html files, so it is not perfect,
     but it can be useful for
     checking and adjusting this ``trimdirs`` option.
 
@@ -379,8 +370,6 @@ General Section
     when ``convert``, the program processes ``rsrcs``.
     Normally (if it is ``False``), it processes ``efile``.
 
-    I don't have much clear idea when and how it is used now.
-
 .. confopt:: css \*
 
     | (``sample``)
@@ -390,8 +379,10 @@ General Section
     The names are referenced, in order, in ``efiles``
     (``'<link ... rel="stylesheet">'``).
 
-    If the files are in ``css directory``,
     you can only use the filenames (not full paths).
+
+    The filenames are searched in
+    ``css directory``, ``application css directory`` and current directory in order.
 
     The program includes sample css ``sample.t.css``,
     and as a special case, it can be abbreviated as ``sample``
@@ -409,56 +400,56 @@ General Section
 
 .. note ::
 
-    For ``hookcmds``, see `Hookcmds <topics.html#hookcmds>`__.
+    For ``hookcmds`` below, see `Hookcmds <topics.html#hookcmds>`__.
 
 .. confopt:: precmd1
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command before ``download``.
+    Run arbitrary commands before ``download`` action.
 
 .. confopt:: postcmd1
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command after ``download``.
+    Run arbitrary commands after ``download`` action.
 
 .. confopt:: precmd2
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command before ``extract``.
+    Run arbitrary commands before ``extract`` action.
 
 .. confopt:: postcmd2
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command after ``extract``.
+    Run arbitrary commands after ``extract`` action.
 
 .. confopt:: precmd3
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command before ``convert``.
+    Run arbitrary commands before ``convert`` action.
 
 .. confopt:: postcmd3
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command after ``convert``.
+    Run arbitrary commands after ``convert`` action.
 
 .. confopt:: viewcmd
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command
+    Run arbitrary commands
     when specified in commandline options (``-4`` or ``--view``).
 
 .. confopt:: pre_each_cmd1
@@ -466,21 +457,21 @@ General Section
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command before each ``download``.
+    Run arbitrary commands before each ``download``.
 
 .. confopt:: post_each_cmd1
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command after each ``download``.
+    Run arbitrary commands after each ``download``.
 
 .. confopt:: pre_each_cmd2
 
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command before each ``extract``.
+    Run arbitrary commands before each ``extract``.
 
     There are sample hook extractors.
     See `_man <topics.html#man>`__ and `_pcode <topics.html#pcode>`__.
@@ -490,7 +481,7 @@ General Section
     | (None)
     | ``[LINE][CMDS]``
 
-    Run arbitrary command after each ``extract``.
+    Run arbitrary commands after each ``extract``.
 
 .. confopt:: browsercmd
 
@@ -498,12 +489,13 @@ General Section
     | ``[CMD]``
 
     When action is ``--browser``,
-    specify the command to open a browser,
-    if the default (calling Python stdlib ``webbrowser``) is not desirable. E.g.::
+    the default is just call Python stdlib ``webbrowser``
+    to open a browser.
+    If it is not desirable, specify the open command here, e.g.::
 
         firefox 'site.slash_efile'
 
-    Here, you have to use the magic word ``site.slash_efile``.
+    You have to use the magic word ``site.slash_efile`` for the filename.
     It evaluates to the intended URL version of ``efile`` (percent encoding etc.).
 
 
@@ -537,10 +529,6 @@ In the following, the roles in the sample file
     The display size of common 6-inch e-readers seems
     around 90mm x 120mm.
     Here the default thinly clips on height, for versatility.
-    (Officially published pixel specs may be different from
-    physically effective pixels,
-    may be limited by OS, application, or user interfaces.
-    In general, width is more precious than height in small devices.)
 
 .. confopt:: landscape_size
 
@@ -611,11 +599,11 @@ In the following, the roles in the sample file
 Converter Sections
 ^^^^^^^^^^^^^^^^^^
 
-Section ``prince`` and ``weasyprint`` are converters sections.
+Section ``prince`` and ``weasyprint`` are converter sections.
 They have common options.
 
 When ``convert``, only one converter is active,
-and only the options of that converter's section are looked-up.
+and only the options of that converter's section are active.
 
 commandline has the same options, to override.
 
@@ -630,7 +618,7 @@ commandline has the same options, to override.
 
     (``prince``)
 
-    The name or full path for the command as you type it in the shell.
+    The name or full path of the command as you type it in the shell.
     For ordinary installed ones, only the name would suffice.
 
 .. confopt:: css2
@@ -644,15 +632,18 @@ commandline has the same options, to override.
     Although, normally, you can do that better
     with ``css`` option and the template.
 
-    If the files are in ``css directory``,
-    you can only use the filenames (not full paths).
+    You can only use the filenames (not full paths).
+
+    The filenames are searched in ``css directory`` and current directory in order.
 
 .. confopt:: cnvopts
 
     | (None)
     | ``[CMD]``
 
-    Options to pass to the command.
+    Additional options to pass to the command,
+    besides css file option
+    (which is added by ``css2`` option above if it is specified).
 
 
 site.ini
@@ -683,7 +674,7 @@ So section names themselves can be arbitrary.
     So, e.g. ``'*'`` matches any strings
     including all subdirectories.
     (Actually, it uses `fnmatch module <https://docs.python.org/3/library/fnmatch.html>`__,
-    not `glob module <https://docs.python.org/3/library/glob.html>`__.).
+    not `glob module <https://docs.python.org/3/library/glob.html>`__).
 
     The program tries the values of this option from all the sections.
     The section whose ``match`` option matches the ``rsrc``
@@ -699,7 +690,7 @@ So section names themselves can be arbitrary.
     and `guess <#confopt-guess>`__ option is tried.
     In this case, a placeholder value ``http://tosixinch.example.com``
     is set.
-    (Note this imaginary site is used to make file paths
+    (This imaginary site is used to make file paths
     in ``download`` and ``extract``).
 
 .. confopt:: select
@@ -707,7 +698,7 @@ So section names themselves can be arbitrary.
     | (None)
     | ``[LINE]``
 
-    Xpath strings to select elements
+    XPath strings to select elements
     from ``dfile`` when ``extract``.
     Only selected elements are included
     in the ``<body>`` tag of the new ``efile``,
@@ -715,17 +706,13 @@ So section names themselves can be arbitrary.
 
     Each line in the value will be connected with a bar string (``'|'``)
     when evaluating.
-    This means the sequence of selected elements are
-    as the same order in the document,
-    not grouped by each xpath.
-
 
 .. confopt:: exclude
 
     | (None)
     | ``[LINE]``
 
-    Xpath strings to remove elements
+    XPath strings to remove elements
     from the new ``efile`` after ``select``.
     So you don't need to exclude already excluded elements by ``select``.
     As in ``select``,
@@ -744,7 +731,7 @@ So section names themselves can be arbitrary.
     The functions must be top level ones.
 
     It is searched in `user process directory <overview.html#dword-process_directory>`__
-    and the program's process directory, in order.
+    and application process directory, in order.
 
     If the function name is found in multiple modules
     in user process directory, the program raises Error.
@@ -765,18 +752,19 @@ So section names themselves can be arbitrary.
     The function can have additional arguments.
     String after ``'?'`` (and before next ``'?'``) is interpreted as an argument.
 
-    For example, ``'aaa.bbb?cc?dd'`` is made into code,
-    if ``'aaa.bbb'`` is found in user process directory:
+    For example, ``'aaa?bb?cc'`` is made into code
+
+    if ``'aaa.py'`` is found in user process directory:
 
     .. code-block:: none
 
-        process.aaa.bbb(doc, cc, dd)
+        process.aaa(doc, bb, cc)
 
-    or it is found in the program's process directory:
+    or if it is found in application process directory:
 
     .. code-block:: none
 
-        tosixinch.process.aaa.bbb(doc, cc, dd)
+        tosixinch.process.aaa(doc, bb, cc)
 
     You don't have to ``return`` anything,
     just manipulate ``doc`` as you like.
@@ -811,7 +799,8 @@ So section names themselves can be arbitrary.
 
 .. confopt:: clean
 
-    | (Note there is no option named ``clean``. This section is here only for documentation purpose.)
+    (Note there is no option named ``clean``.
+    here I'm just describing what it does).
 
     After ``select``, ``exclude`` and ``process`` in ``extract``,
     the program ``clean`` s the resultant html.
@@ -829,7 +818,7 @@ So section names themselves can be arbitrary.
         (In ``download``, we occasionally need javascript,
         and in that case we might use headless browsers.
         In ``extract``, javascript has already rendered the contents.
-        So we shouldn't need it any more.)
+        So we shouldn't need it any more).
 
     **css**:
         All ``style`` attributes and css source references
@@ -839,7 +828,7 @@ So section names themselves can be arbitrary.
         ``style`` attributes are kept intact.
         It can be used in process functions.
         If you want to keep or create some inline ``style``,
-        inject this class attribute. ::
+        add this class attribute. ::
 
            # removed (becomes just '<div>')
            <div style="font-weight:bold;">
@@ -865,7 +854,7 @@ So section names themselves can be arbitrary.
     By adding cookie data here (e.g. from your browsers),
     you may be able to bypass them.
 
-    Note it is not secure and not right.
+    Note it is not secure.
     Do not provide sensitive data.
 
 .. confopt:: dprocess
@@ -877,7 +866,7 @@ So section names themselves can be arbitrary.
     the program runs functions specified by this option
     after getting http response, and before serializing to html text.
 
-    For completeness, it runs when downloader is ``urllib``,
+    For completeness, it also runs when downloader is ``urllib``,
     but the supposed usage is for other headless browsers.
 
     For example, some webpages have folded contents
@@ -898,14 +887,14 @@ So section names themselves can be arbitrary.
 
     So user should be careful.
     (For example, when you define ``dprocess`` in ``site.ini``,
-    it is advisable to also define ``browser_engine``).
+    it is advisable to also define ``downloader``).
 
     Example:
 
     .. code-block:: python
 
         def sitefoo_click(agent):  # for selenium
-            path = '//div[@class="see_more"]'
+            path = '//div[@class="see_details"]'
             elements = agent.find_elements_by_xpath(path)
             for element in elements:
                 element.click()
@@ -916,9 +905,7 @@ So section names themselves can be arbitrary.
     | (``get_links``)
     | ``[LINE]``
 
-    (Experimental)
-
-    When action is ``inspect`` (``--inspect`` is in commandline),
+    When action is ``inspect``,
     the program runs functions this option specifies.
 
     This is similar to ``extract`` action's ``process``,

@@ -7,32 +7,21 @@ Topics
 Text Format
 -----------
 
+(Experimental)
+
 When ``extract``, the program actually checks
 if the content is really an ``html``.
 (Before the main extract procedures:
-``select``, ``exclude``, ``process``, and ``clean``.)
+``select``, ``exclude``, ``process``, and ``clean``).
 
 Currently, only the existence of  ``'<html>'`` tag is checked.
-That is, optional legal pre-html-tag components (whitespaces, comments, doctype, etc.)
-and the following valid opening ``'<html>'`` tag in the first 1000 characters.
 
-The actual code is now::
-
-    _COMMENT = r'\s*(<!--.+?-->\s*)*'
-    _XMLDECL = r'(<\?xml version.+?\?>)?'
-    _DOCTYPE = r'(<!doctype\s+.+?>)?'
-    HTMLFILE = re.compile(
-        '^' + _XMLDECL + _COMMENT + _DOCTYPE + _COMMENT + '<html(| .+?)>',
-        flags=re.IGNORECASE | re.DOTALL)
-
-
-.. note::
-    It is rather strict.
-    It assumes loose or partial htmls are for presentation or software testing,
-    and they are normally expected to be read as raw text.
+Even this is rather strict.
+I assume that loose or partial htmls are for presentation or software testing,
+and they are normally expected to be read as raw text.
 
 If it judges that it is not html,
-the usual html extraction is skipped.
+the html extraction is skipped.
 The text extraction procedure begins instead,
 which basically puts all text content inside a ``<pre>`` tag in a html file.
 
@@ -45,16 +34,16 @@ The program separates it into three types:
 And it adds some informative attributes
 to the ``pre`` tag it creates.
 
-In case of ``code``, It also adds the same attributes
-to other new tags it creates. (``h2``, ``h3``, and ``span``. See below.)
-
 For ``prose``, ``class="tsi-text tsi-prose"``.
 
 For ``nonprose``, ``class="tsi-text tsi-nonprose"``.
 
 For ``code``, ``class="tsi-text tsi-code"``.
 
-For ``pythoncode``, ``class="tsi-text tsi-pythoncode"``.
+For ``pythoncode``, ``class="tsi-text tsi-code tsi-python"``.
+
+In case of ``code``, It also adds the same attributes
+to other new tags it creates. (``h2``, ``h3``, and ``span``).
 
 prose
 ^^^^^
@@ -82,7 +71,7 @@ and attaches some label to wrapped lines, according to settings
 (`textwidth <options.html#confopt-textwidth>`__ and
 `textindent <options.html#confopt-textindent>`__ respectively).
 
-So that readers can tell logical (source) line breaks
+So that readers can tell source line breaks
 from editorial layout line breaks.
 
 For a short example,::
@@ -111,47 +100,20 @@ code
 
 .. note::
 
-    Now ``_pcode`` is the recommended method to extract source codes.
+    Now ``_pcode`` is the recommended method to format source codes.
     See `_pcode <#pcode>`__.
 
 ``code`` is a special case of ``non-prose``,
-and currently only for python source code.
-It adds small html decorations.
+and currently only for Python source code.
+It adds pdf bookmarks and the references for some identifiers.
 
-``class`` and ``function`` identifiers in definitions
-are wrapped in additional tags.
+For this purpose, class and function names are wrapped
+in ``h2``, ``h3`` and ``span``.
+Since this is very special usage of tags,
+you need to create very special css rules
+(using ``'tsi-code'`` class attribute).
 
-* The top level ones are in ``<h2>``,
-* The second level ones (now it means ones with 4 space indent) are in ``<h3>``,
-* Others are in ``<span>``.
-
-``<h2>`` and ``<h3>`` should appear in pdf bookmarks,
-if so configured in css.
-
-These identifiers in the same file are linked to the definitions.
-So that we can navigate a little,
-or just see physically (underlined link)
-that they are defined words in this module.
-
-This linking is just a simple supplement, only in-file,
-and give up and doesn't do anything for duplicate names
-(e.g. If there are many ``__init__()`` or ``get()``).
-
-.. note::
-
-    In default user agent css,
-    ``h2`` and ``h3`` are normally styled in big, bold font
-    with line breaks (``display: block;``).
-    And it is usually not
-    what we want in classes and functions definitions.
-
-    So we need to change them back to the normal text style
-    in the user css somehow.
-
-    See ``sample.t.css``, for an example.
-
-    (Also note that ``h3`` is going to change into ``h4``
-    if ``toc`` action is run.)
+See ``sample.t.css``, for an example.
 
 
 TOC
@@ -230,7 +192,7 @@ or
 
 The program creates a more structured version of pdf file.
 
-rules
+Rules
 ^^^^^
 
 The ``toc`` action treats ``'#'`` as special chapter directive.
@@ -245,11 +207,8 @@ the name of ``tocfile`` is ``'rsrcs-toc.txt'``).
 So it is Error when ``rfile`` is not provided.
 (``--file`` or implicit ``rsrcs.txt``. No ``--input``).
 
-The ``toc`` action processes ``efiles``,
+The ``toc`` action processes normally ``efiles``,
 bundling some of them, and creating new htmls.
-
-So it is Error when you didn't run ``extract`` before,
-with the same ``rfile``.
 
 Table of Contents adjustments are done
 simply by decreasing ``heading`` numbers.
@@ -278,12 +237,11 @@ To use the same example:
 
 .. code-block:: none
 
-    _htmls/somesite.com/index~.html                         (11)
-    _htmls/tosixinch.example.com/alices-articles/_~.html    (12)
-    _htmls/tosixinch.example.com/bobs-articles/_~.html      (13)
+    _htmls/somesite.com/index.html                  (11)
+    _htmls/tosixinch.example.com/alices-articles    (12)
+    _htmls/tosixinch.example.com/bobs-articles      (13)
 
-``tosixinch.example.com`` is an imaginary placeholder host,
-strange path names (``'_~'``) are names ``efiles`` created from ``rsrcs``.
+``tosixinch.example.com`` is an imaginary placeholder host.
 
 ``(11)``
     (1) is outside of new chapters structure,
@@ -292,7 +250,7 @@ strange path names (``'_~'``) are names ``efiles`` created from ``rsrcs``.
 
 ``(12)``
     it creates this new html,
-    whose ``<h1>`` is ``#`` line (2),
+    whose ``<h1>`` is line (2),
     ``<body>`` consists of (3)(4)(5)'s (previous) ``<body>``,
     their ``<h1>`` changed to ``<h2>``,
     ``<h2>`` to ``<h3>`` etc.. ``<h6>`` is kept as is.
@@ -370,9 +328,9 @@ Replace
 ----------
 
 If there is a file ``'replace.txt'`` in `userdir <overview.html#dword-userdir>`__,
-it is used for regex rsrc preprocess.
+it is used for regex ``rsrc`` preprocess.
 
-The rsrcs matching the pattern are internally changed to replacement rsrcs,
+The ``rsrcs`` matching the pattern are internally changed to replacement ``rsrcs``,
 and processed accordingly.
 
 If there are lines in the file::
@@ -405,10 +363,10 @@ The format of the file is:
 So if there are lines, they are always two consecutive lines,
 separated by blank lines.
 (blank lines in the very first line and the very last line of the file
-are optional.)
+are optional).
 
-The lines starting with '#' are ignored (comments).
-You can put them in any place in units.
+The lines starting with ``'#'`` are ignored (comments).
+You can put them in any line in units.
 
 
 Hookcmds
@@ -424,7 +382,7 @@ according to precmds and postcmds options in ``tosixinch.ini``.
 
 One useful use case of ``postcmds`` is notification,
 since ``download`` and ``convert`` sometimes take time.
-For example, if you are using linux::
+For example::
 
     postcmd1=   notify-send -t 3000 'Done -- tosixinch.download'
 
@@ -451,7 +409,7 @@ It uses ``eval``, so be careful.)
 **Running Module:**
 
 If a command consists of one word, without 'dot',
-and the file actually exists in `script directory <overview.html#dword-script_directory>`__,
+and the ``'.py'`` extension file actually exists in `script directory <overview.html#dword-script_directory>`__,
 the program runs the command as Python module internally
 (as opposed to running it as an external system subprocess).
 
@@ -466,8 +424,9 @@ the program does roughly::
     script.foo.run(conf, site)
 
 So the module must have ``run`` function with this signature.
-(In this context, ``site`` should be ``None``,
-since it is not available.)
+(In this context, ``site`` should be ``None``.
+*Whole* action ``hookcmds`` only have application level configuration.
+*each* action ``hookcmds`` (see below) are given ``site``).
 
 ``userdir`` is inserted to ``sys.path`` (``sys.path[0]``).
 So if you want to import sibling modules in the program file,
@@ -487,7 +446,7 @@ it should be a bit faster, and ``conf`` and ``site`` are writable.
 
 **Multiple Commands:**
 
-Their value function signatures are actually ``[LINE][CMDS]``, that is,
+Their value function signatures are ``[LINE][CMDS]``, that is,
 you can run multiple commands in a hookcmd, one command for each line.
 
 If the return code of a command is 0,
@@ -520,8 +479,8 @@ In running subprocess, other return codes (not 0, 100, 101, 102) aborts the prog
 
 In running module, any other return codes and values (not 0, 100, 101, 102)
 are interpreted as 0.
-(It is to permit normal Python return value ``None``.
-Python itself will abort the program if something goes wrong.)
+(It is to permit normal Python return value of ``None``.
+Python itself will abort the program if something goes wrong).
 
 
 Viewcmd
@@ -547,7 +506,7 @@ will open the viewer with the generated pdf file.
 
 Also, the program includes a sample file `_viewer.py <topics.html#viewer>`__.
 (It does basically the same thing as above,
-but cancels duplicate openings.)
+but cancels duplicate openings).
 
 
 Pre_Each_Cmds and Post_Each_Cmds
@@ -573,7 +532,7 @@ For this job, there are corresponding pre- and post- hookcmds.
 The specification (return codes etc.) is the same as precmds and postcmds.
 
 In this context, there are ``rsrc`` specific configurations,
-in addition to the general configuration.
+in addition to application level configuration.
 So you can use ``site`` variable, in addition to ``conf``:
 
 If a word in the statement begins with ``'site.'``,
@@ -582,14 +541,14 @@ it is evaluated as the object ``site``. For example::
 
     post_each_cmd1=   echo site.efile site.match
 
-will print each ``efile`` and rsrc glob pattern.
+will print each ``efile`` and ``match`` option value.
 
 Also, the following environment variables are exposed
 (in running subprocess case).
 
 .. code-block:: none
 
-    TOSIXINCH_RSRC:     URL or filepath
+    TOSIXINCH_RSRC:     rsrc
     TOSIXINCH_DFILE:    dfile
     TOSIXINCH_EFILE:    efile
 
@@ -601,6 +560,7 @@ A few sample script files are included in the application.
 They are in ``tosixinch/script`` directory in the installation.
 You can refer them in user configurations
 
+
 _viewer
 ^^^^^^^
 
@@ -610,9 +570,7 @@ It opens a pdf viewer.
 But if there is a same pdf application opened with the same pdf file,
 if does nothing (cancels duplicate openings).
 
-It uses unix command ``ps`` to get active processes,
-and search the app and the file names in invocation commandline strings.
-So, only unixes users can use it.
+It uses unix command ``ps``.
 
 It can be used without full path.::
 
@@ -621,14 +579,14 @@ It can be used without full path.::
 * ``--command`` accepts arbitrary commands with some options,
   but you need to quote.
   (e.g. ``--command 'okular --page 5'``).
-* ``--check`` is the option flag to do above duplicate checks.
+* ``--check`` is the option flag to do above duplicate check.
 * ``--null`` is to suppress *this* command's stdout and stderr.
 
 And one way to see the help is::
 
     $ tosixinch -4 --viewcmd '_viewer.py --help' -i aaa
 
-(This doesn't work if ``rsrcs`` is not supplied,
+(This doesn't work if ``rsrc`` is not supplied,
 so you have to supply something, like the above ``-i aaa``.)
 
 
@@ -672,9 +630,9 @@ skipping the main extraction.
 _pcode
 ^^^^^^
 
-A sample hook extractor for source codes (means 'Pygments code extraction').
+A sample hook extractor for source codes (pcode: short of '``Pygments`` code').
 
-It formats (html-wraps) some Pygments tokens.
+It formats (html-wraps) some ``Pygments`` tokens.
 The purpose is to make them pdf bookmarks items,
 and create references to them.
 If you want to use it, add this command to ``pre_each_cmd2`` in user configuration.
@@ -687,124 +645,132 @@ and ``ctags``
 (`Universal Ctags <https://ctags.io/>`__
 or `Exuberant Ctags <http://ctags.sourceforge.net/>`__).
 
-By default, for some common languages,
-it wraps Ctags kinds ``cf`` (class and function) to ``<h2>``,
-``m`` (method) to ``<h3>>``.
-But since Ctags kinds are greatly differ for each languages,
-you have to customize them for each of your languages.
-
 It creates working files ``tsi.tags`` and ``tsi.tags.checksum``
 in current directory
 (The script skips tag creation,
-if files and (max) mtime are the same as the previous run).
+if command, files and (max) mtime are the same as the previous run).
 
-**Language Names:**
+As stated in `code <topics.html#code>`__,
+it uses ``h2`` and ``h3`` tags very unusual way.
+You need special css rules (See ``sample.t.css``, for an example).
 
-It maps Pygments' lexer.names and Ctags language names to internal names.
-The common names (lower cased) are provided as base,
-But you must explicitly define other names.
+**Language names:**
 
-If Pygments finds a language but the language is not mapped,
-It does not do formatting (skips to other ``pre_each_cmd2`` or the builtin text extraction).
-But it registers the ``rsrc``'s ``ftype`` as ``nonprose``.
+``Pygments`` is a code highlighter, the script uses to find identifiers.
 
-(It is an heuristic.
-If Pygments finds a language, it is better to treat the text as code-like,
-disallowing natural html line-wrapping.)
+But ``Pygments`` doesn't tell where the identifier definition is,
+so we also need ``Ctags`` to find the definitions.
 
-If Pygments' name is mapped,
-but Ctags doesn't find a language, the language is not mapped, or not mapped to the same name,
-It does formatting only with Pygments tokens.
+``Pygments`` and ``Ctags`` have slightly different language names,
+e.g. 'reStructuredText' (``Pygments``) and 'ReStructuredText' (``Ctags``).
+So they must be mapped to third common names the script defines (``ftype``).
 
-As a special case, if Pygments name is mapped to the name ``'prose'``,
-It does not do formatting, but registers the ``rsrc``'s ``ftype`` as ``prose``
-(The default is: ``reStructuredText`` and ``markdown``).
+``ftypes`` are all lower cases,
+so the names, which happen to be case-insensitively the same, are already mapped.
+But the other names must be explicitly mapped to the same ``ftype`` in configuration,
+using ``c2ftype`` and ``p2ftype`` sections.
+
+To see actual mappings, run tosixinch with some text input and with ``--verbose``::
+
+    tosixinch -i <some-text-file> -12 --verbose
 
 **Configuration:**
 
 You can specify some configuration
-if you create ``pcode.ini`` in `userdir <overview.html#dword-userdir>`__,
+if you create ``pcode.ini`` in `userdir <overview.html#dword-userdir>`__.
 
-(See application's ``tosixinch/data/pcode.ini`` for the example).
+(See the default config file ``tosixinch/data/pcode.ini``, for the example).
 
-In ``[ctags]`` section, you can customize
-ctags binary path, tagfile name or arguments.
+``arguments`` option in the default ``pcode.ini`` above,
+are currently like this.
+It is commandline arguments to run ``Ctags``,
+and most are required to work as the script is supposed to work.
 
-Note ``--format=2``, ``--excmd=number``, ``--file-scope=yes``, and ``fkl`` in ``--fields``
-in arguments are normally required.
-The script needs excmd to be number (not pattern).
-It needs filename, language name, and kind.
+.. code-block:: none
 
-You have to add ``--kinds-<lang>`` for you languages
-(``--<lang>-kinds`` in Exuberant Ctags).
+    --options=NONE      # reset
+    --format=2          # only support extended format
+    --sort=no           # toc is normally in appearance order
+    --excmd=number      # only support line number, not pattern
+    --file-scope=yes    # only support in-file tags now
+    --fields=fkl        # need them, filename, kind, and language
+    --kinds-python=cfm  # define which kinds to use
+                        # in each language
+                        # ('--<lang>-kinds' in Exuberant Ctags)
 
-In ``[p2ftype]`` and ``[c2ftype]`` sections,
-you can add maps for Pygments and Ctags language names.
+``kindmap`` option in the default ``pcode.ini`` are like this::
 
-    * p2ftype: Pygments lexer.name to internal name
-    * c2ftype: Ctags language name to internal name
+    kindmap=    h2=cf, h3=m
 
-(Run tosixinch with some text input and with ``-v``, to see actual mappings).
+Which means: wrap ``Ctags`` kinds ``cf`` (class and function) in html ``<h2>`` tag,
+and wrap ``m`` (method) in ``<h3>`` tag.
 
-If you want to customize formatting for a specific language,
-you can create a section with an internal name.
-(So it must first be mapped, if not already).
-Options are:
+But since ``Ctags`` kinds are greatly differ for each language,
+you have to customize them for each of your languages.
 
-    * start_token:
-        Pygments token type name.
-        All other tokens than it and it's subclasses are not touched by formatting.
-        Normally ``Token.Name`` is suffice (default).
-    * kindmap:
-        Comma separated html element and kind pairs.
-        Optionally only one '*' is possible for kind.
-        It means all other kinds not defined.
-    * module:
-        module name for your custom module.
-        you have to create this module
-        in ``pcode`` directory in `script directory <overview.html#dword-script_directory>`__.
-    * class:
-        class name for you custom class in the module above.
-        the default is ``CustomCode``.
+One ``*`` is allowed, to mean any other kinds, so you can write the same as above ::
 
-        The class is supposed to subclass ``tosixinch.script.pcode._pygments.PygmentsCode``,
-        and normally customize methods called from ``format_entry``.
-        See ``tosixinch/script/pcode/python.py`` for the example.
+    kindmap=    h2=*, h3=m
 
-**Basic Usage:**
+**Customization:**
 
-If you want to use the default formatter, but customize for a language,
+You can write custom module using the class ``tosixinch.script.pcode._pygments.PygmentsCode``.
 
-* Define some internal name if not already defined
-  (in ``p2ftype`` and ``c2ftype`` section).
+Example:
 
-* Select which Ctags kinds to use (in ``arguments`` option).
+.. code-block:: python
 
-* Select which kinds maps to which html elements (in ``kindmap`` option).
+    # ~/.config/tosixinch/script/pcode/perl.py
 
-If you want to customize the formatter,
+    from tosixinch.script.pcode import _pygments
 
-* Create a section, say, perl:
+    class CustomCode(_pygments.PygmentsCode):
 
-  .. code-block:: ini
+The entry point is ``format_entry``,
+which has sub entry points ``check_def``, ``check_ref``, ``wrap_def`` or ``wrap_ref``.
 
-      [perl]
-      module=   perl
+See ``tosixinch/script/pcode/python.py`` for the example.
 
-* Create ``pcode/perl.py``
-  (in `script directory <overview.html#dword-script_directory>`__).
+Relevant options are:
 
-  .. code-block:: python
+* (new section):
+    create new section as the same name as ftype
+* module:
+    module name for your custom module.
+    you have to create this module
+    in ``pcode`` directory in `script directory <overview.html#dword-script_directory>`__.
 
-      # ~/.config/tosixinch/script/pcode/perl.py
+    Example::
 
-      from tosixinch.script.pcode import _pygments
+        [perl]
+        module=   perl
+* class:
+    class name for you custom class in the module above.
+    the default is ``CustomCode``.
+* start_token:
+    Pygments token type name.
+    All other tokens (and their subclasses) are not touched by formatting.
+    Normally ``Token.Name`` is suffice (default).
+* kindmap:
+    Explained above.
 
-      class CustomCode(_pygments.PygmentsCode):
+**Generic Ftypes**
 
-* Customize ``check_def``, ``check_ref``, ``wrap_def`` or ``wrap_ref``.
+If ``Pygments`` finds a language but the language is not mapped,
+It returns without doing formatting,
+but the script registers the ``rsrc``'s ``ftype`` as ``nonprose``.
 
-  Application automatically finds and uses this class.
+(It is an heuristic.
+If ``Pygments`` finds a language, it is better to treat the text as code-like,
+not ``prose``.
+
+If ``Pygments`` name is mapped,
+but ``Ctags`` doesn't find a language, or the language is not mapped, or not mapped to the same name,
+It does formatting only with ``Pygments`` tokens.
+
+As a special case, if ``Pygments`` name is mapped to the name ``'prose'``,
+It does not do formatting, but registers the ``rsrc``'s ``ftype`` as ``prose``
+(The default is: ``reStructuredText`` and ``markdown``).
 
 
 _tosixinch.bash
@@ -821,7 +787,6 @@ Vendored Libraries
 ------------------
 
 The program uses a few vendored (included) libraries.
-They are all single file modules.
 
 .. script:: templite.py
 
@@ -829,8 +794,7 @@ They are all single file modules.
     `Ned Batchelder <https://nedbatchelder.com/>`__'s
     `Coverage.py <https://github.com/nedbat/coveragepy>`__,
     and described extensively in
-    `a chapter of '500 Lines or Less' <http://aosabook.org/en/500L/a-template-engine.html>`__
-    (a great book all together).
+    `a chapter of '500 Lines or Less' <http://aosabook.org/en/500L/a-template-engine.html>`__.
 
     It is a general template engine, used for css template rendering here.
 

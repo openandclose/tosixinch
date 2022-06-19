@@ -28,9 +28,8 @@ def get_links(doc, match=''):
 def hackernews_topstories(doc):
     """Print hackernews top stories and some data, all commented out.
 
-    Not using ``doc`` argument.
-
-    use https://github.com/HackerNews/API
+    Querying https://github.com/HackerNews/API.
+    (So it's not using ``doc`` argumant).
 
     2022/04/30: quite slow (the API server itself is that way, I guess)
 

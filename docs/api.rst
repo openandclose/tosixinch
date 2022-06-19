@@ -5,6 +5,7 @@ API reference
 A few modules are documented here.
 
 * process.sample
+* process.inspect_sample
 * templite
 
 process.sample

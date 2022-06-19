@@ -44,7 +44,7 @@ General
 
 .. option:: -i INPUT, --input INPUT
 
-    input url or file path. it can be specified multiple times
+    input rsrc (URL or file path). it can be specified multiple times
 
 .. option:: -f FILE, --file FILE
 
@@ -81,15 +81,15 @@ Actions
 
 .. option:: -1, --download
 
-    download by default downloader
+    download by downloader
 
 .. option:: -2, --extract
 
-    extract by default extractor
+    extract by extractor
 
 .. option:: -3, --convert
 
-    convert by default converter
+    convert by converter
 
 .. option:: -4, --view
 
@@ -105,11 +105,11 @@ Actions
 
 .. option:: -c, --check
 
-    print matched url settings, and exit (so you have to supply url some way)
+    print matched rsrc settings, and exit (so you have to supply rsrc some way)
 
 .. option:: --toc
 
-    create toc htmls and a toc url list. conflicts with '--input'.
+    create toc htmls and a toc rsrc list file. conflicts with '--input'.
 
 .. option:: --inspect
 
@@ -117,7 +117,7 @@ Actions
 
 .. option:: --printout {0,1,2,3,all}
 
-    print filenames the program's actions would create (0=url, 1=dfiles, 2=efiles 3=pdfname, all=0<tab>1<tab>2)
+    print filenames the program's actions would create (0=rsrc, 1=dfiles, 2=efiles 3=pdfname, all=0<tab>1<tab>2)
 
         choices=0, 1, 2, 3, all
 
@@ -126,23 +126,23 @@ Programs
 
 .. option:: --urllib
 
-    download by urllib (default)
+    set downloader to urllib (default)
 
 .. option:: --headless
 
-    download by one of headless browser engines (see --browser-engine)
+    set downloader to one of headless browser engines (see --browser-engine)
 
 .. option:: --lxml
 
-    extract by lxml (default, and currently the only option)
+    set extractor to lxml (default, and currently the only option)
 
 .. option:: --prince
 
-    convert by princexml
+    set converter to princexml
 
 .. option:: --weasyprint
 
-    convert by weasyprint
+    set converter to weasyprint
 
 .. option:: --cnvpath CNVPATH
 
@@ -154,7 +154,7 @@ Programs
 
 .. option:: --cnvopts CNVOPTS
 
-    specify converter commandline options
+    specify additional converter commandline options
 
 Configs
 -------
@@ -173,7 +173,7 @@ Configs
 
 .. option:: --browser-engine {selenium-chrome,selenium-firefox}
 
-    specify the browser library when downloader is 'headless'
+    specify the browser engine when 'headless' (default: selenium-firefox)
 
         choices=selenium-chrome, selenium-firefox
 
@@ -187,11 +187,11 @@ Configs
 
 .. option:: --encoding ENCODING
 
-    assign an encoding for file opening when extract (f: comma)
+    specify encoding candidates for file opening when extract (f: comma)
 
 .. option:: --encoding-errors { (choices...) }
 
-    assign an encoding error handler (default: strict)
+    specify encoding error handler (default: strict)
 
         choices=strict, ignore, replace, xmlcharrefreplace, backslashreplace, namereplace, surrogateescape, surrogatepass
 
@@ -209,7 +209,7 @@ Configs
 
 .. option:: --guess GUESS
 
-    if there is no matched url, use this xpath for content selection (f: line)
+    if there is no matched option, use this XPath for content selection (f: line)
 
 .. option:: --full-image FULL_IMAGE
 
@@ -229,7 +229,7 @@ Configs
 
 .. option:: --elements-to-keep-attrs ELEMENTS_TO_KEEP_ATTRS
 
-    specify elements (Xpath) in which you want to keep attributes (default: <math>, <svg> and some mathjax tags) (f: line)
+    specify elements (XPath) in which you want to keep attributes (default: <math>, <svg> and some mathjax tags) (f: line)
 
 .. option:: --ftype {html,prose,nonprose,python}
 
@@ -247,19 +247,59 @@ Configs
 
 .. option:: --trimdirs TRIMDIRS
 
-    if plus, remove leading directories from PDF title of local text name. if minus, remove leading directories to reduce path segments to that abs number. (default: 3)
+    if no sign, remove leading directories from local text name in PDF TOC. if minus sign, remove leading directories to reduce path segments to that abs number. (default: 3)
 
 .. option:: --raw
 
-    use input paths as is (no url transformation, and only for local files)
+    use input paths as is (no filename transformation)
 
 .. option:: --pdfname PDFNAME
 
-    override pdf file name
+    specify pdf file name
+
+.. option:: --precmd1 PRECMD1
+
+    run arbitrary commands before download action
+
+.. option:: --postcmd1 POSTCMD1
+
+    run arbitrary commands after download action
+
+.. option:: --precmd2 PRECMD2
+
+    run arbitrary commands before extract action
+
+.. option:: --postcmd2 POSTCMD2
+
+    run arbitrary commands after extract action
+
+.. option:: --precmd3 PRECMD3
+
+    run arbitrary commands before convert action
+
+.. option:: --postcmd3 POSTCMD3
+
+    run arbitrary commands after convert action
 
 .. option:: --viewcmd VIEWCMD
 
     commandline string to open the pdf viewer (f: cmds)
+
+.. option:: --pre-each-cmd1 PRE_EACH_CMD1
+
+    run arbitrary commands before each download
+
+.. option:: --post-each-cmd1 POST_EACH_CMD1
+
+    run arbitrary commands after each download
+
+.. option:: --pre-each-cmd2 PRE_EACH_CMD2
+
+    run arbitrary commands before each extract
+
+.. option:: --post-each-cmd2 POST_EACH_CMD2
+
+    run arbitrary commands after each extract
 
 .. option:: --download-dir DOWNLOAD_DIR
 
@@ -267,11 +307,11 @@ Configs
 
 .. option:: --keep-html
 
-    do not extract, keep html as is, just component download to make complete local version
+    do not extract, keep html as is, just component download to make complete local version html
 
 .. option:: --overwrite-html
 
-    do not create new 'efile' (overwrite 'dfiles')
+    do not create new 'efile' (overwrite 'dfile')
 
 Styles
 ------

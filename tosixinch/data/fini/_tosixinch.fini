@@ -44,15 +44,15 @@ nouserdir=          : disable user configuration (intended for testing)
 
 [_action]
 
-download=           : download by default downloader
+download=           : download by downloader
                     :: names: 1
                     :: action: store_true
 
-extract=            : extract by default extractor
+extract=            : extract by extractor
                     :: names: 2
                     :: action: store_true
 
-convert=            : convert by default converter
+convert=            : convert by converter
                     :: names: 3
                     :: action: store_true
 
@@ -85,28 +85,28 @@ printout=           : print filenames the program's actions would create
 
 [_program]
 
-urllib=             : download by urllib (default)
+urllib=             : set downloader to urllib (default)
                     :: action: store_const
                     :: const: urllib
                     :: dest: downloader
 
-headless=           : download by one of headless browser engines
+headless=           : set downloader to one of headless browser engines
                     : (see --browser-engine)
                     :: action: store_const
                     :: const: headless
                     :: dest: downloader
 
-lxml=               : extract by lxml (default, and currently the only option)
+lxml=               : set extractor to lxml (default, and currently the only option)
                     :: action: store_const
                     :: const: lxml
                     :: dest: extractor
 
-prince=             : convert by princexml
+prince=             : set converter to princexml
                     :: action: store_const
                     :: const: prince
                     :: dest: converter
 
-weasyprint=         : convert by weasyprint
+weasyprint=         : set converter to weasyprint
                     :: action: store_const
                     :: const: weasyprint
                     :: dest: converter
@@ -116,7 +116,7 @@ cnvpath=            : specify converter executable path. also need to set conver
 css2=               : specify css files, for converter commandline css option
                     :: f: comma
 
-cnvopts=            : specify converter commandline options
+cnvopts=            : specify additional converter commandline options
                     :: f: cmd
 
 
@@ -145,7 +145,8 @@ converter=          : argparse.SUPPRESS
                     :: f: float
                     0.2
 
-*browser_engine=    : specify the browser library when downloader is 'headless'
+*browser_engine=    : specify the browser engine when 'headless'
+                    : (default: selenium-firefox)
                     :: choices: selenium-chrome, selenium-firefox
                     selenium-firefox
 
@@ -153,11 +154,11 @@ converter=          : argparse.SUPPRESS
 
 *selenium_firefox_path= : specify the path of geckodriver for selenium
 
-*encoding=          : assign an encoding for file opening when extract (f: comma)
+*encoding=          : specify encoding candidates for file opening when extract (f: comma)
                     :: f: comma
                     utf-8, cp1252, latin_1
 
-*encoding_errors=   : assign an encoding error handler (default: strict)
+*encoding_errors=   : specify encoding error handler (default: strict)
                     # Python 3.7.4
                     :: choices: strict, ignore, replace, xmlcharrefreplace, backslashreplace, namereplace, surrogateescape, surrogatepass
                     strict
@@ -175,7 +176,7 @@ converter=          : argparse.SUPPRESS
                     :: f: bool
                     no
 
-guess=              : if there is no matched option, use this xpath for content selection (f: line)
+guess=              : if there is no matched option, use this XPath for content selection (f: line)
                     :: f: line
                     //div[@itemprop="articleBody"]
                     //div[@role="main"]
@@ -203,7 +204,7 @@ add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: pl
                     :: f: plus
                     color, width, height
 
-*elements_to_keep_attrs=    : specify elements (Xpath) in which you want to keep attributes
+*elements_to_keep_attrs=    : specify elements (XPath) in which you want to keep attributes
                             : (default: <math>, <svg> and some mathjax tags) (f: line)
                             :: f: line
                             self::math
@@ -223,42 +224,52 @@ textwidth=          : width (character numbers) for rendering non-prose text
 textindent=         : line continuation marker for rendering non-prose text
                     '                    --> '
 
-*trimdirs=          : if plus, remove leading directories from PDF title of local text name.
-                    : if minus, remove leading directories to reduce path segments to that abs number.
+*trimdirs=          : if no sign, remove leading directories from local text name in PDF TOC.
+                    : if minus sign, remove leading directories to reduce path segments to that abs number.
                     : (default: 3)
                     :: f: int
                     3
 
-raw=                : use input paths as is (no filename transformation, and only for local files)
+raw=                : use input paths as is (no filename transformation)
                     :: f: bool
                     no
 
 *css=               :: f: comma
                     sample
 
-pdfname=            : override pdf file name
+pdfname=            : specify pdf file name
 
-precmd1=            :: f: line, cmds
+precmd1=            : run arbitrary commands before download action
+                    :: f: line, cmds
 
-postcmd1=           :: f: line, cmds
+postcmd1=           : run arbitrary commands after download action
+                    :: f: line, cmds
 
-precmd2=            :: f: line, cmds
+precmd2=            : run arbitrary commands before extract action
+                    :: f: line, cmds
 
-postcmd2=           :: f: line, cmds
+postcmd2=           : run arbitrary commands after extract action
+                    :: f: line, cmds
 
-precmd3=            :: f: line, cmds
+precmd3=            : run arbitrary commands before convert action
+                    :: f: line, cmds
 
-postcmd3=           :: f: line, cmds
-
-pre_each_cmd1=      :: f: line, cmds
-
-post_each_cmd1=     :: f: line, cmds
-
-pre_each_cmd2=      :: f: line, cmds
-
-post_each_cmd2=     :: f: line, cmds
+postcmd3=           : run arbitrary commands after convert action
+                    :: f: line, cmds
 
 viewcmd=            : commandline string to open the pdf viewer (f: cmds)
+                    :: f: line, cmds
+
+pre_each_cmd1=      : run arbitrary commands before each download
+                    :: f: line, cmds
+
+post_each_cmd1=      : run arbitrary commands after each download
+                    :: f: line, cmds
+
+pre_each_cmd2=      : run arbitrary commands before each extract
+                    :: f: line, cmds
+
+post_each_cmd2=     : run arbitrary commands after each extract
                     :: f: line, cmds
 
 browsercmd=         :: f: cmd
@@ -268,11 +279,11 @@ download_dir=       : specify root directory for download and extract
                     _htmls
 
 keep_html=          : do not extract, keep html as is, just component download
-                    : to make complete local version
+                    : to make complete local version html
                     :: f: bool
                     no
 
-overwrite_html=     : do not create new 'efile' (overwrite 'dfiles')
+overwrite_html=     : do not create new 'efile' (overwrite 'dfile')
                     :: f: bool
                     no
 
