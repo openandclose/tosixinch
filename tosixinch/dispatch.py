@@ -23,9 +23,9 @@ def _run_cleanup():
     _CLEANUP = []
 
 
-def _action_run(conf, command, precomd, postcmd):
+def _action_run(conf, command, precmd, postcmd):
     try:
-        returncode = system.run_cmds(precomd, conf)
+        returncode = system.run_cmds(precmd, conf)
         if returncode not in (101, 102):
             command(conf)
         if returncode not in (102,):
@@ -35,10 +35,10 @@ def _action_run(conf, command, precomd, postcmd):
 
 
 def _action_dispatch(conf, command,
-        precomd, postcmd, pre_each_cmd, post_each_cmd):
+        precmd, postcmd, pre_each_cmd, post_each_cmd):
 
     command = _sub_action_dispatch(conf, command, pre_each_cmd, post_each_cmd)
-    _action_run(conf, command, precomd, postcmd)
+    _action_run(conf, command, precmd, postcmd)
 
 
 def _sub_action_dispatch(conf, command, pre_each_cmd, post_each_cmd):
