@@ -90,7 +90,6 @@ class Location(urlmap.Map):
     PREFIX = DOWNLOAD_DIR
     OVERWRITE = False
 
-    EXTENSION = '.html'
     HASH_DIR = '_hash'
 
     def _map_name(self, name):

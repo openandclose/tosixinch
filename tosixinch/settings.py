@@ -417,11 +417,9 @@ class Site(location.Location):
 
     @cached_property
     def text(self):
-        dfile = self.dfile
         codings = self.general.encoding
         errors = self.general.encoding_errors
-        reader = action.ExtractReader(dfile, codings=codings, errors=errors)
-        return reader.read()
+        return action.read(self.dfile, codings=codings, errors=errors)
 
 
 class Conf(object):

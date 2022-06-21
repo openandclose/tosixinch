@@ -116,9 +116,13 @@ class Resolver(object):
 
     def _build_sibling_urls(self, locs):
         for loc in locs:
-            path, basepath, url = loc.efile, self.loc.efile, loc.url
+            if loc.is_remote:
+                url = loc.url
+            else:
+                url = ''
+            path, basepath = loc.efile, self.loc.efile
             ref = location.get_relative_reference(path, basepath, url)
-            yield loc.url, ref
+            yield loc.rsrc, ref
 
     def _get_comp_cache(self, url):
         if not self._comp_cache.get(url):

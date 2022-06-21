@@ -127,40 +127,70 @@ def add_cookie(cj, cookie):
 # file read and write ----------------------------
 
 class _File(object):
-    """Common object for Reader and Writer."""
+    """Route file (resolve file-directory collision).
+
+    Which might happen when translating remote URL to system path.
+
+    e.g.
+    http://example.com/users
+    http://example.com/users/john
+
+    Here, 'users' path segment functions as both 'directory' and 'file'.
+    There are no corresponding concept in system paths.
+    """
 
     SUFFIX_FILE = '.f'
 
-    def __init__(self, fname):
-        self.fname = fname
-        self.encoding = 'utf-8'
-
-
-class Reader(_File):
-    """Text reader object.
-
-    Optionally route file (resolve file-directory collision),
-    which might happen when translating remote URL to system path.
-    """
-
-    def __init__(self, fname, text=None, codings=None,
-            errors='strict', length=None):
-        super().__init__(fname)
-        self.text = text
-        self.codings = codings
-        self.errors = errors
-        self.buf_length = length or 102400
-
-    def get_filename(self):
-        fname = self.fname
+    def get_filename(self, fname):
         if os.path.isdir(fname):
             return fname + self.SUFFIX_FILE
         return fname
 
+    def in_directory(self, fname, base=os.curdir):
+        current = os.path.abspath(base)
+        path = os.path.abspath(fname)
+        if path.startswith(current + os.sep):
+            return current, path
+
+        msg = 'filename path is outside of current dir: %r' % fname
+        raise ValueError(msg)
+
+    def _set_filename(self, dirname):
+        files = []
+        current, path = self.in_directory(dirname)
+
+        start = len(current.split('/'))
+        segments = path.split('/')
+        end = len(segments)
+
+        for i in range(start + 1, end + 1):
+            fn = os.path.join('/', *segments[:i])
+            if os.path.isfile(fn):
+                files.append(fn)
+
+        return files
+
+    def set_filename(self, dirname):
+        for fn in self._set_filename(dirname):
+            os.replace(fn, fn + self.SUFFIX_FILE)
+
+
+class Reader(_File):
+    """Text reader object."""
+
+    def __init__(self, fname, text=None, codings=None,
+            errors='strict', length=None):
+        self.fname = fname
+        self.text = text
+        self.codings = codings
+        self.errors = errors
+        self.buf_length = length or 102400
+        self.encoding = 'utf-8'
+
     def _prepare(self):
         if self.text:
             return
-        fname = self.get_filename()
+        fname = self.get_filename(self.fname)
         self.text, self.encoding = manuopen.manuopen(
             fname, self.codings, self.errors, self.buf_length)
 
@@ -170,66 +200,38 @@ class Reader(_File):
 
 
 class Writer(_File):
-    """Text writer object.
-
-    Optionally route file (resolve file-directory collision),
-    which might happen when translating remote URL to system path.
-    """
+    """Text writer object."""
 
     def __init__(self, fname, text):
-        super().__init__(fname)
+        self.fname = fname
         self.text = text
+        self.encoding = 'utf-8'
 
-    def makedirs(self, fname, on_error_exit=True):
-        if not self._in_current_dir(fname):
-            if on_error_exit:
-                msg = 'filename path is outside of current dir: %r' % fname
-                logger.error(msg)
-                sys.exit(1)
-            else:
-                return
+    def makedirs(self, fname):
+        self.in_directory(fname)
 
         dirname = os.path.dirname(fname)
-        if dirname in ('', '.', '/'):
+        if dirname in ('', '.'):
             return
+        try:
+            os.makedirs(dirname, exist_ok=True)
+        except FileExistsError:
+            self.set_filename(dirname)
+            os.makedirs(dirname, exist_ok=True)
 
-        while True:
-            try:
-                os.makedirs(dirname, exist_ok=True)
-                break
-            except FileExistsError:
-                self.move_file(dirname)
-
-    def _in_current_dir(self, fname, base=os.curdir):
-        current = os.path.abspath(base)
-        path = os.path.abspath(fname)
-        # note: the same filepath is not 'in' current dir.
-        if path.startswith(current + os.sep):
-            return True
-        else:
-            return False
-
-    def move_file(self, dirname):
-        while True:
-            if dirname in ('', '.', '/'):
-                break
-            elif os.path.isfile(dirname):
-                os.replace(dirname, dirname + self.SUFFIX_FILE)
-                break
-            else:
-                dirname = os.path.dirname(dirname)
-
-    def _prepare(self):
-        self.makedirs(self.fname)
-
-    def write(self, fname=None):
-        self._prepare()
+    def _prepare(self, fname=None):
         fname = fname or self.fname
-        if os.path.isdir(fname):
-            fname = fname + self.SUFFIX_FILE
+        self.makedirs(fname)
+
+    def _write(self, fname):
         mode = 'wb' if isinstance(self.text, bytes) else 'w'
         with open(fname, mode) as f:
             f.write(self.text)
+
+    def write(self, fname=None):
+        fname = fname or self.fname
+        self._prepare(fname)
+        self._write(self.get_filename(fname))
 
 
 class DownloadWriter(Writer):
@@ -237,14 +239,12 @@ class DownloadWriter(Writer):
 
     SUFFIX_PART = '.part'
 
-    def get_partfile(self, name):
-        return name + self.SUFFIX_PART
-
     def write(self, fname=None):
         fname = fname or self.fname
-        part = self.get_partfile(fname)
-        super().write(part)
-        os.replace(part, fname)
+        part = fname + self.SUFFIX_PART
+        self._prepare(fname)
+        self._write(part)
+        os.replace(part, self.get_filename(fname))
 
 
 def read(fname, text=None, codings=None, errors='strict', length=None):

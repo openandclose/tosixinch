@@ -70,7 +70,7 @@ import time
 
 import tosixinch.main
 import tosixinch.settings
-import tosixinch.system
+import tosixinch.action
 import tosixinch.toc
 
 from tosixinch import location
@@ -458,7 +458,7 @@ def _clean_ref():
 def _get_downloaded_files(rsrcs):
     for rsrc in rsrcs:
         dfile = location.Location(rsrc).dfile
-        yield tosixinch.system.ExtractReader(dfile).get_filename()
+        yield tosixinch.action.read(dfile)
 
 
 def _copy_downloaded_files(rsrcs):
