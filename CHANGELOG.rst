@@ -8,6 +8,19 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+
+v0.9.0 (2022-06-28)
+-------------------
+
+Many filename related API changes.
+
+The terms (both in code and doc) themselves are changed.
+Basically:
+
+    url                     ->  rsrc (resource)
+    fname, download_file    ->  dfile
+    fnew, extracted_file    ->  efile
+
 **Change:**
 
 * **!!** Change name syntax of dfile, Using suffix '.f'
