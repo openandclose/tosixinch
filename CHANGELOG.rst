@@ -15,7 +15,7 @@ v0.9.0 (2022-06-28)
 Many filename related API changes.
 
 The terms (both in code and doc) themselves are changed.
-Basically:
+Basically::
 
     url                     ->  rsrc (resource)
     fname, download_file    ->  dfile
