@@ -21,6 +21,13 @@ Basically::
     fname, download_file    ->  dfile
     fnew, extracted_file    ->  efile
 
+This is so great a change,
+I recommend to use brand-new working directory (new '_htmls' directory).
+
+Since previous syntax created so many now-redundant directories for files,
+if you have many old files (cache) in '_htmls' directory,
+it is very confusing.
+
 **Change:**
 
 * **!!** Change name syntax of dfile, Using suffix '.f'
@@ -37,13 +44,13 @@ Basically::
 
     _htmls/en.wikipedia.org/wiki/XPath
 
-  NOTE: you can no longer use old html cache in '_htmls' folder,
-  since names are different.
+  (Only when there is a file-directory conflict in system)::
 
-  Especially, there should be many now-redundant directory,
-  which causes download Errors.
+    _htmls/en.wikipedia.org/wiki/XPath.f
 
-  E.g. If there is a directory 'XPath', we can not write a file 'XPath'.
+  NOTE: The change is always to the file (not the directory),
+  e.g. when trying to write a dfile ('a/b/c') but there is already a dfile 'a/b',
+  the latter changes to 'a/b.f'.
 
 * **!!** Change name syntax of efile using suffix '.orig'
 
