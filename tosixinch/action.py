@@ -89,7 +89,7 @@ class Downloader(Action):
         force = self._site.general.force_download
         cache = self._conf._cache.download
 
-        if os.path.exists(dfile):
+        if os.path.isfile(self.get_filename(dfile)):
             if not force:
                 return True
             else:

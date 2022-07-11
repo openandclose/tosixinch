@@ -10,6 +10,7 @@ import subprocess
 from tosixinch import content
 from tosixinch import location
 from tosixinch import stylesheet
+from tosixinch import system
 from tosixinch import toc
 
 logger = logging.getLogger(__name__)
@@ -57,7 +58,7 @@ def merge_htmls(paths, pdfname, hashid=False, codings=None, errors='strict'):
     return hname
 
 
-class Convert(object):
+class Convert(system._File):
     """Base class for each application specific classes."""
 
     def __init__(self, conf):
@@ -74,9 +75,9 @@ class Convert(object):
             files = [site.rsrc for site in conf.sites]
         elif rfile and tocfile and _is_newer(rfile, tocfile):
             locations = location.Locations(rfile=tocfile)
-            files = [loc.efile for loc in locations]
+            files = [self.get_filename(loc.efile) for loc in locations]
         else:
-            files = [site.efile for site in conf.sites]
+            files = [self.get_filename(site.efile) for site in conf.sites]
         self.files = files
 
         self.cmd = [self.path]
