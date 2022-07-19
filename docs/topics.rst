@@ -727,7 +727,7 @@ Example:
     class CustomCode(_pygments.PygmentsCode):
 
 The entry point is ``format_entry``,
-which has sub entry points ``check_def``, ``check_ref``, ``wrap_def`` or ``wrap_ref``.
+which has sub entry points ``check_def``, ``check_ref``, ``wrap_def`` and ``wrap_ref``.
 
 See ``tosixinch/script/pcode/python.py`` for the example.
 
@@ -738,7 +738,8 @@ Relevant options are:
 * module:
     module name for your custom module.
     you have to create this module
-    in ``pcode`` directory in `script directory <overview.html#dword-script_directory>`__.
+    in ``pcode`` directory in `script directory <overview.html#dword-script_directory>`__
+    (e.g. '~/.config/tosixinch/script/pcode/perl.py' above).
 
     Example::
 
@@ -762,7 +763,7 @@ but the script registers the ``rsrc``'s ``ftype`` as ``nonprose``.
 
 (It is an heuristic.
 If ``Pygments`` finds a language, it is better to treat the text as code-like,
-not ``prose``.
+not ``prose``).
 
 If ``Pygments`` name is mapped,
 but ``Ctags`` doesn't find a language, or the language is not mapped, or not mapped to the same name,
