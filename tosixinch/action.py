@@ -93,11 +93,10 @@ class Downloader(Action):
             if not force:
                 return True
             else:
-                if cache and cache.get(dfile):
+                if cache.get(dfile):
                     return True
 
-        if cache:
-            cache[dfile] = 1
+        cache[dfile] = 1
         return False
 
     def request(self, site, on_error_exit=True):
