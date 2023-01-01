@@ -179,9 +179,9 @@ converter=          : argparse.SUPPRESS
 guess=              : if there is no matched option, use this XPath for content selection (f: line)
                     :: f: line
                     //div[@itemprop="articleBody"]
+                    //div[@id="content"]
                     //div[@role="main"]
                     //div[@id="main"]
-                    //div[@id="content"]
                     //div[@class=="body"]
                     //article
 
