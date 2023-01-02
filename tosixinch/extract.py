@@ -9,6 +9,7 @@
 * save the content to utf-8 file.
 """
 
+import copy
 import logging
 import os
 
@@ -55,7 +56,15 @@ class Extract(action.Extractor):
         title = title[0] if title else content.DEFAULT_TITLE
         self.title = title
 
-        self.doc = content.build_new_html(doctype=self.doctype, title=title)
+        if self._site.general.clean in ('head', 'both'):
+            doc = content.build_new_html(
+                doctype=self.doctype, title=title)
+        else:
+            doc = copy.deepcopy(self.root)
+            for el in doc.body:
+                doc.body.remove(el)
+
+        self.doc = doc
 
     def guess_selection(self):
         for guess in self._guess:
@@ -79,6 +88,9 @@ class Extract(action.Extractor):
             system.run_function(self._conf._userdir, 'process', self.doc, s)
 
     def clean(self):
+        if self._site.general.clean in ('head', 'none'):
+            return
+
         tags = self._site.general.add_clean_tags
         attrs = self._site.general.add_clean_attrs
         paths = self._site.general.elements_to_keep_attrs

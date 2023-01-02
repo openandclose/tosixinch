@@ -8,6 +8,10 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+**Add:**
+
+* Add 'clean' option (specify how to clean html (both, head, body, none)).
+
 **Fix:**
 Fix regression: selenium downloader errors when given multiple URLs.
 

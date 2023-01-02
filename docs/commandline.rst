@@ -231,6 +231,12 @@ Configs
 
     specify elements (XPath) in which you want to keep attributes (default: <math>, <svg> and some mathjax tags) (f: line)
 
+.. option:: --clean {both,head,body,none}
+
+    specify how to clean html (both, head, body, none) (default: both)
+
+        choices=both, head, body, none
+
 .. option:: --ftype {html,prose,nonprose,python}
 
     specify file type

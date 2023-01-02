@@ -286,6 +286,14 @@ General Section
     So the selectors are like above
     (not like e.g. ``'//math'``).
 
+.. confopt:: clean \*
+
+    | (``both``)
+
+    Specify how to clean html (both, head, body, none).
+
+    See `Clean <overview.html#clean>`__.
+
 .. confopt:: ftype
 
     | (None)
@@ -796,50 +804,6 @@ So section names themselves can be arbitrary.
         match=      http://somesite.com/*
         select=     ...
         process=    myprocess.heading_to_div?h3
-
-.. confopt:: clean
-
-    (Note there is no option named ``clean``.
-    here I'm just describing what it does).
-
-    After ``select``, ``exclude`` and ``process`` in ``extract``,
-    the program ``clean`` s the resultant html.
-
-    **tags**:
-        According to `add_clean_tags <#confopt-add_clean_tags>`__.
-
-    **attributes**:
-        According to `add_clean_attrs <#confopt-add_clean_attrs>`__.
-
-    **javascript**:
-        All inline javascript and javascript source references
-        are unconditionally stripped.
-
-        (In ``download``, we occasionally need javascript,
-        and in that case we might use headless browsers.
-        In ``extract``, javascript has already rendered the contents.
-        So we shouldn't need it any more).
-
-    **css**:
-        All ``style`` attributes and css source references
-        are stripped, with one exception.
-
-        If a tag has ``'tsi-keep-style'`` in class attributes,
-        ``style`` attributes are kept intact.
-        It can be used in process functions.
-        If you want to keep or create some inline ``style``,
-        add this class attribute. ::
-
-           # removed (becomes just '<div>')
-           <div style="font-weight:bold;">
-
-           # not removed
-           <div class="tsi-keep-style other-values" style="font-weight:bold;">
-
-    **skip tags**:
-        According to `elements_to_keep_attrs <#confopt-elements_to_keep_attrs>`__.
-        The program skips cleaning the matched elements (and all sub-elements),
-        if the elements are not already removed by ``add_clean_tags``.
 
 .. confopt:: cookie
 

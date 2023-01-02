@@ -211,6 +211,11 @@ add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: pl
                             self::svg
                             self::node()[starts-with(@class, "MathJax")]
 
+clean=              : specify how to clean html (both, head, body, none)
+                    : (default: both)
+                    :: choices: both, head, body, none
+                    both
+
 hashid=             :: f: bool
                     yes
 

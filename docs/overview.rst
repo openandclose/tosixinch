@@ -554,6 +554,62 @@ Users have to fill the value accordingly, if setting.
         ... --plus-option '-two, -three, +four'
 
 
+Clean
+-----
+
+When ``extract``, the program ``clean`` s html head and body
+according to `clean <options.html#confopt-clean>`__ option.
+
+
+clean head
+^^^^^^^^^^
+
+If ``clean`` option is either ``both`` or ``head``,
+before ``select``, ``exclude`` and ``process``,
+the program ``clean`` s the html head.
+
+This means the program replaces the original head
+with the minimal short head (the same one for all htmls).
+
+clean body
+^^^^^^^^^^
+
+If ``clean`` option is either ``both`` or ``body``,
+after ``select``, ``exclude`` and ``process``,
+the program ``clean`` s the resultant html body.
+
+**tags**:
+    According to `add_clean_tags <options.html#confopt-add_clean_tags>`__.
+
+**attributes**:
+    According to `add_clean_attrs <options.html#confopt-add_clean_attrs>`__.
+
+**javascript**:
+    All inline javascript and javascript source references
+    are unconditionally stripped.
+
+**css**:
+    All ``style`` attributes and css source references
+    are stripped, with one exception.
+
+    If a tag has ``'tsi-keep-style'`` in class attributes,
+    ``style`` attributes are kept intact.
+    It can be used in process functions.
+    If you want to keep or create some inline ``style``,
+    add this class attribute. ::
+
+       # removed (becomes just '<div>')
+       <div style="font-weight:bold;">
+
+       # not removed
+       <div class="tsi-keep-style other-values" style="font-weight:bold;">
+
+**skip tags**:
+    According to `elements_to_keep_attrs <options.html#confopt-elements_to_keep_attrs>`__.
+    The program skips cleaning the matched elements (and all sub-elements),
+    if the elements are not already removed by ``add_clean_tags``.
+
+
 CSS Template Values
 -------------------
 
