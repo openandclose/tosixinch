@@ -127,15 +127,25 @@ The main comandline options of the program are:
     * ``-2``, ``--extract``
     * ``-3``, ``--convert``
 
-``INPUT`` (``rsrc``, resource) is either URL or system path.
+``INPUT``:
 
-``-1``: If ``rsrcs`` are URLs, downloads them.
+    either URL or local system path.
 
-``-2``: reads and extracts ``dfiles`` (downloaded files), and creates new files.
+    (Except for commandline, it is referred to as ``rsrc`` (resource))
 
-``-3``: converts ``efiles`` (extracted files), and creates one pdf file.
+``-1``:
 
-Note ``-1``, ``-2`` and ``-3`` take the same ``rsrcs`` as input.
+    If ``INPUTS`` are URLs, downloads them, and creates ``dfiles`` (downloaded files).
+
+``-2``:
+
+    reads and edits ``dfiles``, and creates new ``efiles`` (extracted files).
+
+``-3``:
+
+    converts ``efiles``, and creates one pdf file.
+
+Note ``-1``, ``-2`` and ``-3`` take the same ``INPUT`` as argument.
 You don't need to change that part of the commandline
 (see `Example <#example>`__ below).
 
