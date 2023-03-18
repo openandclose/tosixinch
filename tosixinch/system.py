@@ -215,7 +215,7 @@ class Writer(_File):
             return
         try:
             os.makedirs(dirname, exist_ok=True)
-        except FileExistsError:
+        except (FileExistsError, NotADirectoryError):
             self.set_filename(dirname)
             os.makedirs(dirname, exist_ok=True)
 
