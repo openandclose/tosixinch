@@ -75,7 +75,7 @@ class SeleniumDownloader(action.Downloader):
 
     def request(self, site):
         self.start()
-        logger.info('using selenium (%s)...', self.driver)
+        logger.info('using selenium (%s): %s', self.driver, site.url)
         url = site.idna_url
         self.agent.get(url)
 
