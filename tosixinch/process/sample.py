@@ -350,6 +350,12 @@ def lower_heading_from_order(doc, tag=1, order=1):
             el.tag = 'h' + str(i + 1)
 
 
+def lower_heading_from_order_auto(doc):
+    """Lower headings, except first <h1>, if multiple h1 headings found."""
+    if len(doc.xpath('//h1')) > 1:
+        lower_heading_from_order(doc)
+
+
 def split_h1(doc, seps=None, part='1'):
     """Remove unwanted parts from h1 string.
 
