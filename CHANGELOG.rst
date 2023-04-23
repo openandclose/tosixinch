@@ -8,6 +8,9 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+**Fix:**
+Fix regression: selenium downloader errors when given multiple URLs.
+
 
 v0.9.0 (2022-06-28)
 -------------------

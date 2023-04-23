@@ -67,8 +67,9 @@ class SeleniumDownloader(action.Downloader):
         global SELENIUM_DRIVER
         if not SELENIUM_DRIVER:
             SELENIUM_DRIVER = start_selenium(self.driver, self.driver_path)
-            self.agent = SELENIUM_DRIVER
-            dispatch.add_cleanup(self.cleanup)
+
+        self.agent = SELENIUM_DRIVER
+        dispatch.add_cleanup(self.cleanup)
 
     def cleanup(self):
         global SELENIUM_DRIVER
