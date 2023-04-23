@@ -22,16 +22,19 @@ def start_selenium(driver, driver_path=None):
     if driver == 'firefox':
         driver = webdriver.Firefox
         from selenium.webdriver.firefox.options import Options
+        from selenium.webdriver.firefox.service import Service
     elif driver == 'chrome':
         driver = webdriver.Chrome
         from selenium.webdriver.chrome.options import Options
+        from selenium.webdriver.chrome.service import Service
 
     options = Options()
     options.headless = True
 
     kwargs = {'options': options}
     if driver_path:
-        kwargs['executable_path'] = driver_path
+        service = Service(executable_path=driver_path)
+        kwargs['service'] = service
 
     driver = driver(**kwargs)
     driver.implicitly_wait(10)
