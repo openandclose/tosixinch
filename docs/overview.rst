@@ -175,7 +175,7 @@ Target Files
         As an exception, if original ``URL`` is too long for file name conversion
         (a path segment more than 255 characters),
         the whole ``URL`` is sha1-hashed,
-        and the name takes a ``_html/_hash/<sha1-hexdigit>`` form.
+        and the name takes a ``_htmls/_hash/<sha1-hexdigit>`` form.
 
 .. dword:: efile
 
