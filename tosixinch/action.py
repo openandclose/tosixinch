@@ -143,7 +143,11 @@ class CompDownloader(Downloader):
         return system.download_write(name, text)
 
     def download(self, comp):
-        if self.check_dfile(comp._cls):
+        try:
+            if self.check_dfile(comp._cls):
+                return
+        except (FileNotFoundError, IsADirectoryError):
+            # raised for local files in check_rsrc
             return
 
         self.request(comp, on_error_exit=False)
