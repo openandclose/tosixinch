@@ -36,7 +36,7 @@ Some points to consider:
   It is to manage to make a marginally readable pdf,
   from the least work as possible.
 
-* Many related applications seem to concentrate on major new sites,
+* Many related applications seem to concentrate on major news sites,
   parsing specific article pages or RSS for the target htmls.
   This program doesn't have special functionalities for these sites.
   It is rather for more static reading contents,
