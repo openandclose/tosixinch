@@ -458,7 +458,8 @@ def _clean_ref():
 def _get_downloaded_files(rsrcs):
     for rsrc in rsrcs:
         dfile = location.Location(rsrc).dfile
-        yield tosixinch.action.read(dfile)
+        yield tosixinch.action.get_dfile(dfile)
+        yield location.Location(rsrc).efile
 
 
 def _copy_downloaded_files(rsrcs):
