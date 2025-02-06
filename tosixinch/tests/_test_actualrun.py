@@ -417,13 +417,14 @@ def _run_toc(args, action, do_compare=True):
 def _clean_directory(excludes=None, top='.'):
     abspath = lambda root, name: os.path.abspath(os.path.join(root, name))
 
-    for root, dirs, files in os.walk(top, topdown=False):
+    for root, dirs, files in os.walk(top):
         for name in files:
             path = abspath(root, name)
             if excludes and path in excludes:
                 continue
             os.remove(path)
 
+    for root, dirs, files in os.walk(top, topdown=False):
         for name in dirs:
             path = abspath(root, name)
             if os.listdir(path):
