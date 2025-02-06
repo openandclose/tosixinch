@@ -23,13 +23,14 @@ def start_selenium(driver, driver_path=None):
         driver = webdriver.Firefox
         from selenium.webdriver.firefox.options import Options
         from selenium.webdriver.firefox.service import Service
+        options = Options()
+        options.add_argument('--headless')
     elif driver == 'chrome':
         driver = webdriver.Chrome
         from selenium.webdriver.chrome.options import Options
         from selenium.webdriver.chrome.service import Service
-
-    options = Options()
-    options.headless = True
+        options = Options()
+        options.add_argument('--headless=new')
 
     kwargs = {'options': options}
     if driver_path:

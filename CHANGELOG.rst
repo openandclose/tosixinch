@@ -12,6 +12,8 @@ Unreleased
 
 * Add 'clean' option (specify how to clean html (both, head, body, none)).
 
+* Update Selenium headless option codes (4.8.0-, they changed the syntax)
+
 **Fix:**
 Fix regression: selenium downloader errors when given multiple URLs.
 
