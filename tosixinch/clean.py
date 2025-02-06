@@ -26,7 +26,12 @@ And attributes cleanup is skipped inside <svg> and <math> elements.
 you need ``color`` and ``width`` for svg image, for example.
 """
 
+import re
+
 from tosixinch import lxml_html  # use lxml.html.clean from lxml_html.clean
+
+RE_CSS_DECLARATION = re.compile(r'^\s*([\w-]+)\s*:\s*(.*?)\s*$')
+RE_CSS_VALUE = re.compile(r"""((?:"[^"]+")|(?:'[^\']+')|(?:[^ \t\n]+))""")
 
 KEEP_STYLE = 'tsi-keep-style'
 
@@ -80,11 +85,12 @@ class Clean(object):
         whitelist_tags=set(['iframe', 'embed']),
     )
 
-    def __init__(self, doc, tags=None, attrs=None, paths=None):
+    def __init__(self, doc, tags=None, attrs=None, paths=None, styles=None):
         self.doc = doc
         self.tags = tags
         self.attrs = attrs
         self.paths = paths
+        self.stylematcher = StyleMatcher(styles)
 
     def _clean_html(self):
         if self.tags:
@@ -123,8 +129,85 @@ class Clean(object):
                 if attribute == 'style':
                     if self._keep_style(el):
                         continue
-                    del el.attrib[attribute]
+                    css = self.stylematcher.run_matches(el.attrib[attribute])
+                    if css:
+                        el.attrib[attribute] = css
+                    else:
+                        del el.attrib[attribute]
 
     def run(self):
         self._clean_html()
         self._clean_attributes()
+
+
+class StyleMatcher(object):
+    """Retain only specified inline style attributes."""
+
+    # ',' is used e,g. in 'font-family'
+    # '/' is used e.g. in 'line-height' in 'font'
+    # '(' is used e.g. in function calls
+    DIFFICULT_PARSE_INDICATOR = ',/('
+
+    def __init__(self, matches=None):
+        if not matches:
+            matches = []
+        self.matches, self.raw_props = self.build_matches(matches)
+
+    def parse_declaration(self, declarations):
+        for dec in declarations.split(';'):
+            if not dec.strip():
+                continue
+            m = RE_CSS_DECLARATION.match(dec)
+            if m:
+                prop, valstr = m.groups()
+                prop = prop.lower()
+                valstr = valstr.replace(' !important', '').strip()
+                yield prop, valstr
+
+    def parse_values(self, valstr):
+        for c in self.DIFFICULT_PARSE_INDICATOR:
+            if c in valstr:
+                yield valstr
+                return
+
+        for value in RE_CSS_VALUE.findall(valstr):
+            if value.strip():
+                yield value.strip()
+
+    def build_matches(self, matches):
+        decs = {}
+        raw_props = set()
+        for match in matches:
+            match = match.rstrip(';').strip()
+            for prop, valstr in self.parse_declaration(match):
+                if valstr == '':
+                    raw_props.add(prop)
+                else:
+                    for value in self.parse_values(valstr):
+                        decs[(prop, value)] = 1
+        return decs, raw_props
+
+    def run_matches(self, cssstr):
+        """Return a new css string containg only the matched ones."""
+        csslist = []
+        for prop, valstr in self.parse_declaration(cssstr):
+            if prop in self.raw_props:
+                csslist.append((prop, valstr))
+            else:
+                for value in self.parse_values(valstr):
+                    if (prop, value) in self.matches:
+                        csslist.append((prop, value))
+        return self.compile(csslist)
+
+    def compile(self, csslist):
+        s = {}
+        for prop, value in csslist:
+            s[prop] = []
+        for prop, value in csslist:
+            s[prop].append(value)
+
+        for prop in s:
+            values = ' '.join(s[prop])
+            s[prop] = '%s: %s' % (prop, values)
+
+        return '; '.join(s.values())

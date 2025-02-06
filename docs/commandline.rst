@@ -231,6 +231,10 @@ Configs
 
     specify elements (XPath) in which you want to keep attributes (default: <math>, <svg> and some mathjax tags) (f: line)
 
+.. option:: --styles-to-retain STYLES_TO_RETAIN
+
+    specify particular inline styles you want to retain (all other styles are removed). if only the property is provided (no values after ':'), then all values are retained as is. ';' before each line end is optional. (default: "content:;", "display: none;", "text-decoration-line: line-through;", "text-decoration: line-through;") (f: line)
+
 .. option:: --clean {both,head,body,none}
 
     specify how to clean html (both, head, body, none) (default: both)

@@ -286,6 +286,27 @@ General Section
     So the selectors are like above
     (not like e.g. ``'//math'``).
 
+.. confopt:: styles_to_retain \*
+
+    | (``content:;``
+    | ``display: none;``
+    | ``text-decoration-line: line-through;``
+    | ``text-decoration: line-through;)``
+
+    ``[LINE]``
+
+    Specify particular inline styles you want to retain
+    (all other styles are removed).
+
+    If only the property is provided (no values after ``':'``),
+    then all values are retained as is.
+
+    ';' before each line end is optional.
+
+    Note: This is for the simplest css manipulations.
+    The program gives up for any indication of complexity
+    (currently the existence of any characters of ',', '/', '(').
+
 .. confopt:: clean \*
 
     | (``both``)

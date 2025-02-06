@@ -14,6 +14,8 @@ Unreleased
 
 * Update Selenium headless option codes (4.8.0-, they changed the syntax)
 
+* Add styles_to_retain option
+
 **Fix:**
 * Fix regression: selenium downloader errors when given multiple URLs.
 

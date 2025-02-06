@@ -211,6 +211,16 @@ add_binary_extensions=  : add or subtract to-skip-binaries-extension list (f: pl
                             self::svg
                             self::node()[starts-with(@class, "MathJax")]
 
+*styles_to_retain=  : specify particular inline styles you want to retain (all other styles are removed).
+                    : if only the property is provided (no values after ':'), then all values are retained as is.
+                    : ';' before each line end is optional.
+                    : (default: "content:;", "display: none;", "text-decoration-line: line-through;", "text-decoration: line-through;") (f: line)
+                    :: f: line
+                    content:;
+                    display: none;
+                    text-decoration-line: line-through;
+                    text-decoration: line-through;
+
 clean=              : specify how to clean html (both, head, body, none)
                     : (default: both)
                     :: choices: both, head, body, none
