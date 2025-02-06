@@ -42,11 +42,11 @@ following the rules specified there
 General
 -------
 
-.. option:: -i INPUT, --input INPUT
+.. option:: -i, --input INPUT
 
     input rsrc (URL or file path). it can be specified multiple times
 
-.. option:: -f FILE, --file FILE
+.. option:: -f, --file FILE
 
     file to read inputs. only one file
 
