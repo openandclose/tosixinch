@@ -39,8 +39,21 @@ class _File(system._File):
             os.replace(efile, orig)
 
 
-def read(dfile, text=None, codings=None, errors='strict'):
+def get_dfile(dfile, directory=None):
+    if directory is not None:
+        curdir = os.curdir
+        os.chdir(directory)
+
     dfile = _File().get_dfile(dfile)
+
+    if directory is not None:
+        os.chdir(curdir)
+
+    return dfile
+
+
+def read(dfile, text=None, codings=None, errors='strict'):
+    dfile = get_dfile(dfile)
     return system.read(dfile, text, codings, errors)
 
 
