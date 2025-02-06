@@ -19,6 +19,8 @@ Unreleased
 **Fix:**
 * Fix regression: selenium downloader errors when given multiple URLs.
 
+* Fix wikipedia sample config (math formulas)
+
 
 v0.9.0 (2022-06-28)
 -------------------
