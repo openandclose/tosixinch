@@ -13,13 +13,12 @@ we try to keep the word ``config`` for `ConfigParser` object,
 import argparse
 import fnmatch
 import glob
+import importlib.resources
 import logging
 import os
 import re
 import sys
 import urllib.parse
-
-from pkg_resources import resource_filename
 
 from tosixinch import cached_property
 
@@ -190,7 +189,8 @@ def _checkmacth(rsrc, siteconfig):
 
 
 def _get_configdir():
-    return resource_filename('tosixinch', 'data').rstrip(os.sep)
+    path = importlib.resources.files('tosixinch')
+    return os.path.join(path, 'data')
 
 
 def _get_configs(fmts, args, envs):
