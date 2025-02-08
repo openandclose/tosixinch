@@ -48,8 +48,8 @@ setup(
     },
     python_requires='~=3.6',
     extras_require={
-        'test': ['lxml', 'pytest'],
-        'dev': ['lxml', 'pytest', 'sphinx'],
+        'test': ['lxml', 'lxml_html_clean', 'pytest'],
+        'dev': ['lxml', 'lxml_html_clean', 'pytest', 'sphinx'],
     },
     zip_safe=False,
 )

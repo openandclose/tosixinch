@@ -100,6 +100,9 @@ installing ``lxml`` and at least one of pdf converters is recommended.
 
 * `lxml <http://lxml.de>`__ is used for html DOM manipulations.
 
+* since lxml-5.2.0 (2024/03/31),
+  you also need `lxml-html-clean <https://lxml-html-clean.readthedocs.io>`__.
+
 Converters are:
 
 * `prince (or princexml) <https://www.princexml.com>`__

@@ -1,4 +1,4 @@
-"""Clean html, using ``lxml.html.clean`` library.
+"""Clean html, using ``lxml_html_clean`` or ``lxml.html.clean`` library.
 
 the object of cleanup is:
 1. strip style information, to make easier to apply user stylesheets.
@@ -28,7 +28,7 @@ you need ``color`` and ``width`` for svg image, for example.
 
 import re
 
-from tosixinch import lxml_html  # use lxml.html.clean from lxml_html.clean
+from tosixinch import lxml_html  # use lxml_html_clean from lxml_html
 
 RE_CSS_DECLARATION = re.compile(r'^\s*([\w-]+)\s*:\s*(.*?)\s*$')
 RE_CSS_VALUE = re.compile(r"""((?:"[^"]+")|(?:'[^\']+')|(?:[^ \t\n]+))""")
@@ -59,7 +59,7 @@ def conditioned_iter(el, *tests):
 class Clean(object):
     """Main class of the module."""
 
-    # ``lxml.html.clean.clean_html`` keyword arguments
+    # ``lxml_html_clean.clean_html`` keyword arguments
     kwargs = dict(
         scripts=True,
         javascript=True,

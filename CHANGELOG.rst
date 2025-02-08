@@ -16,6 +16,8 @@ Unreleased
 
 * Add styles_to_retain option
 
+* Update lxml (use now independent lxml-html-clean library)
+
 **Fix:**
 * Fix regression: selenium downloader errors when given multiple URLs.
 
