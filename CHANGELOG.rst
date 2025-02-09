@@ -8,6 +8,10 @@ Important changes (that especially affect users) are marked by '**!!**'.
 Unreleased
 ----------
 
+
+v0.10.0 (2025-02-10)
+-------------------
+
 **Add:**
 
 * Add 'clean' option (specify how to clean html (both, head, body, none)).
@@ -19,6 +23,7 @@ Unreleased
 * Update lxml (use now independent lxml-html-clean library)
 
 **Fix:**
+
 * Fix regression: selenium downloader errors when given multiple URLs.
 
 * Fix wikipedia sample config (math formulas)
